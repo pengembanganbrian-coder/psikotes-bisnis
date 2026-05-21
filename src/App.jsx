@@ -3,6 +3,8 @@ import Login from './pages/Login'
 import Tes from './pages/Tes'
 import Hasil from './pages/Hasil'
 import Dashboard from './pages/Dashboard'
+import TesDisc from './pages/TesDisc'
+import HasilDisc from './pages/HasilDisc'
 
 function App() {
   return (
@@ -12,6 +14,8 @@ function App() {
         <Route path="/tes" element={<Tes />} />
         <Route path="/hasil" element={<Hasil />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/tes-disc" element={<TesDisc />} />
+        <Route path="/hasil-disc" element={<HasilDisc />} />
       </Routes>
     </BrowserRouter>
   )
