@@ -58,8 +58,8 @@ function Home() {
                 <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-3 py-1.5 rounded-full">⏱ ~15 menit</span>
                 <span className="text-xs bg-gray-50 text-gray-500 font-medium px-3 py-1.5 rounded-full">E·I·S·N·T·F·J·P</span>
               </div>
-              <div className="flex items-center text-blue-600 font-semibold text-sm group-hover:gap-2 gap-1 transition-all">
-                Mulai Tes <span className="group-hover:translate-x-1 transition-transform">→</span>
+              <div className="w-full bg-blue-600 group-hover:bg-blue-700 text-white font-bold text-base py-3 rounded-xl text-center transition-all">
+                Mulai Tes →
               </div>
             </button>
 
@@ -78,8 +78,8 @@ function Home() {
                 <span className="text-xs bg-green-50 text-green-700 font-semibold px-3 py-1.5 rounded-full">⏱ ~7 menit</span>
                 <span className="text-xs bg-gray-50 text-gray-500 font-medium px-3 py-1.5 rounded-full">D · I · S · C</span>
               </div>
-              <div className="flex items-center text-green-600 font-semibold text-sm group-hover:gap-2 gap-1 transition-all">
-                Mulai Tes <span className="group-hover:translate-x-1 transition-transform">→</span>
+              <div className="w-full bg-green-600 group-hover:bg-green-700 text-white font-bold text-base py-3 rounded-xl text-center transition-all">
+                Mulai Tes →
               </div>
             </button>
           </div>
