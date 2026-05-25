@@ -2,6 +2,285 @@ import { useState } from 'react'
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 
+const unitKerjaOptions = [
+  {
+    group: 'Kantor Pusat — Bagian',
+    options: [
+      'Bagian Organisasi dan Tata Laksana',
+      'Bagian Keuangan',
+      'Bagian Umum',
+      'Bagian Administrasi Kepegawaian',
+      'Bagian Pengembangan Kepegawaian',
+      'Bagian Pengelolaan Barang Milik Negara',
+    ],
+  },
+  {
+    group: 'Kantor Pusat — Direktorat',
+    options: [
+      'Direktorat Teknis Kepabeanan',
+      'Direktorat Fasilitas Kepabeanan',
+      'Direktorat Teknis dan Fasilitas Cukai',
+      'Direktorat Keberatan Banding dan Peraturan',
+      'Direktorat Penindakan dan Penyidikan',
+      'Direktorat Audit Kepabeanan dan Cukai',
+      'Direktorat Kepatuhan Internal',
+      'Direktorat Informasi Kepabeanan dan Cukai',
+      'Direktorat Penerimaan dan Perencanaan Strategis',
+      'Direktorat Kerja Sama Internasional Kepabeanan dan Cukai',
+      'Direktorat Interdiksi Narkotika',
+      'Direktorat Komunikasi dan Bimbingan Pengguna Jasa',
+      'Tenaga Pengkaji Bidang Pengawasan dan Penegakan Hukum Kepabeanan dan Cukai',
+      'Tenaga Pengkaji Bidang Pengembangan Kapasitas dan Kinerja Organisasi',
+    ],
+  },
+  {
+    group: 'Kantor Wilayah',
+    options: [
+      'Kantor Wilayah DJBC Aceh',
+      'Kantor Wilayah DJBC Sumatera Utara',
+      'Kantor Wilayah DJBC Riau',
+      'Kantor Wilayah DJBC Khusus Kepulauan Riau',
+      'Kantor Wilayah DJBC Sumatera Bagian Timur',
+      'Kantor Wilayah DJBC Sumatera Bagian Barat',
+      'Kantor Wilayah DJBC Banten',
+      'Kantor Wilayah DJBC Jakarta',
+      'Kantor Wilayah DJBC Jawa Barat',
+      'Kantor Wilayah DJBC Jawa Tengah dan DI Yogyakarta',
+      'Kantor Wilayah DJBC Jawa Timur I',
+      'Kantor Wilayah DJBC Jawa Timur II',
+      'Kantor Wilayah DJBC Bali, Nusa Tenggara Barat dan Nusa Tenggara Timur',
+      'Kantor Wilayah DJBC Kalimantan Bagian Barat',
+      'Kantor Wilayah DJBC Kalimantan Bagian Timur',
+      'Kantor Wilayah DJBC Kalimantan Bagian Selatan',
+      'Kantor Wilayah DJBC Sulawesi Bagian Selatan',
+      'Kantor Wilayah DJBC Sulawesi Bagian Utara',
+      'Kantor Wilayah DJBC Maluku',
+      'Kantor Wilayah DJBC Khusus Papua',
+    ],
+  },
+  {
+    group: 'Kantor Pelayanan Utama (KPU)',
+    options: [
+      'Kantor Pelayanan Utama Bea dan Cukai Tipe A Tanjung Priok',
+      'Kantor Pelayanan Utama Bea dan Cukai Tipe C Soekarno-Hatta',
+      'Kantor Pelayanan Utama Bea dan Cukai Tipe B Batam',
+    ],
+  },
+  {
+    group: 'KPPBC — Aceh',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Banda Aceh',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Lhokseumawe',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Meulaboh',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Langsa',
+    ],
+  },
+  {
+    group: 'KPPBC — Sumatera Utara',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Belawan',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Medan',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Teluk Nibung',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kuala Tanjung',
+    ],
+  },
+  {
+    group: 'KPPBC — Kepulauan Riau',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Tanjung Balai Karimun',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Tanjung Pinang',
+    ],
+  },
+  {
+    group: 'KPPBC — Riau',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Pekanbaru',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Dumai',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tembilahan',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bengkalis',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Teluk Bayur',
+    ],
+  },
+  {
+    group: 'KPPBC — Sumatera Bagian Timur',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Palembang',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Jambi',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Pangkalpinang',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tanjungpandan',
+    ],
+  },
+  {
+    group: 'KPPBC — Sumatera Bagian Barat',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bengkulu',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Bandar Lampung',
+    ],
+  },
+  {
+    group: 'KPPBC — Banten',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Merak',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Tangerang',
+    ],
+  },
+  {
+    group: 'KPPBC — Jakarta',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Jakarta',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Marunda',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kantor Pos Pasar Baru',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Bekasi',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Cikarang',
+    ],
+  },
+  {
+    group: 'KPPBC — Jawa Barat',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Bogor',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Purwakarta',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Bandung',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Cirebon',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tasikmalaya',
+    ],
+  },
+  {
+    group: 'KPPBC — Jawa Tengah & DIY',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Tanjung Emas',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Cukai Kudus',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Semarang',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Surakarta',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Yogyakarta',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Cilacap',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Purwokerto',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tegal',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Magelang',
+    ],
+  },
+  {
+    group: 'KPPBC — Jawa Timur I',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Tanjung Perak',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Juanda',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Pasuruan',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Gresik',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Sidoarjo',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Madura',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bojonegoro',
+    ],
+  },
+  {
+    group: 'KPPBC — Jawa Timur II',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Cukai Malang',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Cukai Kediri',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Blitar',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Madiun',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Jember',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Banyuwangi',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Probolinggo',
+    ],
+  },
+  {
+    group: 'KPPBC — Bali, NTB, NTT',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Ngurah Rai',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Denpasar',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Atambua',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Mataram',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kupang',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sumbawa',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Labuan Bajo',
+    ],
+  },
+  {
+    group: 'KPPBC — Kalimantan Barat',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Pontianak',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Entikong',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sintete',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Nanga Badau',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Ketapang',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Jagoi Babang',
+    ],
+  },
+  {
+    group: 'KPPBC — Kalimantan Timur',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Balikpapan',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Samarinda',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Tarakan',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bontang',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Nunukan',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sangatta',
+    ],
+  },
+  {
+    group: 'KPPBC — Kalimantan Selatan',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Banjarmasin',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sampit',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Pangkalan Bun',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kotabaru',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Palangkaraya',
+    ],
+  },
+  {
+    group: 'KPPBC — Sulawesi Selatan',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Makassar',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Parepare',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Malili',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kendari',
+    ],
+  },
+  {
+    group: 'KPPBC — Sulawesi Utara',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Pantoloan',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Morowali',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Luwuk',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bitung',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Manado',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Gorontalo',
+    ],
+  },
+  {
+    group: 'KPPBC — Maluku',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Ambon',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tual',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Ternate',
+    ],
+  },
+  {
+    group: 'KPPBC — Papua',
+    options: [
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sorong',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Manokwari',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Jayapura',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Biak',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Merauke',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Fakfak',
+      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Timika',
+    ],
+  },
+  {
+    group: 'Lainnya',
+    options: [
+      'Pangkalan Sarana Operasi Bea dan Cukai Tipe A Tanjung Balai Karimun',
+      'Pangkalan Sarana Operasi Bea dan Cukai Tipe B Lhokseumawe',
+      'Pangkalan Sarana Operasi Bea dan Cukai Tipe B Tanjung Priok',
+      'Pangkalan Sarana Operasi Bea dan Cukai Tipe B Pantoloan',
+      'Pangkalan Sarana Operasi Bea dan Cukai Tipe B Sorong',
+      'Balai Laboratorium Bea dan Cukai Kelas I Jakarta',
+      'Balai Laboratorium Bea dan Cukai Kelas II Medan',
+      'Balai Laboratorium Bea dan Cukai Kelas II Surabaya',
+    ],
+  },
+]
+
 const soal = [
   { id: 1, pilihan: [
     { teks: "Mudah bergaul, menyenangkan", dimensi: "I" },
@@ -203,6 +482,7 @@ function TesDisc() {
   }
 
   const sudahLengkap = soal.every(s => jawaban[s.id]?.most !== undefined && jawaban[s.id]?.least !== undefined)
+  const jumlahDijawab = Object.keys(jawaban).filter(id => jawaban[id]?.most !== undefined && jawaban[id]?.least !== undefined).length
 
   const handleSubmit = async () => {
     if (!sudahLengkap) { alert('Harap jawab semua pertanyaan!'); return }
@@ -234,68 +514,235 @@ function TesDisc() {
   }
 
   if (step === 'form') return (
-    <div className="min-h-screen bg-green-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-green-700 mb-2 text-center">Psikotes DJBC</h1>
-        <p className="text-gray-500 text-center mb-8">Tes Kepribadian DISC</p>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap</label>
-          <input value={nama} onChange={e => setNama(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400" placeholder="Nama lengkap" />
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+
+        {/* Card */}
+        <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+
+          {/* Header Card */}
+          <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-7 text-center">
+            <div className="inline-flex items-center justify-center w-14 h-14 bg-white/20 border border-white/30 rounded-2xl backdrop-blur mb-3">
+              <span className="text-white text-xl font-black">DISC</span>
+            </div>
+            <h1 className="text-xl font-black text-white tracking-wide">Psikotes DJBC</h1>
+            <p className="text-green-100 text-sm mt-1">Tes Kepribadian DISC</p>
+          </div>
+
+          {/* Body Card */}
+          <div className="px-8 py-7 space-y-5">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+              <input
+                value={nama}
+                onChange={e => setNama(e.target.value)}
+                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400"
+                placeholder="Nama lengkap sesuai KTP"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP / NIK</label>
+              <input
+                value={nip}
+                onChange={e => setNip(e.target.value)}
+                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400"
+                placeholder="NIP atau NIK"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja</label>
+              <div className="relative">
+                <select
+                  value={jabatan}
+                  onChange={e => setJabatan(e.target.value)}
+                  className="w-full appearance-none border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all text-gray-700 pr-10"
+                >
+                  <option value="" disabled>-- Pilih Unit Kerja --</option>
+                  {unitKerjaOptions.map(group => (
+                    <optgroup key={group.group} label={group.group}>
+                      {group.options.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
+                    </optgroup>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                if (nama && nip && jabatan) setStep('tes')
+                else alert('Isi semua data terlebih dahulu!')
+              }}
+              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-green-200 mt-2"
+            >
+              Mulai Tes →
+            </button>
+          </div>
         </div>
-        <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-1">NIP / NIK</label>
-          <input value={nip} onChange={e => setNip(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400" placeholder="NIP atau NIK" />
-        </div>
-        <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Jabatan / Posisi yang Dilamar</label>
-          <input value={jabatan} onChange={e => setJabatan(e.target.value)} className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-400" placeholder="Contoh: Staff Administrasi" />
-        </div>
-        <button onClick={() => { if(nama && nip && jabatan) setStep('tes'); else alert('Isi semua data!') }} className="w-full bg-green-600 text-white font-semibold py-2 rounded-lg hover:bg-green-700 transition">
-          Mulai Tes
-        </button>
+
+        <p className="text-center text-xs text-green-600/40 mt-5">
+          © 2025 · Direktorat Jenderal Bea dan Cukai
+        </p>
       </div>
     </div>
   )
 
   return (
-    <div className="min-h-screen bg-green-50 py-10 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 py-10 px-4">
       <div className="max-w-3xl mx-auto">
+
+        {/* Header Tes */}
         <div className="bg-white rounded-2xl shadow p-6 mb-6">
-          <h1 className="text-xl font-bold text-green-700">Tes DISC — Psikotes DJBC</h1>
-          <p className="text-sm text-gray-500 mt-1">Halo <strong>{nama}</strong>, pilih satu yang paling <span className="text-green-600 font-semibold">MIRIP (M)</span> dan satu yang paling <span className="text-red-500 font-semibold">TIDAK MIRIP (L)</span> dari setiap kelompok.</p>
-          <div className="mt-3 text-xs text-gray-400">{Object.keys(jawaban).length} / {soal.length} kelompok dijawab</div>
-          <div className="h-2 bg-gray-100 rounded-full mt-2">
-            <div className="h-full bg-green-500 rounded-full transition-all" style={{ width: `${(Object.keys(jawaban).length / soal.length) * 100}%` }} />
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <span className="text-white font-black text-sm">DISC</span>
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-gray-800">Tes DISC — Psikotes DJBC</h1>
+              <p className="text-sm text-gray-500">
+                Halo <strong className="text-green-700">{nama}</strong> · {jabatan}
+              </p>
+            </div>
+          </div>
+
+          {/* Instruksi */}
+          <div className="bg-green-50 border border-green-100 rounded-xl px-4 py-3 mb-4 text-sm text-green-800">
+            Dari setiap kelompok, pilih satu yang paling{' '}
+            <span className="font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded">M — Mirip</span>{' '}
+            dan satu yang paling{' '}
+            <span className="font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">L — Tidak Mirip</span>{' '}
+            dengan diri Anda.
+          </div>
+
+          {/* Progress */}
+          <div className="flex items-center gap-3">
+            <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full transition-all duration-500"
+                style={{ width: `${(jumlahDijawab / soal.length) * 100}%` }}
+              />
+            </div>
+            <span className="text-sm font-semibold text-gray-600 whitespace-nowrap">
+              {jumlahDijawab} / {soal.length}
+            </span>
+          </div>
+
+          {/* Pills per kelompok */}
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {soal.map((s, idx) => {
+              const j = jawaban[s.id]
+              const selesai = j?.most !== undefined && j?.least !== undefined
+              return (
+                <span
+                  key={s.id}
+                  className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold transition-all ${
+                    selesai
+                      ? 'bg-green-500 text-white'
+                      : 'bg-gray-100 text-gray-400'
+                  }`}
+                >
+                  {selesai ? '✓' : idx + 1}
+                </span>
+              )
+            })}
           </div>
         </div>
 
+        {/* Soal */}
         {soal.map((s, idx) => {
           const j = jawaban[s.id] || {}
+          const selesai = j.most !== undefined && j.least !== undefined
           return (
-            <div key={s.id} className="bg-white rounded-2xl shadow p-6 mb-4">
-              <p className="text-xs text-gray-400 font-semibold mb-3">Kelompok {idx + 1}</p>
+            <div
+              key={s.id}
+              className={`bg-white rounded-2xl shadow p-6 mb-4 transition-all ${selesai ? 'ring-1 ring-green-200' : ''}`}
+            >
+              {/* Nomor kelompok */}
+              <div className="flex items-center gap-2 mb-4">
+                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 ${
+                  selesai ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-500'
+                }`}>
+                  {selesai ? '✓' : idx + 1}
+                </span>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Kelompok {idx + 1}</p>
+                {selesai && <span className="ml-auto text-xs text-green-500 font-semibold">✓ Selesai</span>}
+              </div>
+
               <div className="space-y-2">
-                {s.pilihan.map((p, i) => (
-                  <div key={i} className={`flex items-center gap-3 p-3 rounded-xl border-2 transition ${j.most === i ? 'border-green-500 bg-green-50' : j.least === i ? 'border-red-400 bg-red-50' : 'border-gray-100 hover:border-gray-300'}`}>
-                    <span className="text-sm flex-1 text-gray-700">{p.teks}</span>
-                    <button
-                      onClick={() => handlePilih(s.id, 'most', i)}
-                      className={`text-xs px-3 py-1 rounded-full font-bold transition ${j.most === i ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-500 hover:bg-green-100'}`}
-                    >M</button>
-                    <button
-                      onClick={() => handlePilih(s.id, 'least', i)}
-                      className={`text-xs px-3 py-1 rounded-full font-bold transition ${j.least === i ? 'bg-red-400 text-white' : 'bg-gray-100 text-gray-500 hover:bg-red-100'}`}
-                    >L</button>
-                  </div>
-                ))}
+                {s.pilihan.map((p, i) => {
+                  const isMost = j.most === i
+                  const isLeast = j.least === i
+                  return (
+                    <div
+                      key={i}
+                      className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
+                        isMost
+                          ? 'border-green-400 bg-green-50'
+                          : isLeast
+                          ? 'border-red-300 bg-red-50'
+                          : 'border-gray-100 hover:border-gray-200 hover:bg-gray-50'
+                      }`}
+                    >
+                      <span className="text-sm flex-1 text-gray-700 leading-snug">{p.teks}</span>
+
+                      <div className="flex gap-1.5 flex-shrink-0">
+                        {/* Tombol M */}
+                        <button
+                          onClick={() => handlePilih(s.id, 'most', i)}
+                          title="Paling Mirip"
+                          className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
+                            isMost
+                              ? 'bg-green-500 text-white shadow-sm shadow-green-200'
+                              : 'bg-gray-100 text-gray-400 hover:bg-green-100 hover:text-green-600'
+                          }`}
+                        >M</button>
+
+                        {/* Tombol L */}
+                        <button
+                          onClick={() => handlePilih(s.id, 'least', i)}
+                          title="Paling Tidak Mirip"
+                          className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
+                            isLeast
+                              ? 'bg-red-400 text-white shadow-sm shadow-red-200'
+                              : 'bg-gray-100 text-gray-400 hover:bg-red-100 hover:text-red-500'
+                          }`}
+                        >L</button>
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )
         })}
 
-        <button onClick={handleSubmit} disabled={loading || !sudahLengkap} className="w-full bg-green-600 text-white font-semibold py-3 rounded-xl hover:bg-green-700 transition disabled:opacity-50 mt-2">
-          {loading ? 'Menyimpan...' : 'Selesai & Lihat Hasil'}
-        </button>
+        {/* Tombol Submit */}
+        <div className="sticky bottom-4">
+          <button
+            onClick={handleSubmit}
+            disabled={loading || !sudahLengkap}
+            className={`w-full font-semibold py-4 rounded-2xl transition-all text-base shadow-xl ${
+              sudahLengkap
+                ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-green-300 cursor-pointer'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
+            }`}
+          >
+            {loading
+              ? '⏳ Menyimpan hasil...'
+              : sudahLengkap
+              ? '✓ Selesai & Lihat Hasil →'
+              : `Jawab ${soal.length - jumlahDijawab} kelompok lagi`}
+          </button>
+        </div>
+
       </div>
     </div>
   )
