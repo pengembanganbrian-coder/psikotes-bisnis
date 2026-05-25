@@ -375,7 +375,7 @@ function Hasil() {
           <h3 className="font-bold text-gray-700 text-lg mb-4">Laporan Interpretasi MBTI</h3>
           <Section title="Karakteristik Umum" items={info.karakteristik} color="blue" />
           <Section title="Kekuatan" items={info.kekuatan} color="green" />
-          <Section title="Relationship" items={info.relationship} color="purple" />
+          <Section title="Hubungan Interpersonal" items={info.relationship} color="purple" />
           <Section title="Pengambilan Keputusan" items={info.keputusan} color="blue" />
           <Section title="Memperlakukan Informasi" items={info.informasi} color="gray" />
           <Section title="Gaya Komunikasi" items={info.komunikasi} color="blue" />
