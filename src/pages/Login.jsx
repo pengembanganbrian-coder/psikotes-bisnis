@@ -25,9 +25,7 @@ function Login() {
 
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 border border-white/20 rounded-2xl backdrop-blur mb-4">
-            <span className="text-white text-2xl font-black">DJ</span>
-          </div>
+          <img src="/logo-djbc.png" alt="Logo DJBC" className="h-16 w-auto mx-auto mb-4" />
           <h1 className="text-2xl font-black text-white">Psikotes DJBC</h1>
           <p className="text-blue-300 text-sm mt-1">Portal Administrator HRD</p>
         </div>

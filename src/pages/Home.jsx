@@ -8,101 +8,90 @@ function Home() {
       {/* Navbar */}
       <header className="bg-gradient-to-r from-blue-900 to-blue-800 px-6 py-4 flex justify-between items-center shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-white/15 border border-white/20 rounded-xl flex items-center justify-center">
-            <span className="text-white font-black text-xs tracking-wider">DJ</span>
-          </div>
+          <img src="/logo-djbc.png" alt="Logo DJBC" className="h-9 w-auto" />
           <div>
             <p className="text-white font-bold text-sm leading-tight">Psikotes DJBC</p>
             <p className="text-blue-300 text-xs leading-tight">Platform Asesmen SDM</p>
           </div>
         </div>
-        <button
-          onClick={() => navigate('/login')}
-          className="text-xs text-blue-200 hover:text-white border border-blue-600 hover:border-blue-400 hover:bg-blue-700/50 px-4 py-2 rounded-xl transition-all duration-200"
-        >
-          Login HRD →
-        </button>
+        <div />
       </header>
 
       {/* Hero */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-16">
-        {/* Logo + Title */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-blue-800 rounded-3xl shadow-2xl shadow-blue-300/40 mb-6">
-            <span className="text-white text-2xl font-black tracking-wider">DJ</span>
+      <main className="flex-1 px-6 py-14">
+        <div className="max-w-6xl mx-auto">
+
+          {/* Logo + Title */}
+          <div className="text-center mb-12">
+            <img src="/logo-djbc.png" alt="Logo DJBC" className="h-24 w-auto mx-auto mb-6" />
+            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
+              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
+              Sistem Aktif
+            </div>
+            <h1 className="text-4xl font-black text-gray-900 leading-tight mb-4">
+              Asesmen Psikologi{' '}
+              <span className="text-blue-700">DJBC</span>
+            </h1>
+            <p className="text-gray-500 text-base max-w-lg mx-auto leading-relaxed">
+              Platform psikotes berbasis web untuk pemetaan potensi dan kepribadian pegawai DJBC
+            </p>
           </div>
-          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
-            <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-            Sistem Aktif
-          </div>
-          <h1 className="text-3xl font-black text-gray-900 leading-tight mb-2">
-            Asesmen Kepribadian
-          </h1>
-          <h2 className="text-3xl font-black text-blue-700 leading-tight mb-4">
-            Bea dan Cukai
-          </h2>
-          <p className="text-gray-500 text-sm max-w-xs mx-auto leading-relaxed">
-            Platform psikotes berbasis web untuk pemetaan potensi dan kepribadian pegawai DJBC
-          </p>
-        </div>
 
-        {/* Section label */}
-        <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Pilih Jenis Tes</p>
+          {/* Section label */}
+          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-5 text-center">Pilih Jenis Tes</p>
 
-        {/* Test Cards */}
-        <div className="w-full max-w-md space-y-4">
+          {/* Test Cards — 2 kolom di desktop */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
 
-          {/* MBTI Card */}
-          <button
-            onClick={() => navigate('/tes')}
-            className="w-full group bg-white rounded-2xl border-2 border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl hover:shadow-blue-100/60 p-6 text-left transition-all duration-300 hover:-translate-y-1"
-          >
-            <div className="flex items-center gap-5">
-              <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 group-hover:scale-105 transition-transform duration-300">
+            {/* MBTI Card */}
+            <button
+              onClick={() => navigate('/tes')}
+              className="group bg-white rounded-2xl border-2 border-gray-100 hover:border-blue-200 shadow-sm hover:shadow-xl hover:shadow-blue-100/60 p-7 text-left transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200 group-hover:scale-105 transition-transform duration-300 mb-5">
                 <span className="text-white font-black text-base tracking-wide">MBTI</span>
               </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-gray-800 text-base mb-0.5">Tes Kepribadian MBTI</h3>
-                <p className="text-xs text-gray-500 mb-2.5">Myers-Briggs Type Indicator · 16 tipe kepribadian</p>
-                <div className="flex flex-wrap gap-1.5">
-                  <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full">📝 60 soal</span>
-                  <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-2.5 py-1 rounded-full">⏱ ~15 menit</span>
-                  <span className="text-xs bg-gray-50 text-gray-500 font-medium px-2.5 py-1 rounded-full">E·I·S·N·T·F·J·P</span>
-                </div>
+              <h3 className="font-bold text-gray-800 text-lg mb-1">Tes Kepribadian MBTI</h3>
+              <p className="text-sm text-gray-500 mb-4">Myers-Briggs Type Indicator · 16 tipe kepribadian</p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-3 py-1.5 rounded-full">📝 60 soal</span>
+                <span className="text-xs bg-blue-50 text-blue-700 font-semibold px-3 py-1.5 rounded-full">⏱ ~15 menit</span>
+                <span className="text-xs bg-gray-50 text-gray-500 font-medium px-3 py-1.5 rounded-full">E·I·S·N·T·F·J·P</span>
               </div>
-              <div className="text-gray-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all text-2xl font-light">›</div>
-            </div>
-          </button>
+              <div className="flex items-center text-blue-600 font-semibold text-sm group-hover:gap-2 gap-1 transition-all">
+                Mulai Tes <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </button>
 
-          {/* DISC Card */}
-          <button
-            onClick={() => navigate('/tes-disc')}
-            className="w-full group bg-white rounded-2xl border-2 border-gray-100 hover:border-green-200 shadow-sm hover:shadow-xl hover:shadow-green-100/60 p-6 text-left transition-all duration-300 hover:-translate-y-1"
-          >
-            <div className="flex items-center gap-5">
-              <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center shadow-lg shadow-green-200 group-hover:scale-105 transition-transform duration-300">
+            {/* DISC Card */}
+            <button
+              onClick={() => navigate('/tes-disc')}
+              className="group bg-white rounded-2xl border-2 border-gray-100 hover:border-green-200 shadow-sm hover:shadow-xl hover:shadow-green-100/60 p-7 text-left transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-2xl flex items-center justify-center shadow-lg shadow-green-200 group-hover:scale-105 transition-transform duration-300 mb-5">
                 <span className="text-white font-black text-base tracking-wide">DISC</span>
               </div>
-              <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-gray-800 text-base mb-0.5">Tes Kepribadian DISC</h3>
-                <p className="text-xs text-gray-500 mb-2.5">Dominance · Influence · Steadiness · Conscientiousness</p>
-                <div className="flex flex-wrap gap-1.5">
-                  <span className="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full">📝 24 soal</span>
-                  <span className="text-xs bg-green-50 text-green-700 font-semibold px-2.5 py-1 rounded-full">⏱ ~7 menit</span>
-                  <span className="text-xs bg-gray-50 text-gray-500 font-medium px-2.5 py-1 rounded-full">D · I · S · C</span>
-                </div>
+              <h3 className="font-bold text-gray-800 text-lg mb-1">Tes Kepribadian DISC</h3>
+              <p className="text-sm text-gray-500 mb-4">Dominance · Influence · Steadiness · Conscientiousness</p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                <span className="text-xs bg-green-50 text-green-700 font-semibold px-3 py-1.5 rounded-full">📝 24 soal</span>
+                <span className="text-xs bg-green-50 text-green-700 font-semibold px-3 py-1.5 rounded-full">⏱ ~7 menit</span>
+                <span className="text-xs bg-gray-50 text-gray-500 font-medium px-3 py-1.5 rounded-full">D · I · S · C</span>
               </div>
-              <div className="text-gray-300 group-hover:text-green-500 group-hover:translate-x-1 transition-all text-2xl font-light">›</div>
-            </div>
-          </button>
-        </div>
+              <div className="flex items-center text-green-600 font-semibold text-sm group-hover:gap-2 gap-1 transition-all">
+                Mulai Tes <span className="group-hover:translate-x-1 transition-transform">→</span>
+              </div>
+            </button>
+          </div>
 
-        {/* Info note */}
-        <div className="mt-8 w-full max-w-md bg-amber-50 border border-amber-200 rounded-2xl p-4">
-          <p className="text-xs text-amber-800 text-center leading-relaxed">
-            🔒 Hasil tes bersifat <strong>rahasia</strong> dan digunakan untuk kepentingan pemetaan SDM DJBC.
-            Kerjakan dengan jujur untuk hasil yang akurat.
-          </p>
+          {/* Info note */}
+          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+            <p className="text-sm text-amber-800 text-center leading-relaxed">
+              🔒 Hasil tes bersifat <strong>rahasia</strong> dan digunakan untuk kepentingan pemetaan SDM DJBC.
+              Kerjakan dengan jujur untuk hasil yang akurat.
+            </p>
+          </div>
+
         </div>
       </main>
 
@@ -111,6 +100,12 @@ function Home() {
         <p className="text-xs text-gray-400">
           © 2025 · Direktorat Jenderal Bea dan Cukai · Kementerian Keuangan RI
         </p>
+        <button
+          onClick={() => navigate('/login')}
+          className="mt-2 text-xs text-gray-300 hover:text-gray-400 transition-colors"
+        >
+          Login Admin
+        </button>
       </footer>
     </div>
   )
