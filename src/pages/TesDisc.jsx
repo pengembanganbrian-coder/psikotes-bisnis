@@ -370,7 +370,7 @@ const soal = [
     { teks: "Menghabiskan waktu dengan orang lain", dimensi: "I" },
     { teks: "Merencanakan masa depan, penuh persiapan", dimensi: "C" },
     { teks: "Mencari tantangan baru", dimensi: "D" },
-    { teks: "Menghindari konflik", dimensi: "S" },
+    { teks: "Menerima penghargaan untuk tujuan yang tercapai", dimensi: "S" },
   ]},
   { id: 16, pilihan: [
     { teks: "Peraturan perlu diuji", dimensi: "D" },
