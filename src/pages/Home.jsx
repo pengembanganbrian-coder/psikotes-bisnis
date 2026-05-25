@@ -10,8 +10,7 @@ function Home() {
         <div className="flex items-center gap-3">
           <img src="/logo-djbc.png" alt="Logo DJBC" className="h-9 w-auto" />
           <div>
-            <p className="text-white font-bold text-sm leading-tight">Psikotes DJBC</p>
-            <p className="text-blue-300 text-xs leading-tight">Platform Asesmen SDM</p>
+            <p className="text-white font-bold text-sm leading-tight">Platform Asesmen Pengembangan Kepegawaian DJBC</p>
           </div>
         </div>
         <div />
