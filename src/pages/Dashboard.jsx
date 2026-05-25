@@ -33,7 +33,7 @@ function Dashboard() {
   }
 
   const handleExportExcel = () => {
-    const rows = [['Nama', 'Email/NIP', 'Jabatan', 'Hasil MBTI', 'Tanggal']]
+    const rows = [['Nama', 'Email/NIP', 'Unit Kerja', 'Hasil MBTI', 'Tanggal']]
     peserta.forEach(p => {
       rows.push([
         p.nama,
@@ -43,7 +43,7 @@ function Dashboard() {
         new Date(p.created_at).toLocaleDateString('id-ID')
       ])
     })
-    const csv = rows.map(r => r.join(',')).join('\n')
+    const csv = rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -84,7 +84,7 @@ function Dashboard() {
               <thead>
                 <tr className="bg-blue-50 text-left">
                   <th className="px-4 py-2 rounded-l">Nama</th>
-                  <th className="px-4 py-2">Jabatan</th>
+                  <th className="px-4 py-2">Unit Kerja</th>
                   <th className="px-4 py-2">Hasil MBTI</th>
                   <th className="px-4 py-2 rounded-r">Tanggal</th>
                 </tr>
@@ -134,7 +134,7 @@ function Dashboard() {
                 <span className="font-medium">{selected.email}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-500">Jabatan</span>
+                <span className="text-gray-500">Unit Kerja</span>
                 <span className="font-medium">{selected.jabatan || '-'}</span>
               </div>
               <div className="flex justify-between">
