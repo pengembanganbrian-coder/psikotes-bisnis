@@ -1,0 +1,274 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
+const unitKerjaOptions = [
+  { group: 'Kantor Pusat — Bagian', options: ['Bagian Organisasi dan Tata Laksana','Bagian Keuangan','Bagian Umum','Bagian Administrasi Kepegawaian','Bagian Pengembangan Kepegawaian','Bagian Pengelolaan Barang Milik Negara'] },
+  { group: 'Kantor Pusat — Direktorat', options: ['Direktorat Teknis Kepabeanan','Direktorat Fasilitas Kepabeanan','Direktorat Teknis dan Fasilitas Cukai','Direktorat Keberatan Banding dan Peraturan','Direktorat Penindakan dan Penyidikan','Direktorat Audit Kepabeanan dan Cukai','Direktorat Kepatuhan Internal','Direktorat Informasi Kepabeanan dan Cukai','Direktorat Penerimaan dan Perencanaan Strategis','Direktorat Kerja Sama Internasional Kepabeanan dan Cukai','Direktorat Interdiksi Narkotika','Direktorat Komunikasi dan Bimbingan Pengguna Jasa','Tenaga Pengkaji Bidang Pengawasan dan Penegakan Hukum','Tenaga Pengkaji Bidang Pengembangan Kapasitas dan Kinerja Organisasi'] },
+  { group: 'Kantor Wilayah', options: ['Kantor Wilayah DJBC Aceh','Kantor Wilayah DJBC Sumatera Utara','Kantor Wilayah DJBC Riau','Kantor Wilayah DJBC Khusus Kepulauan Riau','Kantor Wilayah DJBC Sumatera Bagian Timur','Kantor Wilayah DJBC Sumatera Bagian Barat','Kantor Wilayah DJBC Banten','Kantor Wilayah DJBC Jakarta','Kantor Wilayah DJBC Jawa Barat','Kantor Wilayah DJBC Jawa Tengah dan DI Yogyakarta','Kantor Wilayah DJBC Jawa Timur I','Kantor Wilayah DJBC Jawa Timur II','Kantor Wilayah DJBC Bali, NTB dan NTT','Kantor Wilayah DJBC Kalimantan Bagian Barat','Kantor Wilayah DJBC Kalimantan Bagian Timur','Kantor Wilayah DJBC Kalimantan Bagian Selatan','Kantor Wilayah DJBC Sulawesi Bagian Selatan','Kantor Wilayah DJBC Sulawesi Bagian Utara','Kantor Wilayah DJBC Maluku','Kantor Wilayah DJBC Khusus Papua'] },
+  { group: 'Kantor Pelayanan Utama (KPU)', options: ['KPU Bea dan Cukai Tipe A Tanjung Priok','KPU Bea dan Cukai Tipe C Soekarno-Hatta','KPU Bea dan Cukai Tipe B Batam'] },
+  { group: 'KPPBC', options: ['KPPBC Tipe Madya Pabean Belawan','KPPBC Tipe Madya Pabean A Tangerang','KPPBC Tipe Madya Pabean A Jakarta','KPPBC Tipe Madya Pabean A Bekasi','KPPBC Tipe Madya Pabean Cikarang','KPPBC Tipe Madya Pabean A Bogor','KPPBC Tipe Madya Pabean A Purwakarta','KPPBC Tipe Madya Pabean A Bandung','KPPBC Tipe Madya Pabean Tanjung Emas','KPPBC Tipe Madya Cukai Kudus','KPPBC Tipe Madya Pabean A Semarang','KPPBC Tipe Madya Pabean Tanjung Perak','KPPBC Tipe Madya Pabean Juanda','KPPBC Tipe Madya Pabean B Makassar','KPPBC Tipe Madya Pabean B Balikpapan','KPPBC Tipe Madya Pabean B Banjarmasin','KPPBC Lainnya'] },
+  { group: 'Lainnya', options: ['Pangkalan Sarana Operasi Bea dan Cukai','Balai Laboratorium Bea dan Cukai','Satuan Tugas Khusus'] },
+]
+
+// 21 pernyataan DASS-21 (versi Bahasa Indonesia yang tervalidasi)
+// Skala: D = Depresi, A = Kecemasan (Anxiety), S = Stres
+// Petunjuk: dirasakan dalam 1 minggu terakhir
+const soal = [
+  { id: 1,  teks: "Saya merasa sulit untuk menenangkan diri",                                                                                                     skala: "S" },
+  { id: 2,  teks: "Saya merasakan mulut saya terasa kering",                                                                                                      skala: "A" },
+  { id: 3,  teks: "Saya tidak dapat merasakan perasaan positif sama sekali",                                                                                      skala: "D" },
+  { id: 4,  teks: "Saya mengalami kesulitan bernapas (misalnya: napas terlalu cepat atau sesak tanpa aktivitas fisik)",                                           skala: "A" },
+  { id: 5,  teks: "Saya merasa kesulitan untuk berinisiatif melakukan sesuatu",                                                                                   skala: "D" },
+  { id: 6,  teks: "Saya cenderung bereaksi berlebihan terhadap suatu situasi",                                                                                    skala: "S" },
+  { id: 7,  teks: "Saya mengalami gemetar (misalnya: pada tangan)",                                                                                               skala: "A" },
+  { id: 8,  teks: "Saya merasa banyak menghabiskan energi karena kecemasan",                                                                                      skala: "S" },
+  { id: 9,  teks: "Saya khawatir berada dalam situasi di mana saya mungkin panik dan mempermalukan diri sendiri",                                                 skala: "A" },
+  { id: 10, teks: "Saya merasa tidak ada hal yang dapat diharapkan ke depan",                                                                                     skala: "D" },
+  { id: 11, teks: "Saya merasa mudah menjadi gelisah",                                                                                                            skala: "S" },
+  { id: 12, teks: "Saya merasa sulit untuk rileks",                                                                                                               skala: "S" },
+  { id: 13, teks: "Saya merasa sedih dan tertekan",                                                                                                               skala: "D" },
+  { id: 14, teks: "Saya tidak sabar terhadap hal-hal yang menghalangi saya dalam melakukan sesuatu",                                                             skala: "S" },
+  { id: 15, teks: "Saya merasa hampir panik",                                                                                                                     skala: "A" },
+  { id: 16, teks: "Saya tidak mampu merasa antusias terhadap apapun",                                                                                             skala: "D" },
+  { id: 17, teks: "Saya merasa diri saya tidak berharga sebagai seorang manusia",                                                                                 skala: "D" },
+  { id: 18, teks: "Saya merasa mudah tersinggung",                                                                                                                skala: "S" },
+  { id: 19, teks: "Saya menyadari detak jantung saya meskipun tanpa aktivitas fisik (misalnya: detak jantung meningkat atau berdebar)",                          skala: "A" },
+  { id: 20, teks: "Saya merasa ketakutan tanpa alasan yang jelas",                                                                                                skala: "A" },
+  { id: 21, teks: "Saya merasa hidup tidak berarti",                                                                                                              skala: "D" },
+]
+
+// Depresi items:  3, 5, 10, 13, 16, 17, 21  (7 items × 2 = max 42)
+// Kecemasan items: 2, 4, 7, 9, 15, 19, 20  (7 items × 2 = max 42)
+// Stres items:    1, 6, 8, 11, 12, 14, 18  (7 items × 2 = max 42)
+
+export default function TesDass() {
+  const navigate = useNavigate()
+  const [step, setStep]           = useState('form') // 'form' | 'tes'
+  const [nama, setNama]           = useState('')
+  const [nip, setNip]             = useState('')
+  const [unitKerja, setUnitKerja] = useState('')
+  const [jawaban, setJawaban]     = useState({})      // { id: 0|1|2|3 }
+
+  const answered = Object.keys(jawaban).length
+  const progress  = (answered / 21) * 100
+
+  function hitungDASS() {
+    const D = soal.filter(s => s.skala === 'D').reduce((sum, s) => sum + (jawaban[s.id] ?? 0), 0) * 2
+    const A = soal.filter(s => s.skala === 'A').reduce((sum, s) => sum + (jawaban[s.id] ?? 0), 0) * 2
+    const S = soal.filter(s => s.skala === 'S').reduce((sum, s) => sum + (jawaban[s.id] ?? 0), 0) * 2
+    return { D, A, S }
+  }
+
+  function handleSubmit() {
+    if (answered < 21) {
+      const belum = soal.filter(s => jawaban[s.id] === undefined).map(s => s.id)
+      alert(`Masih ada ${belum.length} pertanyaan yang belum dijawab (no. ${belum.join(', ')}).`)
+      // Scroll ke soal pertama yang belum dijawab
+      const el = document.getElementById(`soal-${belum[0]}`)
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      return
+    }
+    const { D, A, S } = hitungDASS()
+    navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, nip, unitKerja, jawaban } })
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     STEP: FORM
+  ═══════════════════════════════════════════════════════ */
+  if (step === 'form') {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white flex flex-col items-center justify-center p-6">
+        <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl border border-teal-100 p-8">
+
+          {/* Logo + Judul */}
+          <div className="flex items-center gap-4 mb-8">
+            <div className="w-14 h-14 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-teal-200 flex-shrink-0">
+              <span className="text-white font-black text-xs text-center leading-tight">DASS<br/>21</span>
+            </div>
+            <div>
+              <h1 className="text-xl font-black text-gray-900">Tes DASS-21</h1>
+              <p className="text-sm text-gray-400">Depression · Anxiety · Stress Scales</p>
+            </div>
+          </div>
+
+          {/* Deskripsi */}
+          <div className="bg-teal-50 border border-teal-100 rounded-2xl p-4 mb-6 text-sm text-teal-800 leading-relaxed">
+            DASS-21 adalah alat skrining untuk mengukur tingkat{' '}
+            <strong>depresi</strong>, <strong>kecemasan</strong>, dan <strong>stres</strong>{' '}
+            yang Anda rasakan dalam <strong>1 minggu terakhir</strong>.
+            Terdiri dari 21 pernyataan singkat. Tidak ada jawaban benar atau salah.
+          </div>
+
+          {/* Form isian */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+              <input
+                type="text" value={nama} onChange={e => setNama(e.target.value)}
+                placeholder="Nama lengkap sesuai KTP"
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP / NIK</label>
+              <input
+                type="text" value={nip} onChange={e => setNip(e.target.value)}
+                placeholder="NIP atau NIK"
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja</label>
+              <select
+                value={unitKerja} onChange={e => setUnitKerja(e.target.value)}
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition bg-white"
+              >
+                <option value="">-- Pilih Unit Kerja --</option>
+                {unitKerjaOptions.map(g => (
+                  <optgroup key={g.group} label={g.group}>
+                    {g.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              if (!nama.trim()) return alert('Mohon isi nama lengkap.')
+              if (!nip.trim())  return alert('Mohon isi NIP/NIK.')
+              if (!unitKerja)   return alert('Mohon pilih unit kerja.')
+              setStep('tes')
+              window.scrollTo(0, 0)
+            }}
+            className="mt-6 w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-teal-200"
+          >
+            Mulai Tes →
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     STEP: TES
+  ═══════════════════════════════════════════════════════ */
+  return (
+    <div className="min-h-screen bg-slate-50">
+
+      {/* Sticky progress header */}
+      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm px-6 py-3">
+        <div className="max-w-2xl mx-auto flex justify-between items-center gap-4">
+          <div>
+            <p className="font-bold text-gray-800 text-sm">{nama}</p>
+            <p className="text-xs text-gray-400">DASS-21 · {answered}/21 terjawab</p>
+          </div>
+          <div className="flex-1 max-w-xs">
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div
+                className="bg-teal-500 h-2.5 rounded-full transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+          <span className="text-sm font-bold text-teal-600 w-10 text-right">{Math.round(progress)}%</span>
+        </div>
+      </div>
+
+      <div className="max-w-2xl mx-auto px-4 py-8">
+
+        {/* Instruksi + Legenda */}
+        <div className="bg-teal-50 border border-teal-200 rounded-2xl p-5 mb-6">
+          <h2 className="font-bold text-teal-900 mb-2">Petunjuk Pengisian</h2>
+          <p className="text-sm text-teal-800 leading-relaxed mb-4">
+            Bacalah setiap pernyataan dan pilih angka yang paling menggambarkan apa yang Anda rasakan atau alami dalam{' '}
+            <strong>1 minggu terakhir</strong>. Tidak ada jawaban benar atau salah.
+          </p>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { n: 0, label: 'Tidak pernah',  cls: 'bg-emerald-100 text-emerald-700' },
+              { n: 1, label: 'Kadang-kadang', cls: 'bg-amber-100 text-amber-700'   },
+              { n: 2, label: 'Sering',         cls: 'bg-orange-100 text-orange-700' },
+              { n: 3, label: 'Hampir selalu',  cls: 'bg-rose-100 text-rose-700'    },
+            ].map(({ n, label, cls }) => (
+              <div key={n} className="flex items-center gap-2 text-xs">
+                <span className={`w-6 h-6 ${cls} font-bold rounded-lg flex items-center justify-center flex-shrink-0`}>{n}</span>
+                <span className="text-gray-700">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Daftar soal */}
+        <div className="space-y-4">
+          {soal.map(s => {
+            const val  = jawaban[s.id]
+            const done = val !== undefined
+
+            const btnCfg = [
+              { idle: 'bg-gray-50 border-gray-200 text-gray-500 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700', active: 'bg-emerald-500 border-emerald-500 text-white' },
+              { idle: 'bg-gray-50 border-gray-200 text-gray-500 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700',   active: 'bg-amber-500 border-amber-500 text-white'   },
+              { idle: 'bg-gray-50 border-gray-200 text-gray-500 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-700', active: 'bg-orange-500 border-orange-500 text-white'  },
+              { idle: 'bg-gray-50 border-gray-200 text-gray-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-700',     active: 'bg-rose-500 border-rose-500 text-white'      },
+            ]
+
+            return (
+              <div
+                id={`soal-${s.id}`}
+                key={s.id}
+                className={`bg-white rounded-2xl shadow-sm border-2 p-5 transition-all ${done ? 'border-teal-200' : 'border-gray-100'}`}
+              >
+                {/* Nomor + teks */}
+                <div className="flex gap-3 mb-4">
+                  <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${done ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
+                    {s.id}
+                  </span>
+                  <p className="text-sm font-medium text-gray-800 leading-relaxed">{s.teks}</p>
+                </div>
+
+                {/* Tombol pilihan */}
+                <div className="grid grid-cols-4 gap-2">
+                  {[0, 1, 2, 3].map(n => {
+                    const c        = btnCfg[n]
+                    const selected = val === n
+                    return (
+                      <button
+                        key={n}
+                        onClick={() => setJawaban(j => ({ ...j, [s.id]: n }))}
+                        className={`border-2 rounded-xl py-2.5 flex flex-col items-center gap-0.5 transition-all ${selected ? c.active : c.idle}`}
+                      >
+                        <span className="text-base font-black leading-none">{n}</span>
+                        <span className="text-[9px] font-medium leading-tight text-center px-0.5 mt-0.5">
+                          {['Tidak\npernah', 'Kadang-\nkadang', 'Sering', 'Hampir\nselalu'][n]}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Submit */}
+        <div className="mt-8 pb-8">
+          {answered < 21 && (
+            <p className="text-center text-sm text-amber-600 font-medium mb-3">
+              ⚠️ Masih {21 - answered} pertanyaan belum dijawab
+            </p>
+          )}
+          <button
+            onClick={handleSubmit}
+            className={`w-full font-bold py-4 rounded-2xl text-lg transition-all ${
+              answered === 21
+                ? 'bg-teal-600 hover:bg-teal-700 text-white shadow-lg shadow-teal-200'
+                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+            }`}
+          >
+            {answered === 21 ? 'Lihat Hasil →' : `${answered} / 21 terjawab`}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
