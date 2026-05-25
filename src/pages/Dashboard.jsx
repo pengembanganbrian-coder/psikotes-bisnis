@@ -145,14 +145,14 @@ function Dashboard() {
           ) : peserta.filter(p => tab === 'Semua' || p.jenis === tab).length === 0 ? (
             <p className="text-gray-400">Belum ada peserta {tab !== 'Semua' ? tab : ''}.</p>
           ) : (
-            <table className="w-full text-sm">
+            <table className="w-full text-base">
               <thead>
-                <tr className="bg-blue-50 text-left">
-                  <th className="px-4 py-2 rounded-l">Nama</th>
-                  <th className="px-4 py-2">Unit Kerja</th>
-                  <th className="px-4 py-2">Jenis Tes</th>
-                  <th className="px-4 py-2">Hasil</th>
-                  <th className="px-4 py-2 rounded-r">Tanggal</th>
+                <tr className="bg-blue-50 text-left text-sm font-semibold text-gray-600">
+                  <th className="px-5 py-3 rounded-l">Nama</th>
+                  <th className="px-5 py-3">Unit Kerja</th>
+                  <th className="px-5 py-3">Jenis Tes</th>
+                  <th className="px-5 py-3">Hasil</th>
+                  <th className="px-5 py-3 rounded-r">Tanggal</th>
                 </tr>
               </thead>
               <tbody>
@@ -167,15 +167,15 @@ function Dashboard() {
                       onClick={() => setSelected(p)}
                       className={`border-t cursor-pointer transition ${isSelected ? 'bg-blue-50' : 'hover:bg-gray-50'}`}
                     >
-                      <td className="px-4 py-2 font-medium text-blue-600">{p.nama}</td>
-                      <td className="px-4 py-2 text-gray-500 max-w-[200px] truncate">{p.jabatan || '-'}</td>
-                      <td className="px-4 py-2">
-                        <span className={`text-xs font-bold px-2 py-1 rounded-full ${jenisBadge[p.jenis]}`}>
+                      <td className="px-5 py-3 font-semibold text-blue-600">{p.nama}</td>
+                      <td className="px-5 py-3 text-gray-500 max-w-[220px] truncate">{p.jabatan || '-'}</td>
+                      <td className="px-5 py-3">
+                        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${jenisBadge[p.jenis]}`}>
                           {p.jenis}
                         </span>
                       </td>
-                      <td className="px-4 py-2 font-bold text-blue-700">{hasil}</td>
-                      <td className="px-4 py-2 text-gray-400">
+                      <td className="px-5 py-3 font-bold text-blue-700">{hasil}</td>
+                      <td className="px-5 py-3 text-gray-400">
                         {new Date(p.created_at).toLocaleDateString('id-ID')}
                       </td>
                     </tr>
