@@ -81,6 +81,31 @@ function Home() {
                 Mulai Tes →
               </div>
             </button>
+
+            {/* PAPI Card — full width */}
+            <button
+              onClick={() => navigate('/tes-papi')}
+              className="group md:col-span-2 bg-white rounded-2xl border-2 border-gray-100 hover:border-purple-200 shadow-sm hover:shadow-xl hover:shadow-purple-100/60 p-7 text-left transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="flex items-start gap-5">
+                <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-200 group-hover:scale-105 transition-transform duration-300">
+                  <span className="text-white font-black text-xs tracking-wide text-center leading-tight">PAPI<br/>Kostick</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-bold text-gray-800 text-lg mb-1">Tes PAPI Kostick</h3>
+                  <p className="text-sm text-gray-500 mb-4">Personality and Preference Inventory · 20 skala peran & kebutuhan</p>
+                  <div className="flex flex-wrap gap-2 mb-5">
+                    <span className="text-xs bg-purple-50 text-purple-700 font-semibold px-3 py-1.5 rounded-full">📝 90 pasangan soal</span>
+                    <span className="text-xs bg-purple-50 text-purple-700 font-semibold px-3 py-1.5 rounded-full">⏱ ~20 menit</span>
+                    <span className="text-xs bg-indigo-50 text-indigo-600 font-medium px-3 py-1.5 rounded-full">ROLES: G L I T V S R D C E</span>
+                    <span className="text-xs bg-violet-50 text-violet-600 font-medium px-3 py-1.5 rounded-full">NEEDS: N A P X B O Z K F W</span>
+                  </div>
+                  <div className="w-full bg-purple-600 group-hover:bg-purple-700 text-white font-bold text-base py-3 rounded-xl text-center transition-all">
+                    Mulai Tes →
+                  </div>
+                </div>
+              </div>
+            </button>
           </div>
 
           {/* Info note */}
