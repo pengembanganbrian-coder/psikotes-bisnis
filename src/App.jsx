@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard'
 import TesDisc from './pages/TesDisc'
 import HasilDisc from './pages/HasilDisc'
 import JobProfile from './pages/JobProfile'
+import ProtectedRoute from './components/ProtectedRoute'
 
 function App() {
   return (
@@ -16,10 +17,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/tes" element={<Tes />} />
         <Route path="/hasil" element={<Hasil />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/tes-disc" element={<TesDisc />} />
         <Route path="/hasil-disc" element={<HasilDisc />} />
-        <Route path="/job-profile" element={<JobProfile />} />
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/job-profile" element={<ProtectedRoute><JobProfile /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )
