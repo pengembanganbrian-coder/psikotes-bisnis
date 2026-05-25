@@ -7,6 +7,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(null)
   const [tab, setTab] = useState('Semua')
+  const [search, setSearch] = useState('')
   const navigate = useNavigate()
 
   const fetchAllPeserta = async () => {
@@ -116,6 +117,17 @@ function Dashboard() {
 
         {/* Tabel Peserta */}
         <div className="flex-1 bg-white rounded-2xl shadow p-6">
+          {/* Search */}
+          <div className="mb-4">
+            <input
+              type="text"
+              value={search}
+              onChange={e => { setSearch(e.target.value); setSelected(null) }}
+              placeholder="🔍 Cari nama peserta..."
+              className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all"
+            />
+          </div>
+
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-gray-700">Daftar Peserta</h2>
             <div className="flex items-center gap-3">
@@ -135,14 +147,14 @@ function Dashboard() {
                 ))}
               </div>
               <span className="text-sm text-gray-400">
-                {peserta.filter(p => tab === 'Semua' || p.jenis === tab).length} peserta
+                {peserta.filter(p => (tab === 'Semua' || p.jenis === tab) && p.nama.toLowerCase().includes(search.toLowerCase())).length} peserta
               </span>
             </div>
           </div>
 
           {loading ? (
             <p className="text-gray-400">Memuat data...</p>
-          ) : peserta.filter(p => tab === 'Semua' || p.jenis === tab).length === 0 ? (
+          ) : peserta.filter(p => (tab === 'Semua' || p.jenis === tab) && p.nama.toLowerCase().includes(search.toLowerCase())).length === 0 ? (
             <p className="text-gray-400">Belum ada peserta {tab !== 'Semua' ? tab : ''}.</p>
           ) : (
             <table className="w-full text-base">
@@ -156,7 +168,7 @@ function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {peserta.filter(p => tab === 'Semua' || p.jenis === tab).map((p) => {
+                {peserta.filter(p => (tab === 'Semua' || p.jenis === tab) && p.nama.toLowerCase().includes(search.toLowerCase())).map((p) => {
                   const hasil = p.jenis === 'MBTI'
                     ? p.hasil_tes?.[0]?.tipe_mbti || 'Belum tes'
                     : p.hasil_disc?.[0]?.profil || 'Belum tes'
