@@ -309,8 +309,20 @@ function Hasil() {
   const huruf = tipe.split('')
 
   return (
-    <div className="min-h-screen bg-blue-50 py-10 px-4">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Sticky Top Bar */}
+      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-gray-100 px-4 py-3 print:hidden">
+        <div className="max-w-3xl mx-auto flex items-center justify-between">
+          <button onClick={() => navigate('/tes')} className="text-sm text-gray-400 hover:text-blue-600 transition">
+            ← Ulangi Tes
+          </button>
+          <span className="text-xs font-bold text-blue-700 tracking-widest uppercase">MBTI · Psikotes DJBC</span>
+          <button onClick={() => window.print()} className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition">
+            🖨️ Cetak
+          </button>
+        </div>
+      </div>
+      <div className="max-w-3xl mx-auto py-8 px-4">
 
         {/* Header Laporan */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 text-center">
@@ -319,7 +331,7 @@ function Hasil() {
           <h2 className="text-lg font-bold text-gray-700 mb-6">{nama}</h2>
 
           {/* Tipe besar */}
-          <div className="bg-blue-700 text-white rounded-2xl py-8 px-6 mb-6">
+          <div className="bg-gradient-to-br from-blue-700 to-indigo-700 text-white rounded-2xl py-8 px-6 mb-6 shadow-lg shadow-blue-200">
             <p className="text-sm font-semibold opacity-80 mb-2">TIPE KEPRIBADIAN</p>
             <div className="flex justify-center gap-3 mb-3">
               {huruf.map((h, i) => (
@@ -377,16 +389,16 @@ function Hasil() {
         </div>
 
         {/* Tombol */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 sticky bottom-4 print:hidden">
           <button
             onClick={() => navigate('/tes')}
-            className="flex-1 border-2 border-blue-600 text-blue-600 font-semibold py-3 rounded-xl hover:bg-blue-50 transition"
+            className="flex-1 border-2 border-blue-600 text-blue-600 bg-white font-semibold py-3 rounded-xl hover:bg-blue-50 transition shadow-lg"
           >
-            Ulangi Tes
+            ← Ulangi Tes
           </button>
           <button
             onClick={() => window.print()}
-            className="flex-1 bg-blue-600 text-white font-semibold py-3 rounded-xl hover:bg-blue-700 transition"
+            className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition shadow-lg shadow-blue-200"
           >
             🖨️ Cetak Laporan
           </button>

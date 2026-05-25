@@ -205,8 +205,20 @@ function HasilDisc() {
   const maxChange = Math.max(...changeData.map(d => Math.abs(d.val)), 1)
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 print:bg-white print:py-2">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50 print:bg-white">
+      {/* Sticky Top Bar */}
+      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-gray-100 px-4 py-3 print:hidden">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <button onClick={() => navigate('/tes-disc')} className="text-sm text-gray-400 hover:text-green-600 transition">
+            ← Ulangi Tes
+          </button>
+          <span className="text-xs font-bold text-green-700 tracking-widest uppercase">DISC · Psikotes DJBC</span>
+          <button onClick={() => window.print()} className="text-sm bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition">
+            🖨️ Cetak
+          </button>
+        </div>
+      </div>
+      <div className="max-w-2xl mx-auto py-8 px-4">
 
         {/* HEADER */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
@@ -215,7 +227,7 @@ function HasilDisc() {
             <p className="text-xs text-gray-400 mb-3">Psikotes DJBC — Bersifat RAHASIA</p>
             <h2 className="text-xl font-bold text-gray-800">{nama}</h2>
           </div>
-          <div className={`${warna.bg} text-white rounded-2xl py-6 px-6 text-center mb-5`}>
+          <div className={`${warna.bg} text-white rounded-2xl py-6 px-6 text-center mb-5 shadow-lg`}>
             <p className="text-xs font-semibold opacity-75 mb-2 uppercase tracking-widest">Profil Kepribadian</p>
             <div className="flex justify-center gap-2 mb-2">
               {profil.split('').map((h, i) => (
@@ -444,11 +456,11 @@ function HasilDisc() {
         </div>
 
         {/* TOMBOL */}
-        <div className="flex gap-3 print:hidden">
-          <button onClick={() => navigate('/tes-disc')} className="flex-1 border-2 border-green-600 text-green-600 font-semibold py-3 rounded-xl hover:bg-green-50 transition">
-            Ulangi Tes
+        <div className="flex gap-3 sticky bottom-4 print:hidden">
+          <button onClick={() => navigate('/tes-disc')} className="flex-1 border-2 border-green-600 text-green-600 bg-white font-semibold py-3 rounded-xl hover:bg-green-50 transition shadow-lg">
+            ← Ulangi Tes
           </button>
-          <button onClick={() => window.print()} className="flex-1 bg-green-600 text-white font-semibold py-3 rounded-xl hover:bg-green-700 transition">
+          <button onClick={() => window.print()} className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition shadow-lg shadow-green-200">
             🖨️ Cetak Laporan
           </button>
         </div>
