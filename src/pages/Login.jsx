@@ -26,8 +26,8 @@ function Login() {
         {/* Logo */}
         <div className="text-center mb-8">
           <img src="/logo-djbc.png" alt="Logo DJBC" className="h-16 w-auto mx-auto mb-4" />
-          <h1 className="text-2xl font-black text-white">Psikotes DJBC</h1>
-          <p className="text-blue-300 text-sm mt-1">Portal Administrator HRD</p>
+          <h1 className="text-lg font-black text-white leading-snug">Platform Asesmen Pengembangan<br/>Kepegawaian DJBC</h1>
+          <p className="text-blue-300 text-sm mt-1">Portal Admin</p>
         </div>
 
         {/* Card */}

@@ -101,7 +101,7 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-blue-50">
       <div className="bg-white shadow px-8 py-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-blue-700">Dashboard Admin — Psikotes DJBC</h1>
+        <h1 className="text-xl font-bold text-blue-700">Dashboard Admin — Platform Asesmen DJBC</h1>
         <div className="flex gap-3 items-center">
           <button onClick={handleExportExcel} className="text-sm bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
             📥 Export CSV
