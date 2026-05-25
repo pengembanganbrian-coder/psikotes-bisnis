@@ -212,19 +212,19 @@ function HasilDisc() {
           <button onClick={() => navigate('/tes-disc')} className="text-sm text-gray-400 hover:text-green-600 transition">
             ← Ulangi Tes
           </button>
-          <span className="text-xs font-bold text-green-700 tracking-widest uppercase">DISC · Psikotes DJBC</span>
+          <span className="text-xs font-bold text-green-700 tracking-widest uppercase">DISC · Platform Asesmen DJBC</span>
           <button onClick={() => window.print()} className="text-sm bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition">
             🖨️ Cetak
           </button>
         </div>
       </div>
-      <div className="max-w-2xl mx-auto py-8 px-4">
+      <div className="max-w-3xl mx-auto py-8 px-4">
 
         {/* HEADER */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
           <div className="text-center mb-5">
             <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">LAPORAN PROFIL KEPRIBADIAN</p>
-            <p className="text-xs text-gray-400 mb-3">Psikotes DJBC — Bersifat RAHASIA</p>
+            <p className="text-xs text-gray-400 mb-3">Platform Asesmen Pengembangan Kepegawaian DJBC — Bersifat RAHASIA</p>
             <h2 className="text-xl font-bold text-gray-800">{nama}</h2>
           </div>
           <div className={`${warna.bg} text-white rounded-2xl py-6 px-6 text-center mb-5 shadow-lg`}>
@@ -402,55 +402,59 @@ function HasilDisc() {
 
         {/* KARAKTERISTIK */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
-          <h3 className="font-bold text-gray-700 mb-4">Tampilan Kerjanya Saat Ini...</h3>
-          <div className="flex flex-wrap gap-2 mb-4">
+          <h3 className="font-bold text-gray-700 mb-3">Karakteristik Perilaku</h3>
+          <div className="flex flex-wrap gap-2 mb-5">
             {info.karakteristik.map((k, i) => (
-              <span key={i} className={`text-xs px-3 py-1 rounded-full font-medium ${warna.light} ${warna.text}`}>• {k}</span>
+              <span key={i} className={`text-sm px-3 py-1.5 rounded-full font-medium ${warna.light} ${warna.text}`}>• {k}</span>
             ))}
           </div>
-          <h3 className="font-bold text-gray-700 mb-4">Karakteristik Umum...</h3>
-          <div className="grid grid-cols-2 gap-3 mb-4">
+
+          <h3 className="font-bold text-gray-700 mb-3">Analisis Perilaku dan Emosi</h3>
+          <div className="grid grid-cols-2 gap-3 mb-5">
             <div className={`${warna.light} border ${warna.border} rounded-xl p-4`}>
               <p className={`text-xs font-bold uppercase mb-2 ${warna.text}`}>Perilaku Kerja — Kekuatan</p>
-              <ul className="space-y-1">{info.perilakuKerja.kekuatan.map((k,i) => <li key={i} className="text-xs text-gray-700 flex gap-1"><span>•</span>{k}</li>)}</ul>
+              <ul className="space-y-1.5">{info.perilakuKerja.kekuatan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
             </div>
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
               <p className="text-xs font-bold uppercase mb-2 text-amber-700">Perilaku Kerja — Kelemahan</p>
-              <ul className="space-y-1">{info.perilakuKerja.kelemahan.map((k,i) => <li key={i} className="text-xs text-gray-700 flex gap-1"><span>•</span>{k}</li>)}</ul>
+              <ul className="space-y-1.5">{info.perilakuKerja.kelemahan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
             </div>
             <div className={`${warna.light} border ${warna.border} rounded-xl p-4`}>
               <p className={`text-xs font-bold uppercase mb-2 ${warna.text}`}>Suasana Emosi — Kekuatan</p>
-              <ul className="space-y-1">{info.suasanaEmosi.kekuatan.map((k,i) => <li key={i} className="text-xs text-gray-700 flex gap-1"><span>•</span>{k}</li>)}</ul>
+              <ul className="space-y-1.5">{info.suasanaEmosi.kekuatan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
             </div>
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
               <p className="text-xs font-bold uppercase mb-2 text-amber-700">Suasana Emosi — Kelemahan</p>
-              <ul className="space-y-1">{info.suasanaEmosi.kelemahan.map((k,i) => <li key={i} className="text-xs text-gray-700 flex gap-1"><span>•</span>{k}</li>)}</ul>
+              <ul className="space-y-1.5">{info.suasanaEmosi.kelemahan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 mb-4">
+
+          <h3 className="font-bold text-gray-700 mb-3">Kekuatan dan Kelemahan</h3>
+          <div className="grid grid-cols-2 gap-3 mb-5">
             <div className="bg-green-50 border border-green-200 rounded-xl p-4">
               <p className="text-xs font-bold uppercase mb-2 text-green-700">Kekuatan</p>
-              <ul className="space-y-1">{info.kekuatan.slice(0, 8).map((k,i) => <li key={i} className="text-xs text-gray-700 flex gap-1"><span>•</span>{k}</li>)}</ul>
+              <ul className="space-y-1.5">{info.kekuatan.slice(0, 8).map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
             </div>
             <div className="bg-red-50 border border-red-200 rounded-xl p-4">
               <p className="text-xs font-bold uppercase mb-2 text-red-700">Kelemahan</p>
-              <ul className="space-y-1">{info.kelemahan.slice(0, 8).map((k,i) => <li key={i} className="text-xs text-gray-700 flex gap-1"><span>•</span>{k}</li>)}</ul>
+              <ul className="space-y-1.5">{info.kelemahan.slice(0, 8).map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
             </div>
           </div>
+
           <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4">
             <p className="text-xs font-bold uppercase mb-2 text-purple-700">Gaya Kepemimpinan</p>
-            <div className="flex flex-wrap gap-1">
-              {info.gayaKepemimpinan.map((k,i) => <span key={i} className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">• {k}</span>)}
+            <div className="flex flex-wrap gap-1.5">
+              {info.gayaKepemimpinan.map((k,i) => <span key={i} className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-full">• {k}</span>)}
             </div>
           </div>
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-            <p className="text-xs font-bold uppercase mb-2 text-blue-700">Karakteristik Pekerjaan yang Sesuai...</p>
-            <ul className="space-y-1 columns-2">{info.pekerjaan.map((k,i) => <li key={i} className="text-xs text-gray-700 flex gap-1 break-inside-avoid"><span>•</span>{k}</li>)}</ul>
+            <p className="text-xs font-bold uppercase mb-2 text-blue-700">Karakteristik Pekerjaan yang Sesuai</p>
+            <ul className="space-y-1.5 columns-2">{info.pekerjaan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5 break-inside-avoid"><span>•</span>{k}</li>)}</ul>
           </div>
           <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-            <p className="text-xs font-bold uppercase mb-2 text-gray-600">Career Guidelines</p>
+            <p className="text-xs font-bold uppercase mb-2 text-gray-600">Rekomendasi Jalur Karir</p>
             <div className="flex flex-wrap gap-2">
-              {info.karir.map((k,i) => <span key={i} className={`text-xs px-3 py-1 rounded-full font-semibold ${warna.light} ${warna.text}`}>{k}</span>)}
+              {info.karir.map((k,i) => <span key={i} className={`text-sm px-3 py-1.5 rounded-full font-semibold ${warna.light} ${warna.text}`}>{k}</span>)}
             </div>
           </div>
         </div>
