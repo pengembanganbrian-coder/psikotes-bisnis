@@ -8,6 +8,8 @@ import TesDisc from './pages/TesDisc'
 import HasilDisc from './pages/HasilDisc'
 import TesPapi from './pages/TesPapi'
 import HasilPapi from './pages/HasilPapi'
+import TesDass from './pages/TesDass'
+import HasilDass from './pages/HasilDass'
 import JobProfile from './pages/JobProfile'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -23,6 +25,8 @@ function App() {
         <Route path="/hasil-disc" element={<HasilDisc />} />
         <Route path="/tes-papi" element={<TesPapi />} />
         <Route path="/hasil-papi" element={<HasilPapi />} />
+        <Route path="/tes-dass" element={<TesDass />} />
+        <Route path="/hasil-dass" element={<HasilDass />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/job-profile" element={<ProtectedRoute><JobProfile /></ProtectedRoute>} />
       </Routes>

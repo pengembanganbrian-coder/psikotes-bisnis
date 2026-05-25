@@ -15,17 +15,19 @@ function Dashboard() {
   /* ── Fetch ─────────────────────────────────────────────────── */
   const fetchAllPeserta = async () => {
     setLoading(true)
-    const [{ data: mbti }, { data: disc }, { data: papi }] = await Promise.all([
+    const [{ data: mbti }, { data: disc }, { data: papi }, { data: dass }] = await Promise.all([
       supabase.from('peserta').select('*, hasil_tes(*)').order('created_at', { ascending: false }),
       supabase.from('peserta_disc').select('*, hasil_disc(*)').order('created_at', { ascending: false }),
       supabase.from('peserta_papi').select('*, hasil_papi(*)').order('created_at', { ascending: false }),
+      supabase.from('peserta_dass').select('*, hasil_dass(*)').order('created_at', { ascending: false }),
     ])
 
     const mbtiList = (mbti  || []).map(p => ({ ...p, jenis: 'MBTI', identifier: p.email }))
     const discList = (disc  || []).map(p => ({ ...p, jenis: 'DISC', identifier: p.nip }))
     const papiList = (papi  || []).map(p => ({ ...p, jenis: 'PAPI', identifier: p.nip }))
+    const dassList = (dass  || []).map(p => ({ ...p, jenis: 'DASS', identifier: p.nip }))
 
-    const merged = [...mbtiList, ...discList, ...papiList].sort(
+    const merged = [...mbtiList, ...discList, ...papiList, ...dassList].sort(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     )
     setPeserta(merged)
@@ -49,9 +51,12 @@ function Dashboard() {
     } else if (item.jenis === 'DISC') {
       await supabase.from('hasil_disc').delete().eq('peserta_id', item.id)
       await supabase.from('peserta_disc').delete().eq('id', item.id)
-    } else {
+    } else if (item.jenis === 'PAPI') {
       await supabase.from('hasil_papi').delete().eq('peserta_id', item.id)
       await supabase.from('peserta_papi').delete().eq('id', item.id)
+    } else {
+      await supabase.from('hasil_dass').delete().eq('peserta_id', item.id)
+      await supabase.from('peserta_dass').delete().eq('id', item.id)
     }
     setSelected(null)
     fetchAllPeserta()
@@ -65,6 +70,10 @@ function Dashboard() {
       if (p.jenis === 'MBTI') hasil = p.hasil_tes?.[0]?.tipe_mbti  || 'Belum tes'
       if (p.jenis === 'DISC') hasil = p.hasil_disc?.[0]?.profil    || 'Belum tes'
       if (p.jenis === 'PAPI') hasil = p.hasil_papi?.[0]?.profil    || 'Belum tes'
+      if (p.jenis === 'DASS') {
+        const h = p.hasil_dass?.[0]
+        hasil = h ? `D:${h.kategori_depresi} A:${h.kategori_anxietas} S:${h.kategori_stres}` : 'Belum tes'
+      }
       rows.push([
         p.nama,
         p.identifier,
@@ -100,7 +109,7 @@ function Dashboard() {
           },
         },
       })
-    } else {
+    } else if (item.jenis === 'PAPI') {
       const h = item.hasil_papi?.[0]
       if (!h) return
       const scores = {}
@@ -114,6 +123,22 @@ function Dashboard() {
           profil: h.profil,
         },
       })
+    } else {
+      const h = item.hasil_dass?.[0]
+      if (!h) return
+      navigate('/hasil-dass', {
+        state: {
+          fromDashboard: true,
+          nama: item.nama,
+          nip: item.nip,
+          unitKerja: item.jabatan,
+          skor: {
+            D: h.skor_depresi,
+            A: h.skor_anxietas,
+            S: h.skor_stres,
+          },
+        },
+      })
     }
   }
 
@@ -122,6 +147,7 @@ function Dashboard() {
     MBTI: 'bg-blue-100 text-blue-700',
     DISC: 'bg-green-100 text-green-700',
     PAPI: 'bg-purple-100 text-purple-700',
+    DASS: 'bg-teal-100 text-teal-700',
   }
 
   const discColors = { D: 'bg-red-500', I: 'bg-yellow-400', S: 'bg-green-500', C: 'bg-blue-500' }
@@ -130,6 +156,11 @@ function Dashboard() {
     if (p.jenis === 'MBTI') return p.hasil_tes?.[0]?.tipe_mbti  || '—'
     if (p.jenis === 'DISC') return p.hasil_disc?.[0]?.profil    || '—'
     if (p.jenis === 'PAPI') return p.hasil_papi?.[0]?.profil    || '—'
+    if (p.jenis === 'DASS') {
+      const h = p.hasil_dass?.[0]
+      if (!h) return '—'
+      return `D:${h.kategori_depresi?.substring(0,3)} A:${h.kategori_anxietas?.substring(0,3)} S:${h.kategori_stres?.substring(0,3)}`
+    }
     return '—'
   }
 
@@ -173,7 +204,7 @@ function Dashboard() {
             <h2 className="text-lg font-semibold text-gray-700">Daftar Peserta</h2>
             <div className="flex items-center gap-3">
               <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
-                {['Semua', 'MBTI', 'DISC', 'PAPI'].map(t => (
+                {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS'].map(t => (
                   <button key={t}
                     onClick={() => { setTab(t); setSelected(null) }}
                     className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition ${
@@ -181,6 +212,7 @@ function Dashboard() {
                         ? t === 'MBTI'  ? 'bg-blue-600 text-white'
                         : t === 'DISC'  ? 'bg-green-600 text-white'
                         : t === 'PAPI'  ? 'bg-purple-600 text-white'
+                        : t === 'DASS'  ? 'bg-teal-600 text-white'
                         : 'bg-white text-gray-700 shadow-sm'
                         : 'text-gray-400 hover:text-gray-600'
                     }`}
@@ -353,6 +385,55 @@ function Dashboard() {
                 )}
               </>
             )}
+
+            {/* ─── DASS ─── */}
+            {selected.jenis === 'DASS' && (() => {
+              const h = selected.hasil_dass?.[0]
+              const dassSkor = h ? [
+                { key: 'D', label: 'Depresi',   emoji: '💙', skor: h.skor_depresi,  kat: h.kategori_depresi  },
+                { key: 'A', label: 'Kecemasan', emoji: '⚡', skor: h.skor_anxietas, kat: h.kategori_anxietas },
+                { key: 'S', label: 'Stres',     emoji: '🌊', skor: h.skor_stres,    kat: h.kategori_stres    },
+              ] : []
+              const katWarna = { Normal: 'bg-emerald-100 text-emerald-700', Ringan: 'bg-lime-100 text-lime-700', Sedang: 'bg-amber-100 text-amber-700', Berat: 'bg-orange-100 text-orange-700', 'Sangat Berat': 'bg-rose-100 text-rose-700' }
+              return (
+                <>
+                  <div className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl p-4 text-center mb-4">
+                    <p className="text-xs opacity-75 mb-1">DASS-21</p>
+                    <p className="text-sm font-black">Depression · Anxiety · Stress</p>
+                    {h && (
+                      <p className="text-xs opacity-80 mt-1">
+                        D:{h.kategori_depresi} · A:{h.kategori_anxietas} · S:{h.kategori_stres}
+                      </p>
+                    )}
+                  </div>
+                  <div className="space-y-2 text-sm mb-4">
+                    <div className="flex justify-between"><span className="text-gray-500">Nama</span><span className="font-medium">{selected.nama}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">NIP</span><span className="font-medium">{selected.nip}</span></div>
+                    <div className="flex justify-between gap-2"><span className="text-gray-500 flex-shrink-0">Unit Kerja</span><span className="font-medium text-xs text-right">{selected.jabatan || '-'}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Tanggal</span><span className="font-medium">{new Date(selected.created_at).toLocaleDateString('id-ID')}</span></div>
+                  </div>
+                  {h && (
+                    <div className="mb-4">
+                      <p className="text-xs text-gray-500 mb-2 font-semibold uppercase">Skor DASS-21</p>
+                      {dassSkor.map(({ emoji, label, skor, kat }) => (
+                        <div key={label} className="mb-2.5">
+                          <div className="flex justify-between text-xs mb-1">
+                            <span className="font-medium text-gray-700">{emoji} {label}</span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-bold">{skor}</span>
+                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${katWarna[kat] || 'bg-gray-100 text-gray-600'}`}>{kat}</span>
+                            </div>
+                          </div>
+                          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-full bg-teal-500 rounded-full" style={{ width: `${(skor / 42) * 100}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )
+            })()}
 
             <div className="flex gap-2">
               <button onClick={() => handleLihatLaporan(selected)}
