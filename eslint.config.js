@@ -17,5 +17,10 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      // Pattern useEffect(() => { fetchData() }, []) adalah valid dan umum di React.
+      // Rule ini terlalu strict di react-hooks v7 untuk pola async fetch.
+      'react-hooks/set-state-in-effect': 'off',
+    },
   },
 ])

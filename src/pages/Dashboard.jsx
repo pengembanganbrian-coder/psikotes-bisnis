@@ -8,8 +8,6 @@ function Dashboard() {
   const [selected, setSelected] = useState(null)
   const navigate = useNavigate()
 
-  useEffect(() => { fetchPeserta() }, [])
-
   const fetchPeserta = async () => {
     const { data } = await supabase
       .from('peserta')
@@ -18,6 +16,8 @@ function Dashboard() {
     setPeserta(data || [])
     setLoading(false)
   }
+
+  useEffect(() => { fetchPeserta() }, [])
 
   const handleLogout = async () => {
     await supabase.auth.signOut()

@@ -18,13 +18,13 @@ function JobProfile() {
   const [form, setForm] = useState({ nama_jabatan: '', skor_d: 0, skor_i: 0, skor_s: 0, skor_c: 0 })
   const navigate = useNavigate()
 
-  useEffect(() => { fetchJobs() }, [])
-
   const fetchJobs = async () => {
     const { data } = await supabase.from('job_profile').select('*').order('nama_jabatan')
     setJobs(data || [])
     setLoading(false)
   }
+
+  useEffect(() => { fetchJobs() }, [])
 
   const handleSubmit = async () => {
     if (!form.nama_jabatan) { alert('Isi nama jabatan!'); return }
