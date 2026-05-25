@@ -13,56 +13,95 @@ function Login() {
     e.preventDefault()
     setLoading(true)
     setError('')
-
     const { error } = await supabase.auth.signInWithPassword({ email, password })
-
-    if (error) {
-      setError('Email atau password salah!')
-    } else {
-      navigate('/dashboard')
-    }
+    if (error) setError('Email atau password salah. Silakan coba lagi.')
+    else navigate('/dashboard')
     setLoading(false)
   }
 
   return (
-    <div className="min-h-screen bg-blue-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-lg p-10 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-blue-700 mb-2 text-center">Psikotes DJBC</h1>
-        <p className="text-gray-500 text-center mb-8">Login HRD</p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
 
-        {error && <p className="text-red-500 text-sm mb-4 text-center">{error}</p>}
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white/10 border border-white/20 rounded-2xl backdrop-blur mb-4">
+            <span className="text-white text-2xl font-black">DJ</span>
+          </div>
+          <h1 className="text-2xl font-black text-white">Psikotes DJBC</h1>
+          <p className="text-blue-300 text-sm mt-1">Portal Administrator HRD</p>
+        </div>
 
-        <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="email@djbc.go.id"
-            />
+        {/* Card */}
+        <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+
+          {/* Card Header */}
+          <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-8 py-6">
+            <h2 className="text-lg font-bold text-white">Selamat Datang</h2>
+            <p className="text-blue-200 text-sm mt-0.5">Masuk ke panel administrasi data tes</p>
           </div>
 
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              placeholder="••••••••"
-            />
-          </div>
+          {/* Card Body */}
+          <div className="px-8 py-7">
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5 flex items-center gap-3">
+                <span className="text-xl">⚠️</span>
+                <p className="text-sm text-red-700 font-medium">{error}</p>
+              </div>
+            )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
-          >
-            {loading ? 'Loading...' : 'Login'}
-          </button>
-        </form>
+            <form onSubmit={handleLogin} className="space-y-5">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Alamat Email
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400"
+                  placeholder="email@djbc.go.id"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-blue-200 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {loading ? '⏳ Memverifikasi...' : 'Masuk ke Dashboard →'}
+              </button>
+            </form>
+
+            <div className="border-t border-gray-100 mt-6 pt-5">
+              <button
+                onClick={() => navigate('/')}
+                className="w-full text-center text-sm text-gray-400 hover:text-blue-600 transition-colors"
+              >
+                ← Kembali ke Halaman Tes
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center text-xs text-blue-400/50 mt-6">
+          © 2025 · Direktorat Jenderal Bea dan Cukai
+        </p>
       </div>
     </div>
   )
