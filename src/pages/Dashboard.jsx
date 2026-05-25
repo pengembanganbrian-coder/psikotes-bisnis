@@ -6,6 +6,7 @@ function Dashboard() {
   const [peserta, setPeserta] = useState([])
   const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(null)
+  const [tab, setTab] = useState('Semua')
   const navigate = useNavigate()
 
   const fetchAllPeserta = async () => {
@@ -117,13 +118,32 @@ function Dashboard() {
         <div className="flex-1 bg-white rounded-2xl shadow p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-gray-700">Daftar Peserta</h2>
-            <span className="text-sm text-gray-400">{peserta.length} peserta</span>
+            <div className="flex items-center gap-3">
+              <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
+                {['Semua', 'MBTI', 'DISC'].map(t => (
+                  <button
+                    key={t}
+                    onClick={() => { setTab(t); setSelected(null) }}
+                    className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition ${
+                      tab === t
+                        ? t === 'MBTI' ? 'bg-blue-600 text-white'
+                          : t === 'DISC' ? 'bg-green-600 text-white'
+                          : 'bg-white text-gray-700 shadow-sm'
+                        : 'text-gray-400 hover:text-gray-600'
+                    }`}
+                  >{t}</button>
+                ))}
+              </div>
+              <span className="text-sm text-gray-400">
+                {peserta.filter(p => tab === 'Semua' || p.jenis === tab).length} peserta
+              </span>
+            </div>
           </div>
 
           {loading ? (
             <p className="text-gray-400">Memuat data...</p>
-          ) : peserta.length === 0 ? (
-            <p className="text-gray-400">Belum ada peserta.</p>
+          ) : peserta.filter(p => tab === 'Semua' || p.jenis === tab).length === 0 ? (
+            <p className="text-gray-400">Belum ada peserta {tab !== 'Semua' ? tab : ''}.</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
@@ -136,7 +156,7 @@ function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {peserta.map((p) => {
+                {peserta.filter(p => tab === 'Semua' || p.jenis === tab).map((p) => {
                   const hasil = p.jenis === 'MBTI'
                     ? p.hasil_tes?.[0]?.tipe_mbti || 'Belum tes'
                     : p.hasil_disc?.[0]?.profil || 'Belum tes'
