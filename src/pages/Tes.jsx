@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 const unitKerjaOptions = [
   {
-    group: 'Kantor Pusat — Bagian',
+    group: 'Sekretariat DJBC',
     options: [
       'Bagian Organisasi dan Tata Laksana',
       'Bagian Keuangan',
@@ -404,7 +404,7 @@ function Tes() {
   const validateForm = () => {
     const errs = {}
     if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
-    if (!email.trim()) errs.email = 'NIP / NIK wajib diisi.'
+    if (!email.trim()) errs.email = 'NIP wajib diisi.'
     if (!jabatan) errs.jabatan = 'Unit kerja wajib dipilih.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
@@ -456,6 +456,7 @@ function Tes() {
       <div className="w-full max-w-md">
 
         <div className="text-center mb-6">
+          <img src="/logo-djbc.png" alt="DJBC" className="h-14 w-auto mx-auto mb-4" />
           <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl shadow-lg shadow-blue-200 mb-4">
             <span className="text-white font-black text-sm tracking-wide">MBTI</span>
           </div>
@@ -472,13 +473,13 @@ function Tes() {
           <div className="px-7 py-6 space-y-5">
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+              <label className="block text-base font-bold text-gray-700 mb-1.5">
                 Nama Lengkap <span className="text-red-400">*</span>
               </label>
               <input
                 value={nama}
                 onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
-                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
+                className={`w-full border bg-gray-50 rounded-xl px-4 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
                 placeholder="Nama lengkap sesuai KTP"
               />
               {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
@@ -486,13 +487,13 @@ function Tes() {
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                NIP / NIK <span className="text-red-400">*</span>
+                NIP <span className="text-red-400">*</span>
               </label>
               <input
                 value={email}
                 onChange={e => { setEmail(e.target.value); setFormErrors(p => ({ ...p, email: '' })) }}
                 className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.email ? 'border-red-400' : 'border-gray-200'}`}
-                placeholder="Nomor Induk Pegawai / NIK"
+                placeholder="NIP"
               />
               {formErrors.email && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.email}</p>}
             </div>

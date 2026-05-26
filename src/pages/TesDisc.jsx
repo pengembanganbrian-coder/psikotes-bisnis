@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 const unitKerjaOptions = [
   {
-    group: 'Kantor Pusat — Bagian',
+    group: 'Sekretariat DJBC',
     options: [
       'Bagian Organisasi dan Tata Laksana',
       'Bagian Keuangan',
@@ -477,7 +477,7 @@ function TesDisc() {
   const validateForm = () => {
     const errs = {}
     if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
-    if (!nip.trim())  errs.nip  = 'NIP / NIK wajib diisi.'
+    if (!nip.trim())  errs.nip  = 'NIP wajib diisi.'
     if (!jabatan)     errs.jabatan = 'Unit kerja wajib dipilih.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
@@ -545,6 +545,7 @@ function TesDisc() {
 
           {/* Header Card */}
           <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-7 text-center">
+            <img src="/logo-djbc.png" alt="DJBC" className="h-10 w-auto mx-auto mb-3 opacity-90" />
             <div className="inline-flex items-center justify-center w-14 h-14 bg-white/20 border border-white/30 rounded-2xl backdrop-blur mb-3">
               <span className="text-white text-xl font-black">DISC</span>
             </div>
@@ -555,23 +556,23 @@ function TesDisc() {
           {/* Body Card */}
           <div className="px-8 py-7 space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap <span className="text-red-400">*</span></label>
+              <label className="block text-base font-bold text-gray-700 mb-1.5">Nama Lengkap <span className="text-red-400">*</span></label>
               <input
                 value={nama}
                 onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
-                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
+                className={`w-full border bg-gray-50 rounded-xl px-4 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
                 placeholder="Nama lengkap sesuai KTP"
               />
               {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP / NIK <span className="text-red-400">*</span></label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP <span className="text-red-400">*</span></label>
               <input
                 value={nip}
                 onChange={e => { setNip(e.target.value); setFormErrors(p => ({ ...p, nip: '' })) }}
                 className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400 ${formErrors.nip ? 'border-red-400' : 'border-gray-200'}`}
-                placeholder="NIP atau NIK"
+                placeholder="NIP"
               />
               {formErrors.nip && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nip}</p>}
             </div>
