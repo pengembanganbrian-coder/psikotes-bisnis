@@ -39,8 +39,8 @@ function Home() {
           {/* Section label */}
           <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-5 text-center">Pilih Jenis Tes</p>
 
-          {/* Test Cards — 2 kolom di desktop */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+          {/* Test Cards baris 1 — 2 kolom di desktop */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
 
             {/* MBTI Card */}
             <button
@@ -123,6 +123,29 @@ function Home() {
 
           </div>
 
+          {/* Test Cards baris 2 — MSDT + Love Language */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+
+            {/* MSDT Card */}
+            <button
+              onClick={() => navigate('/tes-msdt')}
+              className="group bg-white rounded-2xl border-2 border-gray-100 hover:border-orange-200 shadow-sm hover:shadow-xl hover:shadow-orange-100/60 p-7 text-left transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-200 group-hover:scale-105 transition-transform duration-300 mb-5">
+                <span className="text-white font-black text-xs tracking-wide text-center leading-tight">MSDT</span>
+              </div>
+              <h3 className="font-bold text-gray-800 text-lg mb-1">Tes Gaya Manajemen MSDT</h3>
+              <p className="text-sm text-gray-500 mb-4">Management Style Diagnostic Test · 8 gaya kepemimpinan</p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                <span className="text-xs bg-orange-50 text-orange-700 font-semibold px-3 py-1.5 rounded-full">📝 64 soal</span>
+                <span className="text-xs bg-orange-50 text-orange-700 font-semibold px-3 py-1.5 rounded-full">⏱ ~20 menit</span>
+                <span className="text-xs bg-gray-50 text-gray-500 font-medium px-3 py-1.5 rounded-full">🏢 8 gaya</span>
+              </div>
+              <div className="w-full bg-orange-600 group-hover:bg-orange-700 text-white font-bold text-base py-3 rounded-xl text-center transition-all">
+                Mulai Tes →
+              </div>
+            </button>
+
             {/* Love Language Card */}
             <button
               onClick={() => navigate('/tes-love-language')}
@@ -142,6 +165,8 @@ function Home() {
                 Mulai Tes →
               </div>
             </button>
+
+          </div>
 
           {/* Info note */}
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">

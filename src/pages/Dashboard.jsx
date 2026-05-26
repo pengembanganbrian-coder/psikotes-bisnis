@@ -15,12 +15,13 @@ function Dashboard() {
   /* ── Fetch ─────────────────────────────────────────────────── */
   const fetchAllPeserta = async () => {
     setLoading(true)
-    const [{ data: mbti }, { data: disc }, { data: papi }, { data: dass }, { data: ll }] = await Promise.all([
+    const [{ data: mbti }, { data: disc }, { data: papi }, { data: dass }, { data: ll }, { data: msdt }] = await Promise.all([
       supabase.from('peserta').select('*, hasil_tes(*)').order('created_at', { ascending: false }),
       supabase.from('peserta_disc').select('*, hasil_disc(*)').order('created_at', { ascending: false }),
       supabase.from('peserta_papi').select('*, hasil_papi(*)').order('created_at', { ascending: false }),
       supabase.from('peserta_dass').select('*, hasil_dass(*)').order('created_at', { ascending: false }),
       supabase.from('peserta_love_language').select('*, hasil_love_language(*)').order('created_at', { ascending: false }),
+      supabase.from('peserta_msdt').select('*, hasil_msdt(*)').order('created_at', { ascending: false }),
     ])
 
     const mbtiList = (mbti  || []).map(p => ({ ...p, jenis: 'MBTI',          identifier: p.email }))
@@ -28,8 +29,9 @@ function Dashboard() {
     const papiList = (papi  || []).map(p => ({ ...p, jenis: 'PAPI',          identifier: p.nip   }))
     const dassList = (dass  || []).map(p => ({ ...p, jenis: 'DASS',          identifier: p.nip   }))
     const llList   = (ll    || []).map(p => ({ ...p, jenis: 'Love Language', identifier: p.nip   }))
+    const msdtList = (msdt  || []).map(p => ({ ...p, jenis: 'MSDT',          identifier: p.nip   }))
 
-    const merged = [...mbtiList, ...discList, ...papiList, ...dassList, ...llList].sort(
+    const merged = [...mbtiList, ...discList, ...papiList, ...dassList, ...llList, ...msdtList].sort(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     )
     setPeserta(merged)
@@ -59,9 +61,12 @@ function Dashboard() {
     } else if (item.jenis === 'DASS') {
       await supabase.from('hasil_dass').delete().eq('peserta_id', item.id)
       await supabase.from('peserta_dass').delete().eq('id', item.id)
-    } else {
+    } else if (item.jenis === 'Love Language') {
       await supabase.from('hasil_love_language').delete().eq('peserta_id', item.id)
       await supabase.from('peserta_love_language').delete().eq('id', item.id)
+    } else if (item.jenis === 'MSDT') {
+      await supabase.from('hasil_msdt').delete().eq('peserta_id', item.id)
+      await supabase.from('peserta_msdt').delete().eq('id', item.id)
     }
     setSelected(null)
     fetchAllPeserta()
@@ -80,6 +85,7 @@ function Dashboard() {
         hasil = h ? `D:${h.kategori_depresi} A:${h.kategori_anxietas} S:${h.kategori_stres}` : 'Belum tes'
       }
       if (p.jenis === 'Love Language') hasil = p.hasil_love_language?.[0]?.bahasa_utama || 'Belum tes'
+      if (p.jenis === 'MSDT') hasil = p.hasil_msdt?.[0]?.gaya || 'Belum tes'
       rows.push([
         p.nama,
         p.identifier,
@@ -129,7 +135,7 @@ function Dashboard() {
           profil: h.profil,
         },
       })
-    } else {
+    } else if (item.jenis === 'DASS') {
       const h = item.hasil_dass?.[0]
       if (!h) return
       navigate('/hasil-dass', {
@@ -145,6 +151,27 @@ function Dashboard() {
           },
         },
       })
+    } else if (item.jenis === 'MSDT') {
+      const h = item.hasil_msdt?.[0]
+      if (!h) return
+      navigate('/hasil-msdt', {
+        state: {
+          fromDashboard: true,
+          nama: item.nama,
+          nip: item.nip,
+          unitKerja: item.jabatan,
+          hasil: {
+            TO:         h.skor_to,
+            RO:         h.skor_ro,
+            E_score:    h.e_score,
+            grandTotal: h.grand_total,
+            gaya:       h.gaya,
+            toTinggi:   h.skor_to > 11,
+            roTinggi:   h.skor_ro > 9,
+            eTinggi:    h.e_score >= 2.0,
+          },
+        },
+      })
     }
   }
 
@@ -155,6 +182,7 @@ function Dashboard() {
     PAPI:           'bg-purple-100 text-purple-700',
     DASS:           'bg-teal-100 text-teal-700',
     'Love Language':'bg-rose-100 text-rose-700',
+    MSDT:           'bg-orange-100 text-orange-700',
   }
 
   const discColors = { D: 'bg-red-500', I: 'bg-yellow-400', S: 'bg-green-500', C: 'bg-blue-500' }
@@ -169,6 +197,7 @@ function Dashboard() {
       return `D:${h.kategori_depresi?.substring(0,3)} A:${h.kategori_anxietas?.substring(0,3)} S:${h.kategori_stres?.substring(0,3)}`
     }
     if (p.jenis === 'Love Language') return p.hasil_love_language?.[0]?.bahasa_utama || '—'
+    if (p.jenis === 'MSDT') return p.hasil_msdt?.[0]?.gaya || '—'
     return '—'
   }
 
@@ -212,7 +241,7 @@ function Dashboard() {
             <h2 className="text-lg font-semibold text-gray-700">Daftar Peserta</h2>
             <div className="flex items-center gap-3">
               <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
-                {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'Love Language'].map(t => (
+                {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'MSDT', 'Love Language'].map(t => (
                   <button key={t}
                     onClick={() => { setTab(t); setSelected(null) }}
                     className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition ${
@@ -221,6 +250,7 @@ function Dashboard() {
                         : t === 'DISC'  ? 'bg-green-600 text-white'
                         : t === 'PAPI'  ? 'bg-purple-600 text-white'
                         : t === 'DASS'  ? 'bg-teal-600 text-white'
+                        : t === 'MSDT'  ? 'bg-orange-600 text-white'
                         : 'bg-white text-gray-700 shadow-sm'
                         : 'text-gray-400 hover:text-gray-600'
                     }`}
@@ -434,6 +464,47 @@ function Dashboard() {
                           </div>
                           <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
                             <div className="h-full bg-teal-500 rounded-full" style={{ width: `${(skor / 42) * 100}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )
+            })()}
+
+            {/* ─── MSDT ─── */}
+            {selected.jenis === 'MSDT' && (() => {
+              const h = selected.hasil_msdt?.[0]
+              return (
+                <>
+                  <div className="bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded-xl p-4 text-center mb-4">
+                    <p className="text-xs opacity-75 mb-1">Gaya Manajemen MSDT</p>
+                    <p className="text-2xl font-black leading-tight">{h?.gaya || '—'}</p>
+                    <p className="text-xs opacity-60 mt-1">Management Style Diagnostic Test</p>
+                  </div>
+                  <div className="space-y-2 text-sm mb-4">
+                    <div className="flex justify-between"><span className="text-gray-500">Nama</span><span className="font-medium">{selected.nama}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">NIP</span><span className="font-medium">{selected.nip}</span></div>
+                    <div className="flex justify-between gap-2"><span className="text-gray-500 flex-shrink-0">Unit Kerja</span><span className="font-medium text-xs text-right">{selected.jabatan || '-'}</span></div>
+                    <div className="flex justify-between"><span className="text-gray-500">Tanggal</span><span className="font-medium">{new Date(selected.created_at).toLocaleDateString('id-ID')}</span></div>
+                  </div>
+                  {h && (
+                    <div className="mb-4">
+                      <p className="text-xs text-gray-500 mb-2 font-semibold uppercase">Skor MSDT</p>
+                      {[
+                        { label: 'TO (Task Orientation)',         val: h.skor_to,     max: 19, color: 'bg-orange-500' },
+                        { label: 'RO (Relationship Orientation)', val: h.skor_ro,     max: 17, color: 'bg-amber-500'  },
+                        { label: 'E Score (Efektivitas)',         val: h.e_score,     max: 4,  color: 'bg-green-500'  },
+                        { label: 'Grand Total',                   val: h.grand_total, max: 50, color: 'bg-orange-400' },
+                      ].map(({ label, val, max, color }) => (
+                        <div key={label} className="mb-2">
+                          <div className="flex justify-between text-xs mb-0.5">
+                            <span className="text-gray-600">{label}</span>
+                            <span className="font-bold">{val}</span>
+                          </div>
+                          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div className={`h-full ${color} rounded-full`} style={{ width: `${Math.min(100, (val / max) * 100)}%` }} />
                           </div>
                         </div>
                       ))}
