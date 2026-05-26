@@ -391,6 +391,8 @@ function Tes() {
   const [jawaban, setJawaban] = useState({})
   const [loading, setLoading] = useState(false)
   const [dimensiAktif, setDimensiAktif] = useState(0)
+  const [formErrors, setFormErrors] = useState({})
+  const [submitError, setSubmitError] = useState('')
   const navigate = useNavigate()
 
   const handleJawab = (id, val) => setJawaban(prev => ({ ...prev, [id]: val }))
@@ -399,9 +401,23 @@ function Tes() {
   const sudahDijawab = soalDimensiAktif.filter(s => jawaban[s.id]).length
   const totalDimensi = soalDimensiAktif.length
 
+  const validateForm = () => {
+    const errs = {}
+    if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
+    if (!email.trim()) errs.email = 'NIP / NIK wajib diisi.'
+    if (!jabatan) errs.jabatan = 'Unit kerja wajib dipilih.'
+    setFormErrors(errs)
+    return Object.keys(errs).length === 0
+  }
+
   const handleNext = () => {
     if (sudahDijawab < totalDimensi) {
-      alert(`Harap jawab semua ${totalDimensi} pertanyaan di bagian ini!`)
+      // scroll ke soal pertama yang belum dijawab
+      const belum = soalDimensiAktif.find(s => !jawaban[s.id])
+      if (belum) {
+        const el = document.getElementById(`soal-mbti-${belum.id}`)
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
       return
     }
     if (dimensiAktif < 3) setDimensiAktif(prev => prev + 1)
@@ -410,11 +426,16 @@ function Tes() {
 
   const handleSubmit = async () => {
     setLoading(true)
+    setSubmitError('')
     const { data: pesertaData, error } = await supabase
       .from('peserta')
       .insert([{ nama, email, jabatan }])
       .select()
-    if (error) { alert('Gagal menyimpan data!'); setLoading(false); return }
+    if (error) {
+      setSubmitError('Gagal menyimpan hasil. Periksa koneksi internet dan coba lagi.')
+      setLoading(false)
+      return
+    }
     const pesertaId = pesertaData[0].id
     const { tipe, skor } = hitungMBTI(jawaban)
     await supabase.from('hasil_tes').insert([{
@@ -456,10 +477,11 @@ function Tes() {
               </label>
               <input
                 value={nama}
-                onChange={e => setNama(e.target.value)}
-                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-gray-400"
+                onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
+                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
                 placeholder="Nama lengkap sesuai KTP"
               />
+              {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
             </div>
 
             <div>
@@ -468,10 +490,11 @@ function Tes() {
               </label>
               <input
                 value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-gray-400"
+                onChange={e => { setEmail(e.target.value); setFormErrors(p => ({ ...p, email: '' })) }}
+                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.email ? 'border-red-400' : 'border-gray-200'}`}
                 placeholder="Nomor Induk Pegawai / NIK"
               />
+              {formErrors.email && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.email}</p>}
             </div>
 
             <div>
@@ -481,8 +504,8 @@ function Tes() {
               <div className="relative">
                 <select
                   value={jabatan}
-                  onChange={e => setJabatan(e.target.value)}
-                  className="w-full appearance-none border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all cursor-pointer text-gray-700"
+                  onChange={e => { setJabatan(e.target.value); setFormErrors(p => ({ ...p, jabatan: '' })) }}
+                  className={`w-full appearance-none border bg-gray-50 rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all cursor-pointer text-gray-700 ${formErrors.jabatan ? 'border-red-400' : 'border-gray-200'}`}
                 >
                   <option value="">-- Pilih Unit Kerja --</option>
                   {unitKerjaOptions.map(group => (
@@ -499,10 +522,11 @@ function Tes() {
                   </svg>
                 </div>
               </div>
+              {formErrors.jabatan && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.jabatan}</p>}
             </div>
 
             <button
-              onClick={() => { if (nama && email && jabatan) setStep('tes'); else alert('Harap isi semua data terlebih dahulu!') }}
+              onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
               className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-blue-200 mt-1"
             >
               Mulai Tes MBTI →
@@ -569,7 +593,7 @@ function Tes() {
           </p>
 
           {soalDimensiAktif.map((s, idx) => (
-            <div key={s.id} className={`mb-5 ${idx > 0 ? 'pt-5 border-t border-gray-50' : ''}`}>
+            <div id={`soal-mbti-${s.id}`} key={s.id} className={`mb-5 ${idx > 0 ? 'pt-5 border-t border-gray-50' : ''}`}>
               <div className="flex items-center gap-2 mb-3">
                 <span className="w-6 h-6 bg-blue-50 text-blue-600 text-xs font-bold rounded-lg flex items-center justify-center flex-shrink-0">
                   {idx + 1}
@@ -603,6 +627,20 @@ function Tes() {
             </div>
           ))}
         </div>
+
+        {/* Error banner */}
+        {submitError && (
+          <div className="mb-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
+            ⚠ {submitError}
+          </div>
+        )}
+
+        {/* Peringatan soal belum dijawab */}
+        {sudahDijawab < totalDimensi && (
+          <p className="text-center text-sm text-amber-600 font-medium mb-3">
+            ⚠ Masih {totalDimensi - sudahDijawab} pertanyaan belum dijawab di bagian ini
+          </p>
+        )}
 
         {/* Tombol navigasi */}
         <button

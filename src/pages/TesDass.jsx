@@ -48,6 +48,7 @@ export default function TesDass() {
   const [nip, setNip]             = useState('')
   const [unitKerja, setUnitKerja] = useState('')
   const [jawaban, setJawaban]     = useState({})      // { id: 0|1|2|3 }
+  const [formErrors, setFormErrors] = useState({})
 
   const answered = Object.keys(jawaban).length
   const progress  = (answered / 21) * 100
@@ -59,13 +60,23 @@ export default function TesDass() {
     return { D, A, S }
   }
 
+  function validateForm() {
+    const errs = {}
+    if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
+    if (!nip.trim())  errs.nip  = 'NIP / NIK wajib diisi.'
+    if (!unitKerja)   errs.unitKerja = 'Unit kerja wajib dipilih.'
+    setFormErrors(errs)
+    return Object.keys(errs).length === 0
+  }
+
   function handleSubmit() {
     if (answered < 21) {
-      const belum = soal.filter(s => jawaban[s.id] === undefined).map(s => s.id)
-      alert(`Masih ada ${belum.length} pertanyaan yang belum dijawab (no. ${belum.join(', ')}).`)
       // Scroll ke soal pertama yang belum dijawab
-      const el = document.getElementById(`soal-${belum[0]}`)
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      const belum = soal.find(s => jawaban[s.id] === undefined)
+      if (belum) {
+        const el = document.getElementById(`soal-${belum.id}`)
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
       return
     }
     const { D, A, S } = hitungDASS()
@@ -102,26 +113,31 @@ export default function TesDass() {
           {/* Form isian */}
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap <span className="text-red-400">*</span></label>
               <input
-                type="text" value={nama} onChange={e => setNama(e.target.value)}
+                type="text" value={nama}
+                onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
                 placeholder="Nama lengkap sesuai KTP"
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition"
+                className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
               />
+              {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP / NIK</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP / NIK <span className="text-red-400">*</span></label>
               <input
-                type="text" value={nip} onChange={e => setNip(e.target.value)}
+                type="text" value={nip}
+                onChange={e => { setNip(e.target.value); setFormErrors(p => ({ ...p, nip: '' })) }}
                 placeholder="NIP atau NIK"
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition"
+                className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition ${formErrors.nip ? 'border-red-400' : 'border-gray-200'}`}
               />
+              {formErrors.nip && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nip}</p>}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja <span className="text-red-400">*</span></label>
               <select
-                value={unitKerja} onChange={e => setUnitKerja(e.target.value)}
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition bg-white"
+                value={unitKerja}
+                onChange={e => { setUnitKerja(e.target.value); setFormErrors(p => ({ ...p, unitKerja: '' })) }}
+                className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition bg-white ${formErrors.unitKerja ? 'border-red-400' : 'border-gray-200'}`}
               >
                 <option value="">-- Pilih Unit Kerja --</option>
                 {unitKerjaOptions.map(g => (
@@ -130,17 +146,12 @@ export default function TesDass() {
                   </optgroup>
                 ))}
               </select>
+              {formErrors.unitKerja && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.unitKerja}</p>}
             </div>
           </div>
 
           <button
-            onClick={() => {
-              if (!nama.trim()) return alert('Mohon isi nama lengkap.')
-              if (!nip.trim())  return alert('Mohon isi NIP/NIK.')
-              if (!unitKerja)   return alert('Mohon pilih unit kerja.')
-              setStep('tes')
-              window.scrollTo(0, 0)
-            }}
+            onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
             className="mt-6 w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-teal-200"
           >
             Mulai Tes →

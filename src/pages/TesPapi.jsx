@@ -149,23 +149,46 @@ function TesPapi() {
   const [jabatan, setJabatan] = useState('')
   const [jawaban, setJawaban] = useState({})
   const [loading, setLoading] = useState(false)
+  const [formErrors, setFormErrors] = useState({})
+  const [submitError, setSubmitError] = useState('')
   const navigate = useNavigate()
 
   const jumlahDijawab = soal.filter(s => jawaban[s.id]).length
   const sudahLengkap = jumlahDijawab === soal.length
+
+  const validateForm = () => {
+    const errs = {}
+    if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
+    if (!nip.trim())  errs.nip  = 'NIP / NIK wajib diisi.'
+    if (!jabatan)     errs.jabatan = 'Unit kerja wajib dipilih.'
+    setFormErrors(errs)
+    return Object.keys(errs).length === 0
+  }
 
   const handlePilih = (soalId, pilihan) => {
     setJawaban(prev => ({ ...prev, [soalId]: pilihan }))
   }
 
   const handleSubmit = async () => {
-    if (!sudahLengkap) { alert('Harap jawab semua pertanyaan!'); return }
+    if (!sudahLengkap) {
+      const belum = soal.find(s => !jawaban[s.id])
+      if (belum) {
+        const el = document.getElementById(`soal-papi-${belum.id}`)
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+      return
+    }
     setLoading(true)
+    setSubmitError('')
 
     const { data: pesertaData, error } = await supabase
       .from('peserta_papi').insert([{ nama, nip, jabatan }]).select()
 
-    if (error) { alert('Gagal menyimpan! Pastikan tabel peserta_papi dan hasil_papi sudah dibuat di Supabase.'); setLoading(false); return }
+    if (error) {
+      setSubmitError('Gagal menyimpan hasil. Periksa koneksi internet dan coba lagi.')
+      setLoading(false)
+      return
+    }
 
     const pesertaId = pesertaData[0].id
     const { scores, profil } = hitungPAPI(jawaban)
@@ -196,22 +219,24 @@ function TesPapi() {
           </div>
           <div className="px-8 py-7 space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
-              <input value={nama} onChange={e => setNama(e.target.value)}
-                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all placeholder-gray-400"
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap <span className="text-red-400">*</span></label>
+              <input value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
+                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
                 placeholder="Nama lengkap sesuai KTP" />
+              {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP / NIK</label>
-              <input value={nip} onChange={e => setNip(e.target.value)}
-                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all placeholder-gray-400"
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP / NIK <span className="text-red-400">*</span></label>
+              <input value={nip} onChange={e => { setNip(e.target.value); setFormErrors(p => ({ ...p, nip: '' })) }}
+                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.nip ? 'border-red-400' : 'border-gray-200'}`}
                 placeholder="NIP atau NIK" />
+              {formErrors.nip && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nip}</p>}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja <span className="text-red-400">*</span></label>
               <div className="relative">
-                <select value={jabatan} onChange={e => setJabatan(e.target.value)}
-                  className="w-full appearance-none border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all text-gray-700 pr-10">
+                <select value={jabatan} onChange={e => { setJabatan(e.target.value); setFormErrors(p => ({ ...p, jabatan: '' })) }}
+                  className={`w-full appearance-none border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all text-gray-700 pr-10 ${formErrors.jabatan ? 'border-red-400' : 'border-gray-200'}`}>
                   <option value="" disabled>-- Pilih Unit Kerja --</option>
                   {unitKerjaOptions.map(group => (
                     <optgroup key={group.group} label={group.group}>
@@ -225,12 +250,13 @@ function TesPapi() {
                   </svg>
                 </div>
               </div>
+              {formErrors.jabatan && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.jabatan}</p>}
             </div>
             <div className="bg-violet-50 border border-violet-200 rounded-xl p-3 text-xs text-violet-700">
               <p className="font-semibold mb-1">📋 Petunjuk Pengisian:</p>
               <p>Dari setiap pasang pernyataan, pilih satu yang paling mencerminkan diri Anda. Tidak ada jawaban benar atau salah. Jawab dengan jujur dan spontan. Terdapat <strong>90 pasang</strong> pernyataan.</p>
             </div>
-            <button onClick={() => { if (nama && nip && jabatan) setStep('tes'); else alert('Isi semua data terlebih dahulu!') }}
+            <button onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
               className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-violet-200 mt-2">
               Mulai Tes →
             </button>
@@ -274,12 +300,19 @@ function TesPapi() {
           </div>
         </div>
 
+        {/* Error banner */}
+        {submitError && (
+          <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
+            ⚠ {submitError}
+          </div>
+        )}
+
         {/* Soal */}
         {soal.map((s, idx) => {
           const pilihan = jawaban[s.id]
           const selesai = !!pilihan
           return (
-            <div key={s.id} className={`bg-white rounded-2xl shadow p-6 mb-4 transition-all ${selesai ? 'ring-2 ring-violet-200' : ''}`}>
+            <div id={`soal-papi-${s.id}`} key={s.id} className={`bg-white rounded-2xl shadow p-6 mb-4 transition-all ${selesai ? 'ring-2 ring-violet-200' : ''}`}>
               {/* Nomor soal */}
               <div className="flex items-center gap-3 mb-4">
                 <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0 ${selesai ? 'bg-violet-500 text-white' : 'bg-gray-100 text-gray-500'}`}>

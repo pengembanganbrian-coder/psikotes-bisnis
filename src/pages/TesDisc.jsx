@@ -470,7 +470,18 @@ function TesDisc() {
   const [jabatan, setJabatan] = useState('')
   const [jawaban, setJawaban] = useState({})
   const [loading, setLoading] = useState(false)
+  const [formErrors, setFormErrors] = useState({})
+  const [submitError, setSubmitError] = useState('')
   const navigate = useNavigate()
+
+  const validateForm = () => {
+    const errs = {}
+    if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
+    if (!nip.trim())  errs.nip  = 'NIP / NIK wajib diisi.'
+    if (!jabatan)     errs.jabatan = 'Unit kerja wajib dipilih.'
+    setFormErrors(errs)
+    return Object.keys(errs).length === 0
+  }
 
   const handlePilih = (soalId, tipe, idx) => {
     setJawaban(prev => {
@@ -485,15 +496,27 @@ function TesDisc() {
   const jumlahDijawab = Object.keys(jawaban).filter(id => jawaban[id]?.most !== undefined && jawaban[id]?.least !== undefined).length
 
   const handleSubmit = async () => {
-    if (!sudahLengkap) { alert('Harap jawab semua pertanyaan!'); return }
+    if (!sudahLengkap) {
+      const belum = soal.find(s => jawaban[s.id]?.most === undefined || jawaban[s.id]?.least === undefined)
+      if (belum) {
+        const el = document.getElementById(`soal-disc-${belum.id}`)
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+      return
+    }
     setLoading(true)
+    setSubmitError('')
 
     const { data: pesertaData, error } = await supabase
       .from('peserta_disc')
       .insert([{ nama, nip, jabatan }])
       .select()
 
-    if (error) { alert('Gagal menyimpan!'); setLoading(false); return }
+    if (error) {
+      setSubmitError('Gagal menyimpan hasil. Periksa koneksi internet dan coba lagi.')
+      setLoading(false)
+      return
+    }
 
     const pesertaId = pesertaData[0].id
     const hasil = hitungDISC(jawaban)
@@ -532,32 +555,34 @@ function TesDisc() {
           {/* Body Card */}
           <div className="px-8 py-7 space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Nama Lengkap <span className="text-red-400">*</span></label>
               <input
                 value={nama}
-                onChange={e => setNama(e.target.value)}
-                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400"
+                onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
+                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
                 placeholder="Nama lengkap sesuai KTP"
               />
+              {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP / NIK</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP / NIK <span className="text-red-400">*</span></label>
               <input
                 value={nip}
-                onChange={e => setNip(e.target.value)}
-                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400"
+                onChange={e => { setNip(e.target.value); setFormErrors(p => ({ ...p, nip: '' })) }}
+                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400 ${formErrors.nip ? 'border-red-400' : 'border-gray-200'}`}
                 placeholder="NIP atau NIK"
               />
+              {formErrors.nip && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nip}</p>}
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja <span className="text-red-400">*</span></label>
               <div className="relative">
                 <select
                   value={jabatan}
-                  onChange={e => setJabatan(e.target.value)}
-                  className="w-full appearance-none border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all text-gray-700 pr-10"
+                  onChange={e => { setJabatan(e.target.value); setFormErrors(p => ({ ...p, jabatan: '' })) }}
+                  className={`w-full appearance-none border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all text-gray-700 pr-10 ${formErrors.jabatan ? 'border-red-400' : 'border-gray-200'}`}
                 >
                   <option value="" disabled>-- Pilih Unit Kerja --</option>
                   {unitKerjaOptions.map(group => (
@@ -574,13 +599,11 @@ function TesDisc() {
                   </svg>
                 </div>
               </div>
+              {formErrors.jabatan && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.jabatan}</p>}
             </div>
 
             <button
-              onClick={() => {
-                if (nama && nip && jabatan) setStep('tes')
-                else alert('Isi semua data terlebih dahulu!')
-              }}
+              onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
               className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-green-200 mt-2"
             >
               Mulai Tes →
@@ -656,12 +679,20 @@ function TesDisc() {
           </div>
         </div>
 
+        {/* Error banner */}
+        {submitError && (
+          <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
+            ⚠ {submitError}
+          </div>
+        )}
+
         {/* Soal */}
         {soal.map((s, idx) => {
           const j = jawaban[s.id] || {}
           const selesai = j.most !== undefined && j.least !== undefined
           return (
             <div
+              id={`soal-disc-${s.id}`}
               key={s.id}
               className={`bg-white rounded-2xl shadow p-6 mb-4 transition-all ${selesai ? 'ring-1 ring-green-200' : ''}`}
             >
@@ -726,9 +757,14 @@ function TesDisc() {
 
         {/* Tombol Submit */}
         <div className="sticky bottom-4">
+          {!sudahLengkap && (
+            <p className="text-center text-sm text-amber-600 font-medium mb-2">
+              ⚠ Masih {soal.length - jumlahDijawab} kelompok belum dijawab
+            </p>
+          )}
           <button
             onClick={handleSubmit}
-            disabled={loading || !sudahLengkap}
+            disabled={loading}
             className={`w-full font-semibold py-4 rounded-2xl transition-all text-base shadow-xl ${
               sudahLengkap
                 ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-green-300 cursor-pointer'

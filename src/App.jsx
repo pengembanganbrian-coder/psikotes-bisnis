@@ -12,6 +12,7 @@ import TesDass from './pages/TesDass'
 import HasilDass from './pages/HasilDass'
 import JobProfile from './pages/JobProfile'
 import ProtectedRoute from './components/ProtectedRoute'
+import NotFound from './pages/NotFound'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/hasil-dass" element={<HasilDass />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/job-profile" element={<ProtectedRoute><JobProfile /></ProtectedRoute>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
