@@ -11,49 +11,99 @@ const unitKerjaOptions = [
   { group: 'Lainnya', options: ['Pangkalan Sarana Operasi Bea dan Cukai','Balai Laboratorium Bea dan Cukai','Satuan Tugas Khusus'] },
 ]
 
-// 30 pasang pernyataan — masing-masing 10 pasangan LL × 3 putaran
-// ll: W=Words of Affirmation, Q=Quality Time, G=Receiving Gifts, A=Acts of Service, P=Physical Touch
+// 30 pasang pernyataan — terjemahan resmi dari The Five Love Languages Test by Dr. Gary Chapman
+// ll: W=Words of Affirmation (A), Q=Quality Time (B), G=Receiving Gifts (C), A=Acts of Service (D), P=Physical Touch (E)
 const soal = [
-  // W vs Q
-  { id: 1,  a: { teks: 'Pujian dan kata-kata dukungan dari orang terdekat sangat berarti bagi saya.', ll: 'W' }, b: { teks: 'Menghabiskan waktu berkualitas bersama seseorang lebih bermakna dari apapun.', ll: 'Q' } },
-  { id: 2,  a: { teks: 'Saya merasa paling dihargai saat seseorang memuji atau mengakui pencapaian saya.', ll: 'W' }, b: { teks: 'Perhatian penuh tanpa gangguan saat bersama seseorang membuat saya merasa berarti.', ll: 'Q' } },
-  { id: 3,  a: { teks: 'Kata-kata semangat dari orang terdekat membuat hari saya jauh lebih baik.', ll: 'W' }, b: { teks: 'Saya lebih senang diajak berbincang dan berbagi cerita daripada diberi hadiah.', ll: 'Q' } },
-  // W vs G
-  { id: 4,  a: { teks: 'Ucapan apresiasi secara langsung sangat menyentuh hati saya.', ll: 'W' }, b: { teks: 'Menerima hadiah kecil yang dipilih dengan penuh perhatian membuat saya merasa diingat.', ll: 'G' } },
-  { id: 5,  a: { teks: 'Kata-kata "aku bangga padamu" dari orang yang saya percaya sangat memotivasi saya.', ll: 'W' }, b: { teks: 'Hadiah kejutan, meski sederhana, menunjukkan bahwa seseorang memikirkan saya.', ll: 'G' } },
-  { id: 6,  a: { teks: 'Saya lebih senang dipuji secara tulus daripada diberi sesuatu.', ll: 'W' }, b: { teks: 'Simbol perhatian seperti oleh-oleh atau kenang-kenangan kecil sangat bermakna bagi saya.', ll: 'G' } },
-  // W vs A
-  { id: 7,  a: { teks: 'Pesan singkat yang penuh dukungan dari seseorang membuat saya merasa dicintai.', ll: 'W' }, b: { teks: 'Ketika seseorang membantu saya mengerjakan sesuatu tanpa diminta, saya merasa sangat dihargai.', ll: 'A' } },
-  { id: 8,  a: { teks: 'Kata-kata yang jujur dan mendukung lebih berharga bagi saya daripada bantuan fisik.', ll: 'W' }, b: { teks: 'Tindakan nyata untuk meringankan beban saya menunjukkan rasa perhatian yang sesungguhnya.', ll: 'A' } },
-  { id: 9,  a: { teks: 'Saya merasa dihargai ketika seseorang meluangkan waktu menulis pesan yang tulus.', ll: 'W' }, b: { teks: 'Seseorang yang berinisiatif membantu pekerjaan saya agar saya bisa lebih ringan sangat berarti.', ll: 'A' } },
-  // W vs P
-  { id: 10, a: { teks: 'Kata-kata dorongan di saat sulit sangat membantu saya bangkit kembali.', ll: 'W' }, b: { teks: 'Pelukan dari orang yang saya percaya membuat saya merasa aman dan didukung.', ll: 'P' } },
-  { id: 11, a: { teks: 'Saya lebih membutuhkan kata-kata penegasan daripada kontak fisik.', ll: 'W' }, b: { teks: 'Tepukan di bahu atau jabat tangan erat menunjukkan kepedulian yang tulus.', ll: 'P' } },
-  { id: 12, a: { teks: 'Seseorang yang menyebut hal-hal positif tentang saya membuat saya merasa bahagia.', ll: 'W' }, b: { teks: 'High-five atau salam hangat membuat saya merasa benar-benar terhubung dengan seseorang.', ll: 'P' } },
-  // Q vs G
-  { id: 13, a: { teks: 'Saya merasa paling dihargai saat seseorang meluangkan waktu hanya untuk bersama saya.', ll: 'Q' }, b: { teks: 'Menerima hadiah, bahkan yang kecil, membuat saya merasa diingat dan diperhatikan.', ll: 'G' } },
-  { id: 14, a: { teks: 'Aktivitas bersama seperti makan siang atau olahraga lebih bermakna daripada hadiah apapun.', ll: 'Q' }, b: { teks: 'Ketika seseorang membawakan sesuatu khusus untuk saya, saya merasa sangat dihargai.', ll: 'G' } },
-  { id: 15, a: { teks: 'Saya lebih senang diajak melakukan sesuatu bersama daripada diberi benda.', ll: 'Q' }, b: { teks: 'Hadiah yang mencerminkan pemahaman seseorang tentang selera saya sangat menyentuh hati.', ll: 'G' } },
-  // Q vs A
-  { id: 16, a: { teks: 'Waktu berdua tanpa gangguan adalah bentuk perhatian terbaik bagi saya.', ll: 'Q' }, b: { teks: 'Bantuan praktis dalam menyelesaikan tugas lebih bermakna bagi saya daripada waktu bersama.', ll: 'A' } },
-  { id: 17, a: { teks: 'Saya merasa diperhatikan ketika seseorang menyisihkan waktu khusus untuk bersama saya.', ll: 'Q' }, b: { teks: 'Ketika seseorang membantu menyelesaikan masalah saya, saya merasa benar-benar didukung.', ll: 'A' } },
-  { id: 18, a: { teks: 'Percakapan yang bermakna dan mendalam lebih saya hargai daripada bantuan fisik.', ll: 'Q' }, b: { teks: 'Saya merasa dihargai ketika seseorang bertindak untuk memudahkan urusan saya.', ll: 'A' } },
-  // Q vs P
-  { id: 19, a: { teks: 'Berjalan-jalan atau makan bersama secara rutin membuat saya merasa terhubung erat.', ll: 'Q' }, b: { teks: 'Sentuhan fisik seperti jabat tangan erat atau tepukan membuat saya merasa dekat.', ll: 'P' } },
-  { id: 20, a: { teks: 'Momen bersama yang berkualitas lebih saya ingat daripada kontak fisik.', ll: 'Q' }, b: { teks: 'Saya merasa paling dekat dengan seseorang saat ada kontak fisik yang hangat dan tulus.', ll: 'P' } },
-  { id: 21, a: { teks: 'Saya lebih membutuhkan kehadiran nyata seseorang daripada pelukan.', ll: 'Q' }, b: { teks: 'Sentuhan yang tulus, sekecil apapun, membuat saya merasa sungguh diperhatikan.', ll: 'P' } },
-  // G vs A
-  { id: 22, a: { teks: 'Oleh-oleh atau kenang-kenangan kecil menunjukkan bahwa seseorang memikirkan saya.', ll: 'G' }, b: { teks: 'Seseorang yang rela melakukan sesuatu untuk meringankan beban saya sangat saya hargai.', ll: 'A' } },
-  { id: 23, a: { teks: 'Hadiah simbolis yang bermakna lebih berkesan bagi saya daripada tindakan pelayanan.', ll: 'G' }, b: { teks: 'Bantuan nyata dalam kehidupan sehari-hari lebih menunjukkan perhatian daripada hadiah.', ll: 'A' } },
-  { id: 24, a: { teks: 'Saya merasa istimewa ketika seseorang memilihkan sesuatu khusus untuk saya.', ll: 'G' }, b: { teks: 'Ketika seseorang berinisiatif membantu tanpa diminta, saya merasa benar-benar dicintai.', ll: 'A' } },
-  // G vs P
-  { id: 25, a: { teks: 'Saya lebih mengingat hadiah yang thoughtful daripada sentuhan fisik.', ll: 'G' }, b: { teks: 'Pelukan atau sentuhan hangat lebih bermakna bagi saya daripada benda apapun.', ll: 'P' } },
-  { id: 26, a: { teks: 'Kenang-kenangan fisik dari seseorang selalu mengingatkan saya pada perhatian mereka.', ll: 'G' }, b: { teks: 'Kontak fisik yang tulus lebih saya hargai daripada hadiah materi.', ll: 'P' } },
-  { id: 27, a: { teks: 'Saya merasa diingat dan dihargai ketika seseorang membawakan sesuatu untuk saya.', ll: 'G' }, b: { teks: 'Sentuhan fisik yang hangat lebih membuat saya merasa dekat daripada simbol fisik apapun.', ll: 'P' } },
-  // A vs P
-  { id: 28, a: { teks: 'Ketika seseorang membantu meringankan beban saya, saya merasa sangat diperhatikan.', ll: 'A' }, b: { teks: 'Sentuhan fisik yang penuh kehangatan membuat saya merasa paling dekat dengan seseorang.', ll: 'P' } },
-  { id: 29, a: { teks: 'Tindakan nyata untuk membantu saya lebih bermakna daripada pelukan atau sentuhan.', ll: 'A' }, b: { teks: 'Kontak fisik yang hangat dan tulus lebih menunjukkan kepedulian daripada tindakan apapun.', ll: 'P' } },
-  { id: 30, a: { teks: 'Saya merasa dicintai ketika seseorang sukarela mengerjakan sesuatu yang penting bagi saya.', ll: 'A' }, b: { teks: 'Tepukan di punggung atau jabat tangan erat membuat saya merasa sungguh didukung.', ll: 'P' } },
+  // 1. A(W) vs E(P)
+  { id: 1,  a: { teks: 'Saya senang menerima catatan atau pesan berisi penegasan dan dukungan dari seseorang.', ll: 'W' },
+            b: { teks: 'Saya senang ketika seseorang memeluk saya.', ll: 'P' } },
+  // 2. B(Q) vs D(A)
+  { id: 2,  a: { teks: 'Saya senang menghabiskan waktu berdua secara khusus bersama seseorang.', ll: 'Q' },
+            b: { teks: 'Saya merasa dicintai ketika seseorang memberikan bantuan nyata kepada saya.', ll: 'A' } },
+  // 3. C(G) vs B(Q)
+  { id: 3,  a: { teks: 'Saya senang ketika seseorang memberi saya hadiah.', ll: 'G' },
+            b: { teks: 'Saya senang berjalan-jalan lama atau menghabiskan waktu bersama seseorang.', ll: 'Q' } },
+  // 4. D(A) vs E(P)
+  { id: 4,  a: { teks: 'Saya merasa dicintai ketika seseorang melakukan sesuatu untuk membantu saya.', ll: 'A' },
+            b: { teks: 'Saya merasa dicintai ketika seseorang memeluk atau menyentuh saya dengan hangat.', ll: 'P' } },
+  // 5. E(P) vs C(G)
+  { id: 5,  a: { teks: 'Saya merasa dicintai ketika seseorang merangkul saya dengan erat.', ll: 'P' },
+            b: { teks: 'Saya merasa dicintai ketika menerima hadiah dari seseorang.', ll: 'G' } },
+  // 6. B(Q) vs E(P)
+  { id: 6,  a: { teks: 'Saya senang pergi ke berbagai tempat bersama seseorang.', ll: 'Q' },
+            b: { teks: 'Saya senang berpegangan tangan atau berjalan berdampingan dengan seseorang.', ll: 'P' } },
+  // 7. A(W) vs C(G)
+  { id: 7,  a: { teks: 'Saya merasa dicintai ketika seseorang mengakui dan menghargai keberadaan saya.', ll: 'W' },
+            b: { teks: 'Simbol kasih sayang yang nyata, seperti hadiah, sangat berarti bagi saya.', ll: 'G' } },
+  // 8. E(P) vs A(W)
+  { id: 8,  a: { teks: 'Saya senang duduk berdekatan dengan seseorang.', ll: 'P' },
+            b: { teks: 'Saya senang ketika seseorang mengatakan hal-hal positif tentang diri saya.', ll: 'W' } },
+  // 9. B(Q) vs C(G)
+  { id: 9,  a: { teks: 'Saya senang menghabiskan waktu bersama seseorang.', ll: 'Q' },
+            b: { teks: 'Saya senang menerima hadiah kecil dari seseorang.', ll: 'G' } },
+  // 10. D(A) vs A(W)
+  { id: 10, a: { teks: 'Saya tahu seseorang menyayangi saya ketika mereka membantu saya.', ll: 'A' },
+            b: { teks: 'Kata-kata penerimaan dan apresiasi dari seseorang sangat penting bagi saya.', ll: 'W' } },
+  // 11. B(Q) vs A(W)
+  { id: 11, a: { teks: 'Saya senang berada bersama-sama ketika sedang mengerjakan sesuatu.', ll: 'Q' },
+            b: { teks: 'Saya senang dengan kata-kata baik yang diucapkan seseorang kepada saya.', ll: 'W' } },
+  // 12. E(P) vs D(A)
+  { id: 12, a: { teks: 'Saya merasa utuh dan lengkap saat berpelukan dengan seseorang.', ll: 'P' },
+            b: { teks: 'Apa yang seseorang lakukan untuk saya lebih bermakna daripada apa yang mereka katakan.', ll: 'A' } },
+  // 13. A(W) vs C(G)
+  { id: 13, a: { teks: 'Saya sangat menghargai pujian dan berusaha menghindari kritik yang tidak membangun.', ll: 'W' },
+            b: { teks: 'Beberapa hadiah sederhana lebih berarti bagi saya daripada satu hadiah mahal.', ll: 'G' } },
+  // 14. E(P) vs B(Q)
+  { id: 14, a: { teks: 'Saya merasa lebih dekat dengan seseorang ketika mereka menyentuh saya.', ll: 'P' },
+            b: { teks: 'Saya merasa dekat ketika kami berbicara atau melakukan sesuatu bersama-sama.', ll: 'Q' } },
+  // 15. A(W) vs D(A)
+  { id: 15, a: { teks: 'Saya suka ketika seseorang memuji pencapaian saya.', ll: 'W' },
+            b: { teks: 'Saya tahu seseorang menyayangi saya ketika mereka rela melakukan sesuatu untuk saya, meski itu bukan hal yang mereka sukai.', ll: 'A' } },
+  // 16. E(P) vs B(Q)
+  { id: 16, a: { teks: 'Saya suka ketika seseorang menyentuh atau menepuk bahu saya saat berpapasan.', ll: 'P' },
+            b: { teks: 'Saya suka ketika seseorang mendengarkan saya dengan penuh empati dan perhatian.', ll: 'Q' } },
+  // 17. C(G) vs D(A)
+  { id: 17, a: { teks: 'Saya benar-benar menikmati saat menerima hadiah dari seseorang.', ll: 'G' },
+            b: { teks: 'Saya merasa dicintai ketika seseorang membantu proyek atau pekerjaan saya.', ll: 'A' } },
+  // 18. A(W) vs B(Q)
+  { id: 18, a: { teks: 'Saya suka ketika seseorang memuji penampilan atau cara saya.', ll: 'W' },
+            b: { teks: 'Saya merasa dicintai ketika seseorang meluangkan waktu untuk memahami perasaan saya.', ll: 'Q' } },
+  // 19. E(P) vs D(A)
+  { id: 19, a: { teks: 'Saya merasa aman dan nyaman ketika seseorang menyentuh saya dengan tulus.', ll: 'P' },
+            b: { teks: 'Tindakan pelayanan dari seseorang membuat saya merasa benar-benar dicintai.', ll: 'A' } },
+  // 20. D(A) vs C(G)
+  { id: 20, a: { teks: 'Saya menghargai banyak hal yang seseorang lakukan untuk saya.', ll: 'A' },
+            b: { teks: 'Saya senang menerima hadiah buatan tangan atau yang dipilih dengan penuh perhatian.', ll: 'G' } },
+  // 21. B(Q) vs D(A)
+  { id: 21, a: { teks: 'Saya benar-benar menikmati perasaan saat seseorang memberikan perhatian penuhnya kepada saya.', ll: 'Q' },
+            b: { teks: 'Saya benar-benar menikmati perasaan saat seseorang melakukan suatu tindakan pelayanan untuk saya.', ll: 'A' } },
+  // 22. C(G) vs A(W)
+  { id: 22, a: { teks: 'Saya merasa dicintai ketika seseorang merayakan hari ulang tahun saya dengan hadiah.', ll: 'G' },
+            b: { teks: 'Saya merasa dicintai ketika seseorang merayakan hari ulang tahun saya dengan kata-kata bermakna, baik lisan maupun tulisan.', ll: 'W' } },
+  // 23. D(A) vs C(G)
+  { id: 23, a: { teks: 'Saya merasa dicintai ketika seseorang membantu pekerjaan atau urusan sehari-hari saya.', ll: 'A' },
+            b: { teks: 'Saya tahu seseorang memikirkan saya ketika mereka memberi saya hadiah.', ll: 'G' } },
+  // 24. C(G) vs B(Q)
+  { id: 24, a: { teks: 'Saya menghargai ketika seseorang mengingat hari-hari spesial saya dengan hadiah.', ll: 'G' },
+            b: { teks: 'Saya menghargai ketika seseorang mendengarkan saya dengan sabar tanpa memotong pembicaraan.', ll: 'Q' } },
+  // 25. B(Q) vs D(A)
+  { id: 25, a: { teks: 'Saya menikmati perjalanan atau kegiatan panjang bersama seseorang.', ll: 'Q' },
+            b: { teks: 'Saya suka mengetahui bahwa seseorang cukup peduli untuk membantu tugas harian saya.', ll: 'A' } },
+  // 26. E(P) vs C(G)
+  { id: 26, a: { teks: 'Sentuhan hangat yang tak terduga dari seseorang membuat saya merasa dicintai.', ll: 'P' },
+            b: { teks: 'Mendapat hadiah tanpa alasan tertentu membuat saya merasa benar-benar diperhatikan.', ll: 'G' } },
+  // 27. A(W) vs B(Q)
+  { id: 27, a: { teks: 'Saya suka ketika seseorang mengatakan bahwa mereka menghargai saya.', ll: 'W' },
+            b: { teks: 'Saya suka ketika seseorang menatap saya dengan penuh perhatian saat kami berbicara.', ll: 'Q' } },
+  // 28. C(G) vs E(P)
+  { id: 28, a: { teks: 'Hadiah dari seseorang selalu terasa istimewa dan bermakna bagi saya.', ll: 'G' },
+            b: { teks: 'Pelukan atau sentuhan hangat dari seseorang membuat saya merasa dicintai.', ll: 'P' } },
+  // 29. A(W) vs D(A)
+  { id: 29, a: { teks: 'Saya merasa dicintai ketika seseorang memberitahu saya betapa mereka menghargai saya.', ll: 'W' },
+            b: { teks: 'Saya merasa dicintai ketika seseorang dengan antusias mengerjakan permintaan saya.', ll: 'A' } },
+  // 30. E(P) vs A(W)
+  { id: 30, a: { teks: 'Saya membutuhkan pelukan atau sentuhan hangat dari seseorang setiap harinya.', ll: 'P' },
+            b: { teks: 'Saya membutuhkan kata-kata penegasan dan apresiasi dari seseorang setiap harinya.', ll: 'W' } },
 ]
 
 function hitungLL(jawaban) {
