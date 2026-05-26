@@ -151,6 +151,26 @@ function Dashboard() {
           },
         },
       })
+    } else if (item.jenis === 'Love Language') {
+      const h = item.hasil_love_language?.[0]
+      if (!h) return
+      navigate('/hasil-love-language', {
+        state: {
+          fromDashboard: true,
+          nama: item.nama,
+          nip: item.nip,
+          jabatan: item.jabatan,
+          utama: h.bahasa_utama,
+          kedua: h.bahasa_kedua,
+          skor: {
+            W: h.skor_w,
+            Q: h.skor_q,
+            G: h.skor_g,
+            A: h.skor_a,
+            P: h.skor_p,
+          },
+        },
+      })
     } else if (item.jenis === 'MSDT') {
       const h = item.hasil_msdt?.[0]
       if (!h) return
