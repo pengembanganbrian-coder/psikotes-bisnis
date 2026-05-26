@@ -26,10 +26,13 @@ function Home() {
             <div className="inline-flex items-center gap-2 justify-center mb-6">
               <Logo size="lg" />
             </div>
-            <h1 className="text-4xl font-black text-gray-900 leading-tight mb-4">
+            <h1 className="text-4xl font-black text-gray-900 leading-tight mb-3">
               Asesmen Psikologi{' '}
               <span className="text-blue-700">Digital</span>
             </h1>
+            <p className="text-blue-600 font-bold text-base tracking-widest uppercase mb-3">
+              Assess · Insight · Grow
+            </p>
             <p className="text-gray-500 text-base max-w-lg mx-auto leading-relaxed">
               Platform psikotes berbasis web untuk pemetaan potensi dan kepribadian sumber daya manusia
             </p>

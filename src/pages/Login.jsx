@@ -29,8 +29,8 @@ function Login() {
           <div className="inline-flex items-center gap-2 justify-center">
             <Logo size="lg" dark />
           </div>
-          <h1 className="text-lg font-black text-white leading-snug mt-4">Platform Asesmen Psikologi Digital</h1>
-          <p className="text-blue-300 text-sm mt-1">Portal Admin</p>
+          <p className="text-blue-300 text-sm font-bold tracking-widest uppercase mt-4">Assess · Insight · Grow</p>
+          <p className="text-blue-400 text-xs mt-1">Portal Admin</p>
         </div>
 
         {/* Card */}
