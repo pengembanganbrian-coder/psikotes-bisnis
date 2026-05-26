@@ -26,10 +26,6 @@ function Home() {
             <div className="inline-flex items-center gap-2 justify-center mb-6">
               <Logo size="lg" />
             </div>
-            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
-              <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
-              Sistem Aktif
-            </div>
             <h1 className="text-4xl font-black text-gray-900 leading-tight mb-4">
               Asesmen Psikologi{' '}
               <span className="text-blue-700">Digital</span>
