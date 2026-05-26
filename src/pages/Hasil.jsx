@@ -1,4 +1,5 @@
 ﻿import { useLocation, useNavigate } from 'react-router-dom'
+import PaymentGate from '../components/PaymentGate'
 
 const deskripsiMBTI = {
   ISTJ: {
@@ -406,11 +407,86 @@ const Section = ({ title, items, color = "blue" }) => {
   )
 }
 
+/* ── Konten premium MBTI ────────────────────────────────────── */
+function LaporanLengkapMBTI({ info, ref }) {
+  return (
+    <>
+      {ref.uraian && (
+        <div className="bg-white rounded-2xl shadow p-6 mb-6">
+          <h3 className="font-bold text-gray-700 text-lg mb-3">Uraian Kepribadian</h3>
+          <p className="text-base text-gray-700 leading-relaxed mb-5">{ref.uraian}</p>
+          {ref.saranPengembangan && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+              <p className="text-sm font-bold text-amber-700 mb-2">💡 Saran Pengembangan</p>
+              <p className="text-sm text-amber-800 leading-relaxed">{ref.saranPengembangan}</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="bg-white rounded-2xl shadow p-6 mb-6">
+        <h3 className="font-bold text-gray-700 text-lg mb-4">Laporan Interpretasi MBTI</h3>
+        <Section title="Karakteristik Umum" items={info.karakteristik} color="blue" />
+        <Section title="Kekuatan" items={info.kekuatan} color="green" />
+        <Section title="Hubungan Interpersonal" items={info.relationship} color="purple" />
+        <Section title="Pengambilan Keputusan" items={info.keputusan} color="blue" />
+        <Section title="Memperlakukan Informasi" items={info.informasi} color="gray" />
+        <Section title="Gaya Komunikasi" items={info.komunikasi} color="blue" />
+        <Section title="Faktor Kepuasan" items={info.kepuasan} color="green" />
+        <Section title="Pemimpin & Pengikut" items={info.pemimpin} color="purple" />
+        <Section title="Perilaku Saat Kecewa / Stres" items={info.stres} color="amber" />
+        <Section title="Perilaku Saat Depresi / Stres Berat" items={info.stresKuat} color="red" />
+        <Section title="Pandangan Orang Awam" items={info.pandangan} color="gray" />
+        <Section title="Yang Perlu Diwaspadai" items={info.waspada} color="amber" />
+        <Section title="Saran" items={info.saran} color="green" />
+      </div>
+
+      {(ref.saranProfesi || ref.partner) && (
+        <div className="grid md:grid-cols-2 gap-4 mb-6">
+          {ref.saranProfesi && (
+            <div className="bg-white rounded-2xl shadow p-5">
+              <h3 className="font-bold text-gray-700 mb-3 flex items-center gap-2">
+                <span className="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center text-sm">💼</span>
+                Saran Profesi
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {ref.saranProfesi.split(',').map((p, i) => (
+                  <span key={i} className="text-xs bg-blue-50 text-blue-700 font-medium px-3 py-1.5 rounded-full border border-blue-100">
+                    {p.trim()}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          {ref.partner && (
+            <div className="bg-white rounded-2xl shadow p-5">
+              <h3 className="font-bold text-gray-700 mb-3 flex items-center gap-2">
+                <span className="w-7 h-7 bg-rose-100 rounded-lg flex items-center justify-center text-sm">🤝</span>
+                Partner Kerja / Hidup
+              </h3>
+              <div className="flex gap-3 mt-1">
+                {ref.partner.split(' atau ').map((p, i) => (
+                  <div key={i} className="flex-1 bg-rose-50 border border-rose-100 rounded-xl p-3 text-center">
+                    <p className="text-xl font-black text-rose-600">{p.trim()}</p>
+                    <p className="text-xs text-rose-400 mt-0.5">{mbtiRef[p.trim()]?.subtitle || ''}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  )
+}
+
 function Hasil() {
   const { state } = useLocation()
   const navigate = useNavigate()
-  const tipe = state?.tipe || 'ISTJ'
-  const nama = state?.nama || 'Peserta'
+  const tipe         = state?.tipe         || 'ISTJ'
+  const nama         = state?.nama         || 'Peserta'
+  const pesertaId    = state?.pesertaId    || null
+  const fromDashboard = state?.fromDashboard || false
   const info = deskripsiMBTI[tipe]
 
   if (!info) return (
@@ -490,73 +566,13 @@ function Hasil() {
           </div>
         </div>
 
-        {/* Uraian Kepribadian (dari referensi PDF) */}
-        {ref.uraian && (
-          <div className="bg-white rounded-2xl shadow p-6 mb-6">
-            <h3 className="font-bold text-gray-700 text-lg mb-3">Uraian Kepribadian</h3>
-            <p className="text-base text-gray-700 leading-relaxed mb-5">{ref.uraian}</p>
-            {ref.saranPengembangan && (
-              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <p className="text-sm font-bold text-amber-700 mb-2">💡 Saran Pengembangan</p>
-                <p className="text-sm text-amber-800 leading-relaxed">{ref.saranPengembangan}</p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Laporan Lengkap */}
-        <div className="bg-white rounded-2xl shadow p-6 mb-6">
-          <h3 className="font-bold text-gray-700 text-lg mb-4">Laporan Interpretasi MBTI</h3>
-          <Section title="Karakteristik Umum" items={info.karakteristik} color="blue" />
-          <Section title="Kekuatan" items={info.kekuatan} color="green" />
-          <Section title="Hubungan Interpersonal" items={info.relationship} color="purple" />
-          <Section title="Pengambilan Keputusan" items={info.keputusan} color="blue" />
-          <Section title="Memperlakukan Informasi" items={info.informasi} color="gray" />
-          <Section title="Gaya Komunikasi" items={info.komunikasi} color="blue" />
-          <Section title="Faktor Kepuasan" items={info.kepuasan} color="green" />
-          <Section title="Pemimpin & Pengikut" items={info.pemimpin} color="purple" />
-          <Section title="Perilaku Saat Kecewa / Stres" items={info.stres} color="amber" />
-          <Section title="Perilaku Saat Depresi / Stres Berat" items={info.stresKuat} color="red" />
-          <Section title="Pandangan Orang Awam" items={info.pandangan} color="gray" />
-          <Section title="Yang Perlu Diwaspadai" items={info.waspada} color="amber" />
-          <Section title="Saran" items={info.saran} color="green" />
-        </div>
-
-        {/* Saran Profesi & Partner */}
-        {(ref.saranProfesi || ref.partner) && (
-          <div className="grid md:grid-cols-2 gap-4 mb-6">
-            {ref.saranProfesi && (
-              <div className="bg-white rounded-2xl shadow p-5">
-                <h3 className="font-bold text-gray-700 mb-3 flex items-center gap-2">
-                  <span className="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center text-sm">💼</span>
-                  Saran Profesi
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {ref.saranProfesi.split(',').map((p, i) => (
-                    <span key={i} className="text-xs bg-blue-50 text-blue-700 font-medium px-3 py-1.5 rounded-full border border-blue-100">
-                      {p.trim()}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-            {ref.partner && (
-              <div className="bg-white rounded-2xl shadow p-5">
-                <h3 className="font-bold text-gray-700 mb-3 flex items-center gap-2">
-                  <span className="w-7 h-7 bg-rose-100 rounded-lg flex items-center justify-center text-sm">🤝</span>
-                  Partner Kerja / Hidup
-                </h3>
-                <div className="flex gap-3 mt-1">
-                  {ref.partner.split(' atau ').map((p, i) => (
-                    <div key={i} className="flex-1 bg-rose-50 border border-rose-100 rounded-xl p-3 text-center">
-                      <p className="text-xl font-black text-rose-600">{p.trim()}</p>
-                      <p className="text-xs text-rose-400 mt-0.5">{mbtiRef[p.trim()]?.subtitle || ''}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+        {/* ── KONTEN PREMIUM (Laporan Lengkap) ── */}
+        {fromDashboard ? (
+          <LaporanLengkapMBTI info={info} ref={ref} />
+        ) : (
+          <PaymentGate testType="MBTI" pesertaId={pesertaId} nama={nama}>
+            <LaporanLengkapMBTI info={info} ref={ref} />
+          </PaymentGate>
         )}
 
         {/* Tombol */}

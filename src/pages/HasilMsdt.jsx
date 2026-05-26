@@ -1,6 +1,7 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
+import PaymentGate from '../components/PaymentGate'
 
 /* ── Deskripsi 8 gaya manajemen ──────────────────────────────────── */
 const gayaInfo = {
@@ -89,6 +90,15 @@ const warnaConfig = {
   gray:   { bg: 'bg-gray-50',   border: 'border-gray-300',   badge: 'bg-gray-100 text-gray-700',    bar: 'bg-gray-500',   title: 'text-gray-700',   btn: 'bg-gray-600 hover:bg-gray-700',     grad: 'from-gray-700 to-slate-700'    },
 }
 
+function PremiumSection({ show, testType, pesertaId, nama, children }) {
+  if (show) return <>{children}</>
+  return (
+    <PaymentGate testType={testType} pesertaId={pesertaId} nama={nama}>
+      {children}
+    </PaymentGate>
+  )
+}
+
 export default function HasilMsdt() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -113,7 +123,7 @@ export default function HasilMsdt() {
     )
   }
 
-  const { hasil, nama, nip, unitKerja } = state
+  const { hasil, nama, nip, unitKerja, pesertaId, fromDashboard } = state
   const { TO, RO, E_score, grandTotal, gaya, toTinggi, roTinggi, eTinggi } = hasil
 
   const info = gayaInfo[gaya] || gayaInfo['Deserter']
@@ -341,6 +351,7 @@ export default function HasilMsdt() {
           </div>
         </div>
 
+        <PremiumSection show={!!fromDashboard} testType="MSDT" pesertaId={pesertaId} nama={nama}>
         {/* ── Implikasi HR ───────────────────────────────────────── */}
         <div className={`bg-white rounded-2xl shadow-sm border-2 ${w.border} overflow-hidden`}>
           <div className={`${w.bg} px-6 py-4 flex items-center gap-4`}>
@@ -410,6 +421,7 @@ export default function HasilMsdt() {
             </tbody>
           </table>
         </div>
+        </PremiumSection>
 
         {/* ── Catatan ────────────────────────────────────────────── */}
         <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5">

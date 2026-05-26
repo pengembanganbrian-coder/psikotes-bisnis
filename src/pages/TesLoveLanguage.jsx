@@ -171,7 +171,7 @@ export default function TesLoveLanguage() {
       bahasa_utama: utama, bahasa_kedua: kedua,
     }])
 
-    navigate('/hasil-love-language', { state: { skor, utama, kedua, nama, nip, jabatan } })
+    navigate('/hasil-love-language', { state: { skor, utama, kedua, nama, nip, jabatan, pesertaId: peserta[0].id } })
     setLoading(false)
   }
 

@@ -201,7 +201,7 @@ function TesPapi() {
       skor_o:scores.O, skor_z:scores.Z, skor_k:scores.K, skor_f:scores.F, skor_w:scores.W,
     }])
 
-    navigate('/hasil-papi', { state: { scores, profil, nama, nip, unitKerja: jabatan } })
+    navigate('/hasil-papi', { state: { scores, profil, nama, nip, unitKerja: jabatan, pesertaId } })
     setLoading(false)
   }
 

@@ -105,12 +105,13 @@ function Dashboard() {
   /* ── Lihat Laporan ─────────────────────────────────────────── */
   const handleLihatLaporan = (item) => {
     if (item.jenis === 'MBTI') {
-      navigate('/hasil', { state: { tipe: item.hasil_tes?.[0]?.tipe_mbti, nama: item.nama } })
+      navigate('/hasil', { state: { tipe: item.hasil_tes?.[0]?.tipe_mbti, nama: item.nama, fromDashboard: true } })
     } else if (item.jenis === 'DISC') {
       const h = item.hasil_disc?.[0]
       if (!h) return
       navigate('/hasil-disc', {
         state: {
+          fromDashboard: true,
           nama: item.nama,
           hasil: {
             profil: h.profil,
@@ -128,6 +129,7 @@ function Dashboard() {
       PAPI_SCALES.forEach(k => { scores[k] = h[`skor_${k.toLowerCase()}`] ?? 0 })
       navigate('/hasil-papi', {
         state: {
+          fromDashboard: true,
           nama: item.nama,
           nip: item.nip,
           unitKerja: item.jabatan,

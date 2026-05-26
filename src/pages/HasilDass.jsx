@@ -2,6 +2,7 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import Logo from '../components/Logo'
+import PaymentGate from '../components/PaymentGate'
 
 /* ── Tabel norma DASS-21 (skor sudah dikali 2) ──────────────────── */
 function getKategori(skala, skor) {
@@ -192,6 +193,36 @@ const rekomendasiHR = {
 /* ════════════════════════════════════════════════════════════════════
    KOMPONEN UTAMA
 ═══════════════════════════════════════════════════════════════════ */
+/* ── Konten premium DASS ────────────────────────────────────── */
+function RekomendasiDASS({ rekHR }) {
+  const wr = warnaConfig[rekHR.warna]
+  return (
+    <div className={`bg-white rounded-2xl shadow-sm border-2 ${wr.border} overflow-hidden`}>
+      <div className={`${wr.bg} px-6 py-4 flex items-center gap-4`}>
+        <span className="text-2xl">{rekHR.icon}</span>
+        <div>
+          <h3 className={`font-black text-lg ${wr.title}`}>Rekomendasi Tindak Lanjut</h3>
+          <span className={`inline-block text-xs font-bold px-3 py-0.5 rounded-full ${wr.badge}`}>
+            Status keseluruhan: {rekHR.label}
+          </span>
+        </div>
+      </div>
+      <div className="px-6 py-5">
+        <ul className="space-y-3">
+          {rekHR.tindakan.map((t, i) => (
+            <li key={i} className="flex gap-3 text-sm text-gray-700">
+              <span className={`flex-shrink-0 w-5 h-5 ${wr.badge} rounded-full flex items-center justify-center text-[11px] font-bold`}>
+                {i + 1}
+              </span>
+              {t}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
 export default function HasilDass() {
   const location  = useLocation()
   const navigate  = useNavigate()
@@ -218,7 +249,7 @@ export default function HasilDass() {
     )
   }
 
-  const { skor, nama, nip, unitKerja, fromDashboard } = state
+  const { skor, nama, nip, unitKerja, fromDashboard, pesertaId } = state
 
   /* Kategorisasi */
   const kD = getKategori('D', skor.D)
@@ -231,9 +262,9 @@ export default function HasilDass() {
   const worstLabel = severityOrder[worstIdx]
   const rekHR      = rekomendasiHR[worstLabel]
 
-  /* ── Auto-save ke Supabase (hanya sekali, bukan dari dashboard) ── */
+  /* ── Auto-save ke Supabase (hanya sekali, bukan dari dashboard, bukan jika pesertaId sudah ada) ── */
   useEffect(() => {
-    if (fromDashboard || saved.current) return
+    if (fromDashboard || saved.current || pesertaId) return
     saved.current = true
 
     async function save() {
@@ -368,35 +399,14 @@ export default function HasilDass() {
           )
         })}
 
-        {/* ── Rekomendasi Tindak Lanjut HR ──────────────────────── */}
-        {(() => {
-          const wr = warnaConfig[rekHR.warna]
-          return (
-            <div className={`bg-white rounded-2xl shadow-sm border-2 ${wr.border} overflow-hidden`}>
-              <div className={`${wr.bg} px-6 py-4 flex items-center gap-4`}>
-                <span className="text-2xl">{rekHR.icon}</span>
-                <div>
-                  <h3 className={`font-black text-lg ${wr.title}`}>Rekomendasi Tindak Lanjut</h3>
-                  <span className={`inline-block text-xs font-bold px-3 py-0.5 rounded-full ${wr.badge}`}>
-                    Status keseluruhan: {rekHR.label}
-                  </span>
-                </div>
-              </div>
-              <div className="px-6 py-5">
-                <ul className="space-y-3">
-                  {rekHR.tindakan.map((t, i) => (
-                    <li key={i} className="flex gap-3 text-sm text-gray-700">
-                      <span className={`flex-shrink-0 w-5 h-5 ${wr.badge} rounded-full flex items-center justify-center text-[11px] font-bold`}>
-                        {i + 1}
-                      </span>
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )
-        })()}
+        {/* ── Rekomendasi Tindak Lanjut HR (PREMIUM) ───────────── */}
+        {fromDashboard ? (
+          <RekomendasiDASS rekHR={rekHR} />
+        ) : (
+          <PaymentGate testType="DASS" pesertaId={pesertaId} nama={nama}>
+            <RekomendasiDASS rekHR={rekHR} />
+          </PaymentGate>
+        )}
 
         {/* ── Tabel ringkasan skor ──────────────────────────────── */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">

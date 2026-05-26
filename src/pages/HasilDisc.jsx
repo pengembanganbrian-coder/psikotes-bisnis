@@ -1,6 +1,7 @@
 ﻿import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase'
+import PaymentGate from '../components/PaymentGate'
 
 const profilDISC = {
   D: { nama: "Developer", tipe: "D", deskripsi: "selalu akan mencari solusi-solusi baru dari tiap persoalan yang dihadapi. Ia memiliki internal motif yang kuat dan memiliki kecepatan kerja untuk mencapai tujuannya, serta mampu membuat keputusan dengan mudah walaupun dalam suasana penuh tekanan. Ia adalah seorang yang kreatif dan percaya diri, ia cenderung menggunakan keseimbangan antara intuisi dan fakta ketika mengambil keputusan. Ia memiliki kekuatan ego yang besar, cenderung sangat individualistis dan selalu mencari pandangan-pandangan baru karenanya ia tidak menyukai berada dibawah atasan yang penuh kontrol.", karakteristik: ["Mengambil keputusan","Langsung/direct","Kekuatan ego yang besar","Memecahkan masalah","Berani mengambil resiko","Dominan","Penggerak"], perilakuKerja: { kekuatan: ["Tidak takut bersaing","Kreatif dan memiliki banyak ide","Percaya diri dan mandiri","Berani mengambil risiko"], kelemahan: ["Kurang peka terhadap perasaan orang lain","Terlalu cepat mengambil keputusan","Cenderung mendominasi"] }, suasanaEmosi: { kekuatan: ["Percaya diri","Berkemauan keras","Tekun dan ulet","Berani dan tegar"], kelemahan: ["Pendiriannya sangat keras","Tidak sabaran, suka menekan","Memaksakan kehendak"] }, kekuatan: ["Percaya diri","Berkemauan keras","Tekun dan ulet","Berani dan tegar","Menghadapi hidup tanpa kompromi","Organisator dan promotor","Cepat bertindak","Berani memutuskan dalam keadaan mendesak","Mampu memberikan solusi","Memiliki inisiatif","Mampu bekerja dengan cepat","Memotivasi orang lain","Cepat membuat keputusan","Berani mengambil resiko"], kelemahan: ["Pendiriannya sangat keras","Terlalu cepat mengambil keputusan","Tidak sabaran, suka menekan","Kurang peka terhadap perasaan orang lain","Terlalu percaya diri","Kurang menghargai pendapat orang lain","Cenderung mendominasi","Memaksakan kehendak","Cenderung egois"], gayaKepemimpinan: ["Mengendalikan orang lain","Cepat bertindak","Percaya diri","Mencari perubahan","Persuasif","Kompetitif","Berani mengambil resiko"], pekerjaan: ["Pekerjaan yang membutuhkan pengambilan keputusan secara cepat","Pekerjaan yang berorientasi kepada hasil","Pekerjaan yang kompetitif dan banyak tantangan","Bebas dari pekerjaan detail dan spesifik","Menggunakan kekuasaan dan wewenang","Mengambil suatu gagasan dan menjalankannya","Beragam kegiatan","Bebas dari pengawasan langsung","Memunculkan ide-ide baru","Mengkoordinir kegiatan"], karir: ["Director","Entrepreneur","Manager","Sales Manager","Executive"] },
@@ -72,10 +73,73 @@ function GrafikDISC({ title, subtitle, data, maxVal = 24 }) {
   )
 }
 
+/* ── Konten premium DISC ────────────────────────────────────── */
+function PremiumContentDISC({ info, warna }) {
+  return (
+    <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
+      <h3 className="font-bold text-gray-700 mb-3">Karakteristik Perilaku</h3>
+      <div className="flex flex-wrap gap-2 mb-5">
+        {info.karakteristik.map((k, i) => (
+          <span key={i} className={`text-sm px-3 py-1.5 rounded-full font-medium ${warna.light} ${warna.text}`}>• {k}</span>
+        ))}
+      </div>
+
+      <h3 className="font-bold text-gray-700 mb-3">Analisis Perilaku dan Emosi</h3>
+      <div className="grid grid-cols-2 gap-3 mb-5">
+        <div className={`${warna.light} border ${warna.border} rounded-xl p-4`}>
+          <p className={`text-xs font-bold uppercase mb-2 ${warna.text}`}>Perilaku Kerja — Kekuatan</p>
+          <ul className="space-y-1.5">{info.perilakuKerja.kekuatan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
+        </div>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <p className="text-xs font-bold uppercase mb-2 text-amber-700">Perilaku Kerja — Kelemahan</p>
+          <ul className="space-y-1.5">{info.perilakuKerja.kelemahan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
+        </div>
+        <div className={`${warna.light} border ${warna.border} rounded-xl p-4`}>
+          <p className={`text-xs font-bold uppercase mb-2 ${warna.text}`}>Suasana Emosi — Kekuatan</p>
+          <ul className="space-y-1.5">{info.suasanaEmosi.kekuatan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
+        </div>
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+          <p className="text-xs font-bold uppercase mb-2 text-amber-700">Suasana Emosi — Kelemahan</p>
+          <ul className="space-y-1.5">{info.suasanaEmosi.kelemahan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
+        </div>
+      </div>
+
+      <h3 className="font-bold text-gray-700 mb-3">Kekuatan dan Kelemahan</h3>
+      <div className="grid grid-cols-2 gap-3 mb-5">
+        <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+          <p className="text-xs font-bold uppercase mb-2 text-green-700">Kekuatan</p>
+          <ul className="space-y-1.5">{info.kekuatan.slice(0, 8).map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
+        </div>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+          <p className="text-xs font-bold uppercase mb-2 text-red-700">Kelemahan</p>
+          <ul className="space-y-1.5">{info.kelemahan.slice(0, 8).map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
+        </div>
+      </div>
+
+      <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4">
+        <p className="text-xs font-bold uppercase mb-2 text-purple-700">Gaya Kepemimpinan</p>
+        <div className="flex flex-wrap gap-1.5">
+          {info.gayaKepemimpinan.map((k,i) => <span key={i} className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-full">• {k}</span>)}
+        </div>
+      </div>
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
+        <p className="text-xs font-bold uppercase mb-2 text-blue-700">Karakteristik Pekerjaan yang Sesuai</p>
+        <ul className="space-y-1.5 columns-2">{info.pekerjaan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5 break-inside-avoid"><span>•</span>{k}</li>)}</ul>
+      </div>
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+        <p className="text-xs font-bold uppercase mb-2 text-gray-600">Rekomendasi Jalur Karir</p>
+        <div className="flex flex-wrap gap-2">
+          {info.karir.map((k,i) => <span key={i} className={`text-sm px-3 py-1.5 rounded-full font-semibold ${warna.light} ${warna.text}`}>{k}</span>)}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function HasilDisc() {
   const { state } = useLocation()
   const navigate = useNavigate()
-  const { hasil, nama } = state || {}
+  const { hasil, nama, pesertaId, fromDashboard } = state || {}
 
   const [jobs, setJobs] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
@@ -400,64 +464,19 @@ function HasilDisc() {
           )}
         </div>
 
-        {/* KARAKTERISTIK */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
-          <h3 className="font-bold text-gray-700 mb-3">Karakteristik Perilaku</h3>
-          <div className="flex flex-wrap gap-2 mb-5">
-            {info.karakteristik.map((k, i) => (
-              <span key={i} className={`text-sm px-3 py-1.5 rounded-full font-medium ${warna.light} ${warna.text}`}>• {k}</span>
-            ))}
-          </div>
-
-          <h3 className="font-bold text-gray-700 mb-3">Analisis Perilaku dan Emosi</h3>
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            <div className={`${warna.light} border ${warna.border} rounded-xl p-4`}>
-              <p className={`text-xs font-bold uppercase mb-2 ${warna.text}`}>Perilaku Kerja — Kekuatan</p>
-              <ul className="space-y-1.5">{info.perilakuKerja.kekuatan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
-            </div>
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-              <p className="text-xs font-bold uppercase mb-2 text-amber-700">Perilaku Kerja — Kelemahan</p>
-              <ul className="space-y-1.5">{info.perilakuKerja.kelemahan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
-            </div>
-            <div className={`${warna.light} border ${warna.border} rounded-xl p-4`}>
-              <p className={`text-xs font-bold uppercase mb-2 ${warna.text}`}>Suasana Emosi — Kekuatan</p>
-              <ul className="space-y-1.5">{info.suasanaEmosi.kekuatan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
-            </div>
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-              <p className="text-xs font-bold uppercase mb-2 text-amber-700">Suasana Emosi — Kelemahan</p>
-              <ul className="space-y-1.5">{info.suasanaEmosi.kelemahan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
-            </div>
-          </div>
-
-          <h3 className="font-bold text-gray-700 mb-3">Kekuatan dan Kelemahan</h3>
-          <div className="grid grid-cols-2 gap-3 mb-5">
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-              <p className="text-xs font-bold uppercase mb-2 text-green-700">Kekuatan</p>
-              <ul className="space-y-1.5">{info.kekuatan.slice(0, 8).map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
-            </div>
-            <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-              <p className="text-xs font-bold uppercase mb-2 text-red-700">Kelemahan</p>
-              <ul className="space-y-1.5">{info.kelemahan.slice(0, 8).map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
-            </div>
-          </div>
-
-          <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4">
-            <p className="text-xs font-bold uppercase mb-2 text-purple-700">Gaya Kepemimpinan</p>
-            <div className="flex flex-wrap gap-1.5">
-              {info.gayaKepemimpinan.map((k,i) => <span key={i} className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-full">• {k}</span>)}
-            </div>
-          </div>
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-            <p className="text-xs font-bold uppercase mb-2 text-blue-700">Karakteristik Pekerjaan yang Sesuai</p>
-            <ul className="space-y-1.5 columns-2">{info.pekerjaan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5 break-inside-avoid"><span>•</span>{k}</li>)}</ul>
-          </div>
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-            <p className="text-xs font-bold uppercase mb-2 text-gray-600">Rekomendasi Jalur Karir</p>
-            <div className="flex flex-wrap gap-2">
-              {info.karir.map((k,i) => <span key={i} className={`text-sm px-3 py-1.5 rounded-full font-semibold ${warna.light} ${warna.text}`}>{k}</span>)}
-            </div>
-          </div>
-        </div>
+        {/* KONTEN PREMIUM — Karakteristik, Kekuatan/Kelemahan, Karir */}
+        {fromDashboard ? (
+          /* Admin/Dashboard: tampil langsung */
+          <PremiumContentDISC info={info} warna={warna} />
+        ) : (
+          <PaymentGate
+            testType="DISC"
+            pesertaId={pesertaId}
+            nama={nama}
+          >
+            <PremiumContentDISC info={info} warna={warna} />
+          </PaymentGate>
+        )}
 
         {/* TOMBOL */}
         <div className="flex gap-3 sticky bottom-4 print:hidden">

@@ -175,7 +175,7 @@ function Tes() {
       skor_t: skor.t, skor_f: skor.f,
       skor_j: skor.j, skor_p: skor.p,
     }])
-    navigate('/hasil', { state: { tipe, nama } })
+    navigate('/hasil', { state: { tipe, nama, pesertaId } })
     setLoading(false)
   }
 

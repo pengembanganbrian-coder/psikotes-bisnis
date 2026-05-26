@@ -261,7 +261,7 @@ function TesDisc() {
       skor_s_change: hasil.changeS, skor_c_change: hasil.changeC,
     }])
 
-    navigate('/hasil-disc', { state: { hasil, nama } })
+    navigate('/hasil-disc', { state: { hasil, nama, pesertaId } })
     setLoading(false)
   }
 

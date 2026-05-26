@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
+import PaymentGate from '../components/PaymentGate'
 
 const llInfo = {
   W: {
@@ -94,6 +95,15 @@ const warnaClass = {
   rose:   { bg: 'bg-rose-50',   border: 'border-rose-200',   badge: 'bg-rose-100 text-rose-800',    bar: 'bg-rose-500',   title: 'text-rose-700'   },
 }
 
+function PremiumSection({ show, testType, pesertaId, nama, children }) {
+  if (show) return <>{children}</>
+  return (
+    <PaymentGate testType={testType} pesertaId={pesertaId} nama={nama}>
+      {children}
+    </PaymentGate>
+  )
+}
+
 export default function HasilLoveLanguage() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -117,7 +127,7 @@ export default function HasilLoveLanguage() {
     )
   }
 
-  const { skor, utama, kedua, nama, nip, jabatan } = state
+  const { skor, utama, kedua, nama, nip, jabatan, pesertaId, fromDashboard } = state
   const infoUtama = llInfo[utama]
   const warna     = warnaClass[infoUtama.warna]
   const maxSkor   = 12 // max per LL = 12 (setiap LL muncul di 12 pasangan dari 30 soal)
@@ -188,6 +198,7 @@ export default function HasilLoveLanguage() {
           </div>
         </div>
 
+        <PremiumSection show={!!fromDashboard} testType="Love Language" pesertaId={pesertaId} nama={nama}>
         {/* Bahasa Kasih Kedua */}
         {(() => {
           const info2 = llInfo[kedua]
@@ -239,6 +250,7 @@ export default function HasilLoveLanguage() {
             })}
           </div>
         </div>
+        </PremiumSection>
 
         {/* Tombol */}
         <button

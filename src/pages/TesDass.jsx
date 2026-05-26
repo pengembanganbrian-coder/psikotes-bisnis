@@ -1,6 +1,7 @@
 ﻿import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
+import { supabase } from '../supabase'
 
 const unitKerjaOptions = [
   { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
@@ -69,9 +70,8 @@ export default function TesDass() {
     return Object.keys(errs).length === 0
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (answered < 21) {
-      // Scroll ke soal pertama yang belum dijawab
       const belum = soal.find(s => jawaban[s.id] === undefined)
       if (belum) {
         const el = document.getElementById(`soal-${belum.id}`)
@@ -80,7 +80,41 @@ export default function TesDass() {
       return
     }
     const { D, A, S } = hitungDASS()
-    navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, nip, unitKerja, jawaban } })
+
+    // Simpan ke Supabase
+    try {
+      const { data: peserta, error: e1 } = await supabase
+        .from('peserta_dass')
+        .insert([{ nama, nip, jabatan: unitKerja }])
+        .select()
+        .single()
+
+      if (e1 || !peserta) throw e1 || new Error('Gagal menyimpan peserta DASS')
+
+      const kategori = (skor, batas) => {
+        if (skor <= batas[0]) return 'Normal'
+        if (skor <= batas[1]) return 'Ringan'
+        if (skor <= batas[2]) return 'Sedang'
+        if (skor <= batas[3]) return 'Berat'
+        return 'Sangat Berat'
+      }
+
+      await supabase.from('hasil_dass').insert([{
+        peserta_id:         peserta.id,
+        skor_depresi:       D,
+        skor_anxietas:      A,
+        skor_stres:         S,
+        kategori_depresi:   kategori(D, [9, 13, 20, 27]),
+        kategori_anxietas:  kategori(A, [7, 9, 14, 19]),
+        kategori_stres:     kategori(S, [14, 18, 25, 33]),
+      }])
+
+      navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, nip, unitKerja, jawaban, pesertaId: peserta.id } })
+    } catch (err) {
+      console.error('Save DASS error:', err)
+      // Navigate tetap dilanjutkan meski save gagal, tanpa pesertaId
+      navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, nip, unitKerja, jawaban } })
+    }
   }
 
   /* ═══════════════════════════════════════════════════════

@@ -191,7 +191,7 @@ export default function TesMsdt() {
       if (e2) throw e2
 
       navigate('/hasil-msdt', {
-        state: { hasil, nama, nip, unitKerja },
+        state: { hasil, nama, nip, unitKerja, pesertaId: peserta.id },
       })
     } catch (err) {
       console.error(err)

@@ -1,4 +1,5 @@
 ﻿import { useLocation, useNavigate } from 'react-router-dom'
+import PaymentGate from '../components/PaymentGate'
 
 /* ── Definisi 20 skala PAPI Kostick ─────────────────────────────── */
 const skalaInfo = {
@@ -275,6 +276,16 @@ function levelLabel(v) {
 }
 
 /* ── Halaman Utama ─────────────────────────────────────────────────── */
+/* Helper: tampilkan konten premium atau langsung (jika dashboard) */
+function PremiumSection({ show, testType, pesertaId, nama, children }) {
+  if (show) return <>{children}</>
+  return (
+    <PaymentGate testType={testType} pesertaId={pesertaId} nama={nama}>
+      {children}
+    </PaymentGate>
+  )
+}
+
 export default function HasilPapi() {
   const { state } = useLocation()
   const navigate = useNavigate()
@@ -293,7 +304,7 @@ export default function HasilPapi() {
     )
   }
 
-  const { scores, nama, nip, unitKerja } = state
+  const { scores, nama, nip, unitKerja, pesertaId, fromDashboard } = state
   const tanggal = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
 
   /* Top 5 skala tertinggi */
@@ -370,6 +381,7 @@ export default function HasilPapi() {
           </div>
         </div>
 
+        <PremiumSection show={fromDashboard} testType="PAPI" pesertaId={pesertaId} nama={nama}>
         {/* ── Interpretasi Profil ── */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <h2 className="font-bold text-gray-800 mb-1 flex items-center gap-2 text-xl">
@@ -648,6 +660,7 @@ export default function HasilPapi() {
             </tbody>
           </table>
         </div>
+        </PremiumSection>
 
         {/* ── Catatan & Tombol ── */}
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-800 print:hidden">
