@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import Logo from '../components/Logo'
 
 function Home() {
   const navigate = useNavigate()
@@ -8,12 +9,7 @@ function Home() {
       {/* Navbar */}
       <header className="bg-gradient-to-r from-blue-900 to-blue-800 px-6 py-4 flex justify-between items-center shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="inline-flex items-center gap-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
-              <span className="text-white font-black text-xs">AI</span>
-            </div>
-            <span className="font-black text-2xl text-white tracking-tight">AssesIN</span>
-          </div>
+          <Logo size="md" dark />
           <div>
             <p className="text-white font-bold text-sm leading-tight">AssesIN — Platform Asesmen Psikologi</p>
           </div>
@@ -28,10 +24,7 @@ function Home() {
           {/* Logo + Title */}
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 justify-center mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
-                <span className="text-white font-black text-xs">AI</span>
-              </div>
-              <span className="font-black text-2xl text-blue-700 tracking-tight">AssesIN</span>
+              <Logo size="lg" />
             </div>
             <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
               <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />

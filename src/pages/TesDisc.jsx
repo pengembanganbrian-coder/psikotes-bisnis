@@ -1,6 +1,7 @@
 ﻿import { useState } from 'react'
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
+import Logo from '../components/Logo'
 
 const unitKerjaOptions = [
   { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
@@ -274,10 +275,7 @@ function TesDisc() {
           {/* Header Card */}
           <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-7 text-center">
             <div className="flex items-center gap-2 justify-center mb-1">
-              <div className="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-black text-[9px]">AI</span>
-              </div>
-              <span className="font-black text-lg text-blue-700 tracking-tight">AssesIN</span>
+              <Logo size="sm" dark />
             </div>
             <div className="inline-flex items-center justify-center w-14 h-14 bg-white/20 border border-white/30 rounded-2xl backdrop-blur mb-3">
               <span className="text-white text-xl font-black">DISC</span>

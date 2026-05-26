@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
+import Logo from '../components/Logo'
 
 function Login() {
   const [email, setEmail] = useState('')
@@ -26,10 +27,7 @@ function Login() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 justify-center">
-            <div className="w-12 h-12 bg-white/20 border border-white/30 rounded-xl flex items-center justify-center">
-              <span className="text-white font-black text-sm">AI</span>
-            </div>
-            <span className="font-black text-3xl text-white tracking-tight">AssesIN</span>
+            <Logo size="lg" dark />
           </div>
           <h1 className="text-lg font-black text-white leading-snug mt-4">Platform Asesmen Psikologi Digital</h1>
           <p className="text-blue-300 text-sm mt-1">Portal Admin</p>

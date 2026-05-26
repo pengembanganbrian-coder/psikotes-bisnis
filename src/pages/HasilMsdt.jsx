@@ -1,5 +1,6 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import Logo from '../components/Logo'
 
 /* ── Deskripsi 8 gaya manajemen ──────────────────────────────────── */
 const gayaInfo = {
@@ -136,10 +137,7 @@ export default function HasilMsdt() {
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center gap-3 mb-1">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-black text-[9px]">AI</span>
-              </div>
-              <span className="font-black text-lg text-white tracking-tight">AssesIN</span>
+              <Logo size="sm" dark />
             </div>
             <p className="text-xs font-medium opacity-75">AssesIN — Platform Asesmen Psikologi</p>
           </div>

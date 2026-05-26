@@ -1,5 +1,6 @@
 ﻿import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Logo from '../components/Logo'
 
 const unitKerjaOptions = [
   { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
@@ -93,10 +94,7 @@ export default function TesDass() {
           {/* Logo + Judul */}
           <div className="text-center mb-6">
             <div className="flex items-center gap-2 justify-center mb-1">
-              <div className="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
-                <span className="text-white font-black text-[9px]">AI</span>
-              </div>
-              <span className="font-black text-lg text-blue-700 tracking-tight">AssesIN</span>
+              <Logo size="sm" />
             </div>
           </div>
           <div className="flex items-center gap-4 mb-6">

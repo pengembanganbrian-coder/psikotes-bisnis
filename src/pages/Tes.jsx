@@ -1,6 +1,7 @@
 ﻿import { useState } from 'react'
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
+import Logo from '../components/Logo'
 
 const unitKerjaOptions = [
   { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
@@ -185,10 +186,7 @@ function Tes() {
 
         <div className="text-center mb-6">
           <div className="flex items-center gap-2 justify-center mb-1">
-            <div className="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
-              <span className="text-white font-black text-[9px]">AI</span>
-            </div>
-            <span className="font-black text-lg text-blue-700 tracking-tight">AssesIN</span>
+            <Logo size="sm" />
           </div>
           <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl shadow-lg shadow-blue-200 mb-4">
             <span className="text-white font-black text-sm tracking-wide">MBTI</span>
