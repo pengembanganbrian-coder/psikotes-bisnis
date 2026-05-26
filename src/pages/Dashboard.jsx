@@ -99,7 +99,7 @@ function Dashboard() {
     const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' })
     const url  = URL.createObjectURL(blob)
     const a    = document.createElement('a')
-    a.href = url; a.download = 'peserta-psikotes-djbc.csv'; a.click()
+    a.href = url; a.download = 'peserta-assesin.csv'; a.click()
   }
 
   /* ── Lihat Laporan ─────────────────────────────────────────── */
@@ -230,7 +230,7 @@ function Dashboard() {
     <div className="min-h-screen bg-blue-50">
       {/* Topbar */}
       <div className="bg-white shadow px-8 py-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-blue-700">Dashboard Admin — Platform Asesmen DJBC</h1>
+        <h1 className="text-xl font-bold text-blue-700">Dashboard Admin — Platform Asesmen AssesIN</h1>
         <div className="flex gap-3 items-center">
           <button onClick={handleExportExcel}
             className="text-sm bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">

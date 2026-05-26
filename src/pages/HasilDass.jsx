@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 
@@ -277,8 +277,13 @@ export default function HasilDass() {
       <div className="bg-gradient-to-r from-teal-700 to-cyan-700 text-white px-6 py-10">
         <div className="max-w-3xl mx-auto">
           <div className="flex items-center gap-3 mb-1">
-            <img src="/logo-djbc.png" alt="DJBC" className="h-8 w-auto opacity-90" onError={e => { e.target.style.display = 'none' }} />
-            <p className="text-xs font-medium opacity-75">Platform Asesmen Pengembangan Kepegawaian DJBC</p>
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
+                <span className="text-white font-black text-[9px]">AI</span>
+              </div>
+              <span className="font-black text-lg text-white tracking-tight">AssesIN</span>
+            </div>
+            <p className="text-xs font-medium opacity-75">AssesIN — Platform Asesmen Psikologi</p>
           </div>
           <h1 className="text-3xl font-black mt-5 mb-1">Laporan DASS-21</h1>
           <p className="text-sm opacity-80">Depression · Anxiety · Stress Scales</p>
@@ -439,7 +444,7 @@ export default function HasilDass() {
             dipengaruhi oleh berbagai faktor situasional sementara. Interpretasi dan tindak lanjut
             harus dilakukan oleh tenaga profesional yang berwenang (psikolog, psikiater, atau konselor
             bersertifikat). Hasil bersifat <strong>rahasia</strong> dan hanya digunakan untuk kepentingan
-            pengembangan SDM DJBC.
+            pengembangan sumber daya manusia.
           </p>
         </div>
 

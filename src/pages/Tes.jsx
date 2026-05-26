@@ -1,286 +1,14 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 
 const unitKerjaOptions = [
-  {
-    group: 'Sekretariat DJBC',
-    options: [
-      'Bagian Organisasi dan Tata Laksana',
-      'Bagian Keuangan',
-      'Bagian Umum',
-      'Bagian Administrasi Kepegawaian',
-      'Bagian Pengembangan Kepegawaian',
-      'Bagian Pengelolaan Barang Milik Negara',
-    ],
-  },
-  {
-    group: 'Kantor Pusat — Direktorat',
-    options: [
-      'Direktorat Teknis Kepabeanan',
-      'Direktorat Fasilitas Kepabeanan',
-      'Direktorat Teknis dan Fasilitas Cukai',
-      'Direktorat Keberatan Banding dan Peraturan',
-      'Direktorat Penindakan dan Penyidikan',
-      'Direktorat Audit Kepabeanan dan Cukai',
-      'Direktorat Kepatuhan Internal',
-      'Direktorat Informasi Kepabeanan dan Cukai',
-      'Direktorat Penerimaan dan Perencanaan Strategis',
-      'Direktorat Kerja Sama Internasional Kepabeanan dan Cukai',
-      'Direktorat Interdiksi Narkotika',
-      'Direktorat Komunikasi dan Bimbingan Pengguna Jasa',
-      'Tenaga Pengkaji Bidang Pengawasan dan Penegakan Hukum Kepabeanan dan Cukai',
-      'Tenaga Pengkaji Bidang Pengembangan Kapasitas dan Kinerja Organisasi',
-    ],
-  },
-  {
-    group: 'Kantor Wilayah',
-    options: [
-      'Kantor Wilayah DJBC Aceh',
-      'Kantor Wilayah DJBC Sumatera Utara',
-      'Kantor Wilayah DJBC Riau',
-      'Kantor Wilayah DJBC Khusus Kepulauan Riau',
-      'Kantor Wilayah DJBC Sumatera Bagian Timur',
-      'Kantor Wilayah DJBC Sumatera Bagian Barat',
-      'Kantor Wilayah DJBC Banten',
-      'Kantor Wilayah DJBC Jakarta',
-      'Kantor Wilayah DJBC Jawa Barat',
-      'Kantor Wilayah DJBC Jawa Tengah dan DI Yogyakarta',
-      'Kantor Wilayah DJBC Jawa Timur I',
-      'Kantor Wilayah DJBC Jawa Timur II',
-      'Kantor Wilayah DJBC Bali, Nusa Tenggara Barat dan Nusa Tenggara Timur',
-      'Kantor Wilayah DJBC Kalimantan Bagian Barat',
-      'Kantor Wilayah DJBC Kalimantan Bagian Timur',
-      'Kantor Wilayah DJBC Kalimantan Bagian Selatan',
-      'Kantor Wilayah DJBC Sulawesi Bagian Selatan',
-      'Kantor Wilayah DJBC Sulawesi Bagian Utara',
-      'Kantor Wilayah DJBC Maluku',
-      'Kantor Wilayah DJBC Khusus Papua',
-    ],
-  },
-  {
-    group: 'Kantor Pelayanan Utama (KPU)',
-    options: [
-      'Kantor Pelayanan Utama Bea dan Cukai Tipe A Tanjung Priok',
-      'Kantor Pelayanan Utama Bea dan Cukai Tipe C Soekarno-Hatta',
-      'Kantor Pelayanan Utama Bea dan Cukai Tipe B Batam',
-    ],
-  },
-  {
-    group: 'KPPBC — Aceh',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Banda Aceh',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Lhokseumawe',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Meulaboh',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Langsa',
-    ],
-  },
-  {
-    group: 'KPPBC — Sumatera Utara',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Belawan',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Medan',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Teluk Nibung',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kuala Tanjung',
-    ],
-  },
-  {
-    group: 'KPPBC — Kepulauan Riau',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Tanjung Balai Karimun',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Tanjung Pinang',
-    ],
-  },
-  {
-    group: 'KPPBC — Riau',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Pekanbaru',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Dumai',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tembilahan',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bengkalis',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Teluk Bayur',
-    ],
-  },
-  {
-    group: 'KPPBC — Sumatera Bagian Timur',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Palembang',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Jambi',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Pangkalpinang',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tanjungpandan',
-    ],
-  },
-  {
-    group: 'KPPBC — Sumatera Bagian Barat',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bengkulu',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Bandar Lampung',
-    ],
-  },
-  {
-    group: 'KPPBC — Banten',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Merak',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Tangerang',
-    ],
-  },
-  {
-    group: 'KPPBC — Jakarta',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Jakarta',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Marunda',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kantor Pos Pasar Baru',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Bekasi',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Cikarang',
-    ],
-  },
-  {
-    group: 'KPPBC — Jawa Barat',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Bogor',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Purwakarta',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Bandung',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Cirebon',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tasikmalaya',
-    ],
-  },
-  {
-    group: 'KPPBC — Jawa Tengah & DIY',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Tanjung Emas',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Cukai Kudus',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Semarang',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Surakarta',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Yogyakarta',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Cilacap',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Purwokerto',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tegal',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Magelang',
-    ],
-  },
-  {
-    group: 'KPPBC — Jawa Timur I',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Tanjung Perak',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Juanda',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Pasuruan',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Gresik',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Sidoarjo',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Madura',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bojonegoro',
-    ],
-  },
-  {
-    group: 'KPPBC — Jawa Timur II',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Cukai Malang',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Cukai Kediri',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Blitar',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Madiun',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Jember',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Banyuwangi',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Probolinggo',
-    ],
-  },
-  {
-    group: 'KPPBC — Bali, NTB, NTT',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean Ngurah Rai',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean A Denpasar',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Atambua',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Mataram',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kupang',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sumbawa',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Labuan Bajo',
-    ],
-  },
-  {
-    group: 'KPPBC — Kalimantan Barat',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Pontianak',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Entikong',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sintete',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Nanga Badau',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Ketapang',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Jagoi Babang',
-    ],
-  },
-  {
-    group: 'KPPBC — Kalimantan Timur',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Balikpapan',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Samarinda',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Tarakan',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bontang',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Nunukan',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sangatta',
-    ],
-  },
-  {
-    group: 'KPPBC — Kalimantan Selatan',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Banjarmasin',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sampit',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Pangkalan Bun',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kotabaru',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Palangkaraya',
-    ],
-  },
-  {
-    group: 'KPPBC — Sulawesi Selatan',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean B Makassar',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Parepare',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Malili',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Kendari',
-    ],
-  },
-  {
-    group: 'KPPBC — Sulawesi Utara',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Pantoloan',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Morowali',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Luwuk',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Bitung',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Manado',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Gorontalo',
-    ],
-  },
-  {
-    group: 'KPPBC — Maluku',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Ambon',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Tual',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Ternate',
-    ],
-  },
-  {
-    group: 'KPPBC — Papua',
-    options: [
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Sorong',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Manokwari',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Jayapura',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Biak',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Merauke',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Fakfak',
-      'Kantor Pengawasan dan Pelayanan Bea dan Cukai Tipe Madya Pabean C Timika',
-    ],
-  },
-  {
-    group: 'Lainnya',
-    options: [
-      'Pangkalan Sarana Operasi Bea dan Cukai Tipe A Tanjung Balai Karimun',
-      'Pangkalan Sarana Operasi Bea dan Cukai Tipe B Lhokseumawe',
-      'Pangkalan Sarana Operasi Bea dan Cukai Tipe B Tanjung Priok',
-      'Pangkalan Sarana Operasi Bea dan Cukai Tipe B Pantoloan',
-      'Pangkalan Sarana Operasi Bea dan Cukai Tipe B Sorong',
-      'Balai Laboratorium Bea dan Cukai Kelas I Jakarta',
-      'Balai Laboratorium Bea dan Cukai Kelas II Medan',
-      'Balai Laboratorium Bea dan Cukai Kelas II Surabaya',
-    ],
-  },
+  { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
+  { group: 'BUMN / BUMD', options: ['Perbankan BUMN', 'Energi & Pertambangan BUMN', 'Telekomunikasi BUMN', 'Infrastruktur & Konstruksi BUMN', 'Pertanian & Pangan BUMN', 'BUMD Daerah', 'Lainnya'] },
+  { group: 'Instansi Pemerintah', options: ['Kementerian / Lembaga', 'Pemerintah Daerah', 'TNI / Polri', 'Badan / Komisi Negara', 'Lainnya'] },
+  { group: 'Pendidikan & Penelitian', options: ['Universitas / Perguruan Tinggi', 'Sekolah / Madrasah', 'Lembaga Pelatihan', 'Lembaga Penelitian', 'Lainnya'] },
+  { group: 'Lainnya', options: ['NGO / Yayasan / Ormas', 'Startup', 'Wirausaha / Freelance', 'Pelajar / Mahasiswa', 'Lainnya'] },
 ]
-
 const soal = [
   // EI - Bagian 1 (15 soal)
   { id: 1, kiri: "Lebih memilih berkomunikasi dengan menulis.", kanan: "Lebih memilih berkomunikasi dengan berbicara.", dimensi: "EI", arahKiri: "I", arahKanan: "E" },
@@ -456,12 +184,17 @@ function Tes() {
       <div className="w-full max-w-md">
 
         <div className="text-center mb-6">
-          <img src="/logo-djbc.png" alt="DJBC" className="h-14 w-auto mx-auto mb-4" />
+          <div className="flex items-center gap-2 justify-center mb-1">
+            <div className="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
+              <span className="text-white font-black text-[9px]">AI</span>
+            </div>
+            <span className="font-black text-lg text-blue-700 tracking-tight">AssesIN</span>
+          </div>
           <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl shadow-lg shadow-blue-200 mb-4">
             <span className="text-white font-black text-sm tracking-wide">MBTI</span>
           </div>
           <h1 className="text-xl font-black text-gray-800">Tes Kepribadian MBTI</h1>
-          <p className="text-gray-500 text-sm mt-1">Psikotes DJBC · 60 soal · ~15 menit</p>
+          <p className="text-gray-500 text-sm mt-1">AssesIN · 60 soal · ~15 menit</p>
         </div>
 
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
@@ -554,7 +287,7 @@ function Tes() {
               <span className="text-white font-black text-xs">MBTI</span>
             </div>
             <div>
-              <h1 className="font-bold text-gray-800 text-sm">Tes MBTI — Psikotes DJBC</h1>
+              <h1 className="font-bold text-gray-800 text-sm">Tes MBTI — AssesIN</h1>
               <p className="text-xs text-gray-500">Halo <strong>{nama}</strong> · Pilih yang paling sesuai dengan dirimu</p>
             </div>
           </div>

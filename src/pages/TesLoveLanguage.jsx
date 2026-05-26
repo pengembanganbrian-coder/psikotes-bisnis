@@ -1,14 +1,13 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 
 const unitKerjaOptions = [
-  { group: 'Sekretariat DJBC', options: ['Bagian Organisasi dan Tata Laksana','Bagian Keuangan','Bagian Umum','Bagian Administrasi Kepegawaian','Bagian Pengembangan Kepegawaian','Bagian Pengelolaan Barang Milik Negara'] },
-  { group: 'Kantor Pusat — Direktorat', options: ['Direktorat Teknis Kepabeanan','Direktorat Fasilitas Kepabeanan','Direktorat Teknis dan Fasilitas Cukai','Direktorat Keberatan Banding dan Peraturan','Direktorat Penindakan dan Penyidikan','Direktorat Audit Kepabeanan dan Cukai','Direktorat Kepatuhan Internal','Direktorat Informasi Kepabeanan dan Cukai','Direktorat Penerimaan dan Perencanaan Strategis','Direktorat Kerja Sama Internasional Kepabeanan dan Cukai','Direktorat Interdiksi Narkotika','Direktorat Komunikasi dan Bimbingan Pengguna Jasa','Tenaga Pengkaji Bidang Pengawasan dan Penegakan Hukum','Tenaga Pengkaji Bidang Pengembangan Kapasitas dan Kinerja Organisasi'] },
-  { group: 'Kantor Wilayah', options: ['Kantor Wilayah DJBC Aceh','Kantor Wilayah DJBC Sumatera Utara','Kantor Wilayah DJBC Riau','Kantor Wilayah DJBC Khusus Kepulauan Riau','Kantor Wilayah DJBC Sumatera Bagian Timur','Kantor Wilayah DJBC Sumatera Bagian Barat','Kantor Wilayah DJBC Banten','Kantor Wilayah DJBC Jakarta','Kantor Wilayah DJBC Jawa Barat','Kantor Wilayah DJBC Jawa Tengah dan DI Yogyakarta','Kantor Wilayah DJBC Jawa Timur I','Kantor Wilayah DJBC Jawa Timur II','Kantor Wilayah DJBC Bali, NTB dan NTT','Kantor Wilayah DJBC Kalimantan Bagian Barat','Kantor Wilayah DJBC Kalimantan Bagian Timur','Kantor Wilayah DJBC Kalimantan Bagian Selatan','Kantor Wilayah DJBC Sulawesi Bagian Selatan','Kantor Wilayah DJBC Sulawesi Bagian Utara','Kantor Wilayah DJBC Maluku','Kantor Wilayah DJBC Khusus Papua'] },
-  { group: 'Kantor Pelayanan Utama (KPU)', options: ['KPU Bea dan Cukai Tipe A Tanjung Priok','KPU Bea dan Cukai Tipe C Soekarno-Hatta','KPU Bea dan Cukai Tipe B Batam'] },
-  { group: 'KPPBC', options: ['KPPBC Tipe Madya Pabean Belawan','KPPBC Tipe Madya Pabean A Tangerang','KPPBC Tipe Madya Pabean A Jakarta','KPPBC Tipe Madya Pabean A Bekasi','KPPBC Tipe Madya Pabean Cikarang','KPPBC Tipe Madya Pabean A Bogor','KPPBC Tipe Madya Pabean A Purwakarta','KPPBC Tipe Madya Pabean A Bandung','KPPBC Tipe Madya Pabean Tanjung Emas','KPPBC Tipe Madya Cukai Kudus','KPPBC Tipe Madya Pabean A Semarang','KPPBC Tipe Madya Pabean Tanjung Perak','KPPBC Tipe Madya Pabean Juanda','KPPBC Tipe Madya Pabean B Makassar','KPPBC Tipe Madya Pabean B Balikpapan','KPPBC Tipe Madya Pabean B Banjarmasin','KPPBC Lainnya'] },
-  { group: 'Lainnya', options: ['Pangkalan Sarana Operasi Bea dan Cukai','Balai Laboratorium Bea dan Cukai','Satuan Tugas Khusus'] },
+  { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
+  { group: 'BUMN / BUMD', options: ['Perbankan BUMN', 'Energi & Pertambangan BUMN', 'Telekomunikasi BUMN', 'Infrastruktur & Konstruksi BUMN', 'Pertanian & Pangan BUMN', 'BUMD Daerah', 'Lainnya'] },
+  { group: 'Instansi Pemerintah', options: ['Kementerian / Lembaga', 'Pemerintah Daerah', 'TNI / Polri', 'Badan / Komisi Negara', 'Lainnya'] },
+  { group: 'Pendidikan & Penelitian', options: ['Universitas / Perguruan Tinggi', 'Sekolah / Madrasah', 'Lembaga Pelatihan', 'Lembaga Penelitian', 'Lainnya'] },
+  { group: 'Lainnya', options: ['NGO / Yayasan / Ormas', 'Startup', 'Wirausaha / Freelance', 'Pelajar / Mahasiswa', 'Lainnya'] },
 ]
 
 // 30 pasang pernyataan — terjemahan resmi dari The Five Love Languages Test by Dr. Gary Chapman
@@ -184,7 +183,12 @@ export default function TesLoveLanguage() {
 
         {/* Header */}
         <div className="text-center mb-6">
-          <img src="/logo-djbc.png" alt="DJBC" className="h-12 w-auto mx-auto mb-4" />
+          <div className="flex items-center gap-2 justify-center mb-1">
+            <div className="w-7 h-7 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg flex items-center justify-center">
+              <span className="text-white font-black text-[9px]">AI</span>
+            </div>
+            <span className="font-black text-lg text-blue-700 tracking-tight">AssesIN</span>
+          </div>
         </div>
         <div className="flex items-center gap-4 mb-6">
           <div className="w-14 h-14 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200 flex-shrink-0">

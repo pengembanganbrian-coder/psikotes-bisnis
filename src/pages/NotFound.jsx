@@ -32,7 +32,7 @@ export default function NotFound() {
 
       {/* Footer */}
       <p className="mt-12 text-xs text-gray-300">
-        © 2025 · Direktorat Jenderal Bea dan Cukai · Kementerian Keuangan RI
+        © 2025 · AssesIN
       </p>
     </div>
   )

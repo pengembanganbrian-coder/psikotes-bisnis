@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+﻿import { useLocation, useNavigate } from 'react-router-dom'
 
 const deskripsiMBTI = {
   ISTJ: {
@@ -433,7 +433,7 @@ function Hasil() {
           <button onClick={() => navigate('/tes')} className="text-sm text-gray-400 hover:text-blue-600 transition">
             ← Ulangi Tes
           </button>
-          <span className="text-xs font-bold text-blue-700 tracking-widest uppercase">MBTI · Platform Asesmen DJBC</span>
+          <span className="text-xs font-bold text-blue-700 tracking-widest uppercase">MBTI · Platform Asesmen AssesIN</span>
           <button onClick={() => window.print()} className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition">
             🖨️ Cetak
           </button>
@@ -444,7 +444,7 @@ function Hasil() {
         {/* Header Laporan */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 text-center">
           <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">MYERS-BRIGGS TYPE INDICATOR — INTERPRETIVE REPORT</p>
-          <p className="text-sm text-gray-500 mb-1">Platform Asesmen Pengembangan Kepegawaian DJBC</p>
+          <p className="text-sm text-gray-500 mb-1">AssesIN — Platform Asesmen Psikologi</p>
           <h2 className="text-lg font-bold text-gray-700 mb-6">{nama}</h2>
 
           {/* Tipe besar */}

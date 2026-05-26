@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+﻿import { useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { supabase } from '../supabase'
 
@@ -212,7 +212,7 @@ function HasilDisc() {
           <button onClick={() => navigate('/tes-disc')} className="text-sm text-gray-400 hover:text-green-600 transition">
             ← Ulangi Tes
           </button>
-          <span className="text-xs font-bold text-green-700 tracking-widest uppercase">DISC · Platform Asesmen DJBC</span>
+          <span className="text-xs font-bold text-green-700 tracking-widest uppercase">DISC · Platform Asesmen AssesIN</span>
           <button onClick={() => window.print()} className="text-sm bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition">
             🖨️ Cetak
           </button>
@@ -224,7 +224,7 @@ function HasilDisc() {
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
           <div className="text-center mb-5">
             <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">LAPORAN PROFIL KEPRIBADIAN</p>
-            <p className="text-xs text-gray-400 mb-3">Platform Asesmen Pengembangan Kepegawaian DJBC — Bersifat RAHASIA</p>
+            <p className="text-xs text-gray-400 mb-3">AssesIN — Platform Asesmen Psikologi — Bersifat RAHASIA</p>
             <h2 className="text-xl font-bold text-gray-800">{nama}</h2>
           </div>
           <div className={`${warna.bg} text-white rounded-2xl py-6 px-6 text-center mb-5 shadow-lg`}>

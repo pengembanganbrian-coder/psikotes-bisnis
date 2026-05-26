@@ -8,9 +8,14 @@ function Home() {
       {/* Navbar */}
       <header className="bg-gradient-to-r from-blue-900 to-blue-800 px-6 py-4 flex justify-between items-center shadow-lg">
         <div className="flex items-center gap-3">
-          <img src="/logo-djbc.png" alt="Logo DJBC" className="h-9 w-auto" />
+          <div className="inline-flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
+              <span className="text-white font-black text-xs">AI</span>
+            </div>
+            <span className="font-black text-2xl text-white tracking-tight">AssesIN</span>
+          </div>
           <div>
-            <p className="text-white font-bold text-sm leading-tight">Platform Asesmen Pengembangan Kepegawaian DJBC</p>
+            <p className="text-white font-bold text-sm leading-tight">AssesIN — Platform Asesmen Psikologi</p>
           </div>
         </div>
         <div />
@@ -22,17 +27,22 @@ function Home() {
 
           {/* Logo + Title */}
           <div className="text-center mb-12">
-            <img src="/logo-djbc.png" alt="Logo DJBC" className="h-24 w-auto mx-auto mb-6" />
+            <div className="inline-flex items-center gap-2 justify-center mb-6">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-xl flex items-center justify-center">
+                <span className="text-white font-black text-xs">AI</span>
+              </div>
+              <span className="font-black text-2xl text-blue-700 tracking-tight">AssesIN</span>
+            </div>
             <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 text-xs font-semibold px-4 py-1.5 rounded-full mb-4">
               <span className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse" />
               Sistem Aktif
             </div>
             <h1 className="text-4xl font-black text-gray-900 leading-tight mb-4">
               Asesmen Psikologi{' '}
-              <span className="text-blue-700">DJBC</span>
+              <span className="text-blue-700">Digital</span>
             </h1>
             <p className="text-gray-500 text-base max-w-lg mx-auto leading-relaxed">
-              Platform psikotes berbasis web untuk pemetaan potensi dan kepribadian pegawai DJBC
+              Platform psikotes berbasis web untuk pemetaan potensi dan kepribadian sumber daya manusia
             </p>
           </div>
 
@@ -171,7 +181,7 @@ function Home() {
           {/* Info note */}
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
             <p className="text-sm text-amber-800 text-center leading-relaxed">
-              🔒 Hasil tes bersifat <strong>rahasia</strong> dan digunakan untuk kepentingan pemetaan SDM DJBC.
+              🔒 Hasil tes bersifat <strong>rahasia</strong> dan digunakan untuk kepentingan pengembangan sumber daya manusia.
               Kerjakan dengan jujur untuk hasil yang akurat.
             </p>
           </div>
@@ -182,7 +192,7 @@ function Home() {
       {/* Footer */}
       <footer className="text-center py-5 border-t border-gray-100">
         <p className="text-xs text-gray-400">
-          © 2025 · Direktorat Jenderal Bea dan Cukai · Kementerian Keuangan RI
+          © 2025 · AssesIN
         </p>
         <button
           onClick={() => navigate('/login')}

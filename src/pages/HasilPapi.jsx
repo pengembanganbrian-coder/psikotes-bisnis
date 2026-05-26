@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router-dom'
+﻿import { useLocation, useNavigate } from 'react-router-dom'
 
 /* ── Definisi 20 skala PAPI Kostick ─────────────────────────────── */
 const skalaInfo = {
@@ -330,7 +330,7 @@ export default function HasilPapi() {
       {/* ── Header ── */}
       <div className="bg-gradient-to-r from-purple-700 to-indigo-600 text-white py-8 px-4 print:py-4">
         <div className="max-w-4xl mx-auto text-center relative">
-          <p className="text-purple-200 text-sm mb-1">Platform Asesmen Pengembangan Kepegawaian DJBC</p>
+          <p className="text-purple-200 text-sm mb-1">AssesIN — Platform Asesmen Psikologi</p>
           <h1 className="text-2xl font-bold">Laporan PAPI Kostick</h1>
           <p className="text-purple-100 mt-1 text-sm">Personality and Preference Inventory</p>
           <button onClick={handlePrint}
@@ -467,7 +467,7 @@ export default function HasilPapi() {
               <span>🏢</span> Rekomendasi Jabatan
             </p>
             <p className="text-sm text-indigo-600 mb-4">
-              Berdasarkan profil kepribadian dominan, berikut adalah jabatan-jabatan yang sesuai di lingkungan DJBC:
+              Berdasarkan profil kepribadian dominan, berikut adalah jabatan-jabatan yang sesuai:
             </p>
             <div className="space-y-4">
               {top3Rekomendasi.map(({ kode, nama, warna, list }) => (
