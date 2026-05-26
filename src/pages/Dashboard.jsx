@@ -15,19 +15,21 @@ function Dashboard() {
   /* ── Fetch ─────────────────────────────────────────────────── */
   const fetchAllPeserta = async () => {
     setLoading(true)
-    const [{ data: mbti }, { data: disc }, { data: papi }, { data: dass }] = await Promise.all([
+    const [{ data: mbti }, { data: disc }, { data: papi }, { data: dass }, { data: ll }] = await Promise.all([
       supabase.from('peserta').select('*, hasil_tes(*)').order('created_at', { ascending: false }),
       supabase.from('peserta_disc').select('*, hasil_disc(*)').order('created_at', { ascending: false }),
       supabase.from('peserta_papi').select('*, hasil_papi(*)').order('created_at', { ascending: false }),
       supabase.from('peserta_dass').select('*, hasil_dass(*)').order('created_at', { ascending: false }),
+      supabase.from('peserta_love_language').select('*, hasil_love_language(*)').order('created_at', { ascending: false }),
     ])
 
-    const mbtiList = (mbti  || []).map(p => ({ ...p, jenis: 'MBTI', identifier: p.email }))
-    const discList = (disc  || []).map(p => ({ ...p, jenis: 'DISC', identifier: p.nip }))
-    const papiList = (papi  || []).map(p => ({ ...p, jenis: 'PAPI', identifier: p.nip }))
-    const dassList = (dass  || []).map(p => ({ ...p, jenis: 'DASS', identifier: p.nip }))
+    const mbtiList = (mbti  || []).map(p => ({ ...p, jenis: 'MBTI',          identifier: p.email }))
+    const discList = (disc  || []).map(p => ({ ...p, jenis: 'DISC',          identifier: p.nip   }))
+    const papiList = (papi  || []).map(p => ({ ...p, jenis: 'PAPI',          identifier: p.nip   }))
+    const dassList = (dass  || []).map(p => ({ ...p, jenis: 'DASS',          identifier: p.nip   }))
+    const llList   = (ll    || []).map(p => ({ ...p, jenis: 'Love Language', identifier: p.nip   }))
 
-    const merged = [...mbtiList, ...discList, ...papiList, ...dassList].sort(
+    const merged = [...mbtiList, ...discList, ...papiList, ...dassList, ...llList].sort(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     )
     setPeserta(merged)
@@ -54,9 +56,12 @@ function Dashboard() {
     } else if (item.jenis === 'PAPI') {
       await supabase.from('hasil_papi').delete().eq('peserta_id', item.id)
       await supabase.from('peserta_papi').delete().eq('id', item.id)
-    } else {
+    } else if (item.jenis === 'DASS') {
       await supabase.from('hasil_dass').delete().eq('peserta_id', item.id)
       await supabase.from('peserta_dass').delete().eq('id', item.id)
+    } else {
+      await supabase.from('hasil_love_language').delete().eq('peserta_id', item.id)
+      await supabase.from('peserta_love_language').delete().eq('id', item.id)
     }
     setSelected(null)
     fetchAllPeserta()
@@ -74,6 +79,7 @@ function Dashboard() {
         const h = p.hasil_dass?.[0]
         hasil = h ? `D:${h.kategori_depresi} A:${h.kategori_anxietas} S:${h.kategori_stres}` : 'Belum tes'
       }
+      if (p.jenis === 'Love Language') hasil = p.hasil_love_language?.[0]?.bahasa_utama || 'Belum tes'
       rows.push([
         p.nama,
         p.identifier,
@@ -144,10 +150,11 @@ function Dashboard() {
 
   /* ── Helpers UI ────────────────────────────────────────────── */
   const jenisBadge = {
-    MBTI: 'bg-blue-100 text-blue-700',
-    DISC: 'bg-green-100 text-green-700',
-    PAPI: 'bg-purple-100 text-purple-700',
-    DASS: 'bg-teal-100 text-teal-700',
+    MBTI:           'bg-blue-100 text-blue-700',
+    DISC:           'bg-green-100 text-green-700',
+    PAPI:           'bg-purple-100 text-purple-700',
+    DASS:           'bg-teal-100 text-teal-700',
+    'Love Language':'bg-rose-100 text-rose-700',
   }
 
   const discColors = { D: 'bg-red-500', I: 'bg-yellow-400', S: 'bg-green-500', C: 'bg-blue-500' }
@@ -161,6 +168,7 @@ function Dashboard() {
       if (!h) return '—'
       return `D:${h.kategori_depresi?.substring(0,3)} A:${h.kategori_anxietas?.substring(0,3)} S:${h.kategori_stres?.substring(0,3)}`
     }
+    if (p.jenis === 'Love Language') return p.hasil_love_language?.[0]?.bahasa_utama || '—'
     return '—'
   }
 
@@ -204,7 +212,7 @@ function Dashboard() {
             <h2 className="text-lg font-semibold text-gray-700">Daftar Peserta</h2>
             <div className="flex items-center gap-3">
               <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
-                {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS'].map(t => (
+                {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'Love Language'].map(t => (
                   <button key={t}
                     onClick={() => { setTab(t); setSelected(null) }}
                     className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition ${

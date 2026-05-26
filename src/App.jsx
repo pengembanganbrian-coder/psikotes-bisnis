@@ -12,6 +12,8 @@ import TesDass from './pages/TesDass'
 import HasilDass from './pages/HasilDass'
 import JobProfile from './pages/JobProfile'
 import ProtectedRoute from './components/ProtectedRoute'
+import TesLoveLanguage from './pages/TesLoveLanguage'
+import HasilLoveLanguage from './pages/HasilLoveLanguage'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
         <Route path="/hasil-papi" element={<HasilPapi />} />
         <Route path="/tes-dass" element={<TesDass />} />
         <Route path="/hasil-dass" element={<HasilDass />} />
+        <Route path="/tes-love-language" element={<TesLoveLanguage />} />
+        <Route path="/hasil-love-language" element={<HasilLoveLanguage />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/job-profile" element={<ProtectedRoute><JobProfile /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />

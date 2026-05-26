@@ -123,6 +123,26 @@ function Home() {
 
           </div>
 
+            {/* Love Language Card */}
+            <button
+              onClick={() => navigate('/tes-love-language')}
+              className="group bg-white rounded-2xl border-2 border-gray-100 hover:border-rose-200 shadow-sm hover:shadow-xl hover:shadow-rose-100/60 p-7 text-left transition-all duration-300 hover:-translate-y-1"
+            >
+              <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl flex items-center justify-center shadow-lg shadow-rose-200 group-hover:scale-105 transition-transform duration-300 mb-5">
+                <span className="text-2xl">💗</span>
+              </div>
+              <h3 className="font-bold text-gray-800 text-lg mb-1">Tes Love Language</h3>
+              <p className="text-sm text-gray-500 mb-4">Bahasa Kasih · Gaya Apresiasi & Motivasi</p>
+              <div className="flex flex-wrap gap-2 mb-5">
+                <span className="text-xs bg-rose-50 text-rose-700 font-semibold px-3 py-1.5 rounded-full">📝 30 pasangan</span>
+                <span className="text-xs bg-rose-50 text-rose-700 font-semibold px-3 py-1.5 rounded-full">⏱ ~8 menit</span>
+                <span className="text-xs bg-gray-50 text-gray-500 font-medium px-3 py-1.5 rounded-full">W · Q · G · A · P</span>
+              </div>
+              <div className="w-full bg-rose-600 group-hover:bg-rose-700 text-white font-bold text-base py-3 rounded-xl text-center transition-all">
+                Mulai Tes →
+              </div>
+            </button>
+
           {/* Info note */}
           <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
             <p className="text-sm text-amber-800 text-center leading-relaxed">
