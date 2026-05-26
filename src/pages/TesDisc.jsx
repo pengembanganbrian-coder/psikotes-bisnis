@@ -344,7 +344,7 @@ function TesDisc() {
         </div>
 
         <p className="text-center text-xs text-green-600/40 mt-5">
-          © 2025 · AssesIN
+          © 2026 · AssesIN
         </p>
       </div>
     </div>
@@ -517,3 +517,4 @@ function TesDisc() {
 }
 
 export default TesDisc
+

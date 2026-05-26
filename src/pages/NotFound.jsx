@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+﻿import { useNavigate } from 'react-router-dom'
 
 export default function NotFound() {
   const navigate = useNavigate()
@@ -8,7 +8,7 @@ export default function NotFound() {
       <div className="text-center max-w-md">
         {/* Ilustrasi */}
         <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner">
-          <span className="text-5xl">🔍</span>
+          <span className="text-5xl">ðŸ”</span>
         </div>
 
         {/* Kode error */}
@@ -26,14 +26,15 @@ export default function NotFound() {
           onClick={() => navigate('/')}
           className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-lg shadow-blue-200"
         >
-          ← Kembali ke Beranda
+          â† Kembali ke Beranda
         </button>
       </div>
 
       {/* Footer */}
       <p className="mt-12 text-xs text-gray-300">
-        © 2025 · AssesIN
+        Â© 2025 Â· AssesIN
       </p>
     </div>
   )
 }
+

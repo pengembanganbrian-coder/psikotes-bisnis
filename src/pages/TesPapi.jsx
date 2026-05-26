@@ -265,7 +265,7 @@ function TesPapi() {
             </button>
           </div>
         </div>
-        <p className="text-center text-xs text-violet-600/40 mt-5">© 2025 · AssesIN</p>
+        <p className="text-center text-xs text-violet-600/40 mt-5">© 2026 · AssesIN</p>
       </div>
     </div>
   )
@@ -360,3 +360,4 @@ function TesPapi() {
 }
 
 export default TesPapi
+

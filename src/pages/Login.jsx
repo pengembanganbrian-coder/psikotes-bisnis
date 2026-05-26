@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
@@ -29,7 +29,7 @@ function Login() {
           <div className="inline-flex items-center gap-2 justify-center">
             <Logo size="lg" dark />
           </div>
-          <p className="text-blue-300 text-sm font-bold tracking-widest uppercase mt-4">Assess · Insight · Grow</p>
+          <p className="text-blue-300 text-sm font-bold tracking-widest uppercase mt-4">Assess Â· Insight Â· Grow</p>
           <p className="text-blue-400 text-xs mt-1">Portal Admin</p>
         </div>
 
@@ -46,7 +46,7 @@ function Login() {
           <div className="px-8 py-7">
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-5 flex items-center gap-3">
-                <span className="text-xl">⚠️</span>
+                <span className="text-xl">âš ï¸</span>
                 <p className="text-sm text-red-700 font-medium">{error}</p>
               </div>
             )}
@@ -75,7 +75,7 @@ function Login() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400"
-                  placeholder="••••••••"
+                  placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                   required
                 />
               </div>
@@ -85,7 +85,7 @@ function Login() {
                 disabled={loading}
                 className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-blue-200 disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {loading ? '⏳ Memverifikasi...' : 'Masuk ke Dashboard →'}
+                {loading ? 'â³ Memverifikasi...' : 'Masuk ke Dashboard â†’'}
               </button>
             </form>
 
@@ -94,14 +94,14 @@ function Login() {
                 onClick={() => navigate('/')}
                 className="w-full text-center text-sm text-gray-400 hover:text-blue-600 transition-colors"
               >
-                ← Kembali ke Halaman Tes
+                â† Kembali ke Halaman Tes
               </button>
             </div>
           </div>
         </div>
 
         <p className="text-center text-xs text-blue-400/50 mt-6">
-          © 2025 · AssesIN
+          Â© 2025 Â· AssesIN
         </p>
       </div>
     </div>
@@ -109,3 +109,4 @@ function Login() {
 }
 
 export default Login
+
