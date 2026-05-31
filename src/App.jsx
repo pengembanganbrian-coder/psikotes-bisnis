@@ -21,6 +21,7 @@ import HasilMsdt from './pages/HasilMsdt'
 import NotFound from './pages/NotFound'
 import ResetPassword from './pages/ResetPassword'
 import AdminReset from './pages/AdminReset'
+import AdminBaru from './pages/AdminBaru'
 
 // Listens for Supabase PASSWORD_RECOVERY event (fired when user clicks the reset link).
 // Must live inside BrowserRouter so it can call useNavigate().
@@ -60,6 +61,7 @@ function App() {
         <Route path="/job-profile" element={<ProtectedRoute><JobProfile /></ProtectedRoute>} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/admin-reset" element={<AdminReset />} />
+        <Route path="/admin-baru" element={<AdminBaru />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
