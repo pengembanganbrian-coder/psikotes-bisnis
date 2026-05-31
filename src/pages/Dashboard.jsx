@@ -41,6 +41,24 @@ function Dashboard() {
   useEffect(() => { fetchAllPeserta() }, [])
 
   /* ── Auth ──────────────────────────────────────────────────── */
+  const [showGantiPw, setShowGantiPw] = useState(false)
+  const [newPw,       setNewPw]       = useState('')
+  const [newPwMsg,    setNewPwMsg]    = useState(null)
+  const [newPwLoading, setNewPwLoading] = useState(false)
+
+  const handleGantiPassword = async (e) => {
+    e.preventDefault()
+    if (newPw.length < 8) { setNewPwMsg({ ok: false, text: 'Minimal 8 karakter.' }); return }
+    setNewPwLoading(true)
+    const { error } = await supabase.auth.updateUser({ password: newPw })
+    setNewPwLoading(false)
+    if (error) setNewPwMsg({ ok: false, text: error.message })
+    else {
+      setNewPwMsg({ ok: true, text: 'Password berhasil diubah!' })
+      setTimeout(() => { setShowGantiPw(false); setNewPw(''); setNewPwMsg(null) }, 1500)
+    }
+  }
+
   const handleLogout = async () => {
     await supabase.auth.signOut()
     navigate('/')
@@ -242,9 +260,41 @@ function Dashboard() {
             className="text-sm bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
             💼 Job Profile
           </button>
+          <button onClick={() => setShowGantiPw(true)} className="text-sm text-gray-500 hover:underline">🔑 Ganti Password</button>
           <button onClick={handleLogout} className="text-sm text-red-500 hover:underline">Logout</button>
         </div>
       </div>
+
+      {/* ── Modal Ganti Password ── */}
+      {showGantiPw && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '360px' }}>
+            <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '18px', color: 'var(--text)', marginBottom: '20px' }}>Ganti Password</h3>
+            <form onSubmit={handleGantiPassword} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <input
+                className="field"
+                type="password"
+                value={newPw}
+                onChange={e => { setNewPw(e.target.value); setNewPwMsg(null) }}
+                placeholder="Password baru (min 8 karakter)"
+                autoFocus
+                autoComplete="new-password"
+              />
+              {newPwMsg && (
+                <p style={{ fontSize: '13px', color: newPwMsg.ok ? '#4ade80' : '#f87171', lineHeight: '1.5' }}>{newPwMsg.text}</p>
+              )}
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button type="submit" disabled={newPwLoading} style={{ flex: 1, background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px', borderRadius: '8px', border: 'none', cursor: 'pointer', opacity: newPwLoading ? 0.6 : 1 }}>
+                  {newPwLoading ? 'Menyimpan...' : 'Simpan'}
+                </button>
+                <button type="button" onClick={() => { setShowGantiPw(false); setNewPw(''); setNewPwMsg(null) }} style={{ padding: '12px 16px', background: 'var(--surface-2)', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '12px', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer' }}>
+                  Batal
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-6xl mx-auto p-8 flex gap-6">
 
