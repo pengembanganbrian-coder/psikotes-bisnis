@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
+import { supabase } from './supabase'
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Tes from './pages/Tes'
@@ -19,9 +21,25 @@ import HasilMsdt from './pages/HasilMsdt'
 import NotFound from './pages/NotFound'
 import ResetPassword from './pages/ResetPassword'
 
+// Listens for Supabase PASSWORD_RECOVERY event (fired when user clicks the reset link).
+// Must live inside BrowserRouter so it can call useNavigate().
+function AuthListener() {
+  const navigate = useNavigate()
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        navigate('/reset-password', { replace: true })
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [navigate])
+  return null
+}
+
 function App() {
   return (
     <BrowserRouter>
+      <AuthListener />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

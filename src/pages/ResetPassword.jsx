@@ -14,48 +14,80 @@ export default function ResetPassword() {
   const [confirm,   setConfirm]   = useState('')
   const [error,     setError]     = useState('')
   const [loading,   setLoading]   = useState(false)
-  const [ready,     setReady]     = useState(false)
-  const [initError, setInitError] = useState('')
+  const [status,    setStatus]    = useState('checking') // 'checking' | 'ready' | 'invalid'
 
   useEffect(() => {
-    async function initSession() {
-      // Tokens passed via navigate state (from Home redirect)
-      const state = location.state
-      if (state?.access_token) {
-        const { error } = await supabase.auth.setSession({
-          access_token:  state.access_token,
-          refresh_token: state.refresh_token ?? '',
-        })
-        if (error) {
-          setInitError('Link reset password tidak valid atau sudah kadaluarsa. Silakan minta link baru.')
-        } else {
-          setReady(true)
-        }
-        return
-      }
+    // ── Debug: log everything about the current URL ──────────────
+    console.log('[ResetPassword] href  :', window.location.href)
+    console.log('[ResetPassword] hash  :', window.location.hash)
+    console.log('[ResetPassword] search:', window.location.search)
+    console.log('[ResetPassword] state :', location.state)
 
-      // Fallback: tokens in hash (if Supabase redirects directly to /reset-password)
-      const hash = window.location.hash
-      if (hash.includes('access_token')) {
-        const params = new URLSearchParams(hash.slice(1))
-        const access_token  = params.get('access_token')
-        const refresh_token = params.get('refresh_token') ?? ''
-        if (access_token) {
-          const { error } = await supabase.auth.setSession({ access_token, refresh_token })
-          if (error) {
-            setInitError('Link reset password tidak valid atau sudah kadaluarsa. Silakan minta link baru.')
-          } else {
-            setReady(true)
-          }
-          return
-        }
-      }
+    let resolved = false
 
-      setInitError('Link reset password tidak valid. Silakan minta link baru dari halaman login.')
+    const resolve = (ready) => {
+      if (resolved) return
+      resolved = true
+      setStatus(ready ? 'ready' : 'invalid')
     }
 
-    initSession()
-  }, [location.state])
+    // ── 1. Listen for PASSWORD_RECOVERY event ────────────────────
+    // Supabase fires this automatically when it parses #access_token&type=recovery
+    // from the URL. The AuthListener in App.jsx navigates here when it fires,
+    // but the event may fire again on this page too if the hash is present.
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('[ResetPassword] onAuthStateChange:', event, 'user:', session?.user?.email ?? 'none')
+      if (event === 'PASSWORD_RECOVERY') {
+        resolve(true)
+      }
+    })
+
+    // ── 2. Check if a session already exists ─────────────────────
+    // AuthListener navigated here after PASSWORD_RECOVERY fired on a
+    // different page (Home), so the session is already established.
+    supabase.auth.getSession().then(({ data: { session }, error: sessionError }) => {
+      console.log('[ResetPassword] getSession → user:', session?.user?.email ?? 'none', '| error:', sessionError?.message ?? 'none')
+      if (resolved) return
+      if (session) {
+        resolve(true)
+      }
+      // else: wait for PASSWORD_RECOVERY event or timeout
+    })
+
+    // ── 3. Fallback: try parsing tokens from URL hash ─────────────
+    // Handles edge case where Supabase redirects directly to /reset-password
+    // with the hash present (e.g. redirect URL set to .../reset-password).
+    const hash = window.location.hash
+    console.log('[ResetPassword] checking URL hash for tokens:', hash)
+    if (hash.includes('access_token')) {
+      const params       = new URLSearchParams(hash.slice(1))
+      const accessToken  = params.get('access_token')
+      const refreshToken = params.get('refresh_token') ?? ''
+      const type         = params.get('type')
+      console.log('[ResetPassword] hash params → type:', type, '| access_token present:', !!accessToken)
+
+      if (accessToken && type === 'recovery') {
+        supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
+          .then(({ data, error: sessErr }) => {
+            console.log('[ResetPassword] setSession → user:', data?.session?.user?.email ?? 'none', '| error:', sessErr?.message ?? 'none')
+            if (!resolved) {
+              resolve(!sessErr && !!data?.session)
+            }
+          })
+      }
+    }
+
+    // ── 4. Timeout: if nothing resolved in 4 s, mark invalid ─────
+    const timer = setTimeout(() => {
+      console.log('[ResetPassword] timeout — marking invalid')
+      resolve(false)
+    }, 4000)
+
+    return () => {
+      subscription.unsubscribe()
+      clearTimeout(timer)
+    }
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -71,16 +103,20 @@ export default function ResetPassword() {
     }
 
     setLoading(true)
-    const { error } = await supabase.auth.updateUser({ password })
+    const { error: updateError } = await supabase.auth.updateUser({ password })
     setLoading(false)
 
-    if (error) {
-      setError('Gagal mengubah password. Coba minta link reset baru.')
+    if (updateError) {
+      console.error('[ResetPassword] updateUser error:', updateError.message)
+      setError('Gagal mengubah password: ' + updateError.message)
       return
     }
 
     await supabase.auth.signOut()
-    navigate('/login', { replace: true, state: { successMessage: 'Password berhasil diubah. Silakan login.' } })
+    navigate('/login', {
+      replace: true,
+      state: { successMessage: 'Password berhasil diubah. Silakan login.' },
+    })
   }
 
   return (
@@ -88,30 +124,16 @@ export default function ResetPassword() {
 
       {/* Background */}
       <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '700px', height: '700px',
-          background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)',
-        }} />
-        <div style={{
-          position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)',
-          backgroundSize: '36px 36px',
-        }} />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '36px 36px' }} />
       </div>
 
       <div className="anim-up" style={{ width: '100%', maxWidth: '400px', position: 'relative', zIndex: 1 }}>
 
-        {/* Logo block */}
+        {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <Logo size="md" dark />
-          <p style={{
-            fontFamily: 'Syne, sans-serif', fontWeight: 700,
-            fontSize: '10px', letterSpacing: '0.24em',
-            color: 'var(--accent)', textTransform: 'uppercase',
-            marginTop: '18px', marginBottom: '6px',
-          }}>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.24em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '18px', marginBottom: '6px' }}>
             Assess · Insight · Grow
           </p>
           <p style={{ color: 'var(--text-muted)', fontSize: '12px', letterSpacing: '0.04em' }}>
@@ -119,11 +141,19 @@ export default function ResetPassword() {
           </p>
         </div>
 
-        {/* Error state: invalid/expired link */}
-        {initError ? (
+        {/* Checking state */}
+        {status === 'checking' && (
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '20px', padding: '40px', textAlign: 'center' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>Memverifikasi link...</p>
+          </div>
+        )}
+
+        {/* Invalid/expired link */}
+        {status === 'invalid' && (
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '20px', padding: '32px', textAlign: 'center' }}>
-            <p style={{ color: '#f87171', fontSize: '14px', lineHeight: '1.65', marginBottom: '24px' }}>
-              {initError}
+            <p style={{ color: '#f87171', fontSize: '14px', lineHeight: '1.7', marginBottom: '24px' }}>
+              Link reset password tidak valid atau sudah kadaluarsa.<br />
+              Silakan minta link reset password baru.
             </p>
             <button
               onClick={() => navigate('/login')}
@@ -132,10 +162,11 @@ export default function ResetPassword() {
               Kembali ke Login
             </button>
           </div>
-        ) : (
-          /* Form card */
-          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '20px', padding: '32px' }}>
+        )}
 
+        {/* Form */}
+        {status === 'ready' && (
+          <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '20px', padding: '32px' }}>
             <div className="section-rule" style={{ marginBottom: '28px' }}>
               <span className="section-rule-pip" />
               <span className="section-rule-label">Buat Password Baru</span>
@@ -143,7 +174,6 @@ export default function ResetPassword() {
             </div>
 
             <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-
               <div>
                 <label style={S_LABEL}>Password Baru</label>
                 <input
@@ -153,7 +183,7 @@ export default function ResetPassword() {
                   onChange={e => { setPassword(e.target.value); setError('') }}
                   placeholder="Minimal 8 karakter"
                   autoComplete="new-password"
-                  disabled={!ready}
+                  autoFocus
                 />
               </div>
 
@@ -166,7 +196,6 @@ export default function ResetPassword() {
                   onChange={e => { setConfirm(e.target.value); setError('') }}
                   placeholder="Ulangi password baru"
                   autoComplete="new-password"
-                  disabled={!ready}
                 />
               </div>
 
@@ -174,26 +203,11 @@ export default function ResetPassword() {
 
               <button
                 type="submit"
-                disabled={loading || !ready}
-                style={{
-                  background: 'var(--accent)',
-                  color: '#09090f',
-                  fontFamily: 'Syne, sans-serif',
-                  fontWeight: 800,
-                  fontSize: '12px',
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  padding: '14px',
-                  borderRadius: '10px',
-                  border: 'none',
-                  cursor: loading || !ready ? 'not-allowed' : 'pointer',
-                  opacity: loading || !ready ? 0.6 : 1,
-                  marginTop: '4px',
-                }}
+                disabled={loading}
+                style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, marginTop: '4px' }}
               >
-                {loading ? 'Menyimpan...' : 'Simpan Password Baru'}
+                {loading ? 'Menyimpan...' : 'Simpan Password Baru →'}
               </button>
-
             </form>
           </div>
         )}

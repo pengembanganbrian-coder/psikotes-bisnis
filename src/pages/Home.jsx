@@ -56,16 +56,9 @@ const TESTS = [
 export default function Home() {
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const hash = window.location.hash
-    if (!hash.includes('type=recovery')) return
-    const params = new URLSearchParams(hash.slice(1))
-    const access_token  = params.get('access_token')
-    const refresh_token = params.get('refresh_token')
-    if (access_token) {
-      navigate('/reset-password', { replace: true, state: { access_token, refresh_token } })
-    }
-  }, [navigate])
+  // Supabase auto-parses #access_token&type=recovery on load and fires PASSWORD_RECOVERY
+  // via onAuthStateChange — the global AuthListener in App.jsx handles the redirect.
+  // Nothing to do here for the recovery flow.
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
