@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 
@@ -54,6 +55,17 @@ const TESTS = [
 
 export default function Home() {
   const navigate = useNavigate()
+
+  useEffect(() => {
+    const hash = window.location.hash
+    if (!hash.includes('type=recovery')) return
+    const params = new URLSearchParams(hash.slice(1))
+    const access_token  = params.get('access_token')
+    const refresh_token = params.get('refresh_token')
+    if (access_token) {
+      navigate('/reset-password', { replace: true, state: { access_token, refresh_token } })
+    }
+  }, [navigate])
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>

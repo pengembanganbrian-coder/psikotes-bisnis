@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { supabase } from '../supabase'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Logo from '../components/Logo'
 
 export default function Login() {
@@ -9,6 +9,8 @@ export default function Login() {
   const [error,    setError]    = useState('')
   const [loading,  setLoading]  = useState(false)
   const navigate = useNavigate()
+  const location = useLocation()
+  const successMessage = location.state?.successMessage ?? ''
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -87,6 +89,18 @@ export default function Login() {
 
           {/* Divider under heading */}
           <div style={{ width: '32px', height: '2px', background: 'var(--accent)', marginBottom: '28px', opacity: 0.7 }} />
+
+          {successMessage && (
+            <div style={{
+              border: '1px solid rgba(212,168,83,0.3)',
+              background: 'rgba(212,168,83,0.08)',
+              borderRadius: '10px',
+              padding: '12px 16px',
+              marginBottom: '20px',
+            }}>
+              <p style={{ color: 'var(--accent)', fontSize: '13px', lineHeight: '1.5' }}>{successMessage}</p>
+            </div>
+          )}
 
           {error && (
             <div style={{

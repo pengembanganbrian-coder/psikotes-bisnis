@@ -17,6 +17,7 @@ import HasilLoveLanguage from './pages/HasilLoveLanguage'
 import TesMsdt from './pages/TesMsdt'
 import HasilMsdt from './pages/HasilMsdt'
 import NotFound from './pages/NotFound'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/hasil-msdt" element={<HasilMsdt />} />
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/job-profile" element={<ProtectedRoute><JobProfile /></ProtectedRoute>} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
