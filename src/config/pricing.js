@@ -1,11 +1,11 @@
 // Harga unlock laporan lengkap per jenis tes
 export const HARGA_TES = {
-  MBTI:           39000,
-  DISC:           39000,
-  PAPI:           49000,
-  DASS:           29000,
-  'Love Language': 29000,
-  MSDT:           49000,
+  MBTI:           15000,
+  DISC:           20000,
+  PAPI:           30000,
+  DASS:           10000,
+  'Love Language': 5000,
+  MSDT:           25000,
 }
 
 export const NAMA_TES = {

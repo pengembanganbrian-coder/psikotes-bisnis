@@ -1,40 +1,69 @@
-﻿import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export default function NotFound() {
   const navigate = useNavigate()
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
-      <div className="text-center max-w-md">
-        {/* Ilustrasi */}
-        <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-inner">
-          <span className="text-5xl">ðŸ”</span>
-        </div>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
 
-        {/* Kode error */}
-        <p className="text-7xl font-black text-gray-200 mb-2 leading-none">404</p>
+      <div className="anim-up" style={{ textAlign: 'center', maxWidth: '400px', position: 'relative', zIndex: 1 }}>
+        <p style={{
+          fontFamily: 'Syne, sans-serif',
+          fontWeight: 800,
+          fontSize: 'clamp(96px, 18vw, 140px)',
+          color: 'var(--text)',
+          opacity: 0.035,
+          lineHeight: 1,
+          letterSpacing: '-0.06em',
+          userSelect: 'none',
+          marginBottom: '-16px',
+        }}>
+          404
+        </p>
 
-        {/* Pesan */}
-        <h1 className="text-xl font-bold text-gray-800 mb-2">Halaman Tidak Ditemukan</h1>
-        <p className="text-gray-500 text-sm mb-8 leading-relaxed">
+        <div style={{ width: '24px', height: '2px', background: 'var(--accent)', margin: '0 auto 20px', opacity: 0.7 }} />
+
+        <h1 style={{
+          fontFamily: 'Syne, sans-serif',
+          fontWeight: 700,
+          color: 'var(--text)',
+          fontSize: '20px',
+          marginBottom: '12px',
+          letterSpacing: '-0.01em',
+        }}>
+          Halaman Tidak Ditemukan
+        </h1>
+        <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '36px', lineHeight: '1.65' }}>
           Halaman yang Anda cari tidak ada atau sudah dipindahkan.
           Silakan kembali ke beranda.
         </p>
 
-        {/* Tombol */}
         <button
           onClick={() => navigate('/')}
-          className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-xl transition-all shadow-lg shadow-blue-200"
+          style={{
+            background: 'var(--accent)',
+            color: '#09090f',
+            fontFamily: 'Syne, sans-serif',
+            fontWeight: 800,
+            fontSize: '12px',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            padding: '12px 28px',
+            borderRadius: '8px',
+            border: 'none',
+            cursor: 'pointer',
+            transition: 'opacity 0.2s',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.85' }}
+          onMouseLeave={(e) => { e.currentTarget.style.opacity = '1' }}
         >
-          â† Kembali ke Beranda
+          ← Kembali ke Beranda
         </button>
       </div>
 
-      {/* Footer */}
-      <p className="mt-12 text-xs text-gray-300">
-        Â© 2025 Â· AssesIN
+      <p style={{ color: 'var(--text-muted)', fontSize: '11px', opacity: 0.35, marginTop: '56px', letterSpacing: '0.08em' }}>
+        © 2026 · AssesIN
       </p>
     </div>
   )
 }
-

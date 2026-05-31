@@ -255,7 +255,7 @@ function TesPapi() {
               </div>
               {formErrors.jabatan && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.jabatan}</p>}
             </div>
-            <div className="bg-violet-50 border border-violet-200 rounded-xl p-3 text-xs text-violet-700">
+            <div className="bg-violet-50 border border-violet-200 rounded-xl p-3 text-sm text-violet-700">
               <p className="font-semibold mb-1">📋 Petunjuk Pengisian:</p>
               <p>Dari setiap pasang pernyataan, pilih satu yang paling mencerminkan diri Anda. Tidak ada jawaban benar atau salah. Jawab dengan jujur dan spontan. Terdapat <strong>90 pasang</strong> pernyataan.</p>
             </div>

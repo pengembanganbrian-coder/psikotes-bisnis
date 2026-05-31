@@ -1,3 +1,196 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Design tokens ───────────────────────────────────── */
+:root {
+  --bg:            #09090f;
+  --px:            clamp(16px, 3vw, 32px);
+  --surface:       #0f0f1a;
+  --surface-2:     #16162a;
+  --accent:        #d4a853;
+  --accent-dim:    rgba(212, 168, 83, 0.12);
+  --accent-border: rgba(212, 168, 83, 0.32);
+  --text:          #edeae0;
+  --text-sub:      #a0a0be;
+  --text-muted:    #56566e;
+  --border:        rgba(255, 255, 255, 0.065);
+  --radius:        18px;
+}
+
+/* ── Base ────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* Grain film overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.028;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    background-repeat: repeat;
+  }
+}
+
+/* ── Keyframes ───────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -300% center; }
+  100% { background-position:  300% center; }
+}
+
+@keyframes pulseGold {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1;   }
+}
+
+/* ── Utility animations ──────────────────────────────── */
+.anim-up            { animation: fadeUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.anim-delay-1       { animation-delay: 0.05s; }
+.anim-delay-2       { animation-delay: 0.12s; }
+.anim-delay-3       { animation-delay: 0.19s; }
+.anim-delay-4       { animation-delay: 0.26s; }
+.anim-delay-5       { animation-delay: 0.33s; }
+.anim-delay-6       { animation-delay: 0.40s; }
+.anim-delay-hero    { animation-delay: 0.08s; }
+.anim-delay-sub     { animation-delay: 0.18s; }
+.anim-delay-badges  { animation-delay: 0.28s; }
+.anim-delay-section { animation-delay: 0.10s; }
+
+/* ── Gold shimmer headline ───────────────────────────── */
+.gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--accent)   0%,
+    #f5d98a        35%,
+    var(--accent)  55%,
+    #f5d98a        75%,
+    var(--accent) 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 5s linear infinite;
+}
+
+/* ── Test cards ──────────────────────────────────────── */
+.card-test {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color 0.28s ease, transform 0.28s ease, box-shadow 0.28s ease;
+  cursor: pointer;
+}
+
+.card-test:hover {
+  border-color: var(--accent-border);
+  transform: translateY(-5px);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.55),
+    0  0  48px var(--accent-dim);
+}
+
+.card-test:hover .card-cta-arrow {
+  transform: translateX(4px);
+}
+
+.card-cta-arrow {
+  transition: transform 0.25s ease;
+  display: inline-block;
+}
+
+/* ── Input base ──────────────────────────────────────── */
+.field {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.field:focus {
+  border-color: var(--accent);
+}
+
+.field::placeholder {
+  color: var(--text-muted);
+}
+
+/* ── Responsive grids ───────────────────────────────── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 640px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+}
+@media (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ── Section divider ─────────────────────────────────── */
+.section-rule {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.section-rule-label {
+  color: var(--accent);
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.section-rule-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-rule-pip {
+  flex-shrink: 0;
+  width: 20px;
+  height: 1px;
+  background: var(--accent);
+}

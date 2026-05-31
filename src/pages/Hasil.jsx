@@ -451,7 +451,7 @@ function LaporanLengkapMBTI({ info, ref }) {
               </h3>
               <div className="flex flex-wrap gap-2">
                 {ref.saranProfesi.split(',').map((p, i) => (
-                  <span key={i} className="text-xs bg-blue-50 text-blue-700 font-medium px-3 py-1.5 rounded-full border border-blue-100">
+                  <span key={i} className="text-sm bg-blue-50 text-blue-700 font-medium px-3 py-1.5 rounded-full border border-blue-100">
                     {p.trim()}
                   </span>
                 ))}

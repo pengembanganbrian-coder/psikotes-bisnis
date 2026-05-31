@@ -299,7 +299,7 @@ export default function TesMsdt() {
         <div className="max-w-2xl mx-auto flex justify-between items-center gap-4">
           <div>
             <p className="font-bold text-gray-800 text-sm">{nama}</p>
-            <p className="text-xs text-gray-400">MSDT · {answered}/64 terjawab</p>
+            <p className="text-sm text-gray-400">MSDT · {answered}/64 terjawab</p>
           </div>
           <div className="flex-1 max-w-xs">
             <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -342,7 +342,7 @@ export default function TesMsdt() {
                   <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${done ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
                     {s.id}
                   </span>
-                  <span className="text-xs text-gray-400 font-medium">Pilih salah satu pernyataan berikut:</span>
+                  <span className="text-sm text-gray-400 font-medium">Pilih salah satu pernyataan berikut:</span>
                 </div>
 
                 {/* Pilihan A */}

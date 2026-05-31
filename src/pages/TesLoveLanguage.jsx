@@ -267,7 +267,7 @@ export default function TesLoveLanguage() {
         <div className="max-w-2xl mx-auto flex justify-between items-center gap-4">
           <div>
             <p className="font-bold text-gray-800 text-sm">{nama}</p>
-            <p className="text-xs text-gray-400">Love Language · {answered}/30 terjawab</p>
+            <p className="text-sm text-gray-400">Love Language · {answered}/30 terjawab</p>
           </div>
           <div className="flex-1 max-w-xs">
             <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -316,7 +316,7 @@ export default function TesLoveLanguage() {
                   <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 transition-all ${done ? 'bg-rose-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
                     {done ? '✓' : idx + 1}
                   </span>
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Pernyataan {idx + 1}</p>
+                  <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Pernyataan {idx + 1}</p>
                 </div>
 
                 {/* Pilihan A dan B */}

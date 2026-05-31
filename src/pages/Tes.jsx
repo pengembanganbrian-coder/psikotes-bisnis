@@ -286,7 +286,7 @@ function Tes() {
             </div>
             <div>
               <h1 className="font-bold text-gray-800 text-sm">Tes MBTI — AssesIN</h1>
-              <p className="text-xs text-gray-500">Halo <strong>{nama}</strong> · Pilih yang paling sesuai dengan dirimu</p>
+              <p className="text-sm text-gray-500">Halo <strong>{nama}</strong> · Pilih yang paling sesuai dengan dirimu</p>
             </div>
           </div>
 
@@ -305,8 +305,8 @@ function Tes() {
           </div>
 
           <div className="flex justify-between items-center mb-2">
-            <p className="text-xs text-gray-500">{dimensiNama[dimensiUrutan[dimensiAktif]]}</p>
-            <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
+            <p className="text-sm text-gray-500">{dimensiNama[dimensiUrutan[dimensiAktif]]}</p>
+            <span className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
               {sudahDijawab}/{totalDimensi} dijawab
             </span>
           </div>
@@ -320,7 +320,7 @@ function Tes() {
 
         {/* Soal */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-5">
-          <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-5 pb-3 border-b border-gray-50">
+          <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-5 pb-3 border-b border-gray-50">
             Pilih <span className="text-blue-600">satu</span> pernyataan yang lebih dominan sesuai dirimu
           </p>
 
@@ -330,7 +330,7 @@ function Tes() {
                 <span className="w-6 h-6 bg-blue-50 text-blue-600 text-xs font-bold rounded-lg flex items-center justify-center flex-shrink-0">
                   {idx + 1}
                 </span>
-                <p className="text-xs text-gray-400 font-medium">Pernyataan {idx + 1}</p>
+                <p className="text-sm text-gray-400 font-medium">Pernyataan {idx + 1}</p>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <button

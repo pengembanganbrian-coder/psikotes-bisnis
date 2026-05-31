@@ -435,8 +435,8 @@ function TesDisc() {
                 }`}>
                   {selesai ? '✓' : idx + 1}
                 </span>
-                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide">Kelompok {idx + 1}</p>
-                {selesai && <span className="ml-auto text-xs text-green-500 font-semibold">✓ Selesai</span>}
+                <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Kelompok {idx + 1}</p>
+                {selesai && <span className="ml-auto text-sm text-green-500 font-semibold">✓ Selesai</span>}
               </div>
 
               <div className="space-y-2">

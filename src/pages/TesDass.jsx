@@ -211,7 +211,7 @@ export default function TesDass() {
         <div className="max-w-2xl mx-auto flex justify-between items-center gap-4">
           <div>
             <p className="font-bold text-gray-800 text-sm">{nama}</p>
-            <p className="text-xs text-gray-400">DASS-21 · {answered}/21 terjawab</p>
+            <p className="text-sm text-gray-400">DASS-21 · {answered}/21 terjawab</p>
           </div>
           <div className="flex-1 max-w-xs">
             <div className="w-full bg-gray-200 rounded-full h-2.5">

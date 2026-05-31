@@ -266,7 +266,7 @@ function Dashboard() {
                 {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'MSDT', 'Love Language'].map(t => (
                   <button key={t}
                     onClick={() => { setTab(t); setSelected(null) }}
-                    className={`text-xs font-semibold px-3 py-1.5 rounded-lg transition ${
+                    className={`text-sm font-semibold px-3 py-1.5 rounded-lg transition ${
                       tab === t
                         ? t === 'MBTI'  ? 'bg-blue-600 text-white'
                         : t === 'DISC'  ? 'bg-green-600 text-white'
@@ -307,7 +307,7 @@ function Dashboard() {
                       <td className="px-5 py-3 font-semibold text-blue-600">{p.nama}</td>
                       <td className="px-5 py-3 text-gray-500 max-w-[200px] truncate">{p.jabatan || '-'}</td>
                       <td className="px-5 py-3">
-                        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${jenisBadge[p.jenis]}`}>
+                        <span className={`text-sm font-bold px-2.5 py-1 rounded-full ${jenisBadge[p.jenis]}`}>
                           {p.jenis}
                         </span>
                       </td>
