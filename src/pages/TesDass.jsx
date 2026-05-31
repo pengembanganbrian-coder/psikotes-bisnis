@@ -181,7 +181,7 @@ export default function TesDass() {
     <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
       {/* Sticky header */}
       <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
-        <div style={{ maxWidth: '680px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes DASS-21</p>
             <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {answered}/21 terjawab</p>
@@ -195,7 +195,7 @@ export default function TesDass() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '28px var(--px)' }}>
+      <div style={{ maxWidth: '1024px', margin: '0 auto', padding: '28px var(--px)' }}>
 
         {/* Legenda */}
         <div className="dark-card" style={{ padding: '20px', marginBottom: '24px' }}>

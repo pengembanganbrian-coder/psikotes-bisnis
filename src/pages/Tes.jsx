@@ -243,7 +243,7 @@ function Tes() {
     <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
       {/* Sticky header */}
       <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
-        <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes MBTI</p>
             <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Halo {nama} · {Object.keys(jawaban).length}/60 soal dijawab</p>
@@ -254,7 +254,7 @@ function Tes() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '28px var(--px)' }}>
+      <div style={{ maxWidth: '1024px', margin: '0 auto', padding: '28px var(--px)' }}>
 
         {/* Dimension tabs */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '28px' }}>
