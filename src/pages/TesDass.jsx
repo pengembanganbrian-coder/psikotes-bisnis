@@ -3,14 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { supabase } from '../supabase'
 
-const unitKerjaOptions = [
-  { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
-  { group: 'BUMN / BUMD', options: ['Perbankan BUMN', 'Energi & Pertambangan BUMN', 'Telekomunikasi BUMN', 'Infrastruktur & Konstruksi BUMN', 'Pertanian & Pangan BUMN', 'BUMD Daerah', 'Lainnya'] },
-  { group: 'Instansi Pemerintah', options: ['Kementerian / Lembaga', 'Pemerintah Daerah', 'TNI / Polri', 'Badan / Komisi Negara', 'Lainnya'] },
-  { group: 'Pendidikan & Penelitian', options: ['Universitas / Perguruan Tinggi', 'Sekolah / Madrasah', 'Lembaga Pelatihan', 'Lembaga Penelitian', 'Lainnya'] },
-  { group: 'Lainnya', options: ['NGO / Yayasan / Ormas', 'Startup', 'Wirausaha / Freelance', 'Pelajar / Mahasiswa', 'Lainnya'] },
-]
-
 // 21 pernyataan DASS-21 (versi Bahasa Indonesia yang tervalidasi)
 // Skala: D = Depresi, A = Kecemasan (Anxiety), S = Stres
 // Petunjuk: dirasakan dalam 1 minggu terakhir
@@ -42,13 +34,17 @@ const soal = [
 // Kecemasan items: 2, 4, 7, 9, 15, 19, 20  (7 items × 2 = max 42)
 // Stres items:    1, 6, 8, 11, 12, 14, 18  (7 items × 2 = max 42)
 
+const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
+const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
+
 export default function TesDass() {
   const navigate = useNavigate()
-  const [step, setStep]           = useState('form') // 'form' | 'tes'
-  const [nama, setNama]           = useState('')
-  const [nip, setNip]             = useState('')
-  const [unitKerja, setUnitKerja] = useState('')
-  const [jawaban, setJawaban]     = useState({})      // { id: 0|1|2|3 }
+  const [step, setStep]             = useState('form')
+  const [nama, setNama]             = useState('')
+  const [email, setEmail]           = useState('')
+  const [usia, setUsia]             = useState('')
+  const [jenisKelamin, setJenisKelamin] = useState('')
+  const [jawaban, setJawaban]       = useState({})
   const [formErrors, setFormErrors] = useState({})
 
   const answered = Object.keys(jawaban).length
@@ -63,9 +59,10 @@ export default function TesDass() {
 
   function validateForm() {
     const errs = {}
-    if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
-    if (!nip.trim())  errs.nip  = 'NIP wajib diisi.'
-    if (!unitKerja)   errs.unitKerja = 'Unit kerja wajib dipilih.'
+    if (!nama.trim())  errs.nama  = 'Nama lengkap wajib diisi.'
+    if (!email.trim()) errs.email = 'Email wajib diisi.'
+    if (!usia)         errs.usia  = 'Usia wajib diisi.'
+    if (!jenisKelamin) errs.jenisKelamin = 'Jenis kelamin wajib dipilih.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -73,23 +70,19 @@ export default function TesDass() {
   async function handleSubmit() {
     if (answered < 21) {
       const belum = soal.find(s => jawaban[s.id] === undefined)
-      if (belum) {
-        const el = document.getElementById(`soal-${belum.id}`)
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }
+      if (belum) document.getElementById(`soal-${belum.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       return
     }
     const { D, A, S } = hitungDASS()
-
-    // Simpan ke Supabase
+    const jabatan = `${usia} th · ${jenisKelamin}`
     try {
       const { data: peserta, error: e1 } = await supabase
         .from('peserta_dass')
-        .insert([{ nama, nip, jabatan: unitKerja }])
+        .insert([{ nama, nip: email, jabatan }])
         .select()
         .single()
 
-      if (e1 || !peserta) throw e1 || new Error('Gagal menyimpan peserta DASS')
+      if (e1 || !peserta) throw e1 || new Error('Gagal menyimpan')
 
       const kategori = (skor, batas) => {
         if (skor <= batas[0]) return 'Normal'
@@ -100,220 +93,158 @@ export default function TesDass() {
       }
 
       await supabase.from('hasil_dass').insert([{
-        peserta_id:         peserta.id,
-        skor_depresi:       D,
-        skor_anxietas:      A,
-        skor_stres:         S,
+        peserta_id:       peserta.id,
+        skor_depresi:     D, skor_anxietas: A, skor_stres: S,
         kategori_depresi:   kategori(D, [9, 13, 20, 27]),
         kategori_anxietas:  kategori(A, [7, 9, 14, 19]),
         kategori_stres:     kategori(S, [14, 18, 25, 33]),
       }])
 
-      navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, nip, unitKerja, jawaban, pesertaId: peserta.id } })
+      navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, email, jabatan, jawaban, pesertaId: peserta.id } })
     } catch (err) {
       console.error('Save DASS error:', err)
-      // Navigate tetap dilanjutkan meski save gagal, tanpa pesertaId
-      navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, nip, unitKerja, jawaban } })
+      navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, email, jawaban } })
     }
   }
 
-  /* ═══════════════════════════════════════════════════════
-     STEP: FORM
-  ═══════════════════════════════════════════════════════ */
-  if (step === 'form') {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-teal-50 to-white flex flex-col items-center justify-center p-6">
-        <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl border border-teal-100 p-8">
-
-          {/* Logo + Judul */}
-          <div className="text-center mb-6">
-            <div className="flex items-center gap-2 justify-center mb-1">
-              <Logo size="sm" />
-            </div>
-          </div>
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-14 h-14 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-2xl flex items-center justify-center shadow-lg shadow-teal-200 flex-shrink-0">
-              <span className="text-white font-black text-xs text-center leading-tight">DASS<br/>21</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-black text-gray-900">Tes DASS-21</h1>
-              <p className="text-sm text-gray-400">Depression · Anxiety · Stress Scales</p>
-            </div>
-          </div>
-
-          {/* Deskripsi */}
-          <div className="bg-teal-50 border border-teal-100 rounded-2xl p-4 mb-6 text-sm text-teal-800 leading-relaxed">
-            DASS-21 adalah alat skrining untuk mengukur tingkat{' '}
-            <strong>depresi</strong>, <strong>kecemasan</strong>, dan <strong>stres</strong>{' '}
-            yang Anda rasakan dalam <strong>1 minggu terakhir</strong>.
-            Terdiri dari 21 pernyataan singkat. Tidak ada jawaban benar atau salah.
-          </div>
-
-          {/* Form isian */}
-          <div className="space-y-4">
-            <div>
-              <label className="block text-base font-bold text-gray-700 mb-1.5">Nama Lengkap <span className="text-red-400">*</span></label>
-              <input
-                type="text" value={nama}
-                onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
-                placeholder="Nama lengkap sesuai KTP"
-                className={`w-full border-2 rounded-xl px-4 py-3.5 text-base focus:outline-none focus:border-teal-400 transition ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
-              />
-              {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP <span className="text-red-400">*</span></label>
-              <input
-                type="text" value={nip}
-                onChange={e => { setNip(e.target.value); setFormErrors(p => ({ ...p, nip: '' })) }}
-                placeholder="NIP"
-                className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition ${formErrors.nip ? 'border-red-400' : 'border-gray-200'}`}
-              />
-              {formErrors.nip && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nip}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja <span className="text-red-400">*</span></label>
-              <select
-                value={unitKerja}
-                onChange={e => { setUnitKerja(e.target.value); setFormErrors(p => ({ ...p, unitKerja: '' })) }}
-                className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-teal-400 transition bg-white ${formErrors.unitKerja ? 'border-red-400' : 'border-gray-200'}`}
-              >
-                <option value="">-- Pilih Unit Kerja --</option>
-                {unitKerjaOptions.map(g => (
-                  <optgroup key={g.group} label={g.group}>
-                    {g.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                  </optgroup>
-                ))}
-              </select>
-              {formErrors.unitKerja && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.unitKerja}</p>}
-            </div>
-          </div>
-
-          <button
-            onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-            className="mt-6 w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-teal-200"
-          >
-            Mulai Tes →
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  /* ═══════════════════════════════════════════════════════
-     STEP: TES
-  ═══════════════════════════════════════════════════════ */
-  return (
-    <div className="min-h-screen bg-slate-50">
-
-      {/* Sticky progress header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm px-6 py-3">
-        <div className="max-w-2xl mx-auto flex justify-between items-center gap-4">
-          <div>
-            <p className="font-bold text-gray-800 text-sm">{nama}</p>
-            <p className="text-sm text-gray-400">DASS-21 · {answered}/21 terjawab</p>
-          </div>
-          <div className="flex-1 max-w-xs">
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className="bg-teal-500 h-2.5 rounded-full transition-all duration-500"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-          <span className="text-sm font-bold text-teal-600 w-10 text-right">{Math.round(progress)}%</span>
-        </div>
+  /* ── FORM ── */
+  if (step === 'form') return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px var(--px)' }}>
+      <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-8">
+      <div className="anim-up" style={{ width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1 }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <Logo size="sm" dark />
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes DASS-21</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>21 pernyataan · ~5 menit</p>
+        </div>
 
-        {/* Instruksi + Legenda */}
-        <div className="bg-teal-50 border border-teal-200 rounded-2xl p-5 mb-6">
-          <h2 className="font-bold text-teal-900 mb-2">Petunjuk Pengisian</h2>
-          <p className="text-sm text-teal-800 leading-relaxed mb-4">
-            Bacalah setiap pernyataan dan pilih angka yang paling menggambarkan apa yang Anda rasakan atau alami dalam{' '}
-            <strong>1 minggu terakhir</strong>. Tidak ada jawaban benar atau salah.
+        <div className="dark-card" style={{ padding: '32px', marginBottom: '16px' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.65', marginBottom: '24px', borderLeft: '2px solid var(--accent-border)', paddingLeft: '12px' }}>
+            Ukur tingkat <strong style={{ color: 'var(--text-sub)' }}>depresi</strong>, <strong style={{ color: 'var(--text-sub)' }}>kecemasan</strong>, dan <strong style={{ color: 'var(--text-sub)' }}>stres</strong> yang Anda rasakan dalam <strong style={{ color: 'var(--text-sub)' }}>1 minggu terakhir</strong>.
           </p>
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              { n: 0, label: 'Tidak pernah',  cls: 'bg-emerald-100 text-emerald-700' },
-              { n: 1, label: 'Kadang-kadang', cls: 'bg-amber-100 text-amber-700'   },
-              { n: 2, label: 'Sering',         cls: 'bg-orange-100 text-orange-700' },
-              { n: 3, label: 'Hampir selalu',  cls: 'bg-rose-100 text-rose-700'    },
-            ].map(({ n, label, cls }) => (
-              <div key={n} className="flex items-center gap-2 text-xs">
-                <span className={`w-6 h-6 ${cls} font-bold rounded-lg flex items-center justify-center flex-shrink-0`}>{n}</span>
-                <span className="text-gray-700">{label}</span>
+          <div className="section-rule" style={{ marginBottom: '28px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Data Diri</span><span className="section-rule-line" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div>
+              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({...p, nama: ''})) }} placeholder="Nama lengkap" autoComplete="name" />
+              {formErrors.nama && <p style={S_ERR}>{formErrors.nama}</p>}
+            </div>
+            <div>
+              <label style={S_LABEL}>Email <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
+              {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div>
+                <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
+                <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
+                {formErrors.usia && <p style={S_ERR}>{formErrors.usia}</p>}
+              </div>
+              <div>
+                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#f87171' }}>*</span></label>
+                <select className="field" value={jenisKelamin} onChange={e => { setJenisKelamin(e.target.value); setFormErrors(p => ({...p, jenisKelamin: ''})) }}>
+                  <option value="">— Pilih —</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+                {formErrors.jenisKelamin && <p style={S_ERR}>{formErrors.jenisKelamin}</p>}
+              </div>
+            </div>
+            <button
+              onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
+              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+            >
+              Mulai Tes →
+            </button>
+          </div>
+        </div>
+
+        <button onClick={() => navigate('/')} style={{ display: 'block', margin: '0 auto', color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>
+          ← Kembali ke beranda
+        </button>
+      </div>
+    </div>
+  )
+
+  /* ── TES ── */
+  const LABELS = ['Tidak\npernah', 'Kadang-\nkadang', 'Sering', 'Hampir\nselalu']
+
+  return (
+    <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
+      {/* Sticky header */}
+      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+        <div style={{ maxWidth: '680px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+          <div>
+            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes DASS-21</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {answered}/21 terjawab</p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '120px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', background: 'var(--accent)', width: `${progress}%`, transition: 'width 0.5s' }} />
+            </div>
+            <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px' }}>{Math.round(progress)}%</span>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '28px var(--px)' }}>
+
+        {/* Legenda */}
+        <div className="dark-card" style={{ padding: '20px', marginBottom: '24px' }}>
+          <p style={{ color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '14px' }}>Pilih frekuensi yang paling menggambarkan kondisi Anda dalam <strong>1 minggu terakhir</strong>:</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+            {[{n:0,label:'Tidak pernah',cls:'r0'},{n:1,label:'Kadang-kadang',cls:'r1'},{n:2,label:'Sering',cls:'r2'},{n:3,label:'Hampir selalu',cls:'r3'}].map(({n, label, cls}) => (
+              <div key={n} className={`rating-btn ${cls} sel`} style={{ cursor: 'default' }}>
+                <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '16px' }}>{n}</span>
+                <span style={{ fontSize: '10px', textAlign: 'center', lineHeight: '1.3' }}>{label}</span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Daftar soal */}
-        <div className="space-y-4">
+        {/* Soal */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {soal.map(s => {
             const val  = jawaban[s.id]
             const done = val !== undefined
-
-            const btnCfg = [
-              { idle: 'bg-gray-50 border-gray-200 text-gray-500 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700', active: 'bg-emerald-500 border-emerald-500 text-white' },
-              { idle: 'bg-gray-50 border-gray-200 text-gray-500 hover:bg-amber-50 hover:border-amber-300 hover:text-amber-700',   active: 'bg-amber-500 border-amber-500 text-white'   },
-              { idle: 'bg-gray-50 border-gray-200 text-gray-500 hover:bg-orange-50 hover:border-orange-300 hover:text-orange-700', active: 'bg-orange-500 border-orange-500 text-white'  },
-              { idle: 'bg-gray-50 border-gray-200 text-gray-500 hover:bg-rose-50 hover:border-rose-300 hover:text-rose-700',     active: 'bg-rose-500 border-rose-500 text-white'      },
-            ]
-
             return (
-              <div
-                id={`soal-${s.id}`}
-                key={s.id}
-                className={`bg-white rounded-2xl shadow-sm border-2 p-5 transition-all ${done ? 'border-teal-200' : 'border-gray-100'}`}
-              >
-                {/* Nomor + teks */}
-                <div className="flex gap-3 mb-4">
-                  <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${done ? 'bg-teal-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
+              <div id={`soal-${s.id}`} key={s.id} className="dark-card" style={{ padding: '20px', borderColor: done ? 'var(--accent-border)' : 'var(--border)' }}>
+                <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
+                  <span style={{ flexShrink: 0, width: '26px', height: '26px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700, background: done ? 'var(--accent)' : 'var(--surface-2)', color: done ? '#09090f' : 'var(--text-muted)', border: '1px solid ' + (done ? 'var(--accent)' : 'var(--border)') }}>
                     {s.id}
                   </span>
-                  <p className="text-sm font-medium text-gray-800 leading-relaxed">{s.teks}</p>
+                  <p style={{ color: 'var(--text)', fontSize: '14px', lineHeight: '1.65' }}>{s.teks}</p>
                 </div>
-
-                {/* Tombol pilihan */}
-                <div className="grid grid-cols-4 gap-2">
-                  {[0, 1, 2, 3].map(n => {
-                    const c        = btnCfg[n]
-                    const selected = val === n
-                    return (
-                      <button
-                        key={n}
-                        onClick={() => setJawaban(j => ({ ...j, [s.id]: n }))}
-                        className={`border-2 rounded-xl py-2.5 flex flex-col items-center gap-0.5 transition-all ${selected ? c.active : c.idle}`}
-                      >
-                        <span className="text-base font-black leading-none">{n}</span>
-                        <span className="text-[9px] font-medium leading-tight text-center px-0.5 mt-0.5">
-                          {['Tidak\npernah', 'Kadang-\nkadang', 'Sering', 'Hampir\nselalu'][n]}
-                        </span>
-                      </button>
-                    )
-                  })}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                  {[0, 1, 2, 3].map(n => (
+                    <button key={n} onClick={() => setJawaban(j => ({...j, [s.id]: n}))} className={`rating-btn r${n} ${val === n ? 'sel' : ''}`}>
+                      <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '18px' }}>{n}</span>
+                      <span style={{ fontSize: '9px', textAlign: 'center', lineHeight: '1.3', whiteSpace: 'pre-line' }}>{LABELS[n]}</span>
+                    </button>
+                  ))}
                 </div>
               </div>
             )
           })}
         </div>
 
-        {/* Submit */}
-        <div className="mt-8 pb-8">
+        <div style={{ marginTop: '28px' }}>
           {answered < 21 && (
-            <p className="text-center text-sm text-amber-600 font-medium mb-3">
-              ⚠️ Masih {21 - answered} pertanyaan belum dijawab
+            <p style={{ textAlign: 'center', color: '#fbbf24', fontSize: '13px', marginBottom: '12px' }}>
+              Masih {21 - answered} pertanyaan belum dijawab
             </p>
           )}
           <button
             onClick={handleSubmit}
-            className={`w-full font-bold py-4 rounded-2xl text-lg transition-all ${
-              answered === 21
-                ? 'bg-teal-600 hover:bg-teal-700 text-white shadow-lg shadow-teal-200'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            }`}
+            style={{ width: '100%', background: answered === 21 ? 'var(--accent)' : 'var(--surface-2)', color: answered === 21 ? '#09090f' : 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: '1px solid ' + (answered === 21 ? 'var(--accent)' : 'var(--border)'), cursor: answered === 21 ? 'pointer' : 'not-allowed' }}
           >
             {answered === 21 ? 'Lihat Hasil →' : `${answered} / 21 terjawab`}
           </button>

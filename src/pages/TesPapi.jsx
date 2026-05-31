@@ -3,14 +3,6 @@ import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 
-const unitKerjaOptions = [
-  { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
-  { group: 'BUMN / BUMD', options: ['Perbankan BUMN', 'Energi & Pertambangan BUMN', 'Telekomunikasi BUMN', 'Infrastruktur & Konstruksi BUMN', 'Pertanian & Pangan BUMN', 'BUMD Daerah', 'Lainnya'] },
-  { group: 'Instansi Pemerintah', options: ['Kementerian / Lembaga', 'Pemerintah Daerah', 'TNI / Polri', 'Badan / Komisi Negara', 'Lainnya'] },
-  { group: 'Pendidikan & Penelitian', options: ['Universitas / Perguruan Tinggi', 'Sekolah / Madrasah', 'Lembaga Pelatihan', 'Lembaga Penelitian', 'Lainnya'] },
-  { group: 'Lainnya', options: ['NGO / Yayasan / Ormas', 'Startup', 'Wirausaha / Freelance', 'Pelajar / Mahasiswa', 'Lainnya'] },
-]
-
 // 90 soal asli PAPI Kostick 2020
 // a = ATAS (pilihan kiri/atas), b = BAWAH (pilihan kanan/bawah)
 const soal = [
@@ -142,13 +134,17 @@ function hitungPAPI(jawaban) {
   return { scores, profil }
 }
 
+const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
+const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
+
 function TesPapi() {
-  const [step, setStep] = useState('form')
-  const [nama, setNama] = useState('')
-  const [nip, setNip] = useState('')
-  const [jabatan, setJabatan] = useState('')
-  const [jawaban, setJawaban] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [step, setStep]             = useState('form')
+  const [nama, setNama]             = useState('')
+  const [email, setEmail]           = useState('')
+  const [usia, setUsia]             = useState('')
+  const [jenisKelamin, setJenisKelamin] = useState('')
+  const [jawaban, setJawaban]       = useState({})
+  const [loading, setLoading]       = useState(false)
   const [formErrors, setFormErrors] = useState({})
   const [submitError, setSubmitError] = useState('')
   const navigate = useNavigate()
@@ -158,9 +154,10 @@ function TesPapi() {
 
   const validateForm = () => {
     const errs = {}
-    if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
-    if (!nip.trim())  errs.nip  = 'NIP wajib diisi.'
-    if (!jabatan)     errs.jabatan = 'Unit kerja wajib dipilih.'
+    if (!nama.trim())  errs.nama  = 'Nama lengkap wajib diisi.'
+    if (!email.trim()) errs.email = 'Email wajib diisi.'
+    if (!usia)         errs.usia  = 'Usia wajib diisi.'
+    if (!jenisKelamin) errs.jenisKelamin = 'Jenis kelamin wajib dipilih.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -181,8 +178,9 @@ function TesPapi() {
     setLoading(true)
     setSubmitError('')
 
+    const jabatan = `${usia} th · ${jenisKelamin}`
     const { data: pesertaData, error } = await supabase
-      .from('peserta_papi').insert([{ nama, nip, jabatan }]).select()
+      .from('peserta_papi').insert([{ nama, nip: email, jabatan }]).select()
 
     if (error) {
       setSubmitError('Gagal menyimpan hasil. Periksa koneksi internet dan coba lagi.')
@@ -201,157 +199,135 @@ function TesPapi() {
       skor_o:scores.O, skor_z:scores.Z, skor_k:scores.K, skor_f:scores.F, skor_w:scores.W,
     }])
 
-    navigate('/hasil-papi', { state: { scores, profil, nama, nip, unitKerja: jabatan, pesertaId } })
+    navigate('/hasil-papi', { state: { scores, profil, nama, email, jabatan, pesertaId } })
     setLoading(false)
   }
 
-  // ── FORM AWAL ─────────────────────────────────────────────────
+  // ── FORM ──
   if (step === 'form') return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 via-purple-50 to-indigo-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-violet-600 to-purple-600 px-8 py-7 text-center">
-            <div className="flex items-center gap-2 justify-center mb-1">
-              <Logo size="sm" dark />
-            </div>
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-white/20 border border-white/30 rounded-2xl backdrop-blur mb-3">
-              <span className="text-white text-sm font-black leading-tight">PAPI</span>
-            </div>
-            <h1 className="text-xl font-black text-white tracking-wide">AssesIN</h1>
-            <p className="text-purple-100 text-sm mt-1">Tes Kepribadian PAPI Kostick</p>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px var(--px)' }}>
+      <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+      </div>
+      <div className="anim-up" style={{ width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1 }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <Logo size="sm" dark />
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes PAPI Kostick</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>90 pasangan · ~20 menit</p>
+        </div>
+        <div className="dark-card" style={{ padding: '32px' }}>
+          <div className="section-rule" style={{ marginBottom: '28px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Data Diri</span><span className="section-rule-line" />
           </div>
-          <div className="px-8 py-7 space-y-5">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <label className="block text-base font-bold text-gray-700 mb-1.5">Nama Lengkap <span className="text-red-400">*</span></label>
-              <input value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
-                className={`w-full border bg-gray-50 rounded-xl px-4 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
-                placeholder="Nama lengkap sesuai KTP" />
-              {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
+              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({...p, nama: ''})) }} placeholder="Nama lengkap" autoComplete="name" />
+              {formErrors.nama && <p style={S_ERR}>{formErrors.nama}</p>}
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP <span className="text-red-400">*</span></label>
-              <input value={nip} onChange={e => { setNip(e.target.value); setFormErrors(p => ({ ...p, nip: '' })) }}
-                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.nip ? 'border-red-400' : 'border-gray-200'}`}
-                placeholder="NIP" />
-              {formErrors.nip && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nip}</p>}
+              <label style={S_LABEL}>Email <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
+              {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
             </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja <span className="text-red-400">*</span></label>
-              <div className="relative">
-                <select value={jabatan} onChange={e => { setJabatan(e.target.value); setFormErrors(p => ({ ...p, jabatan: '' })) }}
-                  className={`w-full appearance-none border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 focus:bg-white transition-all text-gray-700 pr-10 ${formErrors.jabatan ? 'border-red-400' : 'border-gray-200'}`}>
-                  <option value="" disabled>-- Pilih Unit Kerja --</option>
-                  {unitKerjaOptions.map(group => (
-                    <optgroup key={group.group} label={group.group}>
-                      {group.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                    </optgroup>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div>
+                <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
+                <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
+                {formErrors.usia && <p style={S_ERR}>{formErrors.usia}</p>}
               </div>
-              {formErrors.jabatan && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.jabatan}</p>}
+              <div>
+                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#f87171' }}>*</span></label>
+                <select className="field" value={jenisKelamin} onChange={e => { setJenisKelamin(e.target.value); setFormErrors(p => ({...p, jenisKelamin: ''})) }}>
+                  <option value="">— Pilih —</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+                {formErrors.jenisKelamin && <p style={S_ERR}>{formErrors.jenisKelamin}</p>}
+              </div>
             </div>
-            <div className="bg-violet-50 border border-violet-200 rounded-xl p-3 text-sm text-violet-700">
-              <p className="font-semibold mb-1">📋 Petunjuk Pengisian:</p>
-              <p>Dari setiap pasang pernyataan, pilih satu yang paling mencerminkan diri Anda. Tidak ada jawaban benar atau salah. Jawab dengan jujur dan spontan. Terdapat <strong>90 pasang</strong> pernyataan.</p>
+            <div className="dark-card" style={{ padding: '14px 16px', background: 'rgba(212,168,83,0.05)', borderColor: 'var(--accent-border)' }}>
+              <p style={{ color: 'var(--text-sub)', fontSize: '13px', lineHeight: '1.65' }}>
+                Dari setiap pasang pernyataan, pilih satu yang paling mencerminkan diri Anda. Terdapat <strong style={{ color: 'var(--text)' }}>90 pasang</strong> pernyataan.
+              </p>
             </div>
-            <button onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-              className="w-full bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-violet-200 mt-2">
+            <button
+              onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
+              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '4px' }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+            >
               Mulai Tes →
             </button>
           </div>
         </div>
-        <p className="text-center text-xs text-violet-600/40 mt-5">© 2026 · AssesIN</p>
+        <button onClick={() => navigate('/')} style={{ display: 'block', margin: '20px auto 0', color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>
+          ← Kembali ke beranda
+        </button>
       </div>
     </div>
   )
 
-  // ── TES ───────────────────────────────────────────────────────
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-violet-50 to-purple-50 py-8 px-4">
-      <div className="max-w-3xl mx-auto">
+  // ── TES ──
+  const progress = (jumlahDijawab / 90) * 100
 
-        {/* Header sticky */}
-        <div className="bg-white rounded-2xl shadow p-5 mb-6 sticky top-4 z-10">
-          <div className="flex items-center gap-4 mb-3">
-            <div className="w-11 h-11 bg-gradient-to-br from-violet-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-black text-[11px]">PAPI</span>
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-base font-bold text-gray-800 truncate">{nama} · PAPI Kostick</p>
-              <p className="text-sm text-gray-400">{jabatan}</p>
-            </div>
-            <span className="text-base font-bold text-violet-600 flex-shrink-0">{jumlahDijawab}/90</span>
+  return (
+    <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+        <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+          <div>
+            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes PAPI Kostick</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {jumlahDijawab}/90 terjawab</p>
           </div>
-          <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-violet-500 to-purple-500 rounded-full transition-all duration-300"
-              style={{ width: `${(jumlahDijawab / 90) * 100}%` }} />
-          </div>
-          <div className="flex flex-wrap gap-1 mt-2">
-            {soal.map((s, idx) => {
-              const selesai = !!jawaban[s.id]
-              return (
-                <span key={s.id} className={`inline-flex items-center justify-center w-6 h-6 rounded text-[10px] font-bold transition-all ${selesai ? 'bg-violet-500 text-white' : 'bg-gray-100 text-gray-400'}`}>
-                  {selesai ? '✓' : idx+1}
-                </span>
-              )
-            })}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '120px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', background: 'var(--accent)', width: `${progress}%`, transition: 'width 0.5s' }} />
+            </div>
+            <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px' }}>{Math.round(progress)}%</span>
           </div>
         </div>
+      </div>
 
-        {/* Error banner */}
+      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '28px var(--px)' }}>
+
         {submitError && (
-          <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
-            ⚠ {submitError}
+          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#f87171', fontSize: '14px', marginBottom: '16px' }}>
+            {submitError}
           </div>
         )}
 
-        {/* Soal */}
-        {soal.map((s, idx) => {
-          const pilihan = jawaban[s.id]
-          const selesai = !!pilihan
-          return (
-            <div id={`soal-papi-${s.id}`} key={s.id} className={`bg-white rounded-2xl shadow p-6 mb-4 transition-all ${selesai ? 'ring-2 ring-violet-200' : ''}`}>
-              {/* Nomor soal */}
-              <div className="flex items-center gap-3 mb-4">
-                <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-black flex-shrink-0 ${selesai ? 'bg-violet-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
-                  {selesai ? '✓' : idx+1}
-                </span>
-                <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Soal No. {idx+1}</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {soal.map((s, idx) => {
+            const pilihan = jawaban[s.id]
+            const selesai = !!pilihan
+            return (
+              <div id={`soal-papi-${s.id}`} key={s.id} className="dark-card" style={{ padding: '20px', borderColor: selesai ? 'var(--accent-border)' : 'var(--border)' }}>
+                <p style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.7 }}>
+                  {String(idx + 1).padStart(2, '0')}
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {[{key:'a', teks:s.a}, {key:'b', teks:s.b}].map(({key, teks}) => {
+                    const dipilih = pilihan === key
+                    return (
+                      <button key={key} onClick={() => handlePilih(s.id, key)} className={`answer-btn ${dipilih ? 'selected' : ''}`} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                        <span style={{ flexShrink: 0, width: '18px', height: '18px', borderRadius: '50%', border: '2px solid ' + (dipilih ? 'var(--accent)' : 'var(--border)'), background: dipilih ? 'var(--accent)' : 'transparent', marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          {dipilih && <span style={{ width: '6px', height: '6px', background: '#09090f', borderRadius: '50%' }} />}
+                        </span>
+                        <span style={{ fontSize: '14px', lineHeight: '1.65', color: dipilih ? 'var(--text)' : 'var(--text-sub)', textAlign: 'left' }}>{teks}</span>
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
+            )
+          })}
+        </div>
 
-              {/* Pilihan */}
-              <div className="space-y-3">
-                {[{key:'a', teks:s.a}, {key:'b', teks:s.b}].map(({key, teks}) => {
-                  const dipilih = pilihan === key
-                  return (
-                    <button key={key} onClick={() => handlePilih(s.id, key)}
-                      className={`w-full text-left p-4 rounded-xl border-2 transition-all flex items-start gap-4 ${dipilih ? 'border-violet-400 bg-violet-50' : 'border-gray-150 hover:border-violet-200 hover:bg-violet-50/40 bg-gray-50'}`}>
-                      {/* Radio circle */}
-                      <span className={`flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center mt-0.5 transition-all ${dipilih ? 'border-violet-500 bg-violet-500' : 'border-gray-300 bg-white'}`}>
-                        {dipilih && <span className="w-2.5 h-2.5 bg-white rounded-full" />}
-                      </span>
-                      {/* Teks pernyataan */}
-                      <span className={`text-base leading-relaxed ${dipilih ? 'text-violet-800 font-semibold' : 'text-gray-700 font-normal'}`}>
-                        {teks}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          )
-        })}
-
-        {/* Submit */}
-        <div className="sticky bottom-4 mt-4">
+        <div style={{ marginTop: '28px', position: 'sticky', bottom: '16px' }}>
           <button onClick={handleSubmit} disabled={loading || !sudahLengkap}
-            className={`w-full font-bold py-4 rounded-2xl transition-all text-base shadow-xl ${sudahLengkap ? 'bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-700 hover:to-purple-700 text-white shadow-violet-300' : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'}`}>
-            {loading ? '⏳ Menyimpan hasil...' : sudahLengkap ? '✓ Selesai & Lihat Hasil →' : `Jawab ${90 - jumlahDijawab} soal lagi`}
+            style={{ width: '100%', background: sudahLengkap ? 'var(--accent)' : 'var(--surface-2)', color: sudahLengkap ? '#09090f' : 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: '1px solid ' + (sudahLengkap ? 'var(--accent)' : 'var(--border)'), cursor: sudahLengkap && !loading ? 'pointer' : 'not-allowed', opacity: loading ? 0.6 : 1 }}>
+            {loading ? 'Menyimpan...' : sudahLengkap ? 'Selesai & Lihat Hasil →' : `Jawab ${90 - jumlahDijawab} soal lagi`}
           </button>
         </div>
       </div>

@@ -194,3 +194,102 @@
   height: 1px;
   background: var(--accent);
 }
+
+/* ── Select dark options ─────────────────────────────── */
+select.field option {
+  background-color: #0f0f1a;
+  color: #edeae0;
+}
+
+/* ── Dark card ───────────────────────────────────────── */
+.dark-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* ── Answer button (test pages) ──────────────────────── */
+.answer-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--text-sub);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+  width: 100%;
+}
+.answer-btn:hover {
+  border-color: var(--accent-border);
+  color: var(--text);
+}
+.answer-btn.selected {
+  border-color: var(--accent);
+  background: rgba(212, 168, 83, 0.08);
+  color: var(--text);
+}
+
+/* ── Dim tab (MBTI sections) ─────────────────────────── */
+.dim-tab {
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: 10px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.dim-tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #09090f;
+}
+.dim-tab.done {
+  background: rgba(212, 168, 83, 0.12);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+/* ── DASS rating buttons ─────────────────────────────── */
+.rating-btn {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.18s;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 13px;
+}
+.rating-btn:hover  { border-color: var(--accent-border); color: var(--text); }
+.rating-btn.r0.sel { background: rgba(52,211,153,0.15); border-color: #34d399; color: #34d399; }
+.rating-btn.r1.sel { background: rgba(251,191,36,0.15); border-color: #fbbf24; color: #fbbf24; }
+.rating-btn.r2.sel { background: rgba(251,146,60,0.15); border-color: #fb923c; color: #fb923c; }
+.rating-btn.r3.sel { background: rgba(248,113,113,0.15); border-color: #f87171; color: #f87171; }
+
+/* ── DISC M / L buttons ──────────────────────────────── */
+.disc-pill {
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.disc-pill.most { border-color: var(--accent); background: rgba(212,168,83,0.15); color: var(--accent); }
+.disc-pill.least { border-color: #f87171; background: rgba(248,113,113,0.12); color: #f87171; }

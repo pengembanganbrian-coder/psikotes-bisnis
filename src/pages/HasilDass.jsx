@@ -233,15 +233,10 @@ export default function HasilDass() {
   /* Guard: pastikan state tersedia */
   if (!state?.skor) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow p-8 text-center max-w-md">
-          <p className="text-4xl mb-4">🔍</p>
-          <p className="text-gray-600 mb-2 font-semibold">Data hasil tidak ditemukan.</p>
-          <p className="text-gray-400 text-sm mb-6">Silakan kerjakan tes terlebih dahulu.</p>
-          <button
-            onClick={() => navigate('/tes-dass')}
-            className="bg-teal-600 text-white px-6 py-2.5 rounded-xl hover:bg-teal-700 transition font-semibold"
-          >
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div className="dark-card" style={{ padding: '40px', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '20px' }}>Data hasil tidak ditemukan. Silakan kerjakan tes terlebih dahulu.</p>
+          <button onClick={() => navigate('/tes-dass')} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
             Kembali ke Tes
           </button>
         </div>
@@ -303,103 +298,79 @@ export default function HasilDass() {
      RENDER
   ════════════════════════════════════════════════════════════════ */
   return (
-    <div className="min-h-screen bg-slate-100 pb-12">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }}>
 
-      {/* ── Header ────────────────────────────────────────────────── */}
-      <div className="bg-gradient-to-r from-teal-700 to-cyan-700 text-white px-6 py-10">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="flex items-center gap-2">
-              <Logo size="sm" dark />
-            </div>
-            <p className="text-xs font-medium opacity-75">AssesIN — Platform Asesmen Psikologi</p>
+      {/* Header */}
+      <div style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '28px var(--px)' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+          <div className="section-rule" style={{ marginBottom: '20px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Laporan DASS-21</span><span className="section-rule-line" />
           </div>
-          <h1 className="text-3xl font-black mt-5 mb-1">Laporan DASS-21</h1>
-          <p className="text-sm opacity-80">Depression · Anxiety · Stress Scales</p>
-          <div className="mt-5 flex flex-wrap gap-x-6 gap-y-1.5 text-sm opacity-90">
-            <span>👤 <strong>{nama}</strong></span>
-            {nip  && <span>🪪 {nip}</span>}
-            {unitKerja && <span>🏢 {unitKerja}</span>}
-            <span>📅 {tanggal}</span>
+          <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '26px', color: 'var(--text)', marginBottom: '6px' }}>Laporan DASS-21</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '14px' }}>Depression · Anxiety · Stress Scales</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+            <span style={{ color: 'var(--text-sub)', fontSize: '13px' }}>👤 <strong style={{ color: 'var(--text)' }}>{nama}</strong></span>
+            <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>📅 {tanggal}</span>
+            {isSaved && <span style={{ color: 'var(--accent)', fontSize: '12px', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>✓ Tersimpan</span>}
           </div>
-          {isSaved && (
-            <p className="mt-2 text-xs opacity-60 font-medium">✓ Tersimpan ke sistem</p>
-          )}
         </div>
       </div>
 
-      <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '32px var(--px)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-        {/* ── Ringkasan Status Keseluruhan ───────────────────────── */}
+        {/* Status Keseluruhan */}
         {(() => {
           const wr = warnaConfig[rekHR.warna]
           return (
-            <div className={`${wr.bg} border-2 ${wr.border} rounded-2xl px-6 py-4 flex items-center gap-4`}>
-              <span className="text-3xl">{rekHR.icon}</span>
+            <div className="dark-card" style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
+              <span style={{ fontSize: '32px' }}>{rekHR.icon}</span>
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Status Kesejahteraan Psikologis</p>
+                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.18em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>Status Kesejahteraan Psikologis</p>
                 <p className={`text-xl font-black ${wr.title}`}>{rekHR.label}</p>
-                <p className="text-xs text-gray-500 mt-0.5">
-                  D: <strong>{kD.label}</strong> · A: <strong>{kA.label}</strong> · S: <strong>{kS.label}</strong>
+                <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '4px' }}>
+                  D: <strong style={{ color: 'var(--text-sub)' }}>{kD.label}</strong> · A: <strong style={{ color: 'var(--text-sub)' }}>{kA.label}</strong> · S: <strong style={{ color: 'var(--text-sub)' }}>{kS.label}</strong>
                 </p>
               </div>
             </div>
           )
         })()}
 
-        {/* ── Kartu per skala ───────────────────────────────────── */}
+        {/* Kartu per skala */}
         {skalaData.map(({ key, skor: s, kat }) => {
           const info = skalaInfo[key]
           const w    = warnaConfig[kat.warna]
           const pct  = (s / 42) * 100
 
           return (
-            <div key={key} className={`bg-white rounded-2xl shadow-sm border-2 ${w.border} overflow-hidden`}>
-
-              {/* Header kartu */}
+            <div key={key} className={`dark-card overflow-hidden`} style={{ borderColor: 'var(--border)' }}>
               <div className={`${w.bg} px-6 py-4 flex justify-between items-center`}>
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{info.emoji}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ fontSize: '24px' }}>{info.emoji}</span>
                   <div>
                     <h3 className={`font-black text-lg ${w.title}`}>{info.nama}</h3>
-                    <p className="text-[10px] text-gray-400 mt-0.5">{info.thresholds}</p>
+                    <p style={{ fontSize: '10px', color: 'rgba(0,0,0,0.45)', marginTop: '2px' }}>{info.thresholds}</p>
                   </div>
                 </div>
-                <div className="text-right">
+                <div style={{ textAlign: 'right' }}>
                   <p className={`text-4xl font-black ${w.title}`}>{s}</p>
-                  <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full mt-1 ${w.badge}`}>
-                    {kat.label}
-                  </span>
+                  <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full mt-1 ${w.badge}`}>{kat.label}</span>
                 </div>
               </div>
-
-              {/* Progress bar */}
-              <div className="px-6 py-3 bg-gray-50 border-t border-gray-100">
-                <div className="flex justify-between text-[9px] text-gray-400 font-medium mb-1.5 px-0.5">
-                  <span>0</span>
-                  <span>Normal</span>
-                  <span>Ringan</span>
-                  <span>Sedang</span>
-                  <span>Berat</span>
-                  <span>42</span>
+              <div style={{ padding: '12px 24px', background: 'var(--surface-2)', borderTop: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                  <span>0</span><span>Normal</span><span>Ringan</span><span>Sedang</span><span>Berat</span><span>42</span>
                 </div>
-                <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full ${w.bar} rounded-full transition-all duration-700`}
-                    style={{ width: `${pct}%` }}
-                  />
+                <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                  <div className={`h-full ${w.bar} rounded-full`} style={{ width: `${pct}%`, transition: 'width 0.7s' }} />
                 </div>
               </div>
-
-              {/* Narasi interpretasi */}
-              <div className="px-6 py-4">
-                <p className="text-sm text-gray-700 leading-relaxed">{info.narasi[kat.label]}</p>
+              <div style={{ padding: '16px 24px' }}>
+                <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: '1.7' }}>{info.narasi[kat.label]}</p>
               </div>
             </div>
           )
         })}
 
-        {/* ── Rekomendasi Tindak Lanjut HR (PREMIUM) ───────────── */}
         {fromDashboard ? (
           <RekomendasiDASS rekHR={rekHR} />
         ) : (
@@ -408,19 +379,17 @@ export default function HasilDass() {
           </PaymentGate>
         )}
 
-        {/* ── Tabel ringkasan skor ──────────────────────────────── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-gray-50 px-6 py-3 border-b border-gray-100">
-            <h3 className="font-bold text-gray-700 text-sm">Ringkasan Skor</h3>
+        {/* Tabel Ringkasan */}
+        <div className="dark-card" style={{ overflow: 'hidden' }}>
+          <div style={{ padding: '12px 24px', background: 'var(--surface-2)', borderBottom: '1px solid var(--border)' }}>
+            <h3 style={{ color: 'var(--text-sub)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase' }}>Ringkasan Skor</h3>
           </div>
-          <table className="w-full text-sm">
+          <table style={{ width: '100%', fontSize: '14px', borderCollapse: 'collapse' }}>
             <thead>
-              <tr className="text-xs text-gray-500 font-semibold uppercase border-b border-gray-100">
-                <th className="px-6 py-3 text-left">Dimensi</th>
-                <th className="px-6 py-3 text-center">Skor Raw</th>
-                <th className="px-6 py-3 text-center">Skor ×2</th>
-                <th className="px-6 py-3 text-center">Maks.</th>
-                <th className="px-6 py-3 text-center">Kategori</th>
+              <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                {['Dimensi','Skor Raw','Skor ×2','Maks.','Kategori'].map(h => (
+                  <th key={h} style={{ padding: '10px 16px', textAlign: h === 'Dimensi' ? 'left' : 'center', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{h}</th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -428,12 +397,12 @@ export default function HasilDass() {
                 const info = skalaInfo[key]
                 const w    = warnaConfig[kat.warna]
                 return (
-                  <tr key={key} className="border-b border-gray-50 last:border-0">
-                    <td className="px-6 py-3 font-medium">{info.emoji} {info.nama}</td>
-                    <td className="px-6 py-3 text-center text-gray-400">{s / 2}</td>
-                    <td className="px-6 py-3 text-center font-bold text-gray-800">{s}</td>
-                    <td className="px-6 py-3 text-center text-gray-400">42</td>
-                    <td className="px-6 py-3 text-center">
+                  <tr key={key} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '12px 16px', color: 'var(--text-sub)' }}>{info.emoji} {info.nama}</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', color: 'var(--text-muted)' }}>{s / 2}</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', color: 'var(--text)', fontWeight: 700 }}>{s}</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center', color: 'var(--text-muted)' }}>42</td>
+                    <td style={{ padding: '12px 16px', textAlign: 'center' }}>
                       <span className={`text-xs font-bold px-3 py-1 rounded-full ${w.badge}`}>{kat.label}</span>
                     </td>
                   </tr>
@@ -443,24 +412,23 @@ export default function HasilDass() {
           </table>
         </div>
 
-        {/* ── Catatan penting ───────────────────────────────────── */}
-        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5">
-          <h4 className="font-bold text-blue-800 mb-2">⚠️ Catatan Penting</h4>
-          <p className="text-sm text-blue-700 leading-relaxed">
-            DASS-21 adalah alat <strong>skrining psikologis</strong>, bukan instrumen diagnostik klinis.
-            Hasil ini mencerminkan kondisi emosional yang dilaporkan dalam 1 minggu terakhir dan dapat
-            dipengaruhi oleh berbagai faktor situasional sementara. Interpretasi dan tindak lanjut
-            harus dilakukan oleh tenaga profesional yang berwenang (psikolog, psikiater, atau konselor
-            bersertifikat). Hasil bersifat <strong>rahasia</strong> dan hanya digunakan untuk kepentingan
-            pengembangan sumber daya manusia.
+        {/* Catatan Penting */}
+        <div className="dark-card" style={{ padding: '20px 24px', borderColor: 'var(--accent-border)', background: 'rgba(212,168,83,0.04)' }}>
+          <h4 style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '10px' }}>Catatan Penting</h4>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.7' }}>
+            DASS-21 adalah alat <strong style={{ color: 'var(--text-sub)' }}>skrining psikologis</strong>, bukan instrumen diagnostik klinis.
+            Hasil ini mencerminkan kondisi emosional yang dilaporkan dalam 1 minggu terakhir.
+            Interpretasi dan tindak lanjut harus dilakukan oleh tenaga profesional yang berwenang.
+            Hasil bersifat <strong style={{ color: 'var(--text-sub)' }}>rahasia</strong>.
           </p>
         </div>
 
-        {/* ── Navigasi ──────────────────────────────────────────── */}
-        <div className="text-center pt-2">
+        <div style={{ textAlign: 'center', paddingTop: '8px' }}>
           <button
             onClick={() => navigate('/')}
-            className="bg-teal-600 hover:bg-teal-700 text-white font-bold px-10 py-3.5 rounded-xl transition-all shadow-lg shadow-teal-100"
+            style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px 40px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
           >
             ← Kembali ke Beranda
           </button>

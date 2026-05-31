@@ -111,15 +111,10 @@ export default function HasilLoveLanguage() {
 
   if (!state?.skor) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow p-8 text-center max-w-md">
-          <p className="text-4xl mb-4">🔍</p>
-          <p className="text-gray-600 mb-2 font-semibold">Data hasil tidak ditemukan.</p>
-          <p className="text-gray-400 text-sm mb-6">Silakan kerjakan tes terlebih dahulu.</p>
-          <button
-            onClick={() => navigate('/tes-love-language')}
-            className="bg-rose-600 text-white px-6 py-2.5 rounded-xl hover:bg-rose-700 transition font-semibold"
-          >
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div className="dark-card" style={{ padding: '40px', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '12px' }}>Data hasil tidak ditemukan.</p>
+          <button onClick={() => navigate('/tes-love-language')} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
             Kembali ke Tes
           </button>
         </div>
@@ -136,61 +131,57 @@ export default function HasilLoveLanguage() {
   const ranking = Object.entries(skor).sort((a, b) => b[1] - a[1])
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }}>
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-rose-600 to-pink-600 px-6 py-8 text-white text-center">
-        <div className="max-w-2xl mx-auto">
-          <p className="text-rose-200 text-sm mb-1">Hasil Tes Love Language</p>
-          <h1 className="text-2xl font-black mb-0.5">{nama}</h1>
-          <p className="text-rose-100 text-sm">{nip} · {jabatan}</p>
+      <div style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '28px var(--px)' }}>
+        <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+          <div className="section-rule" style={{ marginBottom: '20px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Laporan Love Language</span><span className="section-rule-line" />
+          </div>
+          <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '26px', color: 'var(--text)', marginBottom: '6px' }}>{nama}</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Tes Love Language · {jabatan}</p>
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-8 space-y-6">
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '32px var(--px)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
         {/* Bahasa Kasih Utama */}
-        <div className={`${warna.bg} border-2 ${warna.border} rounded-3xl p-7`}>
-          <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Bahasa Kasih Utama</p>
-          <div className="flex items-center gap-4 mb-5">
-            <span className="text-5xl">{infoUtama.emoji}</span>
-            <div>
-              <h2 className={`text-2xl font-black ${warna.title}`}>{infoUtama.indo}</h2>
-              <p className="text-sm text-gray-500 italic">{infoUtama.nama}</p>
+        <div className="dark-card" style={{ padding: '28px', borderColor: 'var(--accent-border)' }}>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '20px', opacity: 0.8 }}>Bahasa Kasih Utama</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+            <span style={{ fontSize: '48px' }}>{infoUtama.emoji}</span>
+            <div style={{ flex: 1 }}>
+              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>{infoUtama.indo}</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '13px', fontStyle: 'italic' }}>{infoUtama.nama}</p>
             </div>
-            <div className={`ml-auto ${warna.badge} font-black text-xl px-4 py-2 rounded-2xl`}>
+            <div style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '18px', padding: '8px 16px', borderRadius: '10px', flexShrink: 0 }}>
               {skor[utama]}/12
             </div>
           </div>
-          <p className="text-sm text-gray-700 leading-relaxed">{infoUtama.deskripsi}</p>
+          <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: '1.7' }}>{infoUtama.deskripsi}</p>
         </div>
 
         {/* Skor Semua LL */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-bold text-gray-800 mb-5">Skor Semua Bahasa Kasih</h3>
-          <div className="space-y-4">
+        <div className="dark-card" style={{ padding: '24px' }}>
+          <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '15px', marginBottom: '20px' }}>Skor Semua Bahasa Kasih</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {ranking.map(([key, val], idx) => {
               const info = llInfo[key]
-              const w    = warnaClass[info.warna]
               const pct  = Math.round((val / maxSkor) * 100)
+              const isMain = idx === 0
               return (
                 <div key={key}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg">{info.emoji}</span>
-                      <div>
-                        <span className="text-sm font-bold text-gray-800">{info.indo}</span>
-                        {idx === 0 && <span className="ml-2 text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full">Utama</span>}
-                        {idx === 1 && <span className="ml-2 text-xs bg-gray-100 text-gray-600 font-semibold px-2 py-0.5 rounded-full">Kedua</span>}
-                      </div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <span>{info.emoji}</span>
+                      <span style={{ color: isMain ? 'var(--text)' : 'var(--text-sub)', fontSize: '14px', fontWeight: isMain ? 700 : 400 }}>{info.indo}</span>
+                      {isMain && <span style={{ background: 'var(--accent-dim)', color: 'var(--accent)', border: '1px solid var(--accent-border)', fontSize: '10px', fontFamily: 'Syne, sans-serif', fontWeight: 700, padding: '2px 8px', borderRadius: '99px', letterSpacing: '0.08em' }}>UTAMA</span>}
                     </div>
-                    <span className={`text-sm font-black ${w.title}`}>{val}</span>
+                    <span style={{ color: isMain ? 'var(--accent)' : 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px' }}>{val}</span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div
-                      className={`${w.bar} h-2.5 rounded-full transition-all duration-700`}
-                      style={{ width: `${pct}%` }}
-                    />
+                  <div style={{ height: '4px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
+                    <div style={{ height: '100%', background: isMain ? 'var(--accent)' : 'rgba(255,255,255,0.15)', width: `${pct}%`, borderRadius: '99px' }} />
                   </div>
                 </div>
               )
@@ -202,60 +193,57 @@ export default function HasilLoveLanguage() {
         {/* Bahasa Kasih Kedua */}
         {(() => {
           const info2 = llInfo[kedua]
-          const w2    = warnaClass[info2.warna]
           return (
-            <div className={`${w2.bg} border ${w2.border} rounded-2xl p-6`}>
-              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Bahasa Kasih Kedua</p>
-              <div className="flex items-center gap-3 mb-3">
-                <span className="text-3xl">{info2.emoji}</span>
+            <div className="dark-card" style={{ padding: '24px' }}>
+              <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '16px' }}>Bahasa Kasih Kedua</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
+                <span style={{ fontSize: '32px' }}>{info2.emoji}</span>
                 <div>
-                  <h3 className={`text-lg font-bold ${w2.title}`}>{info2.indo}</h3>
-                  <p className="text-xs text-gray-400 italic">{info2.nama} · Skor: {skor[kedua]}/12</p>
+                  <h3 style={{ color: 'var(--text)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '16px', marginBottom: '2px' }}>{info2.indo}</h3>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '12px', fontStyle: 'italic' }}>{info2.nama} · Skor: {skor[kedua]}/12</p>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 leading-relaxed">{info2.deskripsi}</p>
+              <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: '1.7' }}>{info2.deskripsi}</p>
             </div>
           )
         })()}
 
         {/* Implikasi di Tempat Kerja */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-bold text-gray-800 mb-3">💼 Implikasi di Tempat Kerja</h3>
-          <p className="text-sm text-gray-600 leading-relaxed">{infoUtama.ditempat_kerja}</p>
+        <div className="dark-card" style={{ padding: '24px' }}>
+          <h3 style={{ color: 'var(--text)', fontWeight: 600, fontSize: '15px', marginBottom: '12px' }}>Implikasi di Tempat Kerja</h3>
+          <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: '1.7' }}>{infoUtama.ditempat_kerja}</p>
         </div>
 
         {/* Rekomendasi HR */}
-        <div className="bg-indigo-50 border border-indigo-200 rounded-2xl p-6">
-          <h3 className="font-bold text-indigo-800 mb-3">📋 Rekomendasi untuk HR / Atasan</h3>
-          <p className="text-sm text-indigo-700 leading-relaxed">{infoUtama.tips_hr}</p>
+        <div className="dark-card" style={{ padding: '24px', borderColor: 'var(--accent-border)', background: 'rgba(212,168,83,0.04)' }}>
+          <h3 style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '13px', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>Rekomendasi untuk HR / Atasan</h3>
+          <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: '1.7' }}>{infoUtama.tips_hr}</p>
         </div>
 
         {/* Deskripsi Semua LL */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h3 className="font-bold text-gray-800 mb-5">📖 Deskripsi Lengkap 5 Bahasa Kasih</h3>
-          <div className="space-y-5">
-            {Object.entries(llInfo).map(([key, info]) => {
-              const w = warnaClass[info.warna]
-              return (
-                <div key={key} className={`${w.bg} border ${w.border} rounded-xl p-4`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span>{info.emoji}</span>
-                    <span className={`font-bold text-sm ${w.title}`}>{info.indo}</span>
-                    <span className="text-xs text-gray-400 italic">— {info.nama}</span>
-                    {key === utama && <span className="ml-auto text-xs bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded-full">Anda</span>}
-                  </div>
-                  <p className="text-xs text-gray-600 leading-relaxed">{info.deskripsi}</p>
+        <div className="dark-card" style={{ padding: '24px' }}>
+          <h3 style={{ color: 'var(--text)', fontWeight: 600, fontSize: '15px', marginBottom: '20px' }}>Deskripsi Lengkap 5 Bahasa Kasih</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {Object.entries(llInfo).map(([key, info]) => (
+              <div key={key} className="dark-card" style={{ padding: '16px', background: 'var(--surface-2)', borderColor: key === utama ? 'var(--accent-border)' : 'var(--border)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+                  <span>{info.emoji}</span>
+                  <span style={{ color: key === utama ? 'var(--accent)' : 'var(--text-sub)', fontWeight: 600, fontSize: '14px' }}>{info.indo}</span>
+                  <span style={{ color: 'var(--text-muted)', fontSize: '12px', fontStyle: 'italic' }}>— {info.nama}</span>
+                  {key === utama && <span style={{ marginLeft: 'auto', background: 'var(--accent)', color: '#09090f', fontSize: '10px', fontFamily: 'Syne, sans-serif', fontWeight: 700, padding: '2px 8px', borderRadius: '99px' }}>ANDA</span>}
                 </div>
-              )
-            })}
+                <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.65' }}>{info.deskripsi}</p>
+              </div>
+            ))}
           </div>
         </div>
         </PremiumSection>
 
-        {/* Tombol */}
         <button
           onClick={() => navigate('/')}
-          className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg shadow-rose-200"
+          style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: 'none', cursor: 'pointer', width: '100%' }}
+          onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
+          onMouseLeave={e => e.currentTarget.style.opacity = '1'}
         >
           ← Kembali ke Beranda
         </button>

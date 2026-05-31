@@ -3,13 +3,6 @@ import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 
-const unitKerjaOptions = [
-  { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
-  { group: 'BUMN / BUMD', options: ['Perbankan BUMN', 'Energi & Pertambangan BUMN', 'Telekomunikasi BUMN', 'Infrastruktur & Konstruksi BUMN', 'Pertanian & Pangan BUMN', 'BUMD Daerah', 'Lainnya'] },
-  { group: 'Instansi Pemerintah', options: ['Kementerian / Lembaga', 'Pemerintah Daerah', 'TNI / Polri', 'Badan / Komisi Negara', 'Lainnya'] },
-  { group: 'Pendidikan & Penelitian', options: ['Universitas / Perguruan Tinggi', 'Sekolah / Madrasah', 'Lembaga Pelatihan', 'Lembaga Penelitian', 'Lainnya'] },
-  { group: 'Lainnya', options: ['NGO / Yayasan / Ormas', 'Startup', 'Wirausaha / Freelance', 'Pelajar / Mahasiswa', 'Lainnya'] },
-]
 const soal = [
   { id: 1, pilihan: [
     { teks: "Mudah bergaul, menyenangkan", dimensi: "I" },
@@ -192,22 +185,27 @@ function hitungDISC(jawaban) {
   return { profil, mostD, mostI, mostS, mostC, leastD, leastI, leastS, leastC, changeD, changeI, changeS, changeC }
 }
 
+const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
+const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
+
 function TesDisc() {
-  const [step, setStep] = useState('form')
-  const [nama, setNama] = useState('')
-  const [nip, setNip] = useState('')
-  const [jabatan, setJabatan] = useState('')
-  const [jawaban, setJawaban] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [step, setStep]             = useState('form')
+  const [nama, setNama]             = useState('')
+  const [email, setEmail]           = useState('')
+  const [usia, setUsia]             = useState('')
+  const [jenisKelamin, setJenisKelamin] = useState('')
+  const [jawaban, setJawaban]       = useState({})
+  const [loading, setLoading]       = useState(false)
   const [formErrors, setFormErrors] = useState({})
   const [submitError, setSubmitError] = useState('')
   const navigate = useNavigate()
 
   const validateForm = () => {
     const errs = {}
-    if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
-    if (!nip.trim())  errs.nip  = 'NIP wajib diisi.'
-    if (!jabatan)     errs.jabatan = 'Unit kerja wajib dipilih.'
+    if (!nama.trim())  errs.nama  = 'Nama lengkap wajib diisi.'
+    if (!email.trim()) errs.email = 'Email wajib diisi.'
+    if (!usia)         errs.usia  = 'Usia wajib diisi.'
+    if (!jenisKelamin) errs.jenisKelamin = 'Jenis kelamin wajib dipilih.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -236,9 +234,10 @@ function TesDisc() {
     setLoading(true)
     setSubmitError('')
 
+    const jabatan = `${usia} th · ${jenisKelamin}`
     const { data: pesertaData, error } = await supabase
       .from('peserta_disc')
-      .insert([{ nama, nip, jabatan }])
+      .insert([{ nama, nip: email, jabatan }])
       .select()
 
     if (error) {
@@ -266,218 +265,127 @@ function TesDisc() {
   }
 
   if (step === 'form') return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px var(--px)' }}>
+      <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+      </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
+      <div className="anim-up" style={{ width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1 }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <Logo size="sm" dark />
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes Kepribadian DISC</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>24 soal · ~7 menit</p>
+        </div>
 
-          {/* Header Card */}
-          <div className="bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-7 text-center">
-            <div className="flex items-center gap-2 justify-center mb-1">
-              <Logo size="sm" dark />
-            </div>
-            <div className="inline-flex items-center justify-center w-14 h-14 bg-white/20 border border-white/30 rounded-2xl backdrop-blur mb-3">
-              <span className="text-white text-xl font-black">DISC</span>
-            </div>
-            <h1 className="text-xl font-black text-white tracking-wide">AssesIN</h1>
-            <p className="text-green-100 text-sm mt-1">Tes Kepribadian DISC</p>
+        <div className="dark-card" style={{ padding: '32px' }}>
+          <div className="section-rule" style={{ marginBottom: '28px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Data Diri</span><span className="section-rule-line" />
           </div>
-
-          {/* Body Card */}
-          <div className="px-8 py-7 space-y-5">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <label className="block text-base font-bold text-gray-700 mb-1.5">Nama Lengkap <span className="text-red-400">*</span></label>
-              <input
-                value={nama}
-                onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
-                className={`w-full border bg-gray-50 rounded-xl px-4 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
-                placeholder="Nama lengkap sesuai KTP"
-              />
-              {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
+              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({...p, nama: ''})) }} placeholder="Nama lengkap" autoComplete="name" />
+              {formErrors.nama && <p style={S_ERR}>{formErrors.nama}</p>}
             </div>
-
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">NIP <span className="text-red-400">*</span></label>
-              <input
-                value={nip}
-                onChange={e => { setNip(e.target.value); setFormErrors(p => ({ ...p, nip: '' })) }}
-                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all placeholder-gray-400 ${formErrors.nip ? 'border-red-400' : 'border-gray-200'}`}
-                placeholder="NIP"
-              />
-              {formErrors.nip && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nip}</p>}
+              <label style={S_LABEL}>Email <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
+              {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
             </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Unit Kerja <span className="text-red-400">*</span></label>
-              <div className="relative">
-                <select
-                  value={jabatan}
-                  onChange={e => { setJabatan(e.target.value); setFormErrors(p => ({ ...p, jabatan: '' })) }}
-                  className={`w-full appearance-none border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent focus:bg-white transition-all text-gray-700 pr-10 ${formErrors.jabatan ? 'border-red-400' : 'border-gray-200'}`}
-                >
-                  <option value="" disabled>-- Pilih Unit Kerja --</option>
-                  {unitKerjaOptions.map(group => (
-                    <optgroup key={group.group} label={group.group}>
-                      {group.options.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div>
+                <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
+                <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
+                {formErrors.usia && <p style={S_ERR}>{formErrors.usia}</p>}
               </div>
-              {formErrors.jabatan && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.jabatan}</p>}
+              <div>
+                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#f87171' }}>*</span></label>
+                <select className="field" value={jenisKelamin} onChange={e => { setJenisKelamin(e.target.value); setFormErrors(p => ({...p, jenisKelamin: ''})) }}>
+                  <option value="">— Pilih —</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+                {formErrors.jenisKelamin && <p style={S_ERR}>{formErrors.jenisKelamin}</p>}
+              </div>
             </div>
-
             <button
               onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-green-200 mt-2"
+              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
               Mulai Tes →
             </button>
           </div>
         </div>
 
-        <p className="text-center text-xs text-green-600/40 mt-5">
-          © 2026 · AssesIN
-        </p>
+        <button onClick={() => navigate('/')} style={{ display: 'block', margin: '20px auto 0', color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>
+          ← Kembali ke beranda
+        </button>
       </div>
     </div>
   )
 
+  const progress = (jumlahDijawab / soal.length) * 100
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 py-10 px-4">
-      <div className="max-w-3xl mx-auto">
-
-        {/* Header Tes */}
-        <div className="bg-white rounded-2xl shadow p-6 mb-6">
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-black text-sm">DISC</span>
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-gray-800">Tes DISC — AssesIN</h1>
-              <p className="text-sm text-gray-500">
-                Halo <strong className="text-green-700">{nama}</strong> · {jabatan}
-              </p>
-            </div>
+    <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
+      {/* Sticky header */}
+      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+        <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+          <div>
+            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes DISC</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {jumlahDijawab}/{soal.length} kelompok</p>
           </div>
-
-          {/* Instruksi */}
-          <div className="bg-green-50 border border-green-100 rounded-xl px-4 py-3 mb-4 text-sm text-green-800">
-            Dari setiap kelompok, pilih satu yang paling{' '}
-            <span className="font-bold text-green-700 bg-green-100 px-1.5 py-0.5 rounded">M — Mirip</span>{' '}
-            dan satu yang paling{' '}
-            <span className="font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded">L — Tidak Mirip</span>{' '}
-            dengan diri Anda.
-          </div>
-
-          {/* Progress */}
-          <div className="flex items-center gap-3">
-            <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-green-500 to-emerald-500 rounded-full transition-all duration-500"
-                style={{ width: `${(jumlahDijawab / soal.length) * 100}%` }}
-              />
-            </div>
-            <span className="text-sm font-semibold text-gray-600 whitespace-nowrap">
-              {jumlahDijawab} / {soal.length}
-            </span>
-          </div>
-
-          {/* Pills per kelompok */}
-          <div className="flex flex-wrap gap-1.5 mt-3">
-            {soal.map((s, idx) => {
-              const j = jawaban[s.id]
-              const selesai = j?.most !== undefined && j?.least !== undefined
-              return (
-                <span
-                  key={s.id}
-                  className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold transition-all ${
-                    selesai
-                      ? 'bg-green-500 text-white'
-                      : 'bg-gray-100 text-gray-400'
-                  }`}
-                >
-                  {selesai ? '✓' : idx + 1}
-                </span>
-              )
-            })}
+          <div style={{ flex: 1, maxWidth: '180px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', background: 'var(--accent)', width: `${progress}%`, transition: 'width 0.5s' }} />
           </div>
         </div>
+      </div>
 
-        {/* Error banner */}
+      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '28px var(--px)' }}>
+
+        {/* Instruksi */}
+        <div className="dark-card" style={{ padding: '18px 20px', marginBottom: '24px' }}>
+          <p style={{ color: 'var(--text-sub)', fontSize: '13px', lineHeight: '1.65' }}>
+            Dari setiap kelompok, pilih satu yang paling{' '}
+            <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>M — Mirip</span>{' '}
+            dan satu yang paling{' '}
+            <span style={{ color: '#f87171', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>L — Tidak Mirip</span>{' '}
+            dengan diri Anda.
+          </p>
+        </div>
+
         {submitError && (
-          <div className="mb-4 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
-            ⚠ {submitError}
+          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#f87171', fontSize: '14px', marginBottom: '16px' }}>
+            {submitError}
           </div>
         )}
 
-        {/* Soal */}
         {soal.map((s, idx) => {
           const j = jawaban[s.id] || {}
           const selesai = j.most !== undefined && j.least !== undefined
           return (
-            <div
-              id={`soal-disc-${s.id}`}
-              key={s.id}
-              className={`bg-white rounded-2xl shadow p-6 mb-4 transition-all ${selesai ? 'ring-1 ring-green-200' : ''}`}
-            >
-              {/* Nomor kelompok */}
-              <div className="flex items-center gap-2 mb-4">
-                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black flex-shrink-0 ${
-                  selesai ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-500'
-                }`}>
+            <div id={`soal-disc-${s.id}`} key={s.id} className="dark-card" style={{ padding: '20px', marginBottom: '12px', borderColor: selesai ? 'var(--accent-border)' : 'var(--border)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+                <span style={{ flexShrink: 0, width: '26px', height: '26px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700, background: selesai ? 'var(--accent)' : 'var(--surface-2)', color: selesai ? '#09090f' : 'var(--text-muted)', border: '1px solid ' + (selesai ? 'var(--accent)' : 'var(--border)') }}>
                   {selesai ? '✓' : idx + 1}
                 </span>
-                <p className="text-sm font-semibold text-gray-400 uppercase tracking-wide">Kelompok {idx + 1}</p>
-                {selesai && <span className="ml-auto text-sm text-green-500 font-semibold">✓ Selesai</span>}
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Kelompok {idx + 1}</p>
+                {selesai && <span style={{ marginLeft: 'auto', color: 'var(--accent)', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>✓ Selesai</span>}
               </div>
 
-              <div className="space-y-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {s.pilihan.map((p, i) => {
                   const isMost = j.most === i
                   const isLeast = j.least === i
                   return (
-                    <div
-                      key={i}
-                      className={`flex items-center gap-3 p-3 rounded-xl border-2 transition-all ${
-                        isMost
-                          ? 'border-green-400 bg-green-50'
-                          : isLeast
-                          ? 'border-red-300 bg-red-50'
-                          : 'border-gray-100 hover:border-gray-200 hover:bg-gray-50'
-                      }`}
-                    >
-                      <span className="text-sm flex-1 text-gray-700 leading-snug">{p.teks}</span>
-
-                      <div className="flex gap-1.5 flex-shrink-0">
-                        {/* Tombol M */}
-                        <button
-                          onClick={() => handlePilih(s.id, 'most', i)}
-                          title="Paling Mirip"
-                          className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
-                            isMost
-                              ? 'bg-green-500 text-white shadow-sm shadow-green-200'
-                              : 'bg-gray-100 text-gray-400 hover:bg-green-100 hover:text-green-600'
-                          }`}
-                        >M</button>
-
-                        {/* Tombol L */}
-                        <button
-                          onClick={() => handlePilih(s.id, 'least', i)}
-                          title="Paling Tidak Mirip"
-                          className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
-                            isLeast
-                              ? 'bg-red-400 text-white shadow-sm shadow-red-200'
-                              : 'bg-gray-100 text-gray-400 hover:bg-red-100 hover:text-red-500'
-                          }`}
-                        >L</button>
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 14px', borderRadius: '10px', border: '1px solid ' + (isMost ? 'var(--accent-border)' : isLeast ? 'rgba(248,113,113,0.4)' : 'var(--border)'), background: isMost ? 'rgba(212,168,83,0.08)' : isLeast ? 'rgba(248,113,113,0.06)' : 'var(--surface-2)', transition: 'all 0.18s' }}>
+                      <span style={{ flex: 1, color: 'var(--text-sub)', fontSize: '14px', lineHeight: '1.55' }}>{p.teks}</span>
+                      <div style={{ display: 'flex', gap: '8px', flexShrink: 0 }}>
+                        <button onClick={() => handlePilih(s.id, 'most', i)} className={`disc-pill ${isMost ? 'most' : ''}`}>M</button>
+                        <button onClick={() => handlePilih(s.id, 'least', i)} className={`disc-pill ${isLeast ? 'least' : ''}`}>L</button>
                       </div>
                     </div>
                   )
@@ -487,30 +395,20 @@ function TesDisc() {
           )
         })}
 
-        {/* Tombol Submit */}
-        <div className="sticky bottom-4">
+        <div style={{ marginTop: '24px', position: 'sticky', bottom: '16px' }}>
           {!sudahLengkap && (
-            <p className="text-center text-sm text-amber-600 font-medium mb-2">
-              ⚠ Masih {soal.length - jumlahDijawab} kelompok belum dijawab
+            <p style={{ textAlign: 'center', color: '#fbbf24', fontSize: '13px', marginBottom: '12px' }}>
+              Masih {soal.length - jumlahDijawab} kelompok belum dijawab
             </p>
           )}
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className={`w-full font-semibold py-4 rounded-2xl transition-all text-base shadow-xl ${
-              sudahLengkap
-                ? 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white shadow-green-300 cursor-pointer'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'
-            }`}
+            style={{ width: '100%', background: sudahLengkap ? 'var(--accent)' : 'var(--surface-2)', color: sudahLengkap ? '#09090f' : 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: '1px solid ' + (sudahLengkap ? 'var(--accent)' : 'var(--border)'), cursor: sudahLengkap && !loading ? 'pointer' : 'not-allowed', opacity: loading ? 0.6 : 1 }}
           >
-            {loading
-              ? '⏳ Menyimpan hasil...'
-              : sudahLengkap
-              ? '✓ Selesai & Lihat Hasil →'
-              : `Jawab ${soal.length - jumlahDijawab} kelompok lagi`}
+            {loading ? 'Menyimpan...' : sudahLengkap ? 'Selesai & Lihat Hasil →' : `Jawab ${soal.length - jumlahDijawab} kelompok lagi`}
           </button>
         </div>
-
       </div>
     </div>
   )

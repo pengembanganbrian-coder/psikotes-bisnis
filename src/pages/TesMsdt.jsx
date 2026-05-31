@@ -3,14 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import Logo from '../components/Logo'
 
-const unitKerjaOptions = [
-  { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
-  { group: 'BUMN / BUMD', options: ['Perbankan BUMN', 'Energi & Pertambangan BUMN', 'Telekomunikasi BUMN', 'Infrastruktur & Konstruksi BUMN', 'Pertanian & Pangan BUMN', 'BUMD Daerah', 'Lainnya'] },
-  { group: 'Instansi Pemerintah', options: ['Kementerian / Lembaga', 'Pemerintah Daerah', 'TNI / Polri', 'Badan / Komisi Negara', 'Lainnya'] },
-  { group: 'Pendidikan & Penelitian', options: ['Universitas / Perguruan Tinggi', 'Sekolah / Madrasah', 'Lembaga Pelatihan', 'Lembaga Penelitian', 'Lainnya'] },
-  { group: 'Lainnya', options: ['NGO / Yayasan / Ormas', 'Startup', 'Wirausaha / Freelance', 'Pelajar / Mahasiswa', 'Lainnya'] },
-]
-
 const soal = [
   { id: 1,  a: "Saya tidak akan menegur pelanggar-pelanggar peraturan bila saya merasa pasti bahwa tidak ada satu orangpun yang mengetahui tentang pelanggaran-pelanggaran tersebut.", b: "Bila saya mengumumkan suatu keputusan yang kurang menyenangkan, saya akan menjelaskan kepada bawahan saya bahwa keputusan ini dibuat oleh direktur." },
   { id: 2,  a: "Bila ada seorang karyawan yang hasil kerjanya selalu tidak memuaskan saya, saya akan menunggu suatu kesempatan untuk memindahkannya dan bukan untuk memecatnya.", b: "Bila ada bawahan saya yang dikucilkan dari kelompok kerjanya, saya akan mencari jalan agar orang lain dapat berteman dengannya." },
@@ -132,25 +124,30 @@ function hitungMSDT(jawaban) {
   return { TO, RO, E_raw, O_raw, E_score, grandTotal, gaya, toTinggi, roTinggi, eTinggi, colSkor }
 }
 
+const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
+const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
+
 export default function TesMsdt() {
   const navigate = useNavigate()
-  const [step, setStep]         = useState('form')
-  const [nama, setNama]         = useState('')
-  const [nip, setNip]           = useState('')
-  const [unitKerja, setUnitKerja] = useState('')
-  const [jawaban, setJawaban]   = useState({})
+  const [step, setStep]             = useState('form')
+  const [nama, setNama]             = useState('')
+  const [email, setEmail]           = useState('')
+  const [usia, setUsia]             = useState('')
+  const [jenisKelamin, setJenisKelamin] = useState('')
+  const [jawaban, setJawaban]       = useState({})
   const [formErrors, setFormErrors] = useState({})
-  const [loading, setLoading]   = useState(false)
-  const [saveError, setSaveError] = useState('')
+  const [loading, setLoading]       = useState(false)
+  const [saveError, setSaveError]   = useState('')
 
   const answered = Object.keys(jawaban).length
   const progress  = (answered / 64) * 100
 
   function validateForm() {
     const errs = {}
-    if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
-    if (!nip.trim())  errs.nip  = 'NIP wajib diisi.'
-    if (!unitKerja)   errs.unitKerja = 'Unit kerja wajib dipilih.'
+    if (!nama.trim())  errs.nama  = 'Nama lengkap wajib diisi.'
+    if (!email.trim()) errs.email = 'Email wajib diisi.'
+    if (!usia)         errs.usia  = 'Usia wajib diisi.'
+    if (!jenisKelamin) errs.jenisKelamin = 'Jenis kelamin wajib dipilih.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -158,10 +155,7 @@ export default function TesMsdt() {
   async function handleSubmit() {
     if (answered < 64) {
       const belum = soal.find(s => jawaban[s.id] === undefined)
-      if (belum) {
-        const el = document.getElementById(`soal-msdt-${belum.id}`)
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }
+      if (belum) document.getElementById(`soal-msdt-${belum.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       return
     }
 
@@ -169,11 +163,12 @@ export default function TesMsdt() {
     setSaveError('')
 
     const hasil = hitungMSDT(jawaban)
+    const jabatan = `${usia} th · ${jenisKelamin}`
 
     try {
       const { data: peserta, error: e1 } = await supabase
         .from('peserta_msdt')
-        .insert({ nama, nip, jabatan: unitKerja })
+        .insert({ nama, nip: email, jabatan })
         .select()
         .single()
 
@@ -191,7 +186,7 @@ export default function TesMsdt() {
       if (e2) throw e2
 
       navigate('/hasil-msdt', {
-        state: { hasil, nama, nip, unitKerja, pesertaId: peserta.id },
+        state: { hasil, nama, email, jabatan, pesertaId: peserta.id },
       })
     } catch (err) {
       console.error(err)
@@ -200,213 +195,130 @@ export default function TesMsdt() {
     }
   }
 
-  /* ═══════════════════════════════════════════════
-     STEP: FORM
-  ═══════════════════════════════════════════════ */
-  if (step === 'form') {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white flex flex-col items-center justify-center p-6">
-        <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl border border-orange-100 p-8">
-
-          {/* Logo + Judul */}
-          <div className="text-center mb-6">
-            <div className="flex items-center gap-2 justify-center mb-1">
-              <Logo size="sm" />
-            </div>
-          </div>
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl flex items-center justify-center shadow-lg shadow-orange-200 flex-shrink-0">
-              <span className="text-white font-black text-xs text-center leading-tight">MSDT</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-black text-gray-900">Tes Gaya Manajemen MSDT</h1>
-              <p className="text-sm text-gray-400">Management Style Diagnostic Test</p>
-            </div>
-          </div>
-
-          {/* Deskripsi */}
-          <div className="bg-orange-50 border border-orange-100 rounded-2xl p-4 mb-6 text-sm text-orange-800 leading-relaxed">
-            MSDT adalah instrumen untuk mengidentifikasi <strong>gaya kepemimpinan dan manajemen</strong> Anda.
-            Terdiri dari <strong>64 pasangan pernyataan</strong> — pilih satu yang paling menggambarkan diri Anda.
-            Tidak ada jawaban benar atau salah.
-          </div>
-
-          {/* Form isian */}
-          <div className="space-y-4">
-            <div>
-              <label className="block text-base font-bold text-gray-700 mb-1.5">
-                Nama Lengkap <span className="text-red-400">*</span>
-              </label>
-              <input
-                type="text" value={nama}
-                onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
-                placeholder="Nama lengkap sesuai KTP"
-                className={`w-full border-2 rounded-xl px-4 py-3.5 text-base focus:outline-none focus:border-orange-400 transition ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
-              />
-              {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                NIP <span className="text-red-400">*</span>
-              </label>
-              <input
-                type="text" value={nip}
-                onChange={e => { setNip(e.target.value); setFormErrors(p => ({ ...p, nip: '' })) }}
-                placeholder="NIP"
-                className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition ${formErrors.nip ? 'border-red-400' : 'border-gray-200'}`}
-              />
-              {formErrors.nip && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nip}</p>}
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Unit Kerja <span className="text-red-400">*</span>
-              </label>
-              <select
-                value={unitKerja}
-                onChange={e => { setUnitKerja(e.target.value); setFormErrors(p => ({ ...p, unitKerja: '' })) }}
-                className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-400 transition bg-white ${formErrors.unitKerja ? 'border-red-400' : 'border-gray-200'}`}
-              >
-                <option value="">-- Pilih Unit Kerja --</option>
-                {unitKerjaOptions.map(g => (
-                  <optgroup key={g.group} label={g.group}>
-                    {g.options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                  </optgroup>
-                ))}
-              </select>
-              {formErrors.unitKerja && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.unitKerja}</p>}
-            </div>
-          </div>
-
-          <button
-            onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-            className="mt-6 w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-orange-200"
-          >
-            Mulai Tes →
-          </button>
-        </div>
+  /* ── FORM ── */
+  if (step === 'form') return (
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px var(--px)' }}>
+      <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
       </div>
-    )
-  }
+      <div className="anim-up" style={{ width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1 }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <Logo size="sm" dark />
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes Gaya Manajemen MSDT</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>64 soal · ~20 menit</p>
+        </div>
+        <div className="dark-card" style={{ padding: '32px' }}>
+          <div className="section-rule" style={{ marginBottom: '28px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Data Diri</span><span className="section-rule-line" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div>
+              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({...p, nama: ''})) }} placeholder="Nama lengkap" autoComplete="name" />
+              {formErrors.nama && <p style={S_ERR}>{formErrors.nama}</p>}
+            </div>
+            <div>
+              <label style={S_LABEL}>Email <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
+              {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div>
+                <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
+                <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
+                {formErrors.usia && <p style={S_ERR}>{formErrors.usia}</p>}
+              </div>
+              <div>
+                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#f87171' }}>*</span></label>
+                <select className="field" value={jenisKelamin} onChange={e => { setJenisKelamin(e.target.value); setFormErrors(p => ({...p, jenisKelamin: ''})) }}>
+                  <option value="">— Pilih —</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+                {formErrors.jenisKelamin && <p style={S_ERR}>{formErrors.jenisKelamin}</p>}
+              </div>
+            </div>
+            <button
+              onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
+              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+            >
+              Mulai Tes →
+            </button>
+          </div>
+        </div>
+        <button onClick={() => navigate('/')} style={{ display: 'block', margin: '20px auto 0', color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>
+          ← Kembali ke beranda
+        </button>
+      </div>
+    </div>
+  )
 
-  /* ═══════════════════════════════════════════════
-     STEP: TES
-  ═══════════════════════════════════════════════ */
+  /* ── TES ── */
   return (
-    <div className="min-h-screen bg-slate-50">
-
-      {/* Sticky progress header */}
-      <div className="sticky top-0 z-10 bg-white border-b border-gray-200 shadow-sm px-6 py-3">
-        <div className="max-w-2xl mx-auto flex justify-between items-center gap-4">
+    <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+        <div style={{ maxWidth: '680px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
-            <p className="font-bold text-gray-800 text-sm">{nama}</p>
-            <p className="text-sm text-gray-400">MSDT · {answered}/64 terjawab</p>
+            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes MSDT</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {answered}/64 terjawab</p>
           </div>
-          <div className="flex-1 max-w-xs">
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
-              <div
-                className="bg-orange-500 h-2.5 rounded-full transition-all duration-500"
-                style={{ width: `${progress}%` }}
-              />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '120px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', background: 'var(--accent)', width: `${progress}%`, transition: 'width 0.5s' }} />
             </div>
+            <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px' }}>{Math.round(progress)}%</span>
           </div>
-          <span className="text-sm font-bold text-orange-600 w-10 text-right">{Math.round(progress)}%</span>
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-8">
-
-        {/* Instruksi */}
-        <div className="bg-orange-50 border border-orange-200 rounded-2xl p-5 mb-6">
-          <h2 className="font-bold text-orange-900 mb-2">Petunjuk Pengisian</h2>
-          <p className="text-sm text-orange-800 leading-relaxed">
-            Untuk setiap nomor, pilih <strong>satu pernyataan (A atau B)</strong> yang paling menggambarkan
-            cara Anda biasanya bertindak sebagai pemimpin/atasan. Tidak ada jawaban benar atau salah.
-            Kerjakan berdasarkan kondisi nyata, bukan kondisi ideal.
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: '28px var(--px)' }}>
+        <div className="dark-card" style={{ padding: '16px 20px', marginBottom: '24px' }}>
+          <p style={{ color: 'var(--text-sub)', fontSize: '13px', lineHeight: '1.65' }}>
+            Pilih satu pernyataan <strong style={{ color: 'var(--text)' }}>(A atau B)</strong> yang paling menggambarkan cara Anda biasanya bertindak sebagai pemimpin. Kerjakan berdasarkan kondisi nyata, bukan ideal.
           </p>
         </div>
 
-        {/* Daftar soal */}
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {soal.map(s => {
             const val  = jawaban[s.id]
             const done = val !== undefined
-
             return (
-              <div
-                id={`soal-msdt-${s.id}`}
-                key={s.id}
-                className={`bg-white rounded-2xl shadow-sm border-2 p-5 transition-all ${done ? 'border-orange-200' : 'border-gray-100'}`}
-              >
-                {/* Nomor soal */}
-                <div className="flex items-center gap-2 mb-4">
-                  <span className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${done ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-500'}`}>
-                    {s.id}
-                  </span>
-                  <span className="text-sm text-gray-400 font-medium">Pilih salah satu pernyataan berikut:</span>
+              <div id={`soal-msdt-${s.id}`} key={s.id} className="dark-card" style={{ padding: '20px', borderColor: done ? 'var(--accent-border)' : 'var(--border)' }}>
+                <p style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.7 }}>
+                  {String(s.id).padStart(2, '0')}
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {[['a', s.a], ['b', s.b]].map(([key, teks]) => (
+                    <button key={key} onClick={() => setJawaban(j => ({...j, [s.id]: key}))} className={`answer-btn ${val === key ? 'selected' : ''}`} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                      <span style={{ flexShrink: 0, width: '22px', height: '22px', borderRadius: '50%', border: '1px solid ' + (val === key ? 'var(--accent)' : 'var(--border)'), background: val === key ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '10px', color: val === key ? '#09090f' : 'var(--text-muted)', marginTop: '1px' }}>
+                        {key.toUpperCase()}
+                      </span>
+                      <span style={{ fontSize: '14px', lineHeight: '1.6', textAlign: 'left', color: val === key ? 'var(--text)' : 'var(--text-sub)' }}>{teks}</span>
+                    </button>
+                  ))}
                 </div>
-
-                {/* Pilihan A */}
-                <button
-                  onClick={() => setJawaban(j => ({ ...j, [s.id]: 'a' }))}
-                  className={`w-full text-left border-2 rounded-xl px-4 py-3.5 mb-2 transition-all text-sm leading-relaxed ${
-                    val === 'a'
-                      ? 'border-orange-500 bg-orange-50 text-orange-900 font-medium'
-                      : 'border-gray-200 bg-gray-50 text-gray-700 hover:border-orange-300 hover:bg-orange-50/50'
-                  }`}
-                >
-                  <span className={`inline-block w-5 h-5 rounded-full border-2 mr-2 text-center text-xs font-black leading-4 flex-shrink-0 align-middle ${
-                    val === 'a' ? 'border-orange-500 bg-orange-500 text-white' : 'border-gray-300 text-gray-400'
-                  }`} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', verticalAlign: 'middle' }}>A</span>
-                  {s.a}
-                </button>
-
-                {/* Pilihan B */}
-                <button
-                  onClick={() => setJawaban(j => ({ ...j, [s.id]: 'b' }))}
-                  className={`w-full text-left border-2 rounded-xl px-4 py-3.5 transition-all text-sm leading-relaxed ${
-                    val === 'b'
-                      ? 'border-amber-500 bg-amber-50 text-amber-900 font-medium'
-                      : 'border-gray-200 bg-gray-50 text-gray-700 hover:border-amber-300 hover:bg-amber-50/50'
-                  }`}
-                >
-                  <span className={`inline-block w-5 h-5 rounded-full border-2 mr-2 text-center text-xs font-black leading-4 flex-shrink-0 align-middle ${
-                    val === 'b' ? 'border-amber-500 bg-amber-500 text-white' : 'border-gray-300 text-gray-400'
-                  }`} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', verticalAlign: 'middle' }}>B</span>
-                  {s.b}
-                </button>
               </div>
             )
           })}
         </div>
 
-        {/* Error banner */}
         {saveError && (
-          <div className="mt-6 bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
-            ⚠ {saveError}
+          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#f87171', fontSize: '14px', marginTop: '20px' }}>
+            {saveError}
           </div>
         )}
 
-        {/* Submit */}
-        <div className="mt-8 pb-8">
-          {answered < 64 && (
-            <p className="text-center text-sm text-amber-600 font-medium mb-3">
-              ⚠️ Masih {64 - answered} soal belum dijawab
-            </p>
-          )}
+        <div style={{ marginTop: '28px' }}>
+          {answered < 64 && <p style={{ textAlign: 'center', color: '#fbbf24', fontSize: '13px', marginBottom: '12px' }}>Masih {64 - answered} soal belum dijawab</p>}
           <button
             onClick={handleSubmit}
             disabled={loading}
-            className={`w-full font-bold py-4 rounded-2xl text-lg transition-all ${
-              answered === 64 && !loading
-                ? 'bg-orange-600 hover:bg-orange-700 text-white shadow-lg shadow-orange-200'
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            }`}
+            style={{ width: '100%', background: answered === 64 ? 'var(--accent)' : 'var(--surface-2)', color: answered === 64 ? '#09090f' : 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: '1px solid ' + (answered === 64 ? 'var(--accent)' : 'var(--border)'), cursor: answered === 64 && !loading ? 'pointer' : 'not-allowed', opacity: loading ? 0.6 : 1 }}
           >
-            {loading
-              ? 'Menyimpan...'
-              : answered === 64
-                ? 'Lihat Hasil →'
-                : `${answered} / 64 terjawab`}
+            {loading ? 'Menyimpan...' : answered === 64 ? 'Lihat Hasil →' : `${answered} / 64 terjawab`}
           </button>
         </div>
       </div>

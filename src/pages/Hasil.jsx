@@ -490,10 +490,10 @@ function Hasil() {
   const info = deskripsiMBTI[tipe]
 
   if (!info) return (
-    <div className="min-h-screen bg-blue-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow p-10 text-center">
-        <p className="text-gray-500">Tipe tidak ditemukan.</p>
-        <button onClick={() => navigate('/tes')} className="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg">Ulangi Tes</button>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+      <div className="dark-card" style={{ padding: '40px', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+        <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '20px' }}>Tipe tidak ditemukan.</p>
+        <button onClick={() => navigate('/tes')} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>Ulangi Tes</button>
       </div>
     </div>
   )
@@ -502,16 +502,16 @@ function Hasil() {
   const ref = mbtiRef[tipe] || {}
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }} className="print:bg-white">
       {/* Sticky Top Bar */}
-      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-gray-100 px-4 py-3 print:hidden">
-        <div className="max-w-3xl mx-auto flex items-center justify-between">
-          <button onClick={() => navigate('/tes')} className="text-sm text-gray-400 hover:text-blue-600 transition">
+      <div className="sticky top-0 z-10 print:hidden" style={{ background: 'rgba(9,9,15,0.92)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <button onClick={() => navigate('/tes')} style={{ color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>
             ← Ulangi Tes
           </button>
-          <span className="text-xs font-bold text-blue-700 tracking-widest uppercase">MBTI · Platform Asesmen AssesIN</span>
-          <button onClick={() => window.print()} className="text-sm bg-blue-600 text-white px-3 py-1.5 rounded-lg hover:bg-blue-700 transition">
-            🖨️ Cetak
+          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent)', textTransform: 'uppercase' }}>MBTI · AssesIN</span>
+          <button onClick={() => window.print()} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '6px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
+            Cetak
           </button>
         </div>
       </div>

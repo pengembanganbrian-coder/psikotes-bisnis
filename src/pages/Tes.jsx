@@ -3,13 +3,6 @@ import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 
-const unitKerjaOptions = [
-  { group: 'Perusahaan Swasta', options: ['Manufaktur & Industri', 'Teknologi & IT', 'Perbankan & Keuangan', 'Ritel & Consumer Goods', 'Properti & Konstruksi', 'Kesehatan & Farmasi', 'Media & Komunikasi', 'Transportasi & Logistik', 'Energi & Pertambangan', 'Konsultan & Profesional', 'Lainnya'] },
-  { group: 'BUMN / BUMD', options: ['Perbankan BUMN', 'Energi & Pertambangan BUMN', 'Telekomunikasi BUMN', 'Infrastruktur & Konstruksi BUMN', 'Pertanian & Pangan BUMN', 'BUMD Daerah', 'Lainnya'] },
-  { group: 'Instansi Pemerintah', options: ['Kementerian / Lembaga', 'Pemerintah Daerah', 'TNI / Polri', 'Badan / Komisi Negara', 'Lainnya'] },
-  { group: 'Pendidikan & Penelitian', options: ['Universitas / Perguruan Tinggi', 'Sekolah / Madrasah', 'Lembaga Pelatihan', 'Lembaga Penelitian', 'Lainnya'] },
-  { group: 'Lainnya', options: ['NGO / Yayasan / Ormas', 'Startup', 'Wirausaha / Freelance', 'Pelajar / Mahasiswa', 'Lainnya'] },
-]
 const soal = [
   // EI - Bagian 1 (15 soal)
   { id: 1, kiri: "Lebih memilih berkomunikasi dengan menulis.", kanan: "Lebih memilih berkomunikasi dengan berbicara.", dimensi: "EI", arahKiri: "I", arahKanan: "E" },
@@ -112,41 +105,42 @@ const dimensiLabel = { EI: 'E / I', SN: 'S / N', TF: 'T / F', JP: 'J / P' }
 const dimensiUrutan = ['EI', 'SN', 'TF', 'JP']
 const dimensiNama = { EI: 'Extraversion / Introversion', SN: 'Sensing / iNtuition', TF: 'Thinking / Feeling', JP: 'Judging / Perceiving' }
 
+const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
+const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
+
 function Tes() {
-  const [step, setStep] = useState('form')
-  const [nama, setNama] = useState('')
-  const [email, setEmail] = useState('')
-  const [jabatan, setJabatan] = useState('')
-  const [jawaban, setJawaban] = useState({})
-  const [loading, setLoading] = useState(false)
+  const [step, setStep]               = useState('form')
+  const [nama, setNama]               = useState('')
+  const [email, setEmail]             = useState('')
+  const [usia, setUsia]               = useState('')
+  const [jenisKelamin, setJenisKelamin] = useState('')
+  const [jawaban, setJawaban]         = useState({})
+  const [loading, setLoading]         = useState(false)
   const [dimensiAktif, setDimensiAktif] = useState(0)
-  const [formErrors, setFormErrors] = useState({})
+  const [formErrors, setFormErrors]   = useState({})
   const [submitError, setSubmitError] = useState('')
   const navigate = useNavigate()
 
   const handleJawab = (id, val) => setJawaban(prev => ({ ...prev, [id]: val }))
 
   const soalDimensiAktif = soal.filter(s => s.dimensi === dimensiUrutan[dimensiAktif])
-  const sudahDijawab = soalDimensiAktif.filter(s => jawaban[s.id]).length
-  const totalDimensi = soalDimensiAktif.length
+  const sudahDijawab     = soalDimensiAktif.filter(s => jawaban[s.id]).length
+  const totalDimensi     = soalDimensiAktif.length
 
   const validateForm = () => {
     const errs = {}
-    if (!nama.trim()) errs.nama = 'Nama lengkap wajib diisi.'
-    if (!email.trim()) errs.email = 'NIP wajib diisi.'
-    if (!jabatan) errs.jabatan = 'Unit kerja wajib dipilih.'
+    if (!nama.trim())  errs.nama  = 'Nama lengkap wajib diisi.'
+    if (!email.trim()) errs.email = 'Email wajib diisi.'
+    if (!usia)         errs.usia  = 'Usia wajib diisi.'
+    if (!jenisKelamin) errs.jenisKelamin = 'Jenis kelamin wajib dipilih.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
   }
 
   const handleNext = () => {
     if (sudahDijawab < totalDimensi) {
-      // scroll ke soal pertama yang belum dijawab
       const belum = soalDimensiAktif.find(s => !jawaban[s.id])
-      if (belum) {
-        const el = document.getElementById(`soal-mbti-${belum.id}`)
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }
+      if (belum) document.getElementById(`soal-mbti-${belum.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
       return
     }
     if (dimensiAktif < 3) setDimensiAktif(prev => prev + 1)
@@ -156,6 +150,7 @@ function Tes() {
   const handleSubmit = async () => {
     setLoading(true)
     setSubmitError('')
+    const jabatan = `${usia} th · ${jenisKelamin}`
     const { data: pesertaData, error } = await supabase
       .from('peserta')
       .insert([{ nama, email, jabatan }])
@@ -168,223 +163,155 @@ function Tes() {
     const pesertaId = pesertaData[0].id
     const { tipe, skor } = hitungMBTI(jawaban)
     await supabase.from('hasil_tes').insert([{
-      peserta_id: pesertaId,
-      tipe_mbti: tipe,
-      skor_e: skor.e, skor_i: skor.i,
-      skor_s: skor.s, skor_n: skor.n,
-      skor_t: skor.t, skor_f: skor.f,
-      skor_j: skor.j, skor_p: skor.p,
+      peserta_id: pesertaId, tipe_mbti: tipe,
+      skor_e: skor.e, skor_i: skor.i, skor_s: skor.s, skor_n: skor.n,
+      skor_t: skor.t, skor_f: skor.f, skor_j: skor.j, skor_p: skor.p,
     }])
     navigate('/hasil', { state: { tipe, nama, pesertaId } })
     setLoading(false)
   }
 
-  /* ── FORM DATA DIRI ── */
+  /* ── FORM ── */
   if (step === 'form') return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px var(--px)' }}>
+      <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+      </div>
 
-        <div className="text-center mb-6">
-          <div className="flex items-center gap-2 justify-center mb-1">
-            <Logo size="sm" />
-          </div>
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-800 rounded-2xl shadow-lg shadow-blue-200 mb-4">
-            <span className="text-white font-black text-sm tracking-wide">MBTI</span>
-          </div>
-          <h1 className="text-xl font-black text-gray-800">Tes Kepribadian MBTI</h1>
-          <p className="text-gray-500 text-sm mt-1">AssesIN · 60 soal · ~15 menit</p>
+      <div className="anim-up" style={{ width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1 }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <Logo size="sm" dark />
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes Kepribadian MBTI</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>60 soal · ~15 menit</p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
-          <div className="bg-gradient-to-r from-blue-700 to-blue-600 px-7 py-5">
-            <h2 className="font-bold text-white text-base">Data Diri Peserta</h2>
-            <p className="text-blue-200 text-xs mt-0.5">Lengkapi seluruh data sebelum memulai tes</p>
+        <div className="dark-card" style={{ padding: '32px' }}>
+          <div className="section-rule" style={{ marginBottom: '28px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Data Diri</span><span className="section-rule-line" />
           </div>
 
-          <div className="px-7 py-6 space-y-5">
-
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <label className="block text-base font-bold text-gray-700 mb-1.5">
-                Nama Lengkap <span className="text-red-400">*</span>
-              </label>
-              <input
-                value={nama}
-                onChange={e => { setNama(e.target.value); setFormErrors(p => ({ ...p, nama: '' })) }}
-                className={`w-full border bg-gray-50 rounded-xl px-4 py-3.5 text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.nama ? 'border-red-400' : 'border-gray-200'}`}
-                placeholder="Nama lengkap sesuai KTP"
-              />
-              {formErrors.nama && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.nama}</p>}
+              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({...p, nama: ''})) }} placeholder="Nama lengkap" autoComplete="name" />
+              {formErrors.nama && <p style={S_ERR}>{formErrors.nama}</p>}
             </div>
-
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                NIP <span className="text-red-400">*</span>
-              </label>
-              <input
-                value={email}
-                onChange={e => { setEmail(e.target.value); setFormErrors(p => ({ ...p, email: '' })) }}
-                className={`w-full border bg-gray-50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all placeholder-gray-400 ${formErrors.email ? 'border-red-400' : 'border-gray-200'}`}
-                placeholder="NIP"
-              />
-              {formErrors.email && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.email}</p>}
+              <label style={S_LABEL}>Email <span style={{ color: '#f87171' }}>*</span></label>
+              <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
+              {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
             </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-                Unit Kerja <span className="text-red-400">*</span>
-              </label>
-              <div className="relative">
-                <select
-                  value={jabatan}
-                  onChange={e => { setJabatan(e.target.value); setFormErrors(p => ({ ...p, jabatan: '' })) }}
-                  className={`w-full appearance-none border bg-gray-50 rounded-xl px-4 py-3 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all cursor-pointer text-gray-700 ${formErrors.jabatan ? 'border-red-400' : 'border-gray-200'}`}
-                >
-                  <option value="">-- Pilih Unit Kerja --</option>
-                  {unitKerjaOptions.map(group => (
-                    <optgroup key={group.group} label={group.group}>
-                      {group.options.map(opt => (
-                        <option key={opt} value={opt}>{opt}</option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div>
+                <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
+                <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
+                {formErrors.usia && <p style={S_ERR}>{formErrors.usia}</p>}
               </div>
-              {formErrors.jabatan && <p className="text-red-500 text-xs mt-1">⚠ {formErrors.jabatan}</p>}
+              <div>
+                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#f87171' }}>*</span></label>
+                <select className="field" value={jenisKelamin} onChange={e => { setJenisKelamin(e.target.value); setFormErrors(p => ({...p, jenisKelamin: ''})) }}>
+                  <option value="">— Pilih —</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
+                </select>
+                {formErrors.jenisKelamin && <p style={S_ERR}>{formErrors.jenisKelamin}</p>}
+              </div>
             </div>
-
             <button
               onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-blue-200 mt-1"
+              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
+              onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
+              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
               Mulai Tes MBTI →
             </button>
           </div>
         </div>
 
-        <button onClick={() => navigate('/')} className="w-full text-center text-xs text-gray-400 hover:text-gray-600 mt-4 transition-colors">
+        <button onClick={() => navigate('/')} style={{ display: 'block', margin: '20px auto 0', color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>
           ← Kembali ke beranda
         </button>
       </div>
     </div>
   )
 
-  /* ── HALAMAN SOAL ── */
+  /* ── SOAL ── */
+  const progress = (Object.keys(jawaban).length / 60) * 100
+
   return (
-    <div className="min-h-screen bg-slate-50 py-8 px-4">
-      <div className="max-w-3xl mx-auto">
-
-        {/* Header */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 mb-5">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center flex-shrink-0">
-              <span className="text-white font-black text-xs">MBTI</span>
-            </div>
-            <div>
-              <h1 className="font-bold text-gray-800 text-sm">Tes MBTI — AssesIN</h1>
-              <p className="text-sm text-gray-500">Halo <strong>{nama}</strong> · Pilih yang paling sesuai dengan dirimu</p>
-            </div>
+    <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
+      {/* Sticky header */}
+      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+        <div style={{ maxWidth: '720px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+          <div>
+            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes MBTI</p>
+            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Halo {nama} · {Object.keys(jawaban).length}/60 soal dijawab</p>
           </div>
-
-          <div className="flex gap-2 mb-3">
-            {dimensiUrutan.map((d, idx) => (
-              <div key={d} className={`flex-1 text-center text-xs py-1.5 rounded-xl font-bold transition-all ${
-                idx === dimensiAktif
-                  ? 'bg-blue-600 text-white shadow-md shadow-blue-200'
-                  : idx < dimensiAktif
-                  ? 'bg-green-500 text-white'
-                  : 'bg-gray-100 text-gray-400'
-              }`}>
-                {idx < dimensiAktif ? '✓ ' : ''}{dimensiLabel[d]}
-              </div>
-            ))}
-          </div>
-
-          <div className="flex justify-between items-center mb-2">
-            <p className="text-sm text-gray-500">{dimensiNama[dimensiUrutan[dimensiAktif]]}</p>
-            <span className="text-sm font-semibold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-              {sudahDijawab}/{totalDimensi} dijawab
-            </span>
-          </div>
-          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
-              style={{ width: `${(sudahDijawab / totalDimensi) * 100}%` }}
-            />
+          <div style={{ flex: 1, maxWidth: '180px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', background: 'var(--accent)', width: `${progress}%`, transition: 'width 0.5s' }} />
           </div>
         </div>
+      </div>
 
-        {/* Soal */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-5">
-          <p className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-5 pb-3 border-b border-gray-50">
-            Pilih <span className="text-blue-600">satu</span> pernyataan yang lebih dominan sesuai dirimu
-          </p>
+      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '28px var(--px)' }}>
 
-          {soalDimensiAktif.map((s, idx) => (
-            <div id={`soal-mbti-${s.id}`} key={s.id} className={`mb-5 ${idx > 0 ? 'pt-5 border-t border-gray-50' : ''}`}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="w-6 h-6 bg-blue-50 text-blue-600 text-xs font-bold rounded-lg flex items-center justify-center flex-shrink-0">
-                  {idx + 1}
-                </span>
-                <p className="text-sm text-gray-400 font-medium">Pernyataan {idx + 1}</p>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  onClick={() => handleJawab(s.id, 'kiri')}
-                  className={`p-4 rounded-xl border-2 text-sm text-left leading-relaxed transition-all duration-200 ${
-                    jawaban[s.id] === 'kiri'
-                      ? 'border-blue-500 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                      : 'border-gray-100 bg-gray-50 hover:border-blue-200 hover:bg-white text-gray-700'
-                  }`}
-                >
-                  {jawaban[s.id] === 'kiri' && <span className="block text-blue-500 text-xs font-black mb-1.5">✓ DIPILIH</span>}
-                  {s.kiri}
-                </button>
-                <button
-                  onClick={() => handleJawab(s.id, 'kanan')}
-                  className={`p-4 rounded-xl border-2 text-sm text-left leading-relaxed transition-all duration-200 ${
-                    jawaban[s.id] === 'kanan'
-                      ? 'border-blue-500 bg-blue-50 text-blue-800 font-semibold shadow-sm'
-                      : 'border-gray-100 bg-gray-50 hover:border-blue-200 hover:bg-white text-gray-700'
-                  }`}
-                >
-                  {jawaban[s.id] === 'kanan' && <span className="block text-blue-500 text-xs font-black mb-1.5">✓ DIPILIH</span>}
-                  {s.kanan}
-                </button>
-              </div>
+        {/* Dimension tabs */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '28px' }}>
+          {dimensiUrutan.map((d, idx) => (
+            <div key={d} className={`dim-tab ${idx === dimensiAktif ? 'active' : idx < dimensiAktif ? 'done' : ''}`}>
+              {idx < dimensiAktif ? '✓ ' : ''}{dimensiLabel[d]}
             </div>
           ))}
         </div>
 
-        {/* Error banner */}
+        <p style={{ color: 'var(--text-muted)', fontSize: '12px', letterSpacing: '0.06em', marginBottom: '6px' }}>{dimensiNama[dimensiUrutan[dimensiAktif]]}</p>
+        <div style={{ height: '2px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden', marginBottom: '24px' }}>
+          <div style={{ height: '100%', background: 'var(--accent)', width: `${(sudahDijawab / totalDimensi) * 100}%`, transition: 'width 0.4s' }} />
+        </div>
+
+        <p style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '20px' }}>
+          Pilih satu pernyataan yang lebih sesuai dengan dirimu
+        </p>
+
+        {soalDimensiAktif.map((s, idx) => (
+          <div id={`soal-mbti-${s.id}`} key={s.id} style={{ marginBottom: '16px', paddingTop: idx > 0 ? '16px' : 0, borderTop: idx > 0 ? '1px solid var(--border)' : 'none' }}>
+            <p style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '12px', opacity: 0.7 }}>
+              {String(idx + 1).padStart(2, '0')}
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              {(['kiri', 'kanan']).map(sisi => (
+                <button key={sisi} onClick={() => handleJawab(s.id, sisi)} className={`answer-btn ${jawaban[s.id] === sisi ? 'selected' : ''}`}>
+                  {jawaban[s.id] === sisi && <span style={{ display: 'block', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '8px' }}>✓ DIPILIH</span>}
+                  {s[sisi]}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+
         {submitError && (
-          <div className="mb-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 text-sm text-red-700">
-            ⚠ {submitError}
+          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#f87171', fontSize: '14px', marginBottom: '16px' }}>
+            {submitError}
           </div>
         )}
 
-        {/* Peringatan soal belum dijawab */}
         {sudahDijawab < totalDimensi && (
-          <p className="text-center text-sm text-amber-600 font-medium mb-3">
-            ⚠ Masih {totalDimensi - sudahDijawab} pertanyaan belum dijawab di bagian ini
+          <p style={{ textAlign: 'center', color: '#fbbf24', fontSize: '13px', marginBottom: '12px' }}>
+            Masih {totalDimensi - sudahDijawab} pertanyaan belum dijawab
           </p>
         )}
 
-        {/* Tombol navigasi */}
         <button
           onClick={handleNext}
           disabled={loading}
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3.5 rounded-xl transition-all duration-200 shadow-lg shadow-blue-200 disabled:opacity-60 disabled:cursor-not-allowed"
+          style={{ width: '100%', background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, marginTop: '8px' }}
         >
-          {loading ? '⏳ Menyimpan hasil...' : dimensiAktif < 3 ? `Lanjut ke Bagian ${dimensiAktif + 2} →` : '✓ Selesai & Lihat Hasil'}
+          {loading ? 'Menyimpan...' : dimensiAktif < 3 ? `Lanjut ke Bagian ${dimensiAktif + 2} →` : 'Selesai & Lihat Hasil →'}
         </button>
 
-        <p className="text-center text-xs text-gray-400 mt-4">
-          Bagian {dimensiAktif + 1} dari 4 · {Object.keys(jawaban).length} dari 60 soal dijawab
+        <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '12px', marginTop: '16px' }}>
+          Bagian {dimensiAktif + 1} dari 4 · {sudahDijawab}/{totalDimensi} dijawab
         </p>
       </div>
     </div>

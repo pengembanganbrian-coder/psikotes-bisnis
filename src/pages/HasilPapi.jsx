@@ -292,11 +292,10 @@ export default function HasilPapi() {
 
   if (!state?.scores) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-purple-50">
-        <div className="text-center">
-          <p className="text-gray-600 mb-4">Data hasil tidak ditemukan.</p>
-          <button onClick={() => navigate('/tes-papi')}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg">
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div className="dark-card" style={{ padding: '40px', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '20px' }}>Data hasil tidak ditemukan. Silakan kerjakan tes terlebih dahulu.</p>
+          <button onClick={() => navigate('/tes-papi')} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
             Kembali ke Tes
           </button>
         </div>
@@ -337,16 +336,17 @@ export default function HasilPapi() {
   const handlePrint = () => window.print()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-indigo-50 print:bg-white">
-      {/* ── Header ── */}
-      <div className="bg-gradient-to-r from-purple-700 to-indigo-600 text-white py-8 px-4 print:py-4">
-        <div className="max-w-4xl mx-auto text-center relative">
-          <p className="text-purple-200 text-sm mb-1">AssesIN — Platform Asesmen Psikologi</p>
-          <h1 className="text-2xl font-bold">Laporan PAPI Kostick</h1>
-          <p className="text-purple-100 mt-1 text-sm">Personality and Preference Inventory</p>
-          <button onClick={handlePrint}
-            className="print:hidden absolute right-0 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2">
-            🖨️ Cetak
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }} className="print:bg-white">
+      {/* Header */}
+      <div style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '28px var(--px)' }} className="print:py-4">
+        <div style={{ maxWidth: '900px', margin: '0 auto', position: 'relative' }}>
+          <div className="section-rule print:hidden" style={{ marginBottom: '20px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Laporan PAPI Kostick</span><span className="section-rule-line" />
+          </div>
+          <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '26px', color: 'var(--text)', marginBottom: '4px' }}>Laporan PAPI Kostick</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Personality and Preference Inventory</p>
+          <button onClick={handlePrint} className="print:hidden" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
+            Cetak
           </button>
         </div>
       </div>

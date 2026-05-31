@@ -269,16 +269,16 @@ function HasilDisc() {
   const maxChange = Math.max(...changeData.map(d => Math.abs(d.val)), 1)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-emerald-50 print:bg-white">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }} className="print:bg-white">
       {/* Sticky Top Bar */}
-      <div className="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-gray-100 px-4 py-3 print:hidden">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <button onClick={() => navigate('/tes-disc')} className="text-sm text-gray-400 hover:text-green-600 transition">
+      <div className="sticky top-0 z-10 print:hidden" style={{ background: 'rgba(9,9,15,0.92)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <button onClick={() => navigate('/tes-disc')} style={{ color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>
             ← Ulangi Tes
           </button>
-          <span className="text-xs font-bold text-green-700 tracking-widest uppercase">DISC · Platform Asesmen AssesIN</span>
-          <button onClick={() => window.print()} className="text-sm bg-green-600 text-white px-3 py-1.5 rounded-lg hover:bg-green-700 transition">
-            🖨️ Cetak
+          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent)', textTransform: 'uppercase' }}>DISC · AssesIN</span>
+          <button onClick={() => window.print()} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '6px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
+            Cetak
           </button>
         </div>
       </div>

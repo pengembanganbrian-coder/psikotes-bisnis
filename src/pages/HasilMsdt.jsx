@@ -107,15 +107,10 @@ export default function HasilMsdt() {
   /* Guard: state tidak ada */
   if (!state?.hasil) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-2xl shadow p-8 text-center max-w-md">
-          <p className="text-4xl mb-4">🔍</p>
-          <p className="text-gray-600 mb-2 font-semibold">Data hasil tidak ditemukan.</p>
-          <p className="text-gray-400 text-sm mb-6">Silakan kerjakan tes terlebih dahulu.</p>
-          <button
-            onClick={() => navigate('/tes-msdt')}
-            className="bg-orange-600 text-white px-6 py-2.5 rounded-xl hover:bg-orange-700 transition font-semibold"
-          >
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div className="dark-card" style={{ padding: '40px', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '20px' }}>Data hasil tidak ditemukan. Silakan kerjakan tes terlebih dahulu.</p>
+          <button onClick={() => navigate('/tes-msdt')} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
             Kembali ke Tes
           </button>
         </div>
@@ -140,24 +135,19 @@ export default function HasilMsdt() {
   const gtPct = Math.min(100, Math.max(0, (grandTotal / 50) * 100))
 
   return (
-    <div className="min-h-screen bg-slate-100 pb-12">
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }}>
 
-      {/* ── Header ────────────────────────────────────────────────── */}
-      <div className={`bg-gradient-to-r ${w.grad} text-white px-6 py-10`}>
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="flex items-center gap-2">
-              <Logo size="sm" dark />
-            </div>
-            <p className="text-xs font-medium opacity-75">AssesIN — Platform Asesmen Psikologi</p>
+      {/* Header */}
+      <div style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '28px var(--px)' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
+          <div className="section-rule" style={{ marginBottom: '20px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Laporan MSDT</span><span className="section-rule-line" />
           </div>
-          <h1 className="text-3xl font-black mt-5 mb-1">Laporan MSDT</h1>
-          <p className="text-sm opacity-80">Management Style Diagnostic Test</p>
-          <div className="mt-5 flex flex-wrap gap-x-6 gap-y-1.5 text-sm opacity-90">
-            <span>👤 <strong>{nama}</strong></span>
-            {nip       && <span>🪪 {nip}</span>}
-            {unitKerja && <span>🏢 {unitKerja}</span>}
-            <span>📅 {tanggal}</span>
+          <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '26px', color: 'var(--text)', marginBottom: '6px' }}>Laporan MSDT</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '14px' }}>Management Style Diagnostic Test</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
+            <span style={{ color: 'var(--text-sub)', fontSize: '13px' }}>👤 <strong style={{ color: 'var(--text)' }}>{nama}</strong></span>
+            <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>📅 {tanggal}</span>
           </div>
         </div>
       </div>
@@ -193,14 +183,14 @@ export default function HasilMsdt() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
           {/* TO */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div className="dark-card" style={{ padding: '20px' }}>
             <div className="flex justify-between items-start mb-3">
               <div>
                 <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Task Orientation (TO)</p>
                 <p className="text-xs text-gray-400 mt-0.5">Orientasi pada tugas · range 3–19</p>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-black text-gray-800">{TO}</p>
+                <p className="text-3xl font-black">{TO}</p>
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${toTinggi ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
                   {toTinggi ? 'Tinggi' : 'Rendah'}
                 </span>
@@ -220,14 +210,14 @@ export default function HasilMsdt() {
           </div>
 
           {/* RO */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div className="dark-card" style={{ padding: '20px' }}>
             <div className="flex justify-between items-start mb-3">
               <div>
                 <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Relationship Orientation (RO)</p>
                 <p className="text-xs text-gray-400 mt-0.5">Orientasi pada hubungan · range 1–17</p>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-black text-gray-800">{RO}</p>
+                <p className="text-3xl font-black">{RO}</p>
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${roTinggi ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
                   {roTinggi ? 'Tinggi' : 'Rendah'}
                 </span>
@@ -247,14 +237,14 @@ export default function HasilMsdt() {
           </div>
 
           {/* E Score */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div className="dark-card" style={{ padding: '20px' }}>
             <div className="flex justify-between items-start mb-3">
               <div>
                 <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Skor Efektivitas (E)</p>
                 <p className="text-xs text-gray-400 mt-0.5">Konversi dari Grand Total · range 0–4</p>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-black text-gray-800">{E_score.toFixed(1)}</p>
+                <p className="text-3xl font-black">{E_score.toFixed(1)}</p>
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${eTinggi ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
                   {eTinggi ? 'Efektif (≥2.0)' : 'Kurang Efektif'}
                 </span>
@@ -274,14 +264,14 @@ export default function HasilMsdt() {
           </div>
 
           {/* Grand Total */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div className="dark-card" style={{ padding: '20px' }}>
             <div className="flex justify-between items-start mb-3">
               <div>
                 <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Grand Total</p>
                 <p className="text-xs text-gray-400 mt-0.5">TO + RO + E_raw + O_raw</p>
               </div>
               <div className="text-right">
-                <p className="text-3xl font-black text-gray-800">{grandTotal}</p>
+                <p className="text-3xl font-black">{grandTotal}</p>
                 <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-orange-100 text-orange-700">
                   Skor Total
                 </span>
@@ -302,8 +292,8 @@ export default function HasilMsdt() {
         </div>
 
         {/* ── Decision Tree Visual ───────────────────────────────── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-gray-50 px-6 py-3 border-b border-gray-100">
+        <div className="dark-card" style={{ overflow: 'hidden' }}>
+          <div style={{ background: 'var(--surface-2)', padding: '12px 24px', borderBottom: '1px solid var(--border)' }}>
             <h3 className="font-bold text-gray-700 text-sm">Peta Gaya Manajemen (Decision Tree)</h3>
           </div>
           <div className="p-6">
@@ -369,8 +359,8 @@ export default function HasilMsdt() {
         </div>
 
         {/* ── Ringkasan Skor ─────────────────────────────────────── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="bg-gray-50 px-6 py-3 border-b border-gray-100">
+        <div className="dark-card" style={{ overflow: 'hidden' }}>
+          <div style={{ background: 'var(--surface-2)', padding: '12px 24px', borderBottom: '1px solid var(--border)' }}>
             <h3 className="font-bold text-gray-700 text-sm">Ringkasan Skor</h3>
           </div>
           <table className="w-full text-sm">
