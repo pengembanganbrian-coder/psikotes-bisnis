@@ -4,6 +4,29 @@ import { useNavigate } from 'react-router-dom'
 
 const PAPI_SCALES = ['G','L','I','T','V','S','R','D','C','E','N','A','P','X','B','O','Z','K','F','W']
 
+/* ── Warna badge per jenis tes ─────────────────────────────────── */
+const BADGE = {
+  MBTI:           { bg: 'rgba(59,130,246,0.18)',   color: '#60a5fa'  },
+  DISC:           { bg: 'rgba(34,197,94,0.18)',    color: '#4ade80'  },
+  PAPI:           { bg: 'rgba(168,85,247,0.18)',   color: '#c084fc'  },
+  DASS:           { bg: 'rgba(20,184,166,0.18)',   color: '#2dd4bf'  },
+  'Love Language':{ bg: 'rgba(244,63,94,0.18)',    color: '#fb7185'  },
+  MSDT:           { bg: 'rgba(249,115,22,0.18)',   color: '#fb923c'  },
+}
+
+/* ── Tab accent per jenis tes ─────────────────────────────────── */
+const TAB_ACCENT = {
+  Semua:          '#d4a853',
+  MBTI:           '#60a5fa',
+  DISC:           '#4ade80',
+  PAPI:           '#c084fc',
+  DASS:           '#2dd4bf',
+  MSDT:           '#fb923c',
+  'Love Language':'#fb7185',
+}
+
+const DISC_COLORS = { D: '#ef4444', I: '#f59e0b', S: '#22c55e', C: '#3b82f6' }
+
 function Dashboard() {
   const [peserta, setPeserta]   = useState([])
   const [loading, setLoading]   = useState(true)
@@ -92,7 +115,8 @@ function Dashboard() {
 
   /* ── Export CSV ────────────────────────────────────────────── */
   const handleExportExcel = () => {
-    const rows = [['Nama', 'NIP/Email', 'Unit Kerja', 'Jenis Tes', 'Hasil', 'Tanggal']]
+    /* TODO: Hapus data test (nama seperti "aaa", "aa", "test") sebelum launch */
+    const rows = [['Nama', 'NIK / Email', 'Usia', 'Jenis Tes', 'Hasil', 'Tanggal']]
     peserta.forEach(p => {
       let hasil = '—'
       if (p.jenis === 'MBTI') hasil = p.hasil_tes?.[0]?.tipe_mbti  || 'Belum tes'
@@ -215,18 +239,23 @@ function Dashboard() {
     }
   }
 
-  /* ── Helpers UI ────────────────────────────────────────────── */
-  const jenisBadge = {
-    MBTI:           'bg-blue-100 text-blue-700',
-    DISC:           'bg-green-100 text-green-700',
-    PAPI:           'bg-purple-100 text-purple-700',
-    DASS:           'bg-teal-100 text-teal-700',
-    'Love Language':'bg-rose-100 text-rose-700',
-    MSDT:           'bg-orange-100 text-orange-700',
+  /* ── Test data detection ──────────────────────────────────── */
+  const isTestData = (p) => {
+    const n = (p.nama || '').trim().toLowerCase()
+    return n.length <= 3 || /^(.)\1+$/.test(n) || ['test','tes','aaa','bbb','ccc','xxx','asdf','qwerty'].includes(n)
   }
 
-  const discColors = { D: 'bg-red-500', I: 'bg-yellow-400', S: 'bg-green-500', C: 'bg-blue-500' }
+  const testEntries = peserta.filter(isTestData)
 
+  const handleHapusSemuaTest = async () => {
+    if (testEntries.length === 0) return
+    if (!confirm(`Hapus ${testEntries.length} data test? Tindakan ini tidak bisa dibatalkan.`)) return
+    for (const item of testEntries) {
+      await handleDelete(item)
+    }
+  }
+
+  /* ── Derived ───────────────────────────────────────────────── */
   const getHasil = (p) => {
     if (p.jenis === 'MBTI') return p.hasil_tes?.[0]?.tipe_mbti  || '—'
     if (p.jenis === 'DISC') return p.hasil_disc?.[0]?.profil    || '—'
@@ -246,28 +275,48 @@ function Dashboard() {
     p.nama.toLowerCase().includes(search.toLowerCase())
   )
 
+  /* ── Styles ────────────────────────────────────────────────── */
+  const S = {
+    page:      { minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' },
+    topbar:    { background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' },
+    topTitle:  { fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '15px', color: 'var(--text)', letterSpacing: '0.01em' },
+    topRight:  { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' },
+    btnAccent: { background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' },
+    btnGhost:  { background: 'transparent', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '12px', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer', whiteSpace: 'nowrap' },
+    btnDanger: { background: 'transparent', color: '#f87171', fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '12px', padding: '8px 14px', borderRadius: '8px', border: '1px solid rgba(248,113,113,0.3)', cursor: 'pointer', whiteSpace: 'nowrap' },
+    card:      { background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', overflow: 'hidden' },
+    fieldDark: { width: '100%', background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', fontSize: '13px', color: 'var(--text)', outline: 'none', boxSizing: 'border-box' },
+  }
+
   return (
-    <div className="min-h-screen bg-blue-50">
-      {/* Topbar */}
-      <div className="bg-white shadow px-8 py-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold text-blue-700">Dashboard Admin — Platform Asesmen AssesIN</h1>
-        <div className="flex gap-3 items-center">
-          <button onClick={handleExportExcel}
-            className="text-sm bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+    <div style={S.page}>
+
+      {/* ── Topbar ─────────────────────────────────────────────── */}
+      <div style={S.topbar}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '16px', color: 'var(--accent)', letterSpacing: '0.05em' }}>AssesIN</span>
+          <span style={{ width: '1px', height: '18px', background: 'var(--border)' }} />
+          <span style={S.topTitle}>Admin Dashboard</span>
+        </div>
+        <div style={S.topRight}>
+          <button onClick={handleExportExcel} style={S.btnAccent}>
             📥 Export CSV
           </button>
-          <button onClick={() => navigate('/job-profile')}
-            className="text-sm bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+          <button onClick={() => navigate('/job-profile')} style={{ ...S.btnGhost, color: 'var(--accent)', borderColor: 'var(--accent-border)' }}>
             💼 Job Profile
           </button>
-          <button onClick={() => setShowGantiPw(true)} className="text-sm text-gray-500 hover:underline">🔑 Ganti Password</button>
-          <button onClick={handleLogout} className="text-sm text-red-500 hover:underline">Logout</button>
+          <button onClick={() => setShowGantiPw(true)} style={S.btnGhost}>
+            🔑 Ganti Password
+          </button>
+          <button onClick={handleLogout} style={S.btnDanger}>
+            Logout
+          </button>
         </div>
       </div>
 
-      {/* ── Modal Ganti Password ── */}
+      {/* ── Modal Ganti Password ──────────────────────────────── */}
       {showGantiPw && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '360px' }}>
             <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '18px', color: 'var(--text)', marginBottom: '20px' }}>Ganti Password</h3>
             <form onSubmit={handleGantiPassword} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -296,309 +345,409 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto p-8 flex gap-6">
+      {/* ── Main Layout ──────────────────────────────────────── */}
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '24px 16px', display: 'flex', gap: '20px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
 
-        {/* ── Tabel ── */}
-        <div className="flex-1 bg-white rounded-2xl shadow p-6">
-          {/* Search */}
-          <div className="mb-4">
-            <input type="text" value={search}
+        {/* ── Tabel ──────────────────────────────────────────── */}
+        <div style={{ flex: 1, minWidth: '300px', ...S.card }}>
+
+          {/* Banner data test */}
+          {testEntries.length > 0 && (
+            <div style={{ padding: '12px 20px', background: 'rgba(248,113,113,0.08)', borderBottom: '1px solid rgba(248,113,113,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+              <p style={{ fontSize: '12px', color: '#f87171' }}>
+                ⚠️ <strong>{testEntries.length} data test</strong> terdeteksi — sebaiknya dihapus sebelum launch.
+              </p>
+              <button
+                onClick={handleHapusSemuaTest}
+                style={{ fontSize: '11px', fontWeight: 700, fontFamily: 'Syne, sans-serif', padding: '5px 14px', borderRadius: '6px', background: 'rgba(248,113,113,0.15)', color: '#f87171', border: '1px solid rgba(248,113,113,0.3)', cursor: 'pointer', whiteSpace: 'nowrap' }}
+              >
+                Hapus Semua Data Test
+              </button>
+            </div>
+          )}
+
+          {/* Search + judul */}
+          <div style={{ padding: '20px 20px 0' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '15px', color: 'var(--text)' }}>Daftar Peserta</h2>
+              <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 600 }}>
+                {filtered.length} peserta
+              </span>
+            </div>
+            <input
+              type="text"
+              value={search}
               onChange={e => { setSearch(e.target.value); setSelected(null) }}
-              placeholder="🔍 Cari nama peserta..."
-              className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition-all"
+              placeholder="Cari nama peserta..."
+              style={S.fieldDark}
             />
           </div>
 
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-semibold text-gray-700">Daftar Peserta</h2>
-            <div className="flex items-center gap-3">
-              <div className="flex bg-gray-100 rounded-xl p-1 gap-1">
-                {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'MSDT', 'Love Language'].map(t => (
-                  <button key={t}
-                    onClick={() => { setTab(t); setSelected(null) }}
-                    className={`text-sm font-semibold px-3 py-1.5 rounded-lg transition ${
-                      tab === t
-                        ? t === 'MBTI'  ? 'bg-blue-600 text-white'
-                        : t === 'DISC'  ? 'bg-green-600 text-white'
-                        : t === 'PAPI'  ? 'bg-purple-600 text-white'
-                        : t === 'DASS'  ? 'bg-teal-600 text-white'
-                        : t === 'MSDT'  ? 'bg-orange-600 text-white'
-                        : 'bg-white text-gray-700 shadow-sm'
-                        : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >{t}</button>
-                ))}
-              </div>
-              <span className="text-sm text-gray-400">{filtered.length} peserta</span>
-            </div>
+          {/* Filter tabs */}
+          <div style={{ padding: '14px 20px', display: 'flex', gap: '6px', flexWrap: 'wrap', borderBottom: '1px solid var(--border)' }}>
+            {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'MSDT', 'Love Language'].map(t => {
+              const accent = TAB_ACCENT[t]
+              const isActive = tab === t
+              return (
+                <button
+                  key={t}
+                  onClick={() => { setTab(t); setSelected(null) }}
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    fontFamily: 'Syne, sans-serif',
+                    padding: '5px 12px',
+                    borderRadius: '99px',
+                    border: isActive ? `1px solid ${accent}55` : '1px solid var(--border)',
+                    background: isActive ? accent + '1a' : 'transparent',
+                    color: isActive ? accent : 'var(--text-muted)',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s',
+                    letterSpacing: '0.04em',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {t}
+                </button>
+              )
+            })}
           </div>
 
+          {/* Table */}
           {loading ? (
-            <p className="text-gray-400">Memuat data...</p>
+            <div style={{ padding: '48px', textAlign: 'center' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Memuat data...</p>
+            </div>
           ) : filtered.length === 0 ? (
-            <p className="text-gray-400">Belum ada peserta {tab !== 'Semua' ? tab : ''}.</p>
+            <div style={{ padding: '48px', textAlign: 'center' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>
+                Belum ada peserta{tab !== 'Semua' ? ` ${tab}` : ''}.
+              </p>
+            </div>
           ) : (
-            <table className="w-full text-base">
-              <thead>
-                <tr className="bg-blue-50 text-left text-sm font-semibold text-gray-600">
-                  <th className="px-5 py-3 rounded-l">Nama</th>
-                  <th className="px-5 py-3">Unit Kerja</th>
-                  <th className="px-5 py-3">Jenis</th>
-                  <th className="px-5 py-3">Hasil</th>
-                  <th className="px-5 py-3 rounded-r">Tanggal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map(p => {
-                  const isSelected = selected?.jenis === p.jenis && selected?.id === p.id
-                  return (
-                    <tr key={`${p.jenis}-${p.id}`} onClick={() => setSelected(p)}
-                      className={`border-t cursor-pointer transition ${isSelected ? 'bg-blue-50' : 'hover:bg-gray-50'}`}>
-                      <td className="px-5 py-3 font-semibold text-blue-600">{p.nama}</td>
-                      <td className="px-5 py-3 text-gray-500 max-w-[200px] truncate">{p.jabatan || '-'}</td>
-                      <td className="px-5 py-3">
-                        <span className={`text-sm font-bold px-2.5 py-1 rounded-full ${jenisBadge[p.jenis]}`}>
-                          {p.jenis}
-                        </span>
-                      </td>
-                      <td className="px-5 py-3 font-bold text-blue-700">{getHasil(p)}</td>
-                      <td className="px-5 py-3 text-gray-400">
-                        {new Date(p.created_at).toLocaleDateString('id-ID')}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', fontSize: '13px', borderCollapse: 'collapse', minWidth: '540px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                    {['Nama', 'Usia', 'Jenis', 'Hasil', 'Tanggal'].map(h => (
+                      <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontSize: '10px', fontWeight: 700, fontFamily: 'Syne, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'var(--surface-2)', whiteSpace: 'nowrap' }}>
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map(p => {
+                    const isSelected = selected?.jenis === p.jenis && selected?.id === p.id
+                    const badge = BADGE[p.jenis] || { bg: 'rgba(255,255,255,0.08)', color: 'var(--text-muted)' }
+                    return (
+                      <tr
+                        key={`${p.jenis}-${p.id}`}
+                        onClick={() => setSelected(p)}
+                        style={{
+                          borderBottom: '1px solid var(--border)',
+                          cursor: 'pointer',
+                          background: isSelected ? 'rgba(212,168,83,0.06)' : 'transparent',
+                          transition: 'background 0.15s',
+                        }}
+                        onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'var(--surface-2)' }}
+                        onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'transparent' }}
+                      >
+                        <td style={{ padding: '11px 16px', fontWeight: 600, color: isSelected ? 'var(--accent)' : 'var(--text)', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {p.nama}
+                          {isTestData(p) && <span style={{ marginLeft: '6px', fontSize: '9px', fontWeight: 700, padding: '1px 5px', borderRadius: '4px', background: 'rgba(248,113,113,0.15)', color: '#f87171', border: '1px solid rgba(248,113,113,0.2)', verticalAlign: 'middle' }}>TEST</span>}
+                        </td>
+                        <td style={{ padding: '11px 16px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
+                          {p.jabatan || '—'}
+                        </td>
+                        <td style={{ padding: '11px 16px' }}>
+                          <span style={{ fontSize: '10px', fontWeight: 700, fontFamily: 'Syne, sans-serif', padding: '3px 10px', borderRadius: '99px', background: badge.bg, color: badge.color, whiteSpace: 'nowrap' }}>
+                            {p.jenis}
+                          </span>
+                        </td>
+                        <td style={{ padding: '11px 16px', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)', whiteSpace: 'nowrap' }}>
+                          {getHasil(p)}
+                        </td>
+                        <td style={{ padding: '11px 16px', color: 'var(--text-muted)', whiteSpace: 'nowrap', fontSize: '12px' }}>
+                          {new Date(p.created_at).toLocaleDateString('id-ID')}
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
 
-        {/* ── Detail Panel ── */}
+        {/* ── Detail Panel ──────────────────────────────────── */}
         {selected && (
-          <div className="w-80 bg-white rounded-2xl shadow p-6 flex-shrink-0">
-            <div className="flex justify-between items-start mb-4">
-              <h2 className="text-lg font-semibold text-gray-700">Detail Peserta</h2>
-              <button onClick={() => setSelected(null)} className="text-gray-400 hover:text-gray-600 text-xl">×</button>
+          <div ref={el => el?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })} style={{ width: '300px', flexShrink: 0, ...S.card }}>
+
+            {/* Header */}
+            <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '13px', color: 'var(--text)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Detail Peserta</h2>
+              <button onClick={() => setSelected(null)} style={{ color: 'var(--text-muted)', fontSize: '20px', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1 }}>×</button>
             </div>
 
-            {/* ─── MBTI ─── */}
-            {selected.jenis === 'MBTI' && (
-              <>
-                <div className="bg-blue-600 text-white rounded-xl p-4 text-center mb-4">
-                  <p className="text-xs opacity-75 mb-1">Tipe MBTI</p>
-                  <p className="text-4xl font-black tracking-widest">{selected.hasil_tes?.[0]?.tipe_mbti || '—'}</p>
-                </div>
-                <div className="space-y-2 text-sm mb-4">
-                  <div className="flex justify-between"><span className="text-gray-500">Nama</span><span className="font-medium">{selected.nama}</span></div>
-                  <div className="flex justify-between gap-2"><span className="text-gray-500 flex-shrink-0">Email</span><span className="font-medium text-xs text-right truncate">{selected.email}</span></div>
-                  <div className="flex justify-between gap-2"><span className="text-gray-500 flex-shrink-0">Unit Kerja</span><span className="font-medium text-xs text-right">{selected.jabatan || '-'}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Tanggal</span><span className="font-medium">{new Date(selected.created_at).toLocaleDateString('id-ID')}</span></div>
-                </div>
-                {selected.hasil_tes?.[0] && (
-                  <div className="mb-4">
-                    <p className="text-xs text-gray-500 mb-2 font-semibold uppercase">Skor Dimensi</p>
-                    {[
-                      ['E', selected.hasil_tes[0].skor_e, 'I', selected.hasil_tes[0].skor_i],
-                      ['S', selected.hasil_tes[0].skor_s, 'N', selected.hasil_tes[0].skor_n],
-                      ['T', selected.hasil_tes[0].skor_t, 'F', selected.hasil_tes[0].skor_f],
-                      ['J', selected.hasil_tes[0].skor_j, 'P', selected.hasil_tes[0].skor_p],
-                    ].map(([a, sa, b, sb]) => (
-                      <div key={a} className="mb-2">
-                        <div className="flex justify-between text-xs text-gray-500 mb-1">
-                          <span>{a} ({sa})</span><span>{b} ({sb})</span>
-                        </div>
-                        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-blue-500 rounded-full" style={{ width: `${(sa / (sa + sb)) * 100}%` }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
+            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-            {/* ─── DISC ─── */}
-            {selected.jenis === 'DISC' && (
-              <>
-                <div className="bg-green-600 text-white rounded-xl p-4 text-center mb-4">
-                  <p className="text-xs opacity-75 mb-1">Profil DISC</p>
-                  <p className="text-4xl font-black tracking-widest">{selected.hasil_disc?.[0]?.profil || '—'}</p>
-                </div>
-                <div className="space-y-2 text-sm mb-4">
-                  <div className="flex justify-between"><span className="text-gray-500">Nama</span><span className="font-medium">{selected.nama}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">NIP</span><span className="font-medium">{selected.nip}</span></div>
-                  <div className="flex justify-between gap-2"><span className="text-gray-500 flex-shrink-0">Unit Kerja</span><span className="font-medium text-xs text-right">{selected.jabatan || '-'}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Tanggal</span><span className="font-medium">{new Date(selected.created_at).toLocaleDateString('id-ID')}</span></div>
-                </div>
-                {selected.hasil_disc?.[0] && (
-                  <div className="mb-4">
-                    <p className="text-xs text-gray-500 mb-2 font-semibold uppercase">Skor DISC (Change)</p>
-                    {[
-                      ['D', selected.hasil_disc[0].skor_d_change, 'Dominance'],
-                      ['I', selected.hasil_disc[0].skor_i_change, 'Influence'],
-                      ['S', selected.hasil_disc[0].skor_s_change, 'Steadiness'],
-                      ['C', selected.hasil_disc[0].skor_c_change, 'Conscientiousness'],
-                    ].map(([key, val, label]) => (
-                      <div key={key} className="mb-2">
-                        <div className="flex justify-between text-xs text-gray-500 mb-1">
-                          <span className="font-bold">{key} — {label}</span>
-                          <span>{val > 0 ? '+' : ''}{val}</span>
-                        </div>
-                        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                          <div className={`h-full ${discColors[key]} rounded-full`}
-                            style={{ width: `${Math.max(0, Math.min((val / 12) * 100, 100))}%` }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </>
-            )}
-
-            {/* ─── PAPI ─── */}
-            {selected.jenis === 'PAPI' && (
-              <>
-                <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-xl p-4 text-center mb-4">
-                  <p className="text-xs opacity-75 mb-1">Profil PAPI Kostick</p>
-                  <p className="text-2xl font-black tracking-widest leading-tight">
-                    {selected.hasil_papi?.[0]?.profil || '—'}
-                  </p>
-                  <p className="text-xs opacity-60 mt-1">Dimensi dominan</p>
-                </div>
-                <div className="space-y-2 text-sm mb-4">
-                  <div className="flex justify-between"><span className="text-gray-500">Nama</span><span className="font-medium">{selected.nama}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">NIP</span><span className="font-medium">{selected.nip}</span></div>
-                  <div className="flex justify-between gap-2"><span className="text-gray-500 flex-shrink-0">Unit Kerja</span><span className="font-medium text-xs text-right">{selected.jabatan || '-'}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Tanggal</span><span className="font-medium">{new Date(selected.created_at).toLocaleDateString('id-ID')}</span></div>
-                </div>
-                {selected.hasil_papi?.[0] && (
-                  <div className="mb-4">
-                    <p className="text-xs text-gray-500 mb-2 font-semibold uppercase">Skor PAPI (0–9)</p>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-                      {PAPI_SCALES.map(k => {
-                        const val = selected.hasil_papi[0][`skor_${k.toLowerCase()}`] ?? 0
-                        const pct = (val / 9) * 100
-                        return (
-                          <div key={k}>
-                            <div className="flex justify-between text-xs mb-0.5">
-                              <span className="font-bold text-gray-600">{k}</span>
-                              <span className="text-gray-400">{val}</span>
-                            </div>
-                            <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                              <div className="h-full bg-purple-500 rounded-full" style={{ width: `${pct}%` }} />
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-
-            {/* ─── DASS ─── */}
-            {selected.jenis === 'DASS' && (() => {
-              const h = selected.hasil_dass?.[0]
-              const dassSkor = h ? [
-                { key: 'D', label: 'Depresi',   emoji: '💙', skor: h.skor_depresi,  kat: h.kategori_depresi  },
-                { key: 'A', label: 'Kecemasan', emoji: '⚡', skor: h.skor_anxietas, kat: h.kategori_anxietas },
-                { key: 'S', label: 'Stres',     emoji: '🌊', skor: h.skor_stres,    kat: h.kategori_stres    },
-              ] : []
-              const katWarna = { Normal: 'bg-emerald-100 text-emerald-700', Ringan: 'bg-lime-100 text-lime-700', Sedang: 'bg-amber-100 text-amber-700', Berat: 'bg-orange-100 text-orange-700', 'Sangat Berat': 'bg-rose-100 text-rose-700' }
-              return (
+              {/* ─── MBTI ─── */}
+              {selected.jenis === 'MBTI' && (
                 <>
-                  <div className="bg-gradient-to-r from-teal-600 to-cyan-600 text-white rounded-xl p-4 text-center mb-4">
-                    <p className="text-xs opacity-75 mb-1">DASS-21</p>
-                    <p className="text-sm font-black">Depression · Anxiety · Stress</p>
-                    {h && (
-                      <p className="text-xs opacity-80 mt-1">
-                        D:{h.kategori_depresi} · A:{h.kategori_anxietas} · S:{h.kategori_stres}
-                      </p>
-                    )}
+                  <div style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                    <p style={{ fontSize: '10px', color: '#60a5fa', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Tipe MBTI</p>
+                    <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '36px', color: '#60a5fa', letterSpacing: '0.12em' }}>{selected.hasil_tes?.[0]?.tipe_mbti || '—'}</p>
                   </div>
-                  <div className="space-y-2 text-sm mb-4">
-                    <div className="flex justify-between"><span className="text-gray-500">Nama</span><span className="font-medium">{selected.nama}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">NIP</span><span className="font-medium">{selected.nip}</span></div>
-                    <div className="flex justify-between gap-2"><span className="text-gray-500 flex-shrink-0">Unit Kerja</span><span className="font-medium text-xs text-right">{selected.jabatan || '-'}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">Tanggal</span><span className="font-medium">{new Date(selected.created_at).toLocaleDateString('id-ID')}</span></div>
-                  </div>
-                  {h && (
-                    <div className="mb-4">
-                      <p className="text-xs text-gray-500 mb-2 font-semibold uppercase">Skor DASS-21</p>
-                      {dassSkor.map(({ emoji, label, skor, kat }) => (
-                        <div key={label} className="mb-2.5">
-                          <div className="flex justify-between text-xs mb-1">
-                            <span className="font-medium text-gray-700">{emoji} {label}</span>
-                            <div className="flex items-center gap-1.5">
-                              <span className="font-bold">{skor}</span>
-                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${katWarna[kat] || 'bg-gray-100 text-gray-600'}`}>{kat}</span>
-                            </div>
-                          </div>
-                          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className="h-full bg-teal-500 rounded-full" style={{ width: `${(skor / 42) * 100}%` }} />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </>
-              )
-            })()}
-
-            {/* ─── MSDT ─── */}
-            {selected.jenis === 'MSDT' && (() => {
-              const h = selected.hasil_msdt?.[0]
-              return (
-                <>
-                  <div className="bg-gradient-to-r from-orange-600 to-amber-600 text-white rounded-xl p-4 text-center mb-4">
-                    <p className="text-xs opacity-75 mb-1">Gaya Manajemen MSDT</p>
-                    <p className="text-2xl font-black leading-tight">{h?.gaya || '—'}</p>
-                    <p className="text-xs opacity-60 mt-1">Management Style Diagnostic Test</p>
-                  </div>
-                  <div className="space-y-2 text-sm mb-4">
-                    <div className="flex justify-between"><span className="text-gray-500">Nama</span><span className="font-medium">{selected.nama}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">NIP</span><span className="font-medium">{selected.nip}</span></div>
-                    <div className="flex justify-between gap-2"><span className="text-gray-500 flex-shrink-0">Unit Kerja</span><span className="font-medium text-xs text-right">{selected.jabatan || '-'}</span></div>
-                    <div className="flex justify-between"><span className="text-gray-500">Tanggal</span><span className="font-medium">{new Date(selected.created_at).toLocaleDateString('id-ID')}</span></div>
-                  </div>
-                  {h && (
-                    <div className="mb-4">
-                      <p className="text-xs text-gray-500 mb-2 font-semibold uppercase">Skor MSDT</p>
+                  <DetailRows rows={[
+                    ['Nama', selected.nama],
+                    ['Email', selected.email],
+                    ['Usia', selected.jabatan || '—'],
+                    ['Tanggal', new Date(selected.created_at).toLocaleDateString('id-ID')],
+                  ]} />
+                  {selected.hasil_tes?.[0] && (
+                    <ScoreSection label="Skor Dimensi">
                       {[
-                        { label: 'TO (Task Orientation)',         val: h.skor_to,     max: 19, color: 'bg-orange-500' },
-                        { label: 'RO (Relationship Orientation)', val: h.skor_ro,     max: 17, color: 'bg-amber-500'  },
-                        { label: 'E Score (Efektivitas)',         val: h.e_score,     max: 4,  color: 'bg-green-500'  },
-                        { label: 'Grand Total',                   val: h.grand_total, max: 50, color: 'bg-orange-400' },
-                      ].map(({ label, val, max, color }) => (
-                        <div key={label} className="mb-2">
-                          <div className="flex justify-between text-xs mb-0.5">
-                            <span className="text-gray-600">{label}</span>
-                            <span className="font-bold">{val}</span>
+                        ['E', selected.hasil_tes[0].skor_e, 'I', selected.hasil_tes[0].skor_i, '#60a5fa'],
+                        ['S', selected.hasil_tes[0].skor_s, 'N', selected.hasil_tes[0].skor_n, '#a78bfa'],
+                        ['T', selected.hasil_tes[0].skor_t, 'F', selected.hasil_tes[0].skor_f, '#34d399'],
+                        ['J', selected.hasil_tes[0].skor_j, 'P', selected.hasil_tes[0].skor_p, '#f59e0b'],
+                      ].map(([a, sa, b, sb, color]) => (
+                        <div key={a} style={{ marginBottom: '8px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                            <span>{a} ({sa})</span><span>{b} ({sb})</span>
                           </div>
-                          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
-                            <div className={`h-full ${color} rounded-full`} style={{ width: `${Math.min(100, (val / max) * 100)}%` }} />
+                          <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                            <div style={{ height: '100%', background: color, borderRadius: '99px', width: `${(sa / (sa + sb)) * 100}%` }} />
                           </div>
                         </div>
                       ))}
-                    </div>
+                    </ScoreSection>
                   )}
                 </>
-              )
-            })()}
+              )}
 
-            <div className="flex gap-2">
-              <button onClick={() => handleLihatLaporan(selected)}
-                className="flex-1 bg-blue-600 text-white text-sm py-2 rounded-lg hover:bg-blue-700 transition">
-                Lihat Laporan
-              </button>
-              <button onClick={() => handleDelete(selected)}
-                className="px-3 py-2 bg-red-50 text-red-500 rounded-lg hover:bg-red-100 transition text-sm">
-                🗑️
-              </button>
+              {/* ─── DISC ─── */}
+              {selected.jenis === 'DISC' && (
+                <>
+                  <div style={{ background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                    <p style={{ fontSize: '10px', color: '#4ade80', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Profil DISC</p>
+                    <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '36px', color: '#4ade80', letterSpacing: '0.12em' }}>{selected.hasil_disc?.[0]?.profil || '—'}</p>
+                  </div>
+                  <DetailRows rows={[
+                    ['Nama', selected.nama],
+                    ['NIK / ID', selected.nip],
+                    ['Usia', selected.jabatan || '—'],
+                    ['Tanggal', new Date(selected.created_at).toLocaleDateString('id-ID')],
+                  ]} />
+                  {selected.hasil_disc?.[0] && (
+                    <ScoreSection label="Skor DISC (Change)">
+                      {[
+                        ['D', selected.hasil_disc[0].skor_d_change, 'Dominance',       DISC_COLORS.D],
+                        ['I', selected.hasil_disc[0].skor_i_change, 'Influence',       DISC_COLORS.I],
+                        ['S', selected.hasil_disc[0].skor_s_change, 'Steadiness',      DISC_COLORS.S],
+                        ['C', selected.hasil_disc[0].skor_c_change, 'Conscientiousness', DISC_COLORS.C],
+                      ].map(([key, val, label, color]) => (
+                        <div key={key} style={{ marginBottom: '8px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                            <span style={{ fontWeight: 700, color }}>{key} — {label}</span>
+                            <span>{val > 0 ? '+' : ''}{val}</span>
+                          </div>
+                          <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                            <div style={{ height: '100%', background: color, borderRadius: '99px', width: `${Math.max(0, Math.min((val / 12) * 100, 100))}%` }} />
+                          </div>
+                        </div>
+                      ))}
+                    </ScoreSection>
+                  )}
+                </>
+              )}
+
+              {/* ─── PAPI ─── */}
+              {selected.jenis === 'PAPI' && (
+                <>
+                  <div style={{ background: 'rgba(168,85,247,0.15)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                    <p style={{ fontSize: '10px', color: '#c084fc', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Profil PAPI Kostick</p>
+                    <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '22px', color: '#c084fc', letterSpacing: '0.08em', lineHeight: 1.3 }}>{selected.hasil_papi?.[0]?.profil || '—'}</p>
+                    <p style={{ fontSize: '10px', color: 'rgba(192,132,252,0.6)', marginTop: '4px' }}>Dimensi dominan</p>
+                  </div>
+                  <DetailRows rows={[
+                    ['Nama', selected.nama],
+                    ['NIK / ID', selected.nip],
+                    ['Usia', selected.jabatan || '—'],
+                    ['Tanggal', new Date(selected.created_at).toLocaleDateString('id-ID')],
+                  ]} />
+                  {selected.hasil_papi?.[0] && (
+                    <ScoreSection label="Skor PAPI (0–9)">
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px 16px' }}>
+                        {PAPI_SCALES.map(k => {
+                          const val = selected.hasil_papi[0][`skor_${k.toLowerCase()}`] ?? 0
+                          return (
+                            <div key={k}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', marginBottom: '2px' }}>
+                                <span style={{ fontWeight: 700, color: '#c084fc' }}>{k}</span>
+                                <span style={{ color: 'var(--text-muted)' }}>{val}</span>
+                              </div>
+                              <div style={{ height: '4px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                                <div style={{ height: '100%', background: '#a855f7', borderRadius: '99px', width: `${(val / 9) * 100}%` }} />
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    </ScoreSection>
+                  )}
+                </>
+              )}
+
+              {/* ─── DASS ─── */}
+              {selected.jenis === 'DASS' && (() => {
+                const h = selected.hasil_dass?.[0]
+                const katColor = { Normal: '#4ade80', Ringan: '#a3e635', Sedang: '#f59e0b', Berat: '#f97316', 'Sangat Berat': '#f43f5e' }
+                return (
+                  <>
+                    <div style={{ background: 'rgba(20,184,166,0.15)', border: '1px solid rgba(20,184,166,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: '10px', color: '#2dd4bf', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>DASS-21</p>
+                      <p style={{ fontSize: '12px', fontWeight: 700, color: '#2dd4bf' }}>Depression · Anxiety · Stress</p>
+                      {h && <p style={{ fontSize: '11px', color: 'rgba(45,212,191,0.7)', marginTop: '4px' }}>D:{h.kategori_depresi} · A:{h.kategori_anxietas} · S:{h.kategori_stres}</p>}
+                    </div>
+                    <DetailRows rows={[
+                      ['Nama', selected.nama],
+                      ['NIK / ID', selected.nip],
+                      ['Usia', selected.jabatan || '—'],
+                      ['Tanggal', new Date(selected.created_at).toLocaleDateString('id-ID')],
+                    ]} />
+                    {h && (
+                      <ScoreSection label="Skor DASS-21">
+                        {[
+                          { label: 'Depresi',   skor: h.skor_depresi,  kat: h.kategori_depresi  },
+                          { label: 'Kecemasan', skor: h.skor_anxietas, kat: h.kategori_anxietas },
+                          { label: 'Stres',     skor: h.skor_stres,    kat: h.kategori_stres    },
+                        ].map(({ label, skor, kat }) => {
+                          const color = katColor[kat] || '#6b7280'
+                          return (
+                            <div key={label} style={{ marginBottom: '8px' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px' }}>
+                                <span style={{ color: 'var(--text-muted)' }}>{label}</span>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                  <span style={{ fontWeight: 700, color: 'var(--text)' }}>{skor}</span>
+                                  <span style={{ fontSize: '10px', fontWeight: 700, padding: '1px 8px', borderRadius: '99px', background: color + '22', color }}>{kat}</span>
+                                </div>
+                              </div>
+                              <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                                <div style={{ height: '100%', background: '#14b8a6', borderRadius: '99px', width: `${(skor / 42) * 100}%` }} />
+                              </div>
+                            </div>
+                          )
+                        })}
+                      </ScoreSection>
+                    )}
+                  </>
+                )
+              })()}
+
+              {/* ─── Love Language ─── */}
+              {selected.jenis === 'Love Language' && (() => {
+                const h = selected.hasil_love_language?.[0]
+                return (
+                  <>
+                    <div style={{ background: 'rgba(244,63,94,0.15)', border: '1px solid rgba(244,63,94,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: '10px', color: '#fb7185', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Love Language</p>
+                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '14px', color: '#fb7185', lineHeight: 1.4 }}>{h?.bahasa_utama || '—'}</p>
+                    </div>
+                    <DetailRows rows={[
+                      ['Nama', selected.nama],
+                      ['NIK / ID', selected.nip],
+                      ['Usia', selected.jabatan || '—'],
+                      ['Tanggal', new Date(selected.created_at).toLocaleDateString('id-ID')],
+                    ]} />
+                  </>
+                )
+              })()}
+
+              {/* ─── MSDT ─── */}
+              {selected.jenis === 'MSDT' && (() => {
+                const h = selected.hasil_msdt?.[0]
+                return (
+                  <>
+                    <div style={{ background: 'rgba(249,115,22,0.15)', border: '1px solid rgba(249,115,22,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: '10px', color: '#fb923c', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Gaya Manajemen</p>
+                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', color: '#fb923c' }}>{h?.gaya || '—'}</p>
+                      <p style={{ fontSize: '10px', color: 'rgba(251,146,60,0.6)', marginTop: '2px' }}>MSDT</p>
+                    </div>
+                    <DetailRows rows={[
+                      ['Nama', selected.nama],
+                      ['NIK / ID', selected.nip],
+                      ['Usia', selected.jabatan || '—'],
+                      ['Tanggal', new Date(selected.created_at).toLocaleDateString('id-ID')],
+                    ]} />
+                    {h && (
+                      <ScoreSection label="Skor MSDT">
+                        {[
+                          { label: 'TO (Task Orientation)',         val: h.skor_to,     max: 19, color: '#f97316' },
+                          { label: 'RO (Relationship Orientation)', val: h.skor_ro,     max: 17, color: '#f59e0b' },
+                          { label: 'E Score (Efektivitas)',         val: h.e_score,     max: 4,  color: '#22c55e' },
+                          { label: 'Grand Total',                   val: h.grand_total, max: 50, color: '#d4a853' },
+                        ].map(({ label, val, max, color }) => (
+                          <div key={label} style={{ marginBottom: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px' }}>
+                              <span style={{ color: 'var(--text-muted)' }}>{label}</span>
+                              <span style={{ fontWeight: 700, color: 'var(--text)' }}>{val}</span>
+                            </div>
+                            <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                              <div style={{ height: '100%', background: color, borderRadius: '99px', width: `${Math.min(100, (val / max) * 100)}%` }} />
+                            </div>
+                          </div>
+                        ))}
+                      </ScoreSection>
+                    )}
+                  </>
+                )
+              })()}
+
+              {/* Action buttons */}
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => handleLihatLaporan(selected)}
+                  style={{ flex: 1, background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '10px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
+                >
+                  Lihat Laporan
+                </button>
+                <button
+                  onClick={() => handleDelete(selected)}
+                  style={{ padding: '10px 14px', background: 'rgba(248,113,113,0.1)', color: '#f87171', border: '1px solid rgba(248,113,113,0.2)', borderRadius: '8px', cursor: 'pointer', fontSize: '14px' }}
+                >
+                  🗑️
+                </button>
+              </div>
+
             </div>
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+/* ── Helper sub-components ─────────────────────────────────────── */
+function DetailRows({ rows }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      {rows.map(([label, value]) => (
+        <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', fontSize: '12px' }}>
+          <span style={{ color: 'var(--text-muted)', flexShrink: 0 }}>{label}</span>
+          <span style={{ fontWeight: 600, color: 'var(--text-sub)', textAlign: 'right', wordBreak: 'break-all' }}>{value || '—'}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function ScoreSection({ label, children }) {
+  return (
+    <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px' }}>
+      <p style={{ fontSize: '10px', fontWeight: 700, fontFamily: 'Syne, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '12px' }}>{label}</p>
+      {children}
     </div>
   )
 }

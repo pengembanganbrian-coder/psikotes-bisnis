@@ -23,45 +23,54 @@ const getProfilInfo = (profil) => {
 }
 
 const warnaMap = {
-  D: { bg: 'bg-red-600', light: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', bar: 'bg-red-500', hex: '#dc2626' },
-  I: { bg: 'bg-yellow-500', light: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700', bar: 'bg-yellow-400', hex: '#eab308' },
-  S: { bg: 'bg-green-600', light: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', bar: 'bg-green-500', hex: '#16a34a' },
-  C: { bg: 'bg-blue-600', light: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', bar: 'bg-blue-500', hex: '#2563eb' },
+  D: { bg: 'bg-red-600', light: 'bg-red-50', border: 'border-red-200', text: 'text-red-700', bar: 'bg-red-500', hex: '#ef4444' },
+  I: { bg: 'bg-yellow-500', light: 'bg-yellow-50', border: 'border-yellow-200', text: 'text-yellow-700', bar: 'bg-yellow-400', hex: '#f59e0b' },
+  S: { bg: 'bg-green-600', light: 'bg-green-50', border: 'border-green-200', text: 'text-green-700', bar: 'bg-green-500', hex: '#22c55e' },
+  C: { bg: 'bg-blue-600', light: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700', bar: 'bg-blue-500', hex: '#3b82f6' },
+}
+
+const DC = {
+  D: { hex: '#ef4444', dim: 'rgba(239,68,68,0.12)', border: 'rgba(239,68,68,0.35)', label: 'Dominance'        },
+  I: { hex: '#f59e0b', dim: 'rgba(245,158,11,0.12)', border: 'rgba(245,158,11,0.35)', label: 'Influence'       },
+  S: { hex: '#22c55e', dim: 'rgba(34,197,94,0.12)',  border: 'rgba(34,197,94,0.35)',  label: 'Steadiness'      },
+  C: { hex: '#3b82f6', dim: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.35)', label: 'Conscientiousness'},
 }
 
 function GrafikDISC({ title, subtitle, data, maxVal = 24 }) {
+  const zeroMb = `${(Math.abs(Math.min(...data.map(d => d.val), 0)) / maxVal) * 100}%`
   return (
-    <div className="flex-1 min-w-0">
-      <div className="text-center mb-2">
-        <p className="text-xs font-bold text-gray-700">{title}</p>
-        <p className="text-xs text-gray-400 italic">{subtitle}</p>
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+        <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', color: 'var(--text-sub)', textTransform: 'uppercase' }}>{title}</p>
+        <p style={{ color: 'var(--text-muted)', fontSize: '10px', fontStyle: 'italic', marginTop: '2px' }}>{subtitle}</p>
       </div>
-      <div className="border border-gray-200 rounded-xl overflow-hidden">
-        <div className="grid grid-cols-4 bg-gray-50 border-b border-gray-200">
+      <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '10px', overflow: 'hidden' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
           {['D','I','S','C'].map(d => (
-            <div key={d} className="text-center py-1">
-              <span className={`text-xs font-black ${warnaMap[d].text}`}>{d}</span>
+            <div key={d} style={{ textAlign: 'center' }}>
+              <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '13px', color: DC[d].hex }}>{d}</span>
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-4 h-40 bg-white relative">
-          <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col justify-end pointer-events-none">
-            <div className="h-px bg-gray-300 w-full" style={{ marginBottom: `${(Math.abs(Math.min(...data.map(d=>d.val), 0)) / maxVal) * 100}%` }} />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', height: '120px', position: 'relative' }}>
+          <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', pointerEvents: 'none' }}>
+            <div style={{ height: '1px', background: 'rgba(255,255,255,0.12)', width: '100%', marginBottom: zeroMb }} />
           </div>
-          {data.map((d) => {
-            const w = warnaMap[d.label]
+          {data.map(d => {
             const isPos = d.val >= 0
-            const pct = Math.abs(d.val) / maxVal * 100
+            const pct   = Math.abs(d.val) / maxVal * 100
             return (
-              <div key={d.label} className="flex flex-col items-center justify-end px-1 py-1 relative">
-                <span className="text-xs font-bold text-gray-600 mb-1">{d.val > 0 ? '+' : ''}{d.val}</span>
+              <div key={d.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', padding: '4px 3px', position: 'relative' }}>
+                <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', color: d.val !== 0 ? DC[d.label].hex : 'var(--text-muted)', marginBottom: '4px' }}>
+                  {d.val > 0 ? '+' : ''}{d.val}
+                </span>
                 {isPos ? (
-                  <div className="w-full flex flex-col justify-end" style={{ height: '100px' }}>
-                    <div className={`w-full rounded-t-sm ${w.bar}`} style={{ height: `${Math.max(pct, 2)}%`, minHeight: d.val !== 0 ? '4px' : '0' }} />
+                  <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '80px' }}>
+                    <div style={{ width: '100%', borderRadius: '3px 3px 0 0', background: DC[d.label].hex, height: `${Math.max(pct, 2)}%`, minHeight: d.val !== 0 ? '3px' : '0', opacity: 0.85 }} />
                   </div>
                 ) : (
-                  <div className="w-full flex flex-col justify-start" style={{ height: '100px' }}>
-                    <div className={`w-full rounded-b-sm ${w.bar} opacity-50`} style={{ height: `${Math.max(pct, 2)}%`, minHeight: '4px' }} />
+                  <div style={{ width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', height: '80px' }}>
+                    <div style={{ width: '100%', borderRadius: '0 0 3px 3px', background: DC[d.label].hex, height: `${Math.max(pct, 2)}%`, minHeight: '3px', opacity: 0.45 }} />
                   </div>
                 )}
               </div>
@@ -73,63 +82,86 @@ function GrafikDISC({ title, subtitle, data, maxVal = 24 }) {
   )
 }
 
-/* ── Konten premium DISC ────────────────────────────────────── */
-function PremiumContentDISC({ info, warna }) {
+const DkList = ({ items, color }) => (
+  <ul style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+    {items.map((k, i) => (
+      <li key={i} style={{ display: 'flex', gap: '8px', fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.55' }}>
+        <span style={{ color, flexShrink: 0 }}>•</span>{k}
+      </li>
+    ))}
+  </ul>
+)
+
+function PremiumContentDISC({ info, dominanHex }) {
+  const color = dominanHex || 'var(--accent)'
   return (
-    <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
-      <h3 className="font-bold text-gray-700 mb-3">Karakteristik Perilaku</h3>
-      <div className="flex flex-wrap gap-2 mb-5">
-        {info.karakteristik.map((k, i) => (
-          <span key={i} className={`text-sm px-3 py-1.5 rounded-full font-medium ${warna.light} ${warna.text}`}>• {k}</span>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+      {/* Karakteristik */}
+      <div className="dark-card" style={{ padding: '22px' }}>
+        <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.14em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '14px' }}>Karakteristik Perilaku</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          {info.karakteristik.map((k, i) => (
+            <span key={i} style={{ fontSize: '12px', padding: '5px 12px', borderRadius: '99px', border: `1px solid ${color}44`, color, background: `${color}10`, fontWeight: 500 }}>• {k}</span>
+          ))}
+        </div>
+      </div>
+
+      {/* Perilaku & Emosi */}
+      <div className="hasil-grid-2" style={{ gap: '12px' }}>
+        {[
+          { label: 'Perilaku Kerja — Kekuatan',  items: info.perilakuKerja.kekuatan,  color: '#22c55e' },
+          { label: 'Perilaku Kerja — Kelemahan',  items: info.perilakuKerja.kelemahan,  color: '#f59e0b' },
+          { label: 'Suasana Emosi — Kekuatan',    items: info.suasanaEmosi.kekuatan,    color: '#22c55e' },
+          { label: 'Suasana Emosi — Kelemahan',   items: info.suasanaEmosi.kelemahan,   color: '#f59e0b' },
+        ].map(s => (
+          <div key={s.label} className="dark-card" style={{ padding: '18px', background: 'var(--surface-2)' }}>
+            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.12em', color: s.color, textTransform: 'uppercase', marginBottom: '10px', borderLeft: `2px solid ${s.color}`, paddingLeft: '8px' }}>{s.label}</p>
+            <DkList items={s.items} color={s.color} />
+          </div>
         ))}
       </div>
 
-      <h3 className="font-bold text-gray-700 mb-3">Analisis Perilaku dan Emosi</h3>
-      <div className="grid grid-cols-2 gap-3 mb-5">
-        <div className={`${warna.light} border ${warna.border} rounded-xl p-4`}>
-          <p className={`text-xs font-bold uppercase mb-2 ${warna.text}`}>Perilaku Kerja — Kekuatan</p>
-          <ul className="space-y-1.5">{info.perilakuKerja.kekuatan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
+      {/* Kekuatan & Kelemahan */}
+      <div className="hasil-grid-2" style={{ gap: '12px' }}>
+        <div className="dark-card" style={{ padding: '18px', background: 'var(--surface-2)' }}>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.12em', color: '#22c55e', textTransform: 'uppercase', marginBottom: '10px', borderLeft: '2px solid #22c55e', paddingLeft: '8px' }}>Kekuatan</p>
+          <DkList items={info.kekuatan.slice(0, 8)} color="#22c55e" />
         </div>
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-          <p className="text-xs font-bold uppercase mb-2 text-amber-700">Perilaku Kerja — Kelemahan</p>
-          <ul className="space-y-1.5">{info.perilakuKerja.kelemahan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
-        </div>
-        <div className={`${warna.light} border ${warna.border} rounded-xl p-4`}>
-          <p className={`text-xs font-bold uppercase mb-2 ${warna.text}`}>Suasana Emosi — Kekuatan</p>
-          <ul className="space-y-1.5">{info.suasanaEmosi.kekuatan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
-        </div>
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-          <p className="text-xs font-bold uppercase mb-2 text-amber-700">Suasana Emosi — Kelemahan</p>
-          <ul className="space-y-1.5">{info.suasanaEmosi.kelemahan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
+        <div className="dark-card" style={{ padding: '18px', background: 'var(--surface-2)' }}>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.12em', color: '#ef4444', textTransform: 'uppercase', marginBottom: '10px', borderLeft: '2px solid #ef4444', paddingLeft: '8px' }}>Kelemahan</p>
+          <DkList items={info.kelemahan.slice(0, 8)} color="#ef4444" />
         </div>
       </div>
 
-      <h3 className="font-bold text-gray-700 mb-3">Kekuatan dan Kelemahan</h3>
-      <div className="grid grid-cols-2 gap-3 mb-5">
-        <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-          <p className="text-xs font-bold uppercase mb-2 text-green-700">Kekuatan</p>
-          <ul className="space-y-1.5">{info.kekuatan.slice(0, 8).map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
-        </div>
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-          <p className="text-xs font-bold uppercase mb-2 text-red-700">Kelemahan</p>
-          <ul className="space-y-1.5">{info.kelemahan.slice(0, 8).map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5"><span>•</span>{k}</li>)}</ul>
+      {/* Gaya Kepemimpinan */}
+      <div className="dark-card" style={{ padding: '20px' }}>
+        <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.12em', color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '12px' }}>Gaya Kepemimpinan</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          {info.gayaKepemimpinan.map((k, i) => (
+            <span key={i} style={{ fontSize: '12px', padding: '5px 12px', borderRadius: '99px', border: '1px solid var(--accent-border)', color: 'var(--accent)', background: 'var(--accent-dim)' }}>• {k}</span>
+          ))}
         </div>
       </div>
 
-      <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-4">
-        <p className="text-xs font-bold uppercase mb-2 text-purple-700">Gaya Kepemimpinan</p>
-        <div className="flex flex-wrap gap-1.5">
-          {info.gayaKepemimpinan.map((k,i) => <span key={i} className="text-sm bg-purple-100 text-purple-700 px-3 py-1 rounded-full">• {k}</span>)}
+      {/* Pekerjaan */}
+      <div className="dark-card" style={{ padding: '20px' }}>
+        <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.12em', color: '#3b82f6', textTransform: 'uppercase', marginBottom: '12px' }}>Pekerjaan yang Sesuai</p>
+        <div style={{ columns: 2, gap: '12px' }}>
+          {info.pekerjaan.map((k, i) => (
+            <p key={i} style={{ fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.55', marginBottom: '6px', breakInside: 'avoid', display: 'flex', gap: '6px' }}>
+              <span style={{ color: '#3b82f6' }}>•</span>{k}
+            </p>
+          ))}
         </div>
       </div>
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-4">
-        <p className="text-xs font-bold uppercase mb-2 text-blue-700">Karakteristik Pekerjaan yang Sesuai</p>
-        <ul className="space-y-1.5 columns-2">{info.pekerjaan.map((k,i) => <li key={i} className="text-sm text-gray-700 flex gap-1.5 break-inside-avoid"><span>•</span>{k}</li>)}</ul>
-      </div>
-      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-        <p className="text-xs font-bold uppercase mb-2 text-gray-600">Rekomendasi Jalur Karir</p>
-        <div className="flex flex-wrap gap-2">
-          {info.karir.map((k,i) => <span key={i} className={`text-sm px-3 py-1.5 rounded-full font-semibold ${warna.light} ${warna.text}`}>{k}</span>)}
+
+      {/* Karir */}
+      <div className="dark-card" style={{ padding: '20px' }}>
+        <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.12em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '12px' }}>Rekomendasi Jalur Karir</p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+          {info.karir.map((k, i) => (
+            <span key={i} style={{ fontSize: '13px', padding: '7px 16px', borderRadius: '99px', border: `1px solid ${color}44`, color, background: `${color}10`, fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>{k}</span>
+          ))}
         </div>
       </div>
     </div>
@@ -139,8 +171,6 @@ function PremiumContentDISC({ info, warna }) {
 function HasilDisc() {
   const { state } = useLocation()
   const navigate = useNavigate()
-  const { hasil, nama, pesertaId, fromDashboard } = state || {}
-
   const [jobs, setJobs] = useState([])
   const [selectedJob, setSelectedJob] = useState(null)
   const [jpmScore, setJpmScore] = useState(null)
@@ -149,6 +179,21 @@ function HasilDisc() {
   useEffect(() => {
     supabase.from('job_profile').select('*').order('nama_jabatan').then(({ data }) => setJobs(data || []))
   }, [])
+
+  if (!state?.hasil) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div className="dark-card" style={{ padding: '40px', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '20px' }}>Data hasil tidak ditemukan. Silakan kerjakan tes terlebih dahulu.</p>
+          <button onClick={() => navigate('/tes-disc')} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
+            Kembali ke Tes
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  const { hasil, nama, pesertaId, fromDashboard } = state
 
   const hitungJPM = (job) => {
     const peserta = {
@@ -278,214 +323,212 @@ function HasilDisc() {
           </button>
           <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent)', textTransform: 'uppercase' }}>DISC · AssesIN</span>
           <button onClick={() => window.print()} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '6px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
-            Cetak
+            🖨️ Cetak / PDF
           </button>
         </div>
       </div>
-      <div className="max-w-3xl mx-auto py-8 px-4">
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '28px var(--px)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
-        {/* HEADER */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
-          <div className="text-center mb-5">
-            <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">LAPORAN PROFIL KEPRIBADIAN</p>
-            <p className="text-xs text-gray-400 mb-3">AssesIN — Platform Asesmen Psikologi — Bersifat RAHASIA</p>
-            <h2 className="text-xl font-bold text-gray-800">{nama}</h2>
+        {/* Print-Only Header */}
+        <div className="print-only" style={{ display: 'none', textAlign: 'center', paddingBottom: '20px', borderBottom: '2px solid #a67c00', marginBottom: '4px' }}>
+          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', letterSpacing: '0.22em', color: '#a67c00', marginBottom: '4px' }}>ASSESIN</div>
+          <div style={{ fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888' }}>Platform Asesmen Psikologi Digital · ASSESS · INSIGHT · GROW</div>
+          <div style={{ marginTop: '16px', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111' }}>LAPORAN DISC</div>
+          <div style={{ fontSize: '12px', color: '#555', marginTop: '4px' }}>Dominance · Influence · Steadiness · Conscientiousness</div>
+          <div style={{ marginTop: '8px', fontSize: '11px', color: '#444' }}>Peserta: <strong>{nama}</strong></div>
+        </div>
+
+        {/* ── Header / Profil ── */}
+        <div className="dark-card" style={{ padding: '32px', textAlign: 'center' }}>
+          <div className="section-rule" style={{ marginBottom: '24px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Laporan DISC</span><span className="section-rule-line" />
           </div>
-          <div className={`${warna.bg} text-white rounded-2xl py-6 px-6 text-center mb-5 shadow-lg`}>
-            <p className="text-xs font-semibold opacity-75 mb-2 uppercase tracking-widest">Profil Kepribadian</p>
-            <div className="flex justify-center gap-2 mb-2">
-              {profil.split('').map((h, i) => (
-                <div key={i} className="w-12 h-12 rounded-xl bg-white font-black text-xl flex items-center justify-center shadow" style={{ color: warnaMap[h].hex }}>
-                  {h}
-                </div>
-              ))}
-            </div>
-            <p className="text-lg font-bold">{info.nama}</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.08em', marginBottom: '10px' }}>
+            AssesIN — Platform Asesmen Psikologi Digital · Bersifat Rahasia
+          </p>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '28px' }}>{nama}</p>
+
+          {/* Profil letters */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '20px' }}>
+            {profil.split('').map((h, i) => (
+              <div key={i} style={{ width: '72px', height: '72px', borderRadius: '14px', background: DC[h].dim, border: `2px solid ${DC[h].border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '32px', color: DC[h].hex }}>
+                {h}
+              </div>
+            ))}
           </div>
-          <div className="bg-gray-50 rounded-xl p-4">
-            <p className="text-xs font-semibold uppercase text-gray-500 mb-2">Uraian Kepribadian</p>
-            <p className="text-sm text-gray-700 leading-relaxed"><strong>Sdr. {nama}</strong> {info.deskripsi}</p>
+          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>{info.nama}</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '24px' }}>Profil Dominan: {profil}</p>
+
+          <div className="dark-card" style={{ padding: '20px', textAlign: 'left', background: 'var(--surface-2)' }}>
+            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.14em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '10px' }}>Uraian Kepribadian</p>
+            <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: '1.75' }}>
+              <strong style={{ color: 'var(--text)' }}>Sdr. {nama}</strong> {info.deskripsi}
+            </p>
           </div>
         </div>
 
-        {/* PERSONALITY GRAPHS */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
-          <h3 className="font-bold text-gray-700 mb-1">Personality Graphs Form</h3>
-          <p className="text-xs text-gray-400 mb-4">Tiga grafik menunjukkan perilaku dari sudut pandang berbeda</p>
-          <div className="flex gap-3">
+        {/* ── Personality Graphs ── */}
+        <div className="dark-card" style={{ padding: '24px' }}>
+          <div className="section-rule" style={{ marginBottom: '20px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Personality Graphs Form</span><span className="section-rule-line" />
+          </div>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '20px' }}>Tiga grafik menunjukkan perilaku dari sudut pandang berbeda</p>
+
+          <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
             <GrafikDISC title="Graph 1 — MOST" subtitle="Mask / Public Self" data={mostData} maxVal={maxMost} />
             <GrafikDISC title="Graph 2 — LEAST" subtitle="Under Stress" data={leastData} maxVal={maxLeast} />
             <GrafikDISC title="Graph 3 — CHANGE" subtitle="Core / Private Self" data={changeData} maxVal={maxChange} />
           </div>
-          <div className="mt-4 overflow-x-auto">
-            <table className="w-full text-sm text-center">
+
+          {/* Summary table */}
+          <div style={{ overflowX: 'auto', marginBottom: '16px' }}>
+            <table style={{ width: '100%', fontSize: '13px', textAlign: 'center', borderCollapse: 'collapse' }}>
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="px-3 py-2 text-left text-gray-500 text-xs">Grafik</th>
-                  {['D','I','S','C'].map(d => <th key={d} className={`px-3 py-2 text-xs font-black ${warnaMap[d].text}`}>{d}</th>)}
-                  <th className="px-3 py-2 text-xs text-gray-500">Profil</th>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th style={{ padding: '8px 12px', textAlign: 'left', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Grafik</th>
+                  {['D','I','S','C'].map(d => <th key={d} style={{ padding: '8px 12px', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '13px', color: DC[d].hex }}>{d}</th>)}
+                  <th style={{ padding: '8px 12px', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>Profil</th>
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-t">
-                  <td className="px-3 py-2 text-xs text-left text-gray-600">Graph 1 — Most</td>
-                  {mostData.map(d => <td key={d.label} className="px-3 py-2 font-semibold">{d.val}</td>)}
-                  <td className="px-3 py-2 text-xs font-bold text-gray-600">{[...mostData].sort((a,b) => b.val - a.val)[0].label}</td>
-                </tr>
-                <tr className="border-t bg-gray-50">
-                  <td className="px-3 py-2 text-xs text-left text-gray-600">Graph 2 — Least</td>
-                  {leastData.map(d => <td key={d.label} className="px-3 py-2 font-semibold">{d.val}</td>)}
-                  <td className="px-3 py-2 text-xs font-bold text-gray-600">{[...leastData].sort((a,b) => b.val - a.val)[0].label}</td>
-                </tr>
-                <tr className="border-t">
-                  <td className="px-3 py-2 text-xs text-left text-gray-600">Graph 3 — Change</td>
-                  {changeData.map(d => <td key={d.label} className={`px-3 py-2 font-bold ${d.val > 0 ? warnaMap[d.label].text : 'text-gray-400'}`}>{d.val > 0 ? '+' : ''}{d.val}</td>)}
-                  <td className={`px-3 py-2 text-xs font-black ${warna.text}`}>{profil}</td>
-                </tr>
+                {[
+                  { label: 'Graph 1 — Most',   data: mostData,   alt: false },
+                  { label: 'Graph 2 — Least',  data: leastData,  alt: true  },
+                  { label: 'Graph 3 — Change', data: changeData, alt: false },
+                ].map(({ label, data, alt }) => (
+                  <tr key={label} style={{ borderTop: '1px solid var(--border)', background: alt ? 'rgba(255,255,255,0.02)' : 'transparent' }}>
+                    <td style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--text-sub)', fontSize: '13px' }}>{label}</td>
+                    {data.map(d => (
+                      <td key={d.label} style={{ padding: '10px 12px', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: d.val !== 0 ? DC[d.label].hex : 'var(--text-muted)' }}>
+                        {d.val > 0 ? '+' : ''}{d.val}
+                      </td>
+                    ))}
+                    <td style={{ padding: '10px 12px', fontFamily: 'Syne, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>
+                      {[...data].sort((a,b) => b.val - a.val)[0].label}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
-          <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-center text-gray-400">
-            <div className="bg-gray-50 rounded-lg p-2"><p className="font-semibold text-gray-600">Graph 1 — MOST</p><p>Mask / Public Self</p><p className="italic">Tampilan saat ini</p></div>
-            <div className="bg-gray-50 rounded-lg p-2"><p className="font-semibold text-gray-600">Graph 2 — LEAST</p><p>Under Stress</p><p className="italic">Perilaku saat tertekan</p></div>
-            <div className="bg-gray-50 rounded-lg p-2"><p className="font-semibold text-gray-600">Graph 3 — CHANGE</p><p>Core / Private Self</p><p className="italic">Kepribadian sesungguhnya</p></div>
+
+          {/* Legend */}
+          <div className="hasil-grid-3" style={{ gap: '8px' }}>
+            {[
+              { title: 'Graph 1 — MOST',   sub: 'Mask / Public Self',    note: 'Tampilan saat ini' },
+              { title: 'Graph 2 — LEAST',  sub: 'Under Stress',          note: 'Perilaku saat tertekan' },
+              { title: 'Graph 3 — CHANGE', sub: 'Core / Private Self',   note: 'Kepribadian sesungguhnya' },
+            ].map(l => (
+              <div key={l.title} style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', color: 'var(--text-sub)', marginBottom: '4px' }}>{l.title}</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px' }}>{l.sub}</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '10px', fontStyle: 'italic', marginTop: '2px' }}>{l.note}</p>
+              </div>
+            ))}
           </div>
 
-          {/* WARNING BOX — Tight Profile / Under Shift / Upper Shift */}
+          {/* Profil khusus warning */}
           {profilKhusus.length > 0 && (
-            <div className="mt-4 space-y-3">
-              <p className="text-xs font-semibold uppercase text-gray-500">⚠️ Catatan Profil Khusus</p>
+            <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.14em', color: '#f59e0b', textTransform: 'uppercase' }}>Catatan Profil Khusus</p>
               {profilKhusus.map((k, i) => (
-                <div key={i} className={`border rounded-xl p-4 ${k.warna}`}>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-lg">{k.icon}</span>
-                    <span className="font-bold text-sm">{k.label}</span>
-                  </div>
-                  <p className="text-xs leading-relaxed">{k.deskripsi}</p>
+                <div key={i} style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.25)', borderRadius: '10px', padding: '16px' }}>
+                  <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: '#f59e0b', fontSize: '13px', marginBottom: '6px' }}>{k.icon} {k.label}</p>
+                  <p style={{ color: 'var(--text-sub)', fontSize: '13px', lineHeight: '1.65' }}>{k.deskripsi}</p>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* JPM — JOB PERSON MATCH */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-5 print:shadow-none print:border">
-          <h3 className="font-bold text-gray-700 mb-1">Job Person Match (JPM)</h3>
-          <p className="text-xs text-gray-400 mb-4">Hitung kesesuaian profil kepribadian dengan jabatan</p>
+        {/* ── JPM ── */}
+        <div className="dark-card" style={{ padding: '24px' }}>
+          <div className="section-rule" style={{ marginBottom: '20px' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Job Person Match</span><span className="section-rule-line" />
+          </div>
+          <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '20px' }}>Hitung kesesuaian profil kepribadian dengan jabatan</p>
 
           {jobs.length === 0 ? (
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-center">
-              <p className="text-sm text-yellow-700">Belum ada job profile yang dibuat.</p>
-              <p className="text-xs text-yellow-500 mt-1">HRD perlu menambahkan job profile terlebih dahulu.</p>
+            <div style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.25)', borderRadius: '10px', padding: '16px', textAlign: 'center' }}>
+              <p style={{ color: '#f59e0b', fontSize: '13px' }}>Belum ada job profile. HRD perlu menambahkan job profile terlebih dahulu.</p>
             </div>
           ) : (
             <>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Pilih Jabatan:</label>
-                <div className="grid grid-cols-2 gap-2">
-                  {jobs.map(job => {
-                    const dom = ['D','I','S','C'].reduce((a, b) => job[`skor_${a.toLowerCase()}`] >= job[`skor_${b.toLowerCase()}`] ? a : b)
-                    const w = warnaMap[dom]
-                    return (
-                      <button
-                        key={job.id}
-                        onClick={() => handleSelectJob(job)}
-                        className={`p-3 rounded-xl border-2 text-left transition ${selectedJob?.id === job.id ? `${w.light} ${w.border}` : 'border-gray-100 hover:border-gray-300'}`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className={`text-xs font-black px-2 py-1 rounded-lg ${w.light} ${w.text}`}>{dom}</span>
-                          <span className="text-sm font-medium text-gray-700">{job.nama_jabatan}</span>
-                        </div>
-                      </button>
-                    )
-                  })}
-                </div>
+              <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '12px' }}>Pilih Jabatan:</p>
+              <div className="hasil-grid-2" style={{ gap: '8px', marginBottom: '20px' }}>
+                {jobs.map(job => {
+                  const dom = ['D','I','S','C'].reduce((a, b) => job[`skor_${a.toLowerCase()}`] >= job[`skor_${b.toLowerCase()}`] ? a : b)
+                  const selected = selectedJob?.id === job.id
+                  return (
+                    <button key={job.id} onClick={() => handleSelectJob(job)} style={{ padding: '12px', borderRadius: '10px', border: `1px solid ${selected ? DC[dom].border : 'var(--border)'}`, background: selected ? DC[dom].dim : 'var(--surface-2)', textAlign: 'left', cursor: 'pointer', transition: 'all 0.18s' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '13px', color: DC[dom].hex, padding: '3px 8px', background: `${DC[dom].hex}15`, borderRadius: '6px' }}>{dom}</span>
+                        <span style={{ color: 'var(--text-sub)', fontSize: '13px' }}>{job.nama_jabatan}</span>
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
 
-              {selectedJob && jpmScore !== null && (
-                <div className={`${getJpmColor(jpmScore).light} border border-gray-200 rounded-2xl p-5`}>
-                  <div className="text-center mb-4">
-                    <p className="text-sm text-gray-500 mb-1">Kesesuaian dengan jabatan</p>
-                    <p className="text-lg font-bold text-gray-700 mb-3">{selectedJob.nama_jabatan}</p>
-                    <div className={`${getJpmColor(jpmScore).bg} text-white rounded-2xl py-5 px-6 inline-block min-w-32`}>
-                      <p className="text-5xl font-black">{jpmScore}%</p>
-                      <p className="text-sm font-semibold opacity-90 mt-1">{getJpmColor(jpmScore).label}</p>
+              {selectedJob && jpmScore !== null && (() => {
+                const jc = getJpmColor(jpmScore)
+                const jcHex = jpmScore >= 80 ? '#22c55e' : jpmScore >= 60 ? '#3b82f6' : jpmScore >= 40 ? '#f59e0b' : '#ef4444'
+                return (
+                  <div style={{ background: `${jcHex}08`, border: `1px solid ${jcHex}30`, borderRadius: '12px', padding: '20px' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '6px' }}>Kesesuaian dengan</p>
+                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '16px', color: 'var(--text)', marginBottom: '16px' }}>{selectedJob.nama_jabatan}</p>
+                      <div style={{ display: 'inline-block', background: `${jcHex}18`, border: `2px solid ${jcHex}50`, borderRadius: '14px', padding: '20px 32px' }}>
+                        <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '48px', color: jcHex, lineHeight: 1 }}>{jpmScore}%</p>
+                        <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', color: jcHex, marginTop: '4px', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{jc.label}</p>
+                      </div>
                     </div>
-                  </div>
-
-                  {/* Progress bar JPM */}
-                  <div className="mb-4">
-                    <div className="h-4 bg-white rounded-full overflow-hidden shadow-inner">
-                      <div
-                        className={`h-full ${getJpmColor(jpmScore).bg} rounded-full transition-all duration-500`}
-                        style={{ width: `${jpmScore}%` }}
-                      />
+                    <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden', marginBottom: '8px' }}>
+                      <div style={{ height: '100%', background: jcHex, width: `${jpmScore}%`, borderRadius: '99px', transition: 'width 0.7s' }} />
                     </div>
-                    <div className="flex justify-between text-xs text-gray-400 mt-1">
-                      <span>0%</span>
-                      <span>Kurang Sesuai</span>
-                      <span>Cukup</span>
-                      <span>Sesuai</span>
-                      <span>100%</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginBottom: '20px' }}>
+                      <span>0%</span><span>Kurang</span><span>Cukup</span><span>Sesuai</span><span>100%</span>
                     </div>
-                  </div>
-
-                  {/* Detail per dimensi */}
-                  <div className="space-y-2">
-                    <p className="text-xs font-semibold uppercase text-gray-500 mb-2">Detail Kesesuaian per Dimensi</p>
+                    <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.12em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '12px' }}>Detail per Dimensi</p>
                     {jpmDetail?.map(d => {
-                      const w = warnaMap[d.dim]
                       const pct = Math.min(d.pct, 100)
                       return (
-                        <div key={d.dim}>
-                          <div className="flex justify-between text-xs mb-1">
-                            <span className={`font-bold ${w.text}`}>{d.dim} ({d.dim === 'D' ? 'Dominance' : d.dim === 'I' ? 'Influence' : d.dim === 'S' ? 'Steadiness' : 'Conscientiousness'})</span>
-                            <span className="text-gray-500">Peserta: {d.pesertaVal} / Job: {d.jobVal} = <span className="font-bold">{pct}%</span></span>
+                        <div key={d.dim} style={{ marginBottom: '12px' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '5px' }}>
+                            <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: DC[d.dim].hex }}>{d.dim} — {DC[d.dim].label}</span>
+                            <span style={{ color: 'var(--text-muted)' }}>Peserta {d.pesertaVal} / Job {d.jobVal} = <strong style={{ color: 'var(--text-sub)' }}>{pct}%</strong></span>
                           </div>
-                          <div className="h-3 bg-white rounded-full overflow-hidden shadow-inner">
-                            <div className={`h-full ${w.bar} rounded-full`} style={{ width: `${pct}%` }} />
+                          <div style={{ height: '4px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                            <div style={{ height: '100%', background: DC[d.dim].hex, width: `${pct}%`, borderRadius: '99px', opacity: 0.8 }} />
                           </div>
                         </div>
                       )
                     })}
                   </div>
-
-                  <div className="mt-4 p-3 bg-white rounded-xl">
-                    <p className="text-xs text-gray-500">
-                      {jpmScore >= 80 && '✅ Profil kepribadian peserta sangat sesuai dengan kebutuhan jabatan ini.'}
-                      {jpmScore >= 60 && jpmScore < 80 && '🟢 Profil kepribadian peserta sesuai dengan kebutuhan jabatan ini dengan beberapa area pengembangan.'}
-                      {jpmScore >= 40 && jpmScore < 60 && '🟡 Profil kepribadian peserta cukup sesuai. Perlu pengembangan pada beberapa dimensi.'}
-                      {jpmScore < 40 && '🔴 Profil kepribadian peserta kurang sesuai dengan kebutuhan jabatan ini.'}
-                    </p>
-                  </div>
-                </div>
-              )}
+                )
+              })()}
             </>
           )}
         </div>
 
-        {/* KONTEN PREMIUM — Karakteristik, Kekuatan/Kelemahan, Karir */}
+        {/* ── Konten Premium ── */}
         {fromDashboard ? (
-          /* Admin/Dashboard: tampil langsung */
-          <PremiumContentDISC info={info} warna={warna} />
+          <PremiumContentDISC info={info} dominanHex={DC[dominan].hex} />
         ) : (
-          <PaymentGate
-            testType="DISC"
-            pesertaId={pesertaId}
-            nama={nama}
-          >
-            <PremiumContentDISC info={info} warna={warna} />
+          <PaymentGate testType="DISC" pesertaId={pesertaId} nama={nama}>
+            <PremiumContentDISC info={info} dominanHex={DC[dominan].hex} />
           </PaymentGate>
         )}
 
-        {/* TOMBOL */}
-        <div className="flex gap-3 sticky bottom-4 print:hidden">
-          <button onClick={() => navigate('/tes-disc')} className="flex-1 border-2 border-green-600 text-green-600 bg-white font-semibold py-3 rounded-xl hover:bg-green-50 transition shadow-lg">
-            ← Ulangi Tes
-          </button>
-          <button onClick={() => window.print()} className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 rounded-xl hover:from-green-700 hover:to-emerald-700 transition shadow-lg shadow-green-200">
-            🖨️ Cetak Laporan
-          </button>
+        {/* Footer */}
+        <div style={{ textAlign: 'center', paddingTop: '24px', borderTop: '1px solid var(--border)' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.1em', opacity: 0.4 }}>© 2026 · AssesIN · Platform Asesmen Psikologi Digital</p>
+        </div>
+
+        {/* Tombol */}
+        <div className="print:hidden" style={{ display: 'flex', gap: '12px', position: 'sticky', bottom: '16px' }}>
+          <button onClick={() => navigate('/tes-disc')} style={{ flex: 1, background: 'var(--surface)', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', padding: '14px', borderRadius: '10px', border: '1px solid var(--border)', cursor: 'pointer' }}>← Ulangi Tes</button>
+          <button onClick={() => window.print()} style={{ flex: 1, background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}>🖨️ Cetak / PDF</button>
         </div>
       </div>
     </div>

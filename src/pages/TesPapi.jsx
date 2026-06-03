@@ -2,6 +2,7 @@
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
+import PrivacyCheckbox from '../components/PrivacyCheckbox'
 
 // 90 soal asli PAPI Kostick 2020
 // a = ATAS (pilihan kiri/atas), b = BAWAH (pilihan kanan/bawah)
@@ -146,6 +147,7 @@ function TesPapi() {
   const [jawaban, setJawaban]       = useState({})
   const [loading, setLoading]       = useState(false)
   const [formErrors, setFormErrors] = useState({})
+  const [setujuPrivasi, setSetujuPrivasi] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const navigate = useNavigate()
 
@@ -158,6 +160,7 @@ function TesPapi() {
     if (!email.trim()) errs.email = 'Email wajib diisi.'
     if (!usia)         errs.usia  = 'Usia wajib diisi.'
     if (!jenisKelamin) errs.jenisKelamin = 'Jenis kelamin wajib dipilih.'
+    if (!setujuPrivasi) errs.privasi = 'Wajib menyetujui Kebijakan Privasi untuk melanjutkan.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -231,7 +234,7 @@ function TesPapi() {
               <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
               {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="form-grid-2">
               <div>
                 <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
                 <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
@@ -252,9 +255,15 @@ function TesPapi() {
                 Dari setiap pasang pernyataan, pilih satu yang paling mencerminkan diri Anda. Terdapat <strong style={{ color: 'var(--text)' }}>90 pasang</strong> pernyataan.
               </p>
             </div>
+            <PrivacyCheckbox
+              id="privacy-papi"
+              checked={setujuPrivasi}
+              onChange={v => { setSetujuPrivasi(v); setFormErrors(p => ({...p, privasi: ''})) }}
+              error={formErrors.privasi}
+            />
             <button
               onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '4px' }}
+              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
               onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
@@ -278,7 +287,7 @@ function TesPapi() {
         <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes PAPI Kostick</p>
-            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {jumlahDijawab}/90 terjawab</p>
+            <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {jumlahDijawab}/90 terjawab</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '120px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>

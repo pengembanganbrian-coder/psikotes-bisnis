@@ -44,7 +44,7 @@ serve(async (req: Request) => {
       },
       body: JSON.stringify({
         transaction_details: { order_id: orderId, gross_amount: amount },
-        customer_details:    { first_name: nama, email: email || "peserta@assesin.id" },
+        customer_details:    { first_name: nama, email: email || "pengembangan.brian@gmail.com" },
         item_details: [{
           id:       testType,
           price:    amount,

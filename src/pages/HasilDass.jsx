@@ -91,46 +91,11 @@ const skalaInfo = {
 
 /* ── Konfigurasi warna per tingkat keparahan ────────────────────── */
 const warnaConfig = {
-  emerald: {
-    bg:     'bg-emerald-50',
-    border: 'border-emerald-200',
-    badge:  'bg-emerald-100 text-emerald-800',
-    bar:    'bg-emerald-500',
-    title:  'text-emerald-700',
-    btn:    'bg-emerald-600 hover:bg-emerald-700',
-  },
-  lime:    {
-    bg:     'bg-lime-50',
-    border: 'border-lime-200',
-    badge:  'bg-lime-100 text-lime-800',
-    bar:    'bg-lime-500',
-    title:  'text-lime-700',
-    btn:    'bg-lime-600 hover:bg-lime-700',
-  },
-  amber:   {
-    bg:     'bg-amber-50',
-    border: 'border-amber-200',
-    badge:  'bg-amber-100 text-amber-800',
-    bar:    'bg-amber-500',
-    title:  'text-amber-700',
-    btn:    'bg-amber-600 hover:bg-amber-700',
-  },
-  orange:  {
-    bg:     'bg-orange-50',
-    border: 'border-orange-200',
-    badge:  'bg-orange-100 text-orange-800',
-    bar:    'bg-orange-500',
-    title:  'text-orange-700',
-    btn:    'bg-orange-600 hover:bg-orange-700',
-  },
-  rose:    {
-    bg:     'bg-rose-50',
-    border: 'border-rose-200',
-    badge:  'bg-rose-100 text-rose-800',
-    bar:    'bg-rose-500',
-    title:  'text-rose-700',
-    btn:    'bg-rose-600 hover:bg-rose-700',
-  },
+  emerald: { hex: '#22c55e' },
+  lime:    { hex: '#84cc16' },
+  amber:   { hex: '#f59e0b' },
+  orange:  { hex: '#f97316' },
+  rose:    { hex: '#f43f5e' },
 }
 
 /* ── Rekomendasi HR per tingkat keparahan tertinggi ─────────────── */
@@ -141,7 +106,7 @@ const rekomendasiHR = {
     warna: 'emerald',
     tindakan: [
       'Pertahankan gaya hidup sehat dan keseimbangan antara kerja dan kehidupan pribadi.',
-      'Ikuti program kesejahteraan pegawai yang tersedia sebagai pemeliharaan kesehatan mental rutin.',
+      'Ikuti program kesejahteraan yang tersedia sebagai pemeliharaan kesehatan mental rutin.',
       'Jadwalkan asesmen ulang secara berkala (minimal 1 tahun sekali).',
     ],
   },
@@ -150,7 +115,7 @@ const rekomendasiHR = {
     icon: '👁️',
     warna: 'lime',
     tindakan: [
-      'Dorong pegawai untuk menerapkan teknik relaksasi dan manajemen stres sederhana sehari-hari.',
+      'Dorong penerapan teknik relaksasi dan manajemen stres sederhana dalam rutinitas sehari-hari.',
       'Pastikan beban kerja dalam batas wajar dan ada dukungan sosial yang memadai dari rekan kerja.',
       'Lakukan pemantauan kondisi secara berkala dalam 3–6 bulan ke depan.',
     ],
@@ -184,8 +149,8 @@ const rekomendasiHR = {
     tindakan: [
       'Segera rujuk ke tenaga kesehatan mental profesional (psikolog klinis atau psikiater).',
       'Pertimbangkan cuti medis atau pengurangan beban kerja sementara sesuai rekomendasi medis.',
-      'Pastikan pegawai mendapat dukungan penuh dari keluarga dan lingkungan sosial terdekat.',
-      'Koordinasikan dengan unit kesehatan dan kepegawaian untuk tindak lanjut yang komprehensif.',
+      'Pastikan mendapat dukungan penuh dari keluarga dan lingkungan sosial terdekat.',
+      'Koordinasikan dengan tim HR/People dan profesional kesehatan untuk tindak lanjut yang komprehensif.',
     ],
   },
 }
@@ -195,23 +160,23 @@ const rekomendasiHR = {
 ═══════════════════════════════════════════════════════════════════ */
 /* ── Konten premium DASS ────────────────────────────────────── */
 function RekomendasiDASS({ rekHR }) {
-  const wr = warnaConfig[rekHR.warna]
+  const hex = warnaConfig[rekHR.warna]?.hex ?? '#d4a853'
   return (
-    <div className={`bg-white rounded-2xl shadow-sm border-2 ${wr.border} overflow-hidden`}>
-      <div className={`${wr.bg} px-6 py-4 flex items-center gap-4`}>
-        <span className="text-2xl">{rekHR.icon}</span>
+    <div className="dark-card" style={{ overflow: 'hidden', borderColor: hex + '40' }}>
+      <div style={{ background: hex + '14', padding: '16px 24px', borderBottom: `1px solid ${hex}30`, display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <span style={{ fontSize: '22px' }}>{rekHR.icon}</span>
         <div>
-          <h3 className={`font-black text-lg ${wr.title}`}>Rekomendasi Tindak Lanjut</h3>
-          <span className={`inline-block text-xs font-bold px-3 py-0.5 rounded-full ${wr.badge}`}>
+          <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '15px', color: hex, marginBottom: '4px' }}>Rekomendasi Tindak Lanjut</h3>
+          <span style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, padding: '2px 10px', borderRadius: '99px', background: hex + '22', color: hex, border: `1px solid ${hex}44` }}>
             Status keseluruhan: {rekHR.label}
           </span>
         </div>
       </div>
-      <div className="px-6 py-5">
-        <ul className="space-y-3">
+      <div style={{ padding: '20px 24px' }}>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
           {rekHR.tindakan.map((t, i) => (
-            <li key={i} className="flex gap-3 text-sm text-gray-700">
-              <span className={`flex-shrink-0 w-5 h-5 ${wr.badge} rounded-full flex items-center justify-center text-[11px] font-bold`}>
+            <li key={i} style={{ display: 'flex', gap: '12px', fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.65' }}>
+              <span style={{ flexShrink: 0, width: '20px', height: '20px', borderRadius: '99px', background: hex + '22', color: hex, border: `1px solid ${hex}44`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700 }}>
                 {i + 1}
               </span>
               {t}
@@ -300,10 +265,17 @@ export default function HasilDass() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }}>
 
+      {/* Print stylesheet */}
+      <style>{`
+        @media print {
+          .dass-header { background: white !important; border-bottom: 2px solid #a67c00 !important; }
+        }
+      `}</style>
+
       {/* Header */}
-      <div style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '28px var(--px)' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          <div className="section-rule" style={{ marginBottom: '20px' }}>
+      <div className="dass-header" style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '28px var(--px)' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto', position: 'relative' }}>
+          <div className="section-rule print-hide" style={{ marginBottom: '20px' }}>
             <span className="section-rule-pip" /><span className="section-rule-label">Laporan DASS-21</span><span className="section-rule-line" />
           </div>
           <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '26px', color: 'var(--text)', marginBottom: '6px' }}>Laporan DASS-21</h1>
@@ -313,20 +285,35 @@ export default function HasilDass() {
             <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>📅 {tanggal}</span>
             {isSaved && <span style={{ color: 'var(--accent)', fontSize: '12px', fontFamily: 'Syne, sans-serif', fontWeight: 700 }}>✓ Tersimpan</span>}
           </div>
+          <button onClick={() => window.print()} className="print-hide" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+            🖨️ Cetak / PDF
+          </button>
         </div>
       </div>
 
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '32px var(--px)', display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
+        {/* Print-Only Header */}
+        <div className="print-only" style={{ display: 'none', textAlign: 'center', paddingBottom: '20px', borderBottom: '2px solid #a67c00', marginBottom: '4px' }}>
+          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', letterSpacing: '0.22em', color: '#a67c00', marginBottom: '4px' }}>ASSESIN</div>
+          <div style={{ fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888' }}>Platform Asesmen Psikologi Digital · ASSESS · INSIGHT · GROW</div>
+          <div style={{ marginTop: '16px', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111' }}>LAPORAN DASS-21</div>
+          <div style={{ fontSize: '12px', color: '#555', marginTop: '4px' }}>Depression · Anxiety · Stress Scales</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '11px', color: '#444', maxWidth: '600px', margin: '8px auto 0' }}>
+            <span>Peserta: <strong>{nama}</strong></span>
+            <span>Tanggal: {tanggal}</span>
+          </div>
+        </div>
+
         {/* Status Keseluruhan */}
         {(() => {
-          const wr = warnaConfig[rekHR.warna]
+          const hex = warnaConfig[rekHR.warna]?.hex ?? '#d4a853'
           return (
             <div className="dark-card" style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
               <span style={{ fontSize: '32px' }}>{rekHR.icon}</span>
               <div>
                 <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.18em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>Status Kesejahteraan Psikologis</p>
-                <p className={`text-xl font-black ${wr.title}`}>{rekHR.label}</p>
+                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', color: hex }}>{rekHR.label}</p>
                 <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '4px' }}>
                   D: <strong style={{ color: 'var(--text-sub)' }}>{kD.label}</strong> · A: <strong style={{ color: 'var(--text-sub)' }}>{kA.label}</strong> · S: <strong style={{ color: 'var(--text-sub)' }}>{kS.label}</strong>
                 </p>
@@ -338,22 +325,22 @@ export default function HasilDass() {
         {/* Kartu per skala */}
         {skalaData.map(({ key, skor: s, kat }) => {
           const info = skalaInfo[key]
-          const w    = warnaConfig[kat.warna]
+          const hex  = warnaConfig[kat.warna]?.hex ?? '#56566e'
           const pct  = (s / 42) * 100
 
           return (
-            <div key={key} className={`dark-card overflow-hidden`} style={{ borderColor: 'var(--border)' }}>
-              <div className={`${w.bg} px-6 py-4 flex justify-between items-center`}>
+            <div key={key} className="dark-card" style={{ overflow: 'hidden', borderColor: hex + '40' }}>
+              <div style={{ background: hex + '14', padding: '16px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <span style={{ fontSize: '24px' }}>{info.emoji}</span>
                   <div>
-                    <h3 className={`font-black text-lg ${w.title}`}>{info.nama}</h3>
-                    <p style={{ fontSize: '10px', color: 'rgba(0,0,0,0.45)', marginTop: '2px' }}>{info.thresholds}</p>
+                    <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '16px', color: hex }}>{info.nama}</h3>
+                    <p style={{ fontSize: '10px', color: hex + 'aa', marginTop: '2px' }}>{info.thresholds}</p>
                   </div>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <p className={`text-4xl font-black ${w.title}`}>{s}</p>
-                  <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full mt-1 ${w.badge}`}>{kat.label}</span>
+                  <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '36px', color: hex, lineHeight: 1 }}>{s}</p>
+                  <span style={{ display: 'inline-block', fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', marginTop: '6px', background: hex + '22', color: hex, border: `1px solid ${hex}44` }}>{kat.label}</span>
                 </div>
               </div>
               <div style={{ padding: '12px 24px', background: 'var(--surface-2)', borderTop: '1px solid var(--border)' }}>
@@ -361,7 +348,7 @@ export default function HasilDass() {
                   <span>0</span><span>Normal</span><span>Ringan</span><span>Sedang</span><span>Berat</span><span>42</span>
                 </div>
                 <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
-                  <div className={`h-full ${w.bar} rounded-full`} style={{ width: `${pct}%`, transition: 'width 0.7s' }} />
+                  <div style={{ height: '100%', backgroundColor: hex, borderRadius: '99px', width: `${pct}%`, transition: 'width 0.7s' }} />
                 </div>
               </div>
               <div style={{ padding: '16px 24px' }}>
@@ -395,7 +382,7 @@ export default function HasilDass() {
             <tbody>
               {skalaData.map(({ key, skor: s, kat }) => {
                 const info = skalaInfo[key]
-                const w    = warnaConfig[kat.warna]
+                const hex  = warnaConfig[kat.warna]?.hex ?? '#56566e'
                 return (
                   <tr key={key} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '12px 16px', color: 'var(--text-sub)' }}>{info.emoji} {info.nama}</td>
@@ -403,7 +390,7 @@ export default function HasilDass() {
                     <td style={{ padding: '12px 16px', textAlign: 'center', color: 'var(--text)', fontWeight: 700 }}>{s}</td>
                     <td style={{ padding: '12px 16px', textAlign: 'center', color: 'var(--text-muted)' }}>42</td>
                     <td style={{ padding: '12px 16px', textAlign: 'center' }}>
-                      <span className={`text-xs font-bold px-3 py-1 rounded-full ${w.badge}`}>{kat.label}</span>
+                      <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: hex + '22', color: hex, border: `1px solid ${hex}44` }}>{kat.label}</span>
                     </td>
                   </tr>
                 )
@@ -423,14 +410,26 @@ export default function HasilDass() {
           </p>
         </div>
 
-        <div style={{ textAlign: 'center', paddingTop: '8px' }}>
+        {/* Print-Only Footer */}
+        <div className="print-only" style={{ display: 'none', paddingTop: '16px', borderTop: '1px solid #e0e0e0', textAlign: 'center' }}>
+          <p style={{ fontSize: '10px', color: '#777', lineHeight: '1.6' }}>DASS-21 adalah alat skrining psikologis, bukan instrumen diagnostik klinis. Interpretasi akhir harus dilakukan oleh tenaga profesional yang berwenang.</p>
+          <p style={{ fontSize: '10px', color: '#bbb', marginTop: '4px' }}>© 2026 AssesIN · assesin.com · Laporan ini bersifat rahasia</p>
+        </div>
+
+        <div className="print-hide" style={{ textAlign: 'center', paddingTop: '8px', display: 'flex', gap: '10px', justifyContent: 'center' }}>
           <button
             onClick={() => navigate('/')}
-            style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px 40px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}
+            style={{ background: 'var(--surface-2)', color: 'var(--text-sub)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '14px 32px', borderRadius: '10px', border: '1px solid var(--border)', cursor: 'pointer' }}
+          >
+            ← Beranda
+          </button>
+          <button
+            onClick={() => window.print()}
+            style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px 32px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
             onMouseLeave={e => e.currentTarget.style.opacity = '1'}
           >
-            ← Kembali ke Beranda
+            🖨️ Cetak / PDF
           </button>
         </div>
 

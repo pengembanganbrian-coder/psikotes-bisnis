@@ -1,9 +1,8 @@
-/**
- * AssesIN Logo Component
- * Gunakan: <Logo /> | <Logo size="sm|md|lg|xl" /> | <Logo dark /> | <Logo iconOnly />
- */
+import { useId } from 'react'
 
 export default function Logo({ size = 'md', dark = false, iconOnly = false }) {
+  const uid = useId().replace(/:/g, '')
+  const gradId   = `aiGrad-${uid}`
   const sizes = {
     sm: { icon: 30, text: 'text-lg',  gap: 'gap-2'   },
     md: { icon: 38, text: 'text-2xl', gap: 'gap-2.5' },
@@ -19,19 +18,14 @@ export default function Logo({ size = 'md', dark = false, iconOnly = false }) {
       {/* ── Icon ─────────────────────────────────── */}
       <svg width={d} height={d} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <linearGradient id="aiGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+          <linearGradient id={gradId} x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
             <stop offset="0%"   stopColor="#1D4ED8"/>
             <stop offset="100%" stopColor="#4338CA"/>
           </linearGradient>
-          {/* Glow effect untuk bar tertinggi */}
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="1.5" result="blur"/>
-            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-          </filter>
         </defs>
 
         {/* Background — rounded square */}
-        <rect width="48" height="48" rx="13" fill="url(#aiGrad)"/>
+        <rect width="48" height="48" rx="13" fill={`url(#${gradId})`}/>
 
         {/* Garis dasar / base line */}
         <rect x="8" y="37" width="32" height="2" rx="1" fill="white" opacity="0.25"/>

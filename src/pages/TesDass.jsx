@@ -2,6 +2,7 @@
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { supabase } from '../supabase'
+import PrivacyCheckbox from '../components/PrivacyCheckbox'
 
 // 21 pernyataan DASS-21 (versi Bahasa Indonesia yang tervalidasi)
 // Skala: D = Depresi, A = Kecemasan (Anxiety), S = Stres
@@ -46,6 +47,7 @@ export default function TesDass() {
   const [jenisKelamin, setJenisKelamin] = useState('')
   const [jawaban, setJawaban]       = useState({})
   const [formErrors, setFormErrors] = useState({})
+  const [setujuPrivasi, setSetujuPrivasi] = useState(false)
 
   const answered = Object.keys(jawaban).length
   const progress  = (answered / 21) * 100
@@ -63,6 +65,7 @@ export default function TesDass() {
     if (!email.trim()) errs.email = 'Email wajib diisi.'
     if (!usia)         errs.usia  = 'Usia wajib diisi.'
     if (!jenisKelamin) errs.jenisKelamin = 'Jenis kelamin wajib dipilih.'
+    if (!setujuPrivasi) errs.privasi = 'Wajib menyetujui Kebijakan Privasi untuk melanjutkan.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -101,9 +104,8 @@ export default function TesDass() {
       }])
 
       navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, email, jabatan, jawaban, pesertaId: peserta.id } })
-    } catch (err) {
-      console.error('Save DASS error:', err)
-      navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, email, jawaban } })
+    } catch {
+      navigate('/hasil-dass', { state: { skor: { D, A, S }, nama, email, jabatan, jawaban } })
     }
   }
 
@@ -140,7 +142,7 @@ export default function TesDass() {
               <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
               {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="form-grid-2">
               <div>
                 <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
                 <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
@@ -156,6 +158,12 @@ export default function TesDass() {
                 {formErrors.jenisKelamin && <p style={S_ERR}>{formErrors.jenisKelamin}</p>}
               </div>
             </div>
+            <PrivacyCheckbox
+              id="privacy-dass"
+              checked={setujuPrivasi}
+              onChange={v => { setSetujuPrivasi(v); setFormErrors(p => ({...p, privasi: ''})) }}
+              error={formErrors.privasi}
+            />
             <button
               onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
               style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
@@ -184,7 +192,7 @@ export default function TesDass() {
         <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes DASS-21</p>
-            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {answered}/21 terjawab</p>
+            <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {answered}/21 terjawab</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '120px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
@@ -200,7 +208,7 @@ export default function TesDass() {
         {/* Legenda */}
         <div className="dark-card" style={{ padding: '20px', marginBottom: '24px' }}>
           <p style={{ color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '14px' }}>Pilih frekuensi yang paling menggambarkan kondisi Anda dalam <strong>1 minggu terakhir</strong>:</p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+          <div className="rating-grid">
             {[{n:0,label:'Tidak pernah',cls:'r0'},{n:1,label:'Kadang-kadang',cls:'r1'},{n:2,label:'Sering',cls:'r2'},{n:3,label:'Hampir selalu',cls:'r3'}].map(({n, label, cls}) => (
               <div key={n} className={`rating-btn ${cls} sel`} style={{ cursor: 'default' }}>
                 <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '16px' }}>{n}</span>
@@ -223,7 +231,7 @@ export default function TesDass() {
                   </span>
                   <p style={{ color: 'var(--text)', fontSize: '14px', lineHeight: '1.65' }}>{s.teks}</p>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+                <div className="rating-grid">
                   {[0, 1, 2, 3].map(n => (
                     <button key={n} onClick={() => setJawaban(j => ({...j, [s.id]: n}))} className={`rating-btn r${n} ${val === n ? 'sel' : ''}`}>
                       <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '18px' }}>{n}</span>

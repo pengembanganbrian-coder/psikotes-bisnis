@@ -41,19 +41,19 @@ const narasiSkala = {
     tinggi: 'Individu dengan skor L tinggi memiliki jiwa kepemimpinan yang kuat dan alami. Ia senang memimpin, mengorganisir tim, dan mengambil inisiatif tanpa perlu diminta. Dalam situasi kelompok, orang lain secara alami cenderung mengikutinya karena ia memancarkan kepercayaan diri dan arah yang jelas. Ia menikmati tanggung jawab atas orang lain dan termotivasi oleh keberhasilan timnya. Kemampuannya untuk membaca situasi dan menggerakkan orang menjadikannya aset berharga dalam setiap organisasi, terutama dalam jabatan yang memerlukan koordinasi lintas fungsi dan pengambilan keputusan kolektif.',
     kekuatan: ['Kemampuan memimpin, mengorganisir, dan menginspirasi tim secara natural', 'Inisiatif tinggi — aktif mengambil tindakan tanpa menunggu perintah', 'Dipercaya sebagai figur koordinator dan penanggung jawab dalam kelompok'],
     pengembangan: 'Perlu memperhatikan dan menghargai pendapat anggota tim agar gaya kepemimpinannya tidak terkesan otoriter. Penting untuk tetap membuka ruang partisipasi aktif dari semua anggota dan tidak mendominasi setiap keputusan.',
-    rekomendasi: ['Kepala Seksi / Kasubsie', 'Koordinator Tim / Proyek', 'Jabatan Struktural Eselon IV–III', 'Pengawas Operasional Lapangan', 'Manajer Program / Kegiatan'],
+    rekomendasi: ['Team Lead / Kepala Tim', 'Project Coordinator', 'Department Manager', 'Operations Supervisor', 'Program Manager'],
   },
   P: {
     tinggi: 'Individu dengan skor P tinggi memiliki kebutuhan yang kuat untuk mengontrol situasi dan mengarahkan orang lain. Ia merasa paling nyaman ketika dapat menentukan jalannya pekerjaan, menetapkan standar, dan memastikan setiap langkah berjalan sesuai arahannya. Ia tegas, tidak ragu dalam memberikan instruksi, dan cenderung frustrasi ketika situasi berada di luar kendalinya. Sifat ini menjadikannya pemimpin yang efektif dalam lingkungan yang membutuhkan ketertiban dan ketegasan, namun perlu diimbangi dengan kemampuan mendengarkan.',
     kekuatan: ['Ketegasan tinggi dalam memberikan arahan dan menetapkan standar kerja', 'Kemampuan mendelegasikan dan memastikan tugas berjalan sesuai rencana', 'Disiplin dan tidak mudah goyah dalam menghadapi tekanan untuk berkompromi'],
     pengembangan: 'Perlu mengembangkan fleksibilitas dan kemampuan mendengarkan masukan dari bawahan maupun rekan kerja. Kontrol yang terlalu ketat dapat menghambat kreativitas tim dan menurunkan motivasi anggota.',
-    rekomendasi: ['Pengawas / Supervisor Unit Kerja', 'Kepala Seksi Penindakan & Penyidikan', 'Manajer Operasional Harian', 'Koordinator Quality Control', 'Jabatan Pengawas Kepatuhan Internal'],
+    rekomendasi: ['Unit Supervisor / Team Lead', 'Compliance & Enforcement Manager', 'Daily Operations Manager', 'Quality Control Coordinator', 'Internal Compliance Officer'],
   },
   I: {
     tinggi: 'Individu dengan skor I tinggi sangat percaya diri dalam mengambil keputusan. Ia tidak mudah ragu, tidak bertele-tele, dan dapat bertindak cepat saat kondisi mendesak. Kemampuan ini sangat berharga dalam situasi krisis, di mana keputusan harus dibuat segera tanpa kemewahan untuk berpikir terlalu lama. Ia tidak takut salah dan cenderung belajar dari keputusannya secara langsung. Keteguhan dalam bersikap ini membuatnya menjadi pemimpin yang responsif dan tidak membingungkan tim dengan kebimbangan.',
     kekuatan: ['Kecepatan dan ketegasan dalam pengambilan keputusan bahkan di bawah tekanan', 'Tidak mudah ragu atau berubah-ubah pendirian saat menghadapi pilihan sulit', 'Responsif dan sigap dalam situasi yang membutuhkan tindakan segera'],
     pengembangan: 'Perlu memastikan keputusan cepat tetap didasarkan pada data dan pertimbangan yang memadai, bukan semata-mata dorongan impulsif. Konsultasi singkat dengan pihak terkait sebelum memutuskan sangat disarankan pada isu yang berdampak besar.',
-    rekomendasi: ['Kepala Unit / Kasatgas Operasi', 'Jabatan Crisis Management', 'Pengambil Kebijakan Teknis Lapangan', 'Kepala Tim Penindakan', 'Pejabat Fungsional Senior dengan Kewenangan Mandiri'],
+    rekomendasi: ['Operations Unit Lead', 'Crisis Management Officer', 'Technical Decision Maker', 'Enforcement Team Lead', 'Senior Professional dengan Otonomi Penuh'],
   },
   G: {
     tinggi: 'Individu dengan skor G tinggi sangat berorientasi pada tim dan kelompok. Ia bekerja paling efektif dalam lingkungan kolaboratif dan merasa kurang nyaman jika harus bekerja sendiri dalam waktu lama. Loyalitas dan dedikasinya pada kelompok sangat tinggi — ia akan berjuang keras untuk kepentingan tim. Kehadirannya menciptakan rasa kebersamaan yang kuat. Dalam pengambilan keputusan, ia cenderung mencari konsensus dan sangat mempertimbangkan pendapat rekan-rekannya.',
@@ -65,31 +65,31 @@ const narasiSkala = {
     tinggi: 'Individu dengan skor N tinggi memiliki dorongan prestasi yang sangat kuat. Ia menetapkan standar yang tinggi untuk dirinya sendiri dan tidak mudah merasa puas dengan hasil yang biasa-biasa saja. Selalu termotivasi untuk melampaui target, ia cenderung kompetitif namun terarah — bukan sekadar bersaing dengan orang lain, melainkan dengan dirinya sendiri kemarin. Semangat untuk terus berkembang menjadikannya individu yang proaktif dalam mencari pelatihan, tantangan baru, dan tanggung jawab yang lebih besar.',
     kekuatan: ['Motivasi intrinsik yang sangat tinggi untuk berprestasi dan melampaui target', 'Standar kerja tinggi — tidak mudah puas dengan hasil yang di bawah ekspektasi', 'Proaktif dalam mencari pengembangan diri dan peluang untuk berkontribusi lebih'],
     pengembangan: 'Perlu mengelola ekspektasi agar tidak terlalu perfeksionis sehingga menghambat produktivitas tim. Penting untuk menerima bahwa "cukup baik" terkadang sudah memadai dan menghindari burnout akibat standar yang terlalu tinggi.',
-    rekomendasi: ['Pemeriksa Bea dan Cukai Ahli', 'Auditor Kepabeanan dan Cukai', 'Analis Kebijakan Pengembangan', 'Peneliti / Perencana Strategis', 'Jabatan Fungsional dengan Target Kinerja Terukur'],
+    rekomendasi: ['Quality Assurance Specialist', 'Internal / External Auditor', 'Policy Development Analyst', 'Researcher / Strategic Planner', 'Performance-Based Professional Role'],
   },
   A: {
     tinggi: 'Individu dengan skor A tinggi sangat memperhatikan status, pengakuan, dan citra profesional. Ia termotivasi oleh posisi, jabatan, dan penghargaan yang menegaskan nilainya di mata organisasi dan lingkungannya. Ambisius dalam hal karier, ia bekerja keras tidak hanya karena tugas semata, tetapi juga karena ingin dilihat dan dihargai. Perhatiannya pada penampilan dan reputasi menjadikannya representasi yang baik bagi institusi dalam forum-forum resmi.',
     kekuatan: ['Penampilan dan citra profesional yang selalu terjaga dengan baik', 'Motivasi kuat untuk berkembang dalam jabatan dan meraih posisi lebih tinggi', 'Sadar akan pentingnya reputasi dan mampu merepresentasikan institusi secara baik'],
     pengembangan: 'Perlu memastikan ambisi terhadap status dan pengakuan tidak mengalahkan fokus pada kualitas dan integritas pekerjaan. Kolaborasi dan kerendahan hati tetap penting agar tidak dipersepsikan sebagai orang yang hanya mengejar jabatan.',
-    rekomendasi: ['Juru Bicara / Humas Institusi', 'Pejabat Penghubung (Liaison Officer)', 'Jabatan Struktural Representatif', 'Koordinator Kerja Sama Kelembagaan', 'Protokol dan Acara Resmi'],
+    rekomendasi: ['Corporate Spokesperson / PR Manager', 'Liaison Officer / Relationship Manager', 'Brand Ambassador / Executive Representative', 'Partnership & Alliance Coordinator', 'Event & Protocol Manager'],
   },
   T: {
     tinggi: 'Individu dengan skor T tinggi bekerja dengan tempo yang cepat dan konsisten. Ia mampu mempertahankan ritme kerja yang tinggi dalam jangka panjang tanpa kehilangan produktivitas. Sangat efisien dalam mengelola waktu, ia sering menyelesaikan tugas lebih cepat dari yang diperkirakan. Dalam kondisi tenggat waktu yang ketat, ia justru tampil maksimal karena tekanan justru memotivasinya. Tempo kerjanya yang tinggi sering menjadi standar dan inspirasi bagi rekan-rekan di sekitarnya.',
     kekuatan: ['Produktivitas tinggi dengan tempo kerja yang konsisten dan cepat', 'Kemampuan mengelola waktu secara efisien dan menyelesaikan tugas lebih awal', 'Performa optimal justru muncul di bawah tekanan tenggat waktu'],
     pengembangan: 'Perlu memastikan kecepatan tidak mengorbankan ketelitian dan kualitas hasil akhir. Penting juga untuk memahami bahwa tidak semua rekan kerja memiliki tempo yang sama, sehingga perlu bersabar dalam koordinasi tim.',
-    rekomendasi: ['Staf Operasional dengan Beban Kerja Tinggi', 'Jabatan Pengelolaan Data dan Dokumen', 'Petugas Pelayanan Kepabeanan', 'Jabatan dengan Deadline Harian / Mingguan', 'Koordinator Administrasi dan Tata Usaha'],
+    rekomendasi: ['High-Volume Operations Staff', 'Data & Document Management Specialist', 'Customer Service Officer', 'Deadline-Driven Operational Role', 'Administrative Coordinator'],
   },
   V: {
     tinggi: 'Individu dengan skor V tinggi adalah tipe yang penuh semangat, energi, dan antusiasme. Ia menyukai pekerjaan yang dinamis, bervariasi, dan penuh tantangan. Kehadirannya membawa energi positif yang menular ke lingkungan sekitarnya, menjadikannya penyemangat alami dalam tim. Tidak mudah putus asa dan selalu siap menghadapi tugas berikutnya meskipun baru saja menyelesaikan tugas berat. Vitalitasnya menjadikannya cocok untuk peran yang memerlukan stamina tinggi secara fisik maupun mental.',
     kekuatan: ['Energi dan antusiasme kerja yang sangat tinggi dan menular', 'Semangat yang membara dalam menghadapi tantangan dan tugas baru', 'Motivator alami — kehadirannya meningkatkan semangat seluruh tim'],
     pengembangan: 'Perlu menjaga keseimbangan antara semangat dan stamina jangka panjang. Risiko burnout perlu diwaspadai jika energi dikeluarkan tanpa strategi pemulihan yang baik.',
-    rekomendasi: ['Penyuluh Kepabeanan dan Cukai', 'Fasilitator Pelatihan / Diklat', 'Petugas Lapangan Aktif', 'Jabatan yang Melibatkan Interaksi Publik Intensif', 'Koordinator Program dan Kegiatan'],
+    rekomendasi: ['Corporate Trainer / Learning Facilitator', 'Training & Development Specialist', 'Field Operations Officer', 'High-Interaction Public-Facing Role', 'Program & Events Coordinator'],
   },
   X: {
     tinggi: 'Individu dengan skor X tinggi memiliki kebutuhan kuat akan aktivitas fisik dan tidak nyaman jika harus bekerja statis terlalu lama. Ia menyukai pekerjaan lapangan, pergerakan, dan dinamisme fisik. Energi fisiknya tinggi dan ia akan terasa "terkungkung" jika dipaksa bekerja hanya di balik meja sepanjang hari. Ia beradaptasi dengan baik pada kondisi kerja yang berubah-ubah dan tidak monoton, serta umumnya memiliki stamina yang baik dalam penugasan luar ruangan.',
     kekuatan: ['Cocok dan bersemangat untuk pekerjaan lapangan atau yang membutuhkan mobilitas tinggi', 'Energi fisik tinggi dan tidak mudah kelelahan dalam penugasan aktif', 'Adaptif dalam kondisi kerja yang berubah-ubah dan tidak terprediksi'],
     pengembangan: 'Perlu mengembangkan kemampuan untuk fokus pada pekerjaan yang membutuhkan konsentrasi dan kesabaran panjang di belakang meja. Pekerjaan administratif yang terstruktur mungkin terasa kurang menarik dan perlu strategi khusus untuk tetap produktif.',
-    rekomendasi: ['Petugas Patroli Bea dan Cukai', 'Petugas Penindakan Lapangan', 'Anggota Tim Operasi Khusus', 'Petugas Pemeriksaan Barang / Kapal', 'Jabatan Penyuluh Lapangan'],
+    rekomendasi: ['Field Operations Officer', 'Field Enforcement / Patrol Officer', 'Special Operations Team Member', 'Goods / Asset Inspection Officer', 'Field Outreach & Education Officer'],
   },
   S: {
     tinggi: 'Individu dengan skor S tinggi memiliki kemampuan sosial yang sangat luas. Ia mudah bergaul dengan siapa saja, dari berbagai latar belakang dan tingkatan, tanpa terasa canggung. Jaringannya sangat luas dan ia pandai membangun serta memelihara relasi dalam jangka panjang. Kemampuannya sebagai jembatan komunikasi menjadikannya efektif dalam peran-peran yang memerlukan koordinasi lintas unit atau hubungan eksternal. Lingkungan kerjanya penuh dengan koneksi yang saling mendukung.',
@@ -101,7 +101,7 @@ const narasiSkala = {
     tinggi: 'Individu dengan skor R tinggi adalah pekerja keras sejati yang tekun, gigih, dan penuh dedikasi. Tidak mudah menyerah meskipun menghadapi hambatan yang sulit, ia akan terus bekerja hingga tugas benar-benar selesai dengan baik. Komitmennya terhadap pekerjaan sangat tinggi dan ia memiliki rasa tanggung jawab yang mendalam. Reputasinya sebagai orang yang dapat diandalkan menjadikannya aset berharga dalam setiap unit kerja, terutama untuk proyek-proyek jangka panjang yang membutuhkan konsistensi.',
     kekuatan: ['Ketekunan dan daya tahan kerja yang luar biasa tinggi', 'Rasa tanggung jawab yang sangat kuat — tidak meninggalkan pekerjaan setengah jalan', 'Dapat diandalkan untuk tugas-tugas jangka panjang yang membutuhkan konsistensi'],
     pengembangan: 'Perlu belajar mendelegasikan tugas kepada orang lain agar tidak terlalu membebani diri sendiri. Kemampuan memprioritaskan juga penting agar energi tidak habis untuk hal-hal yang seharusnya bisa didelegasikan.',
-    rekomendasi: ['Auditor Internal / Eksternal', 'Pemeriksa Dokumen Kepabeanan', 'Analis Data dan Riset', 'Pelaksana Proyek Jangka Panjang', 'Jabatan Teknis yang Memerlukan Ketelitian Tinggi'],
+    rekomendasi: ['Internal / External Auditor', 'Document Review Specialist', 'Data & Research Analyst', 'Long-Term Project Executor', 'High-Precision Technical Role'],
   },
   D: {
     tinggi: 'Individu dengan skor D tinggi memiliki kebutuhan untuk tampil menonjol dan diperhatikan. Ia ekspresif, percaya diri dalam presentasi, dan menikmati berada di pusat perhatian. Kemampuan berbicara di depan umum dan mempresentasikan gagasan secara menarik menjadikannya cocok untuk peran representatif. Ia pandai "menjual" ide dan membuat audiens tertarik. Dalam konteks organisasi, ia efektif sebagai wajah institusi dalam forum publik, media, atau pertemuan penting.',
@@ -125,37 +125,37 @@ const narasiSkala = {
     tinggi: 'Individu dengan skor Z tinggi sangat menginginkan kehangatan dan keakraban dalam hubungan kerja. Ia responsif secara emosional, senang membangun ikatan personal yang tulus, dan sangat empatik terhadap perasaan orang lain. Lingkungan kerja yang hangat dan suportif sangat penting baginya untuk dapat bekerja optimal. Ia pandai membuat orang merasa diterima dan dihargai, sehingga sering menjadi tempat curhat dan konsultasi informal bagi rekan-rekannya.',
     kekuatan: ['Empati tinggi dan kepekaan mendalam terhadap kondisi emosional orang lain', 'Mampu menciptakan iklim kerja yang hangat, inklusif, dan suportif', 'Membangun hubungan interpersonal yang tulus, mendalam, dan bermakna'],
     pengembangan: 'Perlu menjaga objektivitas agar keputusan kerja tidak terlalu dipengaruhi oleh kedekatan personal atau faktor emosional. Batas profesional dalam hubungan kerja perlu tetap dijaga.',
-    rekomendasi: ['Staf Pengembangan SDM / HR', 'Konselor atau Pendamping Pegawai', 'Jabatan Pembinaan dan Kesejahteraan', 'Fasilitator Tim dan Kelompok Kerja', 'Koordinator Program Mentoring'],
+    rekomendasi: ['HR Development Specialist', 'Employee Wellness / People Partner', 'Welfare & Wellbeing Specialist', 'Team Facilitator / Group Coach', 'Mentoring Program Coordinator'],
   },
   B: {
     tinggi: 'Individu dengan skor B tinggi sangat menginginkan rasa memiliki dan diterima sebagai bagian dari kelompok. Loyalitas dan komitmennya terhadap tim atau organisasi sangat kuat. Ia rela berkorban untuk kepentingan kelompok dan sangat sensitif terhadap dinamika serta harmoni internal tim. Identitasnya sangat terikat pada kelompoknya dan ia akan bekerja keras untuk mempertahankan kesatuan dan solidaritas.',
     kekuatan: ['Loyalitas yang sangat kuat terhadap tim, organisasi, dan nilai-nilai bersama', 'Kemampuan menjaga semangat dan kohesi kelompok dalam situasi sulit sekalipun', 'Komitmen mendalam terhadap tujuan bersama dan identitas organisasi'],
     pengembangan: 'Perlu mengembangkan keberanian untuk menyuarakan pendapat yang berbeda dari mayoritas kelompok. Kemampuan berpikir independen dan kritis sangat penting agar tidak terjebak dalam groupthink.',
-    rekomendasi: ['Anggota Tim Tetap dengan Sinergi Tinggi', 'Staf Unit Kerja Kolaboratif', 'Jabatan Pembinaan Kepegawaian', 'Koordinator Kegiatan Internal', 'Anggota Panitia atau Satuan Tugas'],
+    rekomendasi: ['High-Synergy Team Member', 'Collaborative Unit Staff', 'HR & People Development Specialist', 'Internal Activities Coordinator', 'Task Force / Committee Member'],
   },
   O: {
     tinggi: 'Individu dengan skor O tinggi memiliki kebutuhan mendasar untuk menjalin dan merawat hubungan interpersonal yang bermakna. Ia pandai bergaul, sangat empatik, dan membangun koneksi yang dalam dan autentik dengan orang-orang di sekitarnya. Tidak sekadar berkenalan, ia benar-benar membangun hubungan jangka panjang yang saling percaya. Kemampuan memahami dan merespons kebutuhan orang lain menjadikannya sangat efektif dalam peran-peran yang mensyaratkan interaksi manusia intensif.',
     kekuatan: ['Kemampuan membangun hubungan interpersonal yang kuat, tulus, dan jangka panjang', 'Empati mendalam dan kepekaan tinggi terhadap kebutuhan, perasaan, dan kondisi orang lain', 'Sangat efektif dalam peran yang memerlukan interaksi dan pelayanan langsung kepada orang'],
     pengembangan: 'Perlu menyeimbangkan kebutuhan sosial yang tinggi dengan fokus pada penyelesaian tugas-tugas mandiri. Kemampuan bekerja independen tanpa bergantung pada interaksi sosial perlu terus diasah.',
-    rekomendasi: ['Petugas Layanan Informasi Kepabeanan', 'Staf Hubungan Pengguna Jasa', 'Jabatan Komunikasi dan Bimbingan Pengguna Jasa', 'Koordinator Hubungan Eksternal', 'Petugas Pengaduan dan Pelayanan Publik'],
+    rekomendasi: ['Customer Information Officer', 'Client Relations Staff', 'Client Communication & Support Specialist', 'External Relations Coordinator', 'Customer Complaint & Service Officer'],
   },
   K: {
     tinggi: 'Individu dengan skor K tinggi memiliki ketegasan yang kuat dan tidak mudah menyerah ketika menghadapi konflik, tekanan, atau pertentangan. Ia berani menyuarakan pendapatnya, bahkan ketika itu bertentangan dengan mayoritas atau pihak yang lebih berkuasa. Gigih dalam mempertahankan prinsip dan posisinya, ia tidak mudah diintimidasi. Kemampuan negosiasi dan advokasi yang kuat menjadikannya efektif dalam situasi yang memerlukan keteguhan sikap.',
     kekuatan: ['Keberanian dan ketegasan tinggi dalam mempertahankan pendapat dan prinsip', 'Tidak mudah terintimidasi dalam situasi konflik, tekanan, atau perdebatan', 'Kemampuan negosiasi, advokasi, dan argumentasi yang kuat dan persuasif'],
     pengembangan: 'Perlu mengelola intensitas dan cara mengekspresikan ketegasan agar tidak dipersepsikan sebagai agresif, konfrontatif, atau tidak kooperatif. Memilih waktu dan cara yang tepat untuk menyampaikan perbedaan pendapat sangat penting.',
-    rekomendasi: ['Penyidik Pegawai Negeri Sipil (PPNS)', 'Jabatan Penindakan dan Penyidikan', 'Negosiator Keberatan / Banding', 'Petugas Penanganan Pelanggaran', 'Jabatan Penegakan Hukum Kepabeanan'],
+    rekomendasi: ['Corporate Investigator / Compliance Officer', 'Enforcement & Investigation Lead', 'Dispute Negotiator / Mediator', 'Violations & Risk Handler', 'Legal Enforcement / Regulatory Compliance'],
   },
   F: {
     tinggi: 'Individu dengan skor F tinggi secara tulus menghormati hierarki, otoritas, dan orang-orang yang dianggapnya lebih berpengalaman. Ia loyal terhadap atasan, patuh pada aturan yang berlaku, dan merasa nyaman berada dalam struktur organisasi yang jelas. Dapat diandalkan untuk menjalankan instruksi dengan teliti dan konsisten tanpa perlu pengawasan ketat. Sifat ini menjadikannya staf yang sangat tepercaya dan andal dalam menjalankan fungsi-fungsi yang telah ditetapkan.',
     kekuatan: ['Kepatuhan, loyalitas, dan dedikasi yang tinggi terhadap atasan dan institusi', 'Dapat diandalkan sepenuhnya untuk menjalankan tugas sesuai instruksi dengan teliti', 'Menghargai dan menjunjung tinggi struktur organisasi dan hierarki yang berlaku'],
     pengembangan: 'Perlu mengembangkan inisiatif dan keberanian untuk mengusulkan perbaikan, inovasi, atau perbedaan pendapat secara proaktif dan konstruktif. Ketergantungan penuh pada arahan atasan dapat membatasi potensi kontribusi.',
-    rekomendasi: ['Staf Administrasi dan Tata Usaha', 'Pelaksana Teknis Operasional', 'Staf Pendukung Pimpinan', 'Jabatan Protokol dan Kesekretariatan', 'Pelaksana Program dengan Panduan Jelas'],
+    rekomendasi: ['Administration & Secretarial Staff', 'Technical Operations Executor', 'Executive Support / Personal Assistant', 'Protocol & Secretariat Officer', 'Structured Program Executor'],
   },
   W: {
     tinggi: 'Individu dengan skor W tinggi sangat menghargai aturan, prosedur, standar operasional, dan struktur yang jelas. Ia adalah sosok yang teratur, sistematis, dan sangat disiplin dalam bekerja. Adanya SOP yang jelas membuatnya merasa aman dan dapat bekerja dengan optimal. Perhatiannya pada detail prosedural sangat tinggi — ia tidak akan melewatkan satu langkah pun jika itu adalah bagian dari aturan yang berlaku. Konsistensi dan keandalannya menjadikannya pilihan tepat untuk jabatan yang memerlukan kepatuhan prosedural tinggi.',
     kekuatan: ['Ketelitian tinggi dan keteraturan sistematis dalam setiap aspek pekerjaan', 'Disiplin kuat dalam mengikuti prosedur, SOP, dan standar operasional yang berlaku', 'Konsistensi dan keandalan yang sangat tinggi dalam penyelesaian tugas'],
     pengembangan: 'Perlu mengembangkan fleksibilitas dan kemampuan beradaptasi dalam situasi yang menuntut respons di luar prosedur baku. Tidak semua kondisi dapat diprediksi, sehingga kemampuan improvisasi yang tetap terukur sangat diperlukan.',
-    rekomendasi: ['Auditor Kepabeanan dan Cukai', 'Jabatan Kepatuhan Internal', 'Pemeriksa Prosedur dan Regulasi', 'Staf Manajemen Risiko', 'Jabatan Standardisasi dan Akreditasi'],
+    rekomendasi: ['Compliance Auditor', 'Internal Compliance Specialist', 'Regulatory & Procedure Reviewer', 'Risk Management Staff', 'Standards & Accreditation Specialist'],
   },
 }
 
@@ -202,20 +202,20 @@ function RadarChart({ scores }) {
       {/* ring grid */}
       {rings.map(v => (
         <polygon key={v} points={ringPoly(v)}
-          fill="none" stroke="#e5e7eb" strokeWidth="1" />
+          fill="none" stroke="#1e1e30" strokeWidth="1" />
       ))}
 
       {/* axis lines */}
       {RADAR_ORDER.map((_, i) => {
         const end = axisEnd(i)
         return <line key={i} x1={cx} y1={cy} x2={end.x.toFixed(1)} y2={end.y.toFixed(1)}
-          stroke="#e5e7eb" strokeWidth="1" />
+          stroke="#1e1e30" strokeWidth="1" />
       })}
 
       {/* ring labels (nilai) */}
       {rings.map(v => {
         const y = cy - (v / 9) * maxR
-        return <text key={v} x={cx + 3} y={y - 2} fontSize="9" fill="#9ca3af">{v}</text>
+        return <text key={v} x={cx + 3} y={y - 2} fontSize="9" fill="#56566e">{v}</text>
       })}
 
       {/* area peserta */}
@@ -242,7 +242,7 @@ function RadarChart({ scores }) {
             </text>
             <text x={lp.x.toFixed(1)} y={(lp.y + 12).toFixed(1)}
               textAnchor="middle" dominantBaseline="middle"
-              fontSize="9" fill="#6b7280">
+              fontSize="9" fill="#56566e">
               {score}
             </text>
           </g>
@@ -255,13 +255,13 @@ function RadarChart({ scores }) {
 /* ── Bar mini per skala ──────────────────────────────────────────── */
 function ScoreBar({ val }) {
   const pct = (val / 9) * 100
-  const color = val >= 7 ? '#ef4444' : val >= 5 ? '#f97316' : val >= 3 ? '#3b82f6' : '#9ca3af'
+  const color = val >= 7 ? '#ef4444' : val >= 5 ? '#f97316' : val >= 3 ? '#3b82f6' : '#56566e'
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex-1 bg-gray-100 rounded-full h-2">
-        <div className="h-2 rounded-full transition-all" style={{ width: `${pct}%`, backgroundColor: color }} />
+    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+      <div style={{ flex: 1, background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '6px' }}>
+        <div style={{ height: '6px', borderRadius: '99px', transition: 'width 0.5s', width: `${pct}%`, backgroundColor: color }} />
       </div>
-      <span className="text-xs font-bold w-4 text-right" style={{ color }}>{val}</span>
+      <span style={{ fontSize: '11px', fontWeight: 700, width: '16px', textAlign: 'right', color }}>{val}</span>
     </div>
   )
 }
@@ -345,75 +345,83 @@ export default function HasilPapi() {
           </div>
           <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '26px', color: 'var(--text)', marginBottom: '4px' }}>Laporan PAPI Kostick</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Personality and Preference Inventory</p>
-          <button onClick={handlePrint} className="print:hidden" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '8px 16px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
-            Cetak
+          <button onClick={handlePrint} className="print:hidden" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+            🖨️ Cetak / PDF
           </button>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
 
+        {/* Print-Only Header */}
+        <div className="print-only" style={{ display: 'none', textAlign: 'center', paddingBottom: '20px', borderBottom: '2px solid #a67c00', marginBottom: '4px' }}>
+          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', letterSpacing: '0.22em', color: '#a67c00', marginBottom: '4px' }}>ASSESIN</div>
+          <div style={{ fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888' }}>Platform Asesmen Psikologi Digital · ASSESS · INSIGHT · GROW</div>
+          <div style={{ marginTop: '16px', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111' }}>LAPORAN PAPI KOSTICK</div>
+          <div style={{ fontSize: '12px', color: '#555', marginTop: '4px' }}>Personality and Preference Inventory</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '11px', color: '#444', maxWidth: '700px', margin: '8px auto 0' }}>
+            <span>Peserta: <strong>{nama}</strong></span>
+            <span>Tanggal: {tanggal}</span>
+          </div>
+        </div>
+
         {/* ── Identitas ── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-          {/* Baris 1: Nama + NIP + Tanggal + Alat Ukur */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-4">
+        <div className="dark-card" style={{ padding: '20px' }}>
+          <div className="hasil-grid-2" style={{ marginBottom: '16px' }}>
             <div>
-              <p className="text-gray-400 text-xs uppercase font-semibold tracking-wide">Nama</p>
-              <p className="font-bold text-gray-800 mt-0.5">{nama || '—'}</p>
+              <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Nama</p>
+              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>{nama || '—'}</p>
             </div>
             <div>
-              <p className="text-gray-400 text-xs uppercase font-semibold tracking-wide">NIP / NIK</p>
-              <p className="font-semibold text-gray-700 mt-0.5">{nip || '—'}</p>
+              <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>NIK / ID</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-sub)', fontSize: '13px' }}>{nip || '—'}</p>
             </div>
             <div>
-              <p className="text-gray-400 text-xs uppercase font-semibold tracking-wide">Tanggal Tes</p>
-              <p className="font-semibold text-gray-700 mt-0.5">{tanggal}</p>
+              <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Tanggal Tes</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-sub)', fontSize: '13px' }}>{tanggal}</p>
             </div>
             <div>
-              <p className="text-gray-400 text-xs uppercase font-semibold tracking-wide">Alat Ukur</p>
-              <p className="font-semibold text-gray-700 mt-0.5">PAPI Kostick 2020</p>
+              <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Alat Ukur</p>
+              <p style={{ fontWeight: 600, color: 'var(--text-sub)', fontSize: '13px' }}>PAPI Kostick 2020</p>
             </div>
           </div>
-          {/* Baris 2: Unit Kerja — fullwidth agar nama panjang muat */}
-          <div className="border-t border-gray-100 pt-3">
-            <p className="text-gray-400 text-xs uppercase font-semibold tracking-wide mb-0.5">Unit Kerja</p>
-            <p className="font-semibold text-gray-700">{unitKerja || '—'}</p>
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
+            <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Departemen / Perusahaan</p>
+            <p style={{ fontWeight: 600, color: 'var(--text-sub)', fontSize: '13px' }}>{unitKerja || '—'}</p>
           </div>
         </div>
 
         <PremiumSection show={fromDashboard} testType="PAPI" pesertaId={pesertaId} nama={nama}>
         {/* ── Interpretasi Profil ── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h2 className="font-bold text-gray-800 mb-1 flex items-center gap-2 text-xl">
-            <span className="w-9 h-9 bg-violet-100 rounded-xl flex items-center justify-center text-lg">📝</span>
+        <div className="dark-card" style={{ padding: '24px' }}>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '17px', color: 'var(--text)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ width: '34px', height: '34px', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>📝</span>
             Interpretasi Profil Kepribadian
           </h2>
-          <p className="text-sm text-gray-400 mb-5 ml-11">Berdasarkan 3 dimensi kepribadian dominan</p>
+          <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '20px', marginLeft: '44px' }}>Berdasarkan 3 dimensi kepribadian dominan</p>
 
           {/* Narasi per top-3 skala */}
-          <div className="space-y-4 mb-6">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
             {top3.map(([kode, nilai], idx) => {
               const info  = skalaInfo[kode]
               const narasi = narasiSkala[kode]
               const lv    = levelLabel(nilai)
               return (
-                <div key={kode} className="flex gap-4 p-5 rounded-xl border border-gray-100 bg-gray-50/70">
-                  <div className="flex-shrink-0 flex flex-col items-center gap-1 mt-0.5">
-                    <span className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-black text-white shadow-sm"
-                      style={{ backgroundColor: info.warna }}>
+                <div key={kode} style={{ display: 'flex', gap: '16px', padding: '16px', borderRadius: '12px', background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
+                  <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                    <span style={{ width: '34px', height: '34px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 900, color: '#09090f', backgroundColor: info.warna }}>
                       {kode}
                     </span>
-                    <span className="text-xs font-bold text-gray-300">#{idx+1}</span>
+                    <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)' }}>#{idx+1}</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      <span className="text-sm font-bold text-gray-700">{info.nama}</span>
-                      <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-white border"
-                        style={{ color: lv.color, borderColor: lv.color + '44' }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)' }}>{info.nama}</span>
+                      <span style={{ fontSize: '11px', fontWeight: 600, padding: '2px 10px', borderRadius: '99px', background: 'var(--surface)', border: `1px solid ${lv.color}44`, color: lv.color }}>
                         {lv.label} ({nilai})
                       </span>
                     </div>
-                    <p className="text-base text-gray-700 leading-relaxed">{narasi?.tinggi}</p>
+                    <p style={{ fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.7' }}>{narasi?.tinggi}</p>
                   </div>
                 </div>
               )
@@ -421,26 +429,24 @@ export default function HasilPapi() {
           </div>
 
           {/* Kekuatan & Area Pengembangan */}
-          <div className="grid md:grid-cols-2 gap-4 mb-5">
-            <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-5">
-              <p className="text-sm font-bold text-emerald-700 uppercase tracking-wide mb-4 flex items-center gap-1.5">
-                <span>✅</span> Kekuatan Utama
+          <div className="hasil-grid-2" style={{ gap: '12px', marginBottom: '16px' }}>
+            <div style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '12px', padding: '16px' }}>
+              <p style={{ fontSize: '11px', fontWeight: 700, color: '#4ade80', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                ✅ Kekuatan Utama
               </p>
-              <div className="space-y-4">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {top3KekuatanAll.map(({ kode, list }) => {
                   const info = skalaInfo[kode]
                   return (
                     <div key={kode}>
-                      <p className="text-xs font-bold mb-1.5 flex items-center gap-1.5"
-                        style={{ color: info.warna }}>
-                        <span className="w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] font-black"
-                          style={{ backgroundColor: info.warna }}>{kode}</span>
+                      <p style={{ fontSize: '11px', fontWeight: 700, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px', color: info.warna }}>
+                        <span style={{ width: '16px', height: '16px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090f', fontSize: '9px', fontWeight: 900, backgroundColor: info.warna }}>{kode}</span>
                         {info.nama}
                       </p>
-                      <ul className="space-y-1.5">
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
                         {list.map((k, i) => (
-                          <li key={i} className="text-sm text-emerald-800 flex items-start gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0 mt-2" />
+                          <li key={i} style={{ fontSize: '12px', color: '#86efac', display: 'flex', alignItems: 'flex-start', gap: '8px', lineHeight: '1.6' }}>
+                            <span style={{ width: '5px', height: '5px', borderRadius: '99px', background: '#4ade80', flexShrink: 0, marginTop: '6px' }} />
                             {k}
                           </li>
                         ))}
@@ -450,22 +456,20 @@ export default function HasilPapi() {
                 })}
               </div>
             </div>
-            <div className="bg-amber-50 border border-amber-100 rounded-xl p-5">
-              <p className="text-sm font-bold text-amber-700 uppercase tracking-wide mb-4 flex items-center gap-1.5">
-                <span>🔧</span> Area Pengembangan
+            <div style={{ background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '12px', padding: '16px' }}>
+              <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                🔧 Area Pengembangan
               </p>
-              <div className="space-y-4">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
                 {top3Pengembangan.map(({ kode, teks }) => {
                   const info = skalaInfo[kode]
                   return (
                     <div key={kode}>
-                      <p className="text-xs font-bold mb-1.5 flex items-center gap-1.5"
-                        style={{ color: info.warna }}>
-                        <span className="w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] font-black"
-                          style={{ backgroundColor: info.warna }}>{kode}</span>
+                      <p style={{ fontSize: '11px', fontWeight: 700, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px', color: info.warna }}>
+                        <span style={{ width: '16px', height: '16px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090f', fontSize: '9px', fontWeight: 900, backgroundColor: info.warna }}>{kode}</span>
                         {info.nama}
                       </p>
-                      <p className="text-sm text-amber-800 leading-relaxed">{teks}</p>
+                      <p style={{ fontSize: '12px', color: 'var(--text-sub)', lineHeight: '1.65' }}>{teks}</p>
                     </div>
                   )
                 })}
@@ -474,26 +478,24 @@ export default function HasilPapi() {
           </div>
 
           {/* Rekomendasi Jabatan */}
-          <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-5">
-            <p className="text-sm font-bold text-indigo-700 uppercase tracking-wide mb-4 flex items-center gap-1.5">
-              <span>🏢</span> Rekomendasi Jabatan
+          <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px' }}>
+            <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-sub)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              🏢 Rekomendasi Jabatan
             </p>
-            <p className="text-sm text-indigo-600 mb-4">
+            <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>
               Berdasarkan profil kepribadian dominan, berikut adalah jabatan-jabatan yang sesuai:
             </p>
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               {top3Rekomendasi.map(({ kode, nama, warna, list }) => (
                 <div key={kode}>
-                  <p className="text-xs font-bold mb-2 flex items-center gap-1.5" style={{ color: warna }}>
-                    <span className="w-4 h-4 rounded-full flex items-center justify-center text-white text-[9px] font-black"
-                      style={{ backgroundColor: warna }}>{kode}</span>
+                  <p style={{ fontSize: '11px', fontWeight: 700, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px', color: warna }}>
+                    <span style={{ width: '16px', height: '16px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090f', fontSize: '9px', fontWeight: 900, backgroundColor: warna }}>{kode}</span>
                     {nama}
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                     {list.map((jabatan, i) => (
                       <span key={i}
-                        className="text-sm px-3 py-1 rounded-full font-medium border"
-                        style={{ backgroundColor: warna + '14', color: warna, borderColor: warna + '44' }}>
+                        style={{ fontSize: '12px', padding: '4px 12px', borderRadius: '99px', fontWeight: 600, backgroundColor: warna + '20', color: warna, border: `1px solid ${warna}44` }}>
                         {jabatan}
                       </span>
                     ))}
@@ -505,41 +507,40 @@ export default function HasilPapi() {
         </div>
 
         {/* ── Radar + Top 5 ── */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="hasil-grid-2" style={{ gap: '20px' }}>
           {/* Radar */}
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-            <h2 className="font-bold text-gray-800 mb-4">Profil Kepribadian</h2>
+          <div className="dark-card" style={{ padding: '20px' }}>
+            <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)', marginBottom: '14px' }}>Profil Kepribadian</h2>
             <RadarChart scores={scores} />
-            <p className="text-center text-xs text-gray-400 mt-2">Skala 0–9 per dimensi (20 skala)</p>
+            <p style={{ textAlign: 'center', fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>Skala 0–9 per dimensi (20 skala)</p>
           </div>
 
           {/* Top 5 + ringkasan */}
-          <div className="space-y-4">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Top 5 */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-              <h2 className="font-bold text-gray-800 mb-4">5 Dimensi Dominan</h2>
-              <div className="space-y-3">
+            <div className="dark-card" style={{ padding: '20px' }}>
+              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)', marginBottom: '14px' }}>5 Dimensi Dominan</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {top5.map(([kode, nilai], idx) => {
                   const info = skalaInfo[kode]
                   const lv = levelLabel(nilai)
                   return (
-                    <div key={kode} className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white"
-                        style={{ backgroundColor: info.warna }}>
+                    <div key={kode} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span style={{ width: '22px', height: '22px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, color: '#09090f', backgroundColor: info.warna, flexShrink: 0 }}>
                         {idx + 1}
                       </span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-sm font-semibold text-gray-700">
-                            <span style={{ color: info.warna }} className="font-bold">{kode}</span>
-                            &nbsp;– {info.nama}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-sub)' }}>
+                            <span style={{ color: info.warna, fontWeight: 700 }}>{kode}</span>
+                            {' – '}{info.nama}
                           </span>
-                          <span className="text-xs font-bold ml-2" style={{ color: lv.color }}>
+                          <span style={{ fontSize: '11px', fontWeight: 700, marginLeft: '8px', color: lv.color }}>
                             {lv.label}
                           </span>
                         </div>
                         <ScoreBar val={nilai} />
-                        <p className="text-xs text-gray-400 mt-0.5">{info.deskripsi}</p>
+                        <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '3px' }}>{info.deskripsi}</p>
                       </div>
                     </div>
                   )
@@ -548,66 +549,61 @@ export default function HasilPapi() {
             </div>
 
             {/* ROLES vs NEEDS */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-              <h2 className="font-bold text-gray-800 mb-3">Ringkasan Kelompok</h2>
-              <div className="space-y-3">
+            <div className="dark-card" style={{ padding: '20px' }}>
+              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)', marginBottom: '12px' }}>Ringkasan Kelompok</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="font-semibold text-indigo-700">ROLES (G L I T V S R D C E)</span>
-                    <span className="font-bold text-indigo-700">{totalRoles}/45</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
+                    <span style={{ fontWeight: 600, color: '#818cf8' }}>ROLES (G L I T V S R D C E)</span>
+                    <span style={{ fontWeight: 700, color: '#818cf8' }}>{totalRoles}/45</span>
                   </div>
-                  <div className="bg-gray-100 rounded-full h-3">
-                    <div className="h-3 rounded-full bg-indigo-500 transition-all"
-                      style={{ width: `${(totalRoles / 45) * 100}%` }} />
+                  <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '8px' }}>
+                    <div style={{ height: '8px', borderRadius: '99px', background: '#6366f1', transition: 'width 0.5s', width: `${(totalRoles / 45) * 100}%` }} />
                   </div>
                 </div>
                 <div>
-                  <div className="flex justify-between text-sm mb-1">
-                    <span className="font-semibold text-violet-700">NEEDS (N A P X B O Z K F W)</span>
-                    <span className="font-bold text-violet-700">{totalNeeds}/45</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
+                    <span style={{ fontWeight: 600, color: '#c084fc' }}>NEEDS (N A P X B O Z K F W)</span>
+                    <span style={{ fontWeight: 700, color: '#c084fc' }}>{totalNeeds}/45</span>
                   </div>
-                  <div className="bg-gray-100 rounded-full h-3">
-                    <div className="h-3 rounded-full bg-violet-500 transition-all"
-                      style={{ width: `${(totalNeeds / 45) * 100}%` }} />
+                  <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '8px' }}>
+                    <div style={{ height: '8px', borderRadius: '99px', background: '#a855f7', transition: 'width 0.5s', width: `${(totalNeeds / 45) * 100}%` }} />
                   </div>
                 </div>
               </div>
-              <p className="text-xs text-gray-400 mt-3">Total ROLES + NEEDS selalu = 90 (dari 90 pasangan soal)</p>
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '10px' }}>Total ROLES + NEEDS selalu = 90 (dari 90 pasangan soal)</p>
             </div>
           </div>
         </div>
 
         {/* ── Detail per Sektor ── */}
         <div>
-          <h2 className="font-bold text-gray-800 mb-4 text-lg">Detail per Sektor</h2>
-          <div className="grid md:grid-cols-2 gap-4">
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '15px', color: 'var(--text)', marginBottom: '14px' }}>Detail per Sektor</h2>
+          <div className="hasil-grid-2" style={{ gap: '14px' }}>
             {skalaPerSektor.map(({ sektor, skalas }) => {
-              const wc = sektorWarna[sektor] ?? { bg: '#f9fafb', border: '#e5e7eb', text: '#374151', dot: '#6b7280' }
+              const wc = sektorWarna[sektor] ?? { dot: '#6b7280' }
               const avgVal = skalas.reduce((s, sk) => s + sk.nilai, 0) / skalas.length
               return (
-                <div key={sektor} className="rounded-2xl border-2 p-4"
-                  style={{ backgroundColor: wc.bg, borderColor: wc.border }}>
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-bold text-sm" style={{ color: wc.text }}>{sektor}</h3>
-                    <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                      style={{ backgroundColor: wc.border, color: wc.text }}>
+                <div key={sektor} className="dark-card" style={{ padding: '16px', borderLeft: `3px solid ${wc.dot}` }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                    <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', color: 'var(--text)' }}>{sektor}</h3>
+                    <span style={{ fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '99px', background: wc.dot + '22', color: wc.dot }}>
                       Rata-rata: {avgVal.toFixed(1)}
                     </span>
                   </div>
-                  <div className="space-y-2.5">
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     {skalas.map(sk => (
                       <div key={sk.kode}>
-                        <div className="flex items-center justify-between mb-0.5">
-                          <span className="text-xs font-semibold" style={{ color: wc.text }}>
-                            <span className="font-extrabold">{sk.kode}</span> – {sk.nama}
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-sub)' }}>
+                            <span style={{ fontWeight: 800, color: wc.dot }}>{sk.kode}</span> – {sk.nama}
                           </span>
-                          <span className="text-xs font-bold" style={{ color: wc.dot }}>{sk.nilai}</span>
+                          <span style={{ fontSize: '12px', fontWeight: 700, color: wc.dot }}>{sk.nilai}</span>
                         </div>
-                        <div className="bg-white/60 rounded-full h-1.5">
-                          <div className="h-1.5 rounded-full transition-all"
-                            style={{ width: `${(sk.nilai / 9) * 100}%`, backgroundColor: wc.dot }} />
+                        <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '5px' }}>
+                          <div style={{ height: '5px', borderRadius: '99px', transition: 'width 0.5s', width: `${(sk.nilai / 9) * 100}%`, backgroundColor: wc.dot }} />
                         </div>
-                        <p className="text-xs mt-0.5" style={{ color: wc.text, opacity: 0.75 }}>{sk.deskripsi}</p>
+                        <p style={{ fontSize: '11px', marginTop: '3px', color: 'var(--text-muted)' }}>{sk.deskripsi}</p>
                       </div>
                     ))}
                   </div>
@@ -618,68 +614,70 @@ export default function HasilPapi() {
         </div>
 
         {/* ── Tabel Lengkap ── */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 overflow-x-auto">
-          <h2 className="font-bold text-gray-800 mb-4">Skor Lengkap (20 Skala)</h2>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-gray-50 text-gray-500 text-xs uppercase">
-                <th className="text-left px-3 py-2 rounded-l">Kode</th>
-                <th className="text-left px-3 py-2">Nama Skala</th>
-                <th className="text-left px-3 py-2">Sektor</th>
-                <th className="text-center px-3 py-2">Skor</th>
-                <th className="text-left px-3 py-2 rounded-r w-48">Bar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {RADAR_ORDER.map(kode => {
-                const info = skalaInfo[kode]
-                const val = scores[kode] ?? 0
-                const lv = levelLabel(val)
-                return (
-                  <tr key={kode} className="border-t border-gray-50 hover:bg-gray-50/50">
-                    <td className="px-3 py-2">
-                      <span className="inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-extrabold text-white"
-                        style={{ backgroundColor: info.warna }}>
-                        {kode}
-                      </span>
-                    </td>
-                    <td className="px-3 py-2 font-medium text-gray-700">{info.nama}</td>
-                    <td className="px-3 py-2 text-gray-500 text-xs">{info.sektor}</td>
-                    <td className="px-3 py-2 text-center">
-                      <span className="font-bold text-sm" style={{ color: lv.color }}>{val}</span>
-                    </td>
-                    <td className="px-3 py-2">
-                      <div className="bg-gray-100 rounded-full h-2 w-full">
-                        <div className="h-2 rounded-full"
-                          style={{ width: `${(val / 9) * 100}%`, backgroundColor: info.warna }} />
-                      </div>
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
+        <div className="dark-card" style={{ overflow: 'hidden' }}>
+          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
+            <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)' }}>Skor Lengkap (20 Skala)</h2>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', fontSize: '13px', borderCollapse: 'collapse' }}>
+              <thead>
+                <tr style={{ background: 'var(--surface-2)', fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  <th style={{ textAlign: 'left', padding: '10px 16px' }}>Kode</th>
+                  <th style={{ textAlign: 'left', padding: '10px 16px' }}>Nama Skala</th>
+                  <th style={{ textAlign: 'left', padding: '10px 16px' }}>Sektor</th>
+                  <th style={{ textAlign: 'center', padding: '10px 16px' }}>Skor</th>
+                  <th style={{ textAlign: 'left', padding: '10px 16px', width: '160px' }}>Bar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {RADAR_ORDER.map(kode => {
+                  const info = skalaInfo[kode]
+                  const val = scores[kode] ?? 0
+                  const lv = levelLabel(val)
+                  return (
+                    <tr key={kode} style={{ borderTop: '1px solid var(--border)' }}>
+                      <td style={{ padding: '10px 16px' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '26px', height: '26px', borderRadius: '99px', fontSize: '11px', fontWeight: 900, color: '#09090f', backgroundColor: info.warna }}>
+                          {kode}
+                        </span>
+                      </td>
+                      <td style={{ padding: '10px 16px', fontWeight: 600, color: 'var(--text-sub)' }}>{info.nama}</td>
+                      <td style={{ padding: '10px 16px', color: 'var(--text-muted)', fontSize: '11px' }}>{info.sektor}</td>
+                      <td style={{ padding: '10px 16px', textAlign: 'center' }}>
+                        <span style={{ fontWeight: 700, fontSize: '13px', color: lv.color }}>{val}</span>
+                      </td>
+                      <td style={{ padding: '10px 16px' }}>
+                        <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '6px', width: '100%' }}>
+                          <div style={{ height: '6px', borderRadius: '99px', width: `${(val / 9) * 100}%`, backgroundColor: info.warna }} />
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
         </PremiumSection>
 
         {/* ── Catatan & Tombol ── */}
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-800 print:hidden">
+        <div className="print:hidden" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '16px', fontSize: '12px', color: 'var(--text-muted)' }}>
           ⚠️ Laporan ini bersifat deskriptif dan merupakan gambaran kecenderungan kepribadian berdasarkan self-report.
-          Interpretasi akhir harus dilakukan oleh psikolog yang berwenang dan tidak dapat dijadikan satu-satunya dasar keputusan kepegawaian.
+          Interpretasi akhir harus dilakukan oleh psikolog yang berwenang dan tidak dapat dijadikan satu-satunya dasar keputusan seleksi atau pengembangan profesional.
         </div>
 
-        <div className="flex gap-3 justify-center print:hidden pb-8">
+        <div className="print:hidden" style={{ display: 'flex', gap: '10px', justifyContent: 'center', paddingBottom: '24px' }}>
           <button onClick={() => navigate('/')}
-            className="px-6 py-2.5 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition">
+            style={{ padding: '10px 22px', background: 'var(--surface-2)', color: 'var(--text-sub)', borderRadius: '10px', fontWeight: 600, fontSize: '13px', border: '1px solid var(--border)', cursor: 'pointer' }}>
             ← Beranda
           </button>
           <button onClick={() => navigate('/tes-papi')}
-            className="px-6 py-2.5 bg-purple-100 text-purple-700 rounded-xl font-semibold hover:bg-purple-200 transition">
+            style={{ padding: '10px 22px', background: 'rgba(168,85,247,0.12)', color: '#c084fc', borderRadius: '10px', fontWeight: 600, fontSize: '13px', border: '1px solid rgba(168,85,247,0.3)', cursor: 'pointer' }}>
             Tes Ulang
           </button>
           <button onClick={handlePrint}
-            className="px-6 py-2.5 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition shadow">
-            🖨️ Cetak Laporan
+            style={{ padding: '10px 22px', background: 'var(--accent)', color: '#09090f', borderRadius: '10px', fontWeight: 700, fontSize: '12px', letterSpacing: '0.08em', border: 'none', cursor: 'pointer' }}>
+            🖨️ Cetak / PDF
           </button>
         </div>
       </div>

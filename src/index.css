@@ -293,3 +293,140 @@ select.field option {
 }
 .disc-pill.most { border-color: var(--accent); background: rgba(212,168,83,0.15); color: var(--accent); }
 .disc-pill.least { border-color: #f87171; background: rgba(248,113,113,0.12); color: #f87171; }
+
+/* ── Responsive grids (mobile-first) ────────────────── */
+/* 2-col form grid (Usia / Jenis Kelamin) */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Answer-button grid (force-choice pairs: MBTI, PAPI, LL, MSDT) */
+.answer-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* 4-point rating grid (DASS) */
+.rating-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+/* Generic 2-col result grid (Hasil pages) */
+.hasil-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* 3-col result grid */
+.hasil-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 480px) {
+  .form-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .answer-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .rating-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hasil-grid-2 {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .hasil-grid-3 {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  /* Reduce radius on very small screens */
+  .dark-card {
+    border-radius: 14px;
+  }
+  /* Bigger touch targets for disc pills */
+  .disc-pill {
+    padding: 8px 16px;
+    min-width: 44px;
+    min-height: 36px;
+  }
+  /* Progress header: prevent text overflow */
+  .tes-header-name {
+    max-width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* Section rule: tighter on mobile */
+  .section-rule {
+    margin-bottom: 24px;
+  }
+  /* Rating btn: taller on mobile for touch */
+  .rating-btn {
+    padding: 12px 4px;
+    min-height: 56px;
+  }
+}
+
+/* ── Print / PDF styles ──────────────────────────────── */
+@media print {
+  @page { margin: 12mm 10mm; size: A4; }
+
+  /* Override dark theme with print-friendly values */
+  :root {
+    --bg:            #ffffff;
+    --surface:       #ffffff;
+    --surface-2:     #f5f5f7;
+    --text:          #111111;
+    --text-sub:      #333333;
+    --text-muted:    #555555;
+    --border:        #e0e0e0;
+    --accent:        #a67c00;
+    --accent-dim:    rgba(166, 124, 0, 0.07);
+    --accent-border: rgba(166, 124, 0, 0.35);
+    --radius:        10px;
+  }
+
+  /* Hide grain film overlay */
+  body::after { display: none !important; }
+
+  /* Force color printing */
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Utility: show/hide for print */
+  .print-only  { display: block !important; }
+  .print-flex  { display: flex !important; }
+  .print-hide  { display: none !important; }
+
+  /* Dark cards become clean white cards in print */
+  .dark-card {
+    background:    #ffffff !important;
+    border:        1px solid #e0e0e0 !important;
+    box-shadow:    none !important;
+    page-break-inside: avoid;
+    break-inside:  avoid;
+  }
+
+  /* Tailwind print: equivalents */
+  .print\:hidden { display: none !important; }
+  .print\:bg-white { background: #ffffff !important; }
+
+  /* Don't stick elements in print */
+  .sticky { position: static !important; }
+
+  /* Bar tracks that are transparent on screen look invisible in print */
+  .print-bar-track { background: #e8e8e8 !important; }
+
+  /* Score bar fills keep their color */
+  .print-bar-fill  { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

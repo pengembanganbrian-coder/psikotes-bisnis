@@ -4,28 +4,57 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AssesIN — Platform Asesmen Psikologi Digital</title>
-    <meta name="description" content="Platform psikotes berbasis web untuk pemetaan potensi dan kepribadian SDM. Tes MBTI, DISC, PAPI Kostick, DASS-21, Love Language, dan MSDT tersedia secara online." />
-    <meta name="theme-color" content="#1e3a8a" />
+    <meta name="description" content="Platform asesmen psikologi digital untuk pemetaan potensi dan kepribadian individu maupun organisasi. Tes MBTI, DISC, PAPI Kostick, DASS-21, Love Language, dan MSDT." />
+    <meta name="theme-color" content="#d4a853" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="AssesIN" />
+
     <!-- Open Graph -->
     <meta property="og:title" content="AssesIN — Platform Asesmen Psikologi Digital" />
-    <meta property="og:description" content="Platform psikotes berbasis web untuk pemetaan potensi dan kepribadian sumber daya manusia." />
+    <meta property="og:description" content="Platform asesmen psikologi digital untuk pemetaan potensi dan kepribadian individu maupun organisasi." />
     <meta property="og:type" content="website" />
-    <!-- Favicon -->
+    <meta property="og:url" content="https://assesin.com" />
+
+    <!-- Favicon + Apple Touch Icon -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.svg" />
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet" />
-    <!-- Midtrans Snap.js — ganti data-client-key dengan Client Key Anda -->
-    <!-- Sandbox: -->
+
+    <!--
+      ═══════════════════════════════════════════════════════════
+      MIDTRANS SNAP.JS — WAJIB ISI SEBELUM LAUNCH
+      ───────────────────────────────────────────────────────────
+      1. Buka Midtrans Dashboard → Settings → Access Keys
+      2. Copy Client Key (bukan Server Key)
+      3. Ganti "ISI_CLIENT_KEY_SANDBOX_ANDA" di bawah
+
+      SANDBOX (untuk testing):
+      Client Key format: SB-Mid-client-xxxxxxxxxxxx
+      ═══════════════════════════════════════════════════════════
+    -->
+    <!-- Midtrans Snap.js — aktifkan setelah akun Midtrans approved & isi client key -->
+    <!--
     <script
       src="https://app.sandbox.midtrans.com/snap/snap.js"
-      data-client-key="YOUR_MIDTRANS_CLIENT_KEY_SANDBOX">
+      data-client-key="ISI_CLIENT_KEY_SANDBOX_ANDA">
     </script>
-    <!-- Production (aktifkan jika sudah live, nonaktifkan baris sandbox di atas):
+    -->
+
+    <!--
+      PRODUCTION (aktifkan saat go-live):
+      1. Nonaktifkan script sandbox di atas (hapus atau comment)
+      2. Aktifkan script berikut dengan Client Key Production
+      Client Key format: Mid-client-xxxxxxxxxxxx
+
     <script
       src="https://app.midtrans.com/snap/snap.js"
-      data-client-key="YOUR_MIDTRANS_CLIENT_KEY_PRODUCTION">
+      data-client-key="ISI_CLIENT_KEY_PRODUCTION_ANDA">
     </script>
     -->
   </head>

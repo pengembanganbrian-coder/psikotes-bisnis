@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 
 const TESTS = [
@@ -95,7 +95,7 @@ export default function Home() {
         <div style={{ maxWidth: '1440px', margin: '0 auto', height: '64px', display: 'flex', alignItems: 'center', gap: '40px' }}>
           <Logo size="sm" dark />
           <div style={{ display: 'flex', gap: '28px', flexWrap: 'wrap' }} className="hidden md:flex">
-            {['6 Instrumen Terstandar', 'Tes Gratis', 'Hasil Instan', 'Data Aman'].map((label) => (
+            {['6 Instrumen Terstandar', 'Mulai Gratis', 'Hasil Instan', 'Data Aman'].map((label) => (
               <span key={label} style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.08em' }}>
                 {label}
               </span>
@@ -135,12 +135,12 @@ export default function Home() {
             color: 'var(--text-sub)', fontSize: '16px', lineHeight: 1.75,
             maxWidth: '520px', margin: '0 auto 36px',
           }}>
-            Platform psikotes berbasis web untuk pemetaan potensi dan kepribadian sumber daya manusia organisasi.
+            Platform asesmen psikologi berbasis web untuk pemetaan potensi dan kepribadian individu maupun organisasi.
           </p>
 
           <div className="anim-up anim-delay-badges"
                style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
-            {['6 Instrumen Terstandar', 'Tes 100% Gratis', 'Hasil Otomatis & Instan', 'Data Peserta Terlindungi'].map((label) => (
+            {['6 Instrumen Terstandar', 'Mulai Gratis', 'Hasil Otomatis & Instan', 'Data Peserta Terlindungi'].map((label) => (
               <span key={label} style={{
                 border: '1px solid var(--border)', color: 'var(--text-sub)',
                 fontSize: '14px', letterSpacing: '0.03em',
@@ -285,22 +285,76 @@ export default function Home() {
           }}>
             <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.65' }}>
               Hasil tes bersifat <strong style={{ color: 'var(--text-sub)', fontWeight: 600 }}>rahasia</strong> dan digunakan
-              untuk kepentingan pengembangan sumber daya manusia. Kerjakan dengan jujur untuk hasil yang akurat.
+              untuk kepentingan pengembangan diri dan profesional Anda. Kerjakan dengan jujur untuk hasil yang akurat.
             </p>
           </div>
         </div>
       </div>
 
       {/* ── Footer ── */}
-      <footer style={{
-        borderTop: '1px solid var(--border)', padding: '28px var(--px)',
-        marginTop: 'auto', position: 'relative', zIndex: 1,
-      }}>
-        <div style={{ maxWidth: '1440px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Logo size="sm" dark />
-          <p style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.08em' }}>
-            © 2026 · AssesIN · All rights reserved
-          </p>
+      <footer style={{ borderTop: '1px solid var(--border)', padding: '40px var(--px) 32px', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+
+          {/* Top row */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '32px', marginBottom: '32px' }}>
+            {/* Brand */}
+            <div style={{ maxWidth: '260px' }}>
+              <Logo size="sm" dark />
+              <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.7', marginTop: '12px' }}>
+                Platform asesmen psikologi digital untuk pemetaan potensi dan kepribadian individu maupun organisasi.
+              </p>
+            </div>
+            {/* Links */}
+            <div style={{ display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
+              <div>
+                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '14px' }}>Layanan</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[
+                    { label: 'Tes MBTI', to: '/tes' },
+                    { label: 'Tes DISC', to: '/tes-disc' },
+                    { label: 'Tes PAPI Kostick', to: '/tes-papi' },
+                    { label: 'Tes DASS-21', to: '/tes-dass' },
+                    { label: 'Tes Love Language', to: '/tes-love-language' },
+                    { label: 'Tes MSDT', to: '/tes-msdt' },
+                  ].map(l => (
+                    <Link key={l.to} to={l.to} style={{ color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none' }}
+                      onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
+                      onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                    >{l.label}</Link>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '14px' }}>Legal</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <Link to="/privacy-policy" style={{ color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                  >Kebijakan Privasi</Link>
+                  <Link to="/terms" style={{ color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                  >Syarat & Ketentuan</Link>
+                  <a href="mailto:pengembangan.brian@gmail.com" style={{ color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none' }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                  >Kontak</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom row */}
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
+              © 2026 AssesIN. All rights reserved.
+            </p>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <Link to="/privacy-policy" style={{ color: 'var(--text-muted)', fontSize: '12px', textDecoration: 'none' }}>Kebijakan Privasi</Link>
+              <Link to="/terms" style={{ color: 'var(--text-muted)', fontSize: '12px', textDecoration: 'none' }}>Syarat & Ketentuan</Link>
+            </div>
+          </div>
+
         </div>
       </footer>
 

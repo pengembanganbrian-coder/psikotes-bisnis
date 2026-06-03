@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from '../supabase'
 import { HARGA_TES, NAMA_TES, formatRupiah } from '../config/pricing'
 
@@ -120,54 +121,71 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
       {freeContent}
 
       {/* Gate: preview + overlay */}
-      <div className="relative mt-6">
-        {/* Blur preview dari konten premium */}
-        <div className="select-none pointer-events-none">
-          <div className="blur-sm opacity-40 max-h-64 overflow-hidden rounded-2xl">
+      <div style={{ position: 'relative', marginTop: '24px' }}>
+        {/* Blur preview */}
+        <div style={{ pointerEvents: 'none', userSelect: 'none' }}>
+          <div style={{ filter: 'blur(6px)', opacity: 0.35, maxHeight: '240px', overflow: 'hidden', borderRadius: '16px' }}>
             {children}
           </div>
-          {/* gradient fade */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white via-white/80 to-transparent rounded-b-2xl" />
+          <div style={{ position: 'absolute', inset: '0 0 0 0', background: 'linear-gradient(to top, var(--bg) 20%, transparent 80%)', borderRadius: '16px' }} />
         </div>
 
-        {/* CTA Card di tengah */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="bg-white rounded-2xl shadow-2xl shadow-blue-100/80 border border-blue-100 p-6 mx-4 max-w-sm w-full text-center">
+        {/* CTA Card */}
+        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+          <div className="dark-card" style={{ padding: '24px', maxWidth: '360px', width: '100%', textAlign: 'center', borderColor: 'var(--accent-border)', background: 'rgba(9,9,15,0.97)' }}>
             {loading ? (
-              <p className="text-gray-400 text-sm">Memeriksa status pembayaran…</p>
+              <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Memeriksa status pembayaran…</p>
             ) : (
               <>
-                <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">🔓</span>
+                <div style={{ width: '44px', height: '44px', borderRadius: '99px', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 14px', fontSize: '20px' }}>
+                  🔓
                 </div>
-                <h3 className="text-base font-bold text-gray-800 mb-1">Laporan Lengkap</h3>
-                <p className="text-xs text-gray-500 mb-1">{NAMA_TES[testType]}</p>
-                <p className="text-2xl font-black text-blue-700 mb-1">
+                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '16px', color: 'var(--text)', marginBottom: '4px' }}>
+                  Laporan Lengkap
+                </p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginBottom: '8px' }}>
+                  {NAMA_TES[testType]}
+                </p>
+                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '26px', color: 'var(--accent)', marginBottom: '4px' }}>
                   {formatRupiah(HARGA_TES[testType])}
                 </p>
-                <p className="text-xs text-gray-400 mb-4">
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px', marginBottom: '16px' }}>
                   Deskripsi mendalam · Kekuatan & Kelemahan · Saran Karir
                 </p>
 
                 {error && (
-                  <p className="text-xs text-red-500 bg-red-50 rounded-lg px-3 py-2 mb-3">{error}</p>
+                  <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.2)', borderRadius: '8px', padding: '10px 12px', marginBottom: '12px' }}>
+                    <p style={{ color: '#f87171', fontSize: '12px' }}>{error}</p>
+                  </div>
                 )}
 
                 <button
                   onClick={handlePay}
                   disabled={paying || !pesertaId}
-                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white font-bold py-3 rounded-xl transition-all text-sm shadow-lg shadow-blue-200"
+                  style={{
+                    width: '100%', background: (paying || !pesertaId) ? 'var(--surface-2)' : 'var(--accent)',
+                    color: (paying || !pesertaId) ? 'var(--text-muted)' : '#09090f',
+                    fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px',
+                    letterSpacing: '0.1em', textTransform: 'uppercase', padding: '14px',
+                    borderRadius: '10px', border: 'none', cursor: (paying || !pesertaId) ? 'not-allowed' : 'pointer',
+                  }}
                 >
-                  {paying
-                    ? '⏳ Memproses…'
-                    : `Buka Laporan — ${formatRupiah(HARGA_TES[testType])}`}
+                  {paying ? '⏳ Memproses…' : `Buka Laporan — ${formatRupiah(HARGA_TES[testType])}`}
                 </button>
 
                 {!pesertaId && (
-                  <p className="text-xs text-amber-600 mt-2">
+                  <p style={{ color: '#f59e0b', fontSize: '11px', marginTop: '8px' }}>
                     ⚠ Selesaikan tes terlebih dahulu untuk membuka laporan.
                   </p>
                 )}
+
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px', marginTop: '12px' }}>
+                  Dengan membayar, Anda menyetujui{' '}
+                  <Link to="/terms" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>
+                    Syarat & Ketentuan
+                  </Link>
+                  {' '}AssesIN
+                </p>
               </>
             )}
           </div>

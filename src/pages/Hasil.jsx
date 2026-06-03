@@ -384,21 +384,22 @@ const preferensiLabel = {
 }
 
 const Section = ({ title, items, color = "blue" }) => {
-  const colors = {
-    blue: "bg-blue-50 border-blue-200 text-blue-800",
-    green: "bg-green-50 border-green-200 text-green-800",
-    amber: "bg-amber-50 border-amber-200 text-amber-800",
-    red: "bg-red-50 border-red-200 text-red-800",
-    purple: "bg-purple-50 border-purple-200 text-purple-800",
-    gray: "bg-gray-50 border-gray-200 text-gray-800",
+  const borderColors = {
+    blue:   '#3b82f6',
+    green:  '#22c55e',
+    amber:  '#f59e0b',
+    red:    '#ef4444',
+    purple: '#a855f7',
+    gray:   '#6b7280',
   }
+  const border = borderColors[color] || borderColors.blue
   return (
-    <div className={`rounded-xl border p-5 mb-4 ${colors[color]}`}>
-      <h3 className="font-bold text-base mb-3">{title}</h3>
-      <ul className="space-y-1">
+    <div style={{ background: 'var(--surface-2)', borderLeft: `3px solid ${border}`, borderRadius: '10px', padding: '16px 20px', marginBottom: '12px' }}>
+      <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '13px', marginBottom: '10px' }}>{title}</h3>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
         {items.filter(i => i && i !== '0').map((item, i) => (
-          <li key={i} className="flex gap-2 text-sm">
-            <span className="mt-1 flex-shrink-0">•</span>
+          <li key={i} style={{ color: 'var(--text-sub)', fontSize: '13px', lineHeight: '1.7', display: 'flex', gap: '8px' }}>
+            <span style={{ color: border, flexShrink: 0 }}>•</span>
             <span>{item}</span>
           </li>
         ))}
@@ -408,24 +409,24 @@ const Section = ({ title, items, color = "blue" }) => {
 }
 
 /* ── Konten premium MBTI ────────────────────────────────────── */
-function LaporanLengkapMBTI({ info, ref }) {
+function LaporanLengkapMBTI({ info, refData }) {
   return (
     <>
-      {ref.uraian && (
-        <div className="bg-white rounded-2xl shadow p-6 mb-6">
-          <h3 className="font-bold text-gray-700 text-lg mb-3">Uraian Kepribadian</h3>
-          <p className="text-base text-gray-700 leading-relaxed mb-5">{ref.uraian}</p>
-          {ref.saranPengembangan && (
-            <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-              <p className="text-sm font-bold text-amber-700 mb-2">💡 Saran Pengembangan</p>
-              <p className="text-sm text-amber-800 leading-relaxed">{ref.saranPengembangan}</p>
+      {refData.uraian && (
+        <div className="dark-card" style={{ padding: '24px', marginBottom: '16px' }}>
+          <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '15px', marginBottom: '12px' }}>Uraian Kepribadian</h3>
+          <p style={{ fontSize: '14px', color: 'var(--text-sub)', lineHeight: '1.75', marginBottom: '16px' }}>{refData.uraian}</p>
+          {refData.saranPengembangan && (
+            <div style={{ background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '10px', padding: '16px' }}>
+              <p style={{ fontSize: '12px', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px', letterSpacing: '0.06em' }}>SARAN PENGEMBANGAN</p>
+              <p style={{ fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.7' }}>{refData.saranPengembangan}</p>
             </div>
           )}
         </div>
       )}
 
-      <div className="bg-white rounded-2xl shadow p-6 mb-6">
-        <h3 className="font-bold text-gray-700 text-lg mb-4">Laporan Interpretasi MBTI</h3>
+      <div className="dark-card" style={{ padding: '24px', marginBottom: '16px' }}>
+        <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '15px', marginBottom: '16px' }}>Laporan Interpretasi MBTI</h3>
         <Section title="Karakteristik Umum" items={info.karakteristik} color="blue" />
         <Section title="Kekuatan" items={info.kekuatan} color="green" />
         <Section title="Hubungan Interpersonal" items={info.relationship} color="purple" />
@@ -441,34 +442,34 @@ function LaporanLengkapMBTI({ info, ref }) {
         <Section title="Saran" items={info.saran} color="green" />
       </div>
 
-      {(ref.saranProfesi || ref.partner) && (
-        <div className="grid md:grid-cols-2 gap-4 mb-6">
-          {ref.saranProfesi && (
-            <div className="bg-white rounded-2xl shadow p-5">
-              <h3 className="font-bold text-gray-700 mb-3 flex items-center gap-2">
-                <span className="w-7 h-7 bg-blue-100 rounded-lg flex items-center justify-center text-sm">💼</span>
+      {(refData.saranProfesi || refData.partner) && (
+        <div className="grid md:grid-cols-2 gap-4" style={{ marginBottom: '16px' }}>
+          {refData.saranProfesi && (
+            <div className="dark-card" style={{ padding: '20px' }}>
+              <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '13px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '26px', height: '26px', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px' }}>💼</span>
                 Saran Profesi
               </h3>
-              <div className="flex flex-wrap gap-2">
-                {ref.saranProfesi.split(',').map((p, i) => (
-                  <span key={i} className="text-sm bg-blue-50 text-blue-700 font-medium px-3 py-1.5 rounded-full border border-blue-100">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {refData.saranProfesi.split(',').map((p, i) => (
+                  <span key={i} style={{ fontSize: '12px', background: 'var(--accent-dim)', color: 'var(--accent)', fontWeight: 600, padding: '5px 12px', borderRadius: '99px', border: '1px solid var(--accent-border)' }}>
                     {p.trim()}
                   </span>
                 ))}
               </div>
             </div>
           )}
-          {ref.partner && (
-            <div className="bg-white rounded-2xl shadow p-5">
-              <h3 className="font-bold text-gray-700 mb-3 flex items-center gap-2">
-                <span className="w-7 h-7 bg-rose-100 rounded-lg flex items-center justify-center text-sm">🤝</span>
+          {refData.partner && (
+            <div className="dark-card" style={{ padding: '20px' }}>
+              <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '13px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ width: '26px', height: '26px', background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px' }}>🤝</span>
                 Partner Kerja / Hidup
               </h3>
-              <div className="flex gap-3 mt-1">
-                {ref.partner.split(' atau ').map((p, i) => (
-                  <div key={i} className="flex-1 bg-rose-50 border border-rose-100 rounded-xl p-3 text-center">
-                    <p className="text-xl font-black text-rose-600">{p.trim()}</p>
-                    <p className="text-xs text-rose-400 mt-0.5">{mbtiRef[p.trim()]?.subtitle || ''}</p>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '4px' }}>
+                {refData.partner.split(' atau ').map((p, i) => (
+                  <div key={i} style={{ flex: 1, background: 'var(--surface-2)', border: '1px solid var(--accent-border)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
+                    <p style={{ fontSize: '20px', fontFamily: 'Syne, sans-serif', fontWeight: 900, color: 'var(--accent)' }}>{p.trim()}</p>
+                    <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>{mbtiRef[p.trim()]?.subtitle || ''}</p>
                   </div>
                 ))}
               </div>
@@ -511,55 +512,68 @@ function Hasil() {
           </button>
           <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent)', textTransform: 'uppercase' }}>MBTI · AssesIN</span>
           <button onClick={() => window.print()} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '6px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
-            Cetak
+            🖨️ Cetak / PDF
           </button>
         </div>
       </div>
       <div className="max-w-3xl mx-auto py-8 px-4">
 
+        {/* Print-Only Header */}
+        <div className="print-only" style={{ display: 'none', textAlign: 'center', paddingBottom: '20px', borderBottom: '2px solid #a67c00', marginBottom: '20px' }}>
+          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', letterSpacing: '0.22em', color: '#a67c00', marginBottom: '4px' }}>ASSESIN</div>
+          <div style={{ fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888' }}>Platform Asesmen Psikologi Digital · ASSESS · INSIGHT · GROW</div>
+          <div style={{ marginTop: '16px', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111' }}>LAPORAN MBTI</div>
+          <div style={{ fontSize: '12px', color: '#555', marginTop: '4px' }}>Myers-Briggs Type Indicator</div>
+          <div style={{ marginTop: '8px', fontSize: '11px', color: '#444' }}>Peserta: <strong>{nama}</strong></div>
+        </div>
+
         {/* Header Laporan */}
-        <div className="bg-white rounded-2xl shadow-lg p-8 mb-6 text-center">
-          <p className="text-xs text-gray-400 uppercase tracking-widest mb-1">MYERS-BRIGGS TYPE INDICATOR — INTERPRETIVE REPORT</p>
-          <p className="text-sm text-gray-500 mb-1">AssesIN — Platform Asesmen Psikologi</p>
-          <h2 className="text-lg font-bold text-gray-700 mb-6">{nama}</h2>
+        <div className="dark-card" style={{ padding: '32px', marginBottom: '20px', textAlign: 'center' }}>
+          <div className="section-rule" style={{ marginBottom: '24px', justifyContent: 'center' }}>
+            <span className="section-rule-pip" /><span className="section-rule-label">Laporan MBTI</span><span className="section-rule-line" />
+          </div>
+          <p style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.08em', marginBottom: '12px' }}>
+            AssesIN — Platform Asesmen Psikologi Digital
+          </p>
+          <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '28px' }}>{nama}</h2>
 
           {/* Tipe besar */}
-          <div className="bg-gradient-to-br from-blue-700 to-indigo-700 text-white rounded-2xl py-8 px-6 mb-6 shadow-lg shadow-blue-200">
-            <p className="text-sm font-semibold opacity-80 mb-2">TIPE KEPRIBADIAN</p>
-            <div className="flex justify-center gap-3 mb-3">
+          <div style={{ background: 'var(--surface-2)', border: '1px solid var(--accent-border)', borderRadius: '16px', padding: '28px 24px', marginBottom: '20px' }}>
+            <p style={{ fontSize: '10px', letterSpacing: '0.14em', color: 'var(--text-muted)', marginBottom: '16px', textTransform: 'uppercase' }}>TIPE KEPRIBADIAN</p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '16px' }}>
               {huruf.map((h, i) => (
-                <div key={i} className="w-14 h-14 rounded-xl bg-white text-blue-700 font-black text-2xl flex items-center justify-center shadow">
+                <div key={i} style={{ width: '64px', height: '64px', borderRadius: '12px', background: 'var(--bg)', border: '2px solid var(--accent-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', color: 'var(--accent)' }}>
                   {h}
                 </div>
               ))}
             </div>
             {ref.subtitle && (
-              <p className="text-lg font-bold mt-1 mb-2">{ref.subtitle}</p>
+              <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '16px', color: 'var(--text)', marginBottom: '12px' }}>{ref.subtitle}</p>
             )}
-            <p className="text-sm opacity-80">PREFERENSI</p>
-            <p className="text-base font-semibold mt-1">
+            <p style={{ fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', marginBottom: '4px', textTransform: 'uppercase' }}>PREFERENSI</p>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-sub)' }}>
               {huruf.map(h => preferensiLabel[h]).join(' — ')}
             </p>
           </div>
 
           {/* Faktor Dominan */}
-          <div className="bg-gray-50 rounded-xl p-4 text-left mb-4">
-            <p className="text-xs text-gray-500 uppercase font-semibold mb-1">Faktor Dominan</p>
-            <p className="text-sm text-gray-700">{info.dominan}</p>
+          <div style={{ background: 'var(--surface-2)', borderRadius: '12px', padding: '16px', textAlign: 'left' }}>
+            <p style={{ fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '6px' }}>Faktor Dominan</p>
+            <p style={{ fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.65' }}>{info.dominan}</p>
           </div>
         </div>
 
         {/* Penjelasan 4 Dimensi */}
-        <div className="bg-white rounded-2xl shadow p-6 mb-6">
-          <h3 className="font-bold text-gray-700 mb-4">Cara Membaca Tipe MBTI</h3>
+        <div className="dark-card" style={{ padding: '24px', marginBottom: '20px' }}>
+          <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '15px', marginBottom: '16px' }}>Cara Membaca Tipe MBTI</h3>
           <div className="grid grid-cols-2 gap-3">
             {[['E','I'], ['S','N'], ['T','F'], ['J','P']].map(([a, b], i) => (
   <div key={i} className="col-span-2 grid grid-cols-2 gap-3">
-    <div className={`rounded-xl p-3 text-sm ${huruf.includes(a) ? 'bg-blue-600 text-white font-bold' : 'bg-gray-50 text-gray-500'}`}>
-      <span className="font-bold">{a}</span> — {preferensiLabel[a]}
+    <div style={{ borderRadius: '10px', padding: '12px', fontSize: '13px', background: huruf.includes(a) ? 'var(--accent-dim)' : 'var(--surface-2)', border: huruf.includes(a) ? '1px solid var(--accent-border)' : '1px solid var(--border)', color: huruf.includes(a) ? 'var(--accent)' : 'var(--text-muted)', fontWeight: huruf.includes(a) ? 700 : 400 }}>
+      <span style={{ fontWeight: 800 }}>{a}</span> — {preferensiLabel[a]}
     </div>
-    <div className={`rounded-xl p-3 text-sm ${huruf.includes(b) ? 'bg-blue-600 text-white font-bold' : 'bg-gray-50 text-gray-500'}`}>
-      <span className="font-bold">{b}</span> — {preferensiLabel[b]}
+    <div style={{ borderRadius: '10px', padding: '12px', fontSize: '13px', background: huruf.includes(b) ? 'var(--accent-dim)' : 'var(--surface-2)', border: huruf.includes(b) ? '1px solid var(--accent-border)' : '1px solid var(--border)', color: huruf.includes(b) ? 'var(--accent)' : 'var(--text-muted)', fontWeight: huruf.includes(b) ? 700 : 400 }}>
+      <span style={{ fontWeight: 800 }}>{b}</span> — {preferensiLabel[b]}
     </div>
   </div>
 ))}
@@ -568,27 +582,22 @@ function Hasil() {
 
         {/* ── KONTEN PREMIUM (Laporan Lengkap) ── */}
         {fromDashboard ? (
-          <LaporanLengkapMBTI info={info} ref={ref} />
+          <LaporanLengkapMBTI info={info} refData={ref} />
         ) : (
           <PaymentGate testType="MBTI" pesertaId={pesertaId} nama={nama}>
-            <LaporanLengkapMBTI info={info} ref={ref} />
+            <LaporanLengkapMBTI info={info} refData={ref} />
           </PaymentGate>
         )}
 
+        {/* Footer Watermark */}
+        <div style={{ textAlign: 'center', paddingTop: '24px', borderTop: '1px solid var(--border)', marginTop: '32px' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.1em', opacity: 0.4 }}>© 2026 · AssesIN · Platform Asesmen Psikologi Digital</p>
+        </div>
+
         {/* Tombol */}
-        <div className="flex gap-3 sticky bottom-4 print:hidden">
-          <button
-            onClick={() => navigate('/tes')}
-            className="flex-1 border-2 border-blue-600 text-blue-600 bg-white font-semibold py-3 rounded-xl hover:bg-blue-50 transition shadow-lg"
-          >
-            ← Ulangi Tes
-          </button>
-          <button
-            onClick={() => window.print()}
-            className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition shadow-lg shadow-blue-200"
-          >
-            🖨️ Cetak Laporan
-          </button>
+        <div className="print:hidden" style={{ display: 'flex', gap: '12px', position: 'sticky', bottom: '16px', marginTop: '24px' }}>
+          <button onClick={() => navigate('/tes')} style={{ flex: 1, background: 'var(--surface)', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', padding: '14px', borderRadius: '10px', border: '1px solid var(--border)', cursor: 'pointer' }}>← Ulangi Tes</button>
+          <button onClick={() => window.print()} style={{ flex: 1, background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}>🖨️ Cetak / PDF</button>
         </div>
       </div>
     </div>

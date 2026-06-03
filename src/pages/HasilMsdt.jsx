@@ -38,7 +38,7 @@ const gayaInfo = {
     deskripsi:
       'Pemimpin yang mengutamakan tugas dan hasil di atas segalanya dengan mengorbankan hubungan manusia. Memberikan perintah tanpa penjelasan, tidak mempercayai bawahan, dan menciptakan suasana kerja yang tegang. Efektif jangka pendek namun merusak moral tim jangka panjang.',
     implikasi:
-      'Perlu pelatihan kepemimpinan yang berfokus pada kecerdasan emosional dan komunikasi. Risiko tinggi terhadap turnover karyawan.',
+      'Perlu pelatihan kepemimpinan yang berfokus pada kecerdasan emosional dan komunikasi. Risiko tinggi terhadap turnover anggota tim.',
     warna: 'red',
   },
   Developer: {
@@ -119,7 +119,7 @@ export default function HasilMsdt() {
   }
 
   const { hasil, nama, nip, unitKerja, pesertaId, fromDashboard } = state
-  const { TO, RO, E_score, grandTotal, gaya, toTinggi, roTinggi, eTinggi } = hasil
+  const { TO, RO, E_score, grandTotal, gaya, toTinggi, roTinggi, eTinggi } = hasil ?? {}
 
   const info = gayaInfo[gaya] || gayaInfo['Deserter']
   const w    = warnaConfig[info.warna]
@@ -128,19 +128,28 @@ export default function HasilMsdt() {
     day: 'numeric', month: 'long', year: 'numeric',
   })
 
+  const safeE = E_score ?? 0
+
   /* Bar helper: TO range 3–19, RO range 1–17 */
   const toPct = Math.min(100, Math.max(0, ((TO - 3) / (19 - 3)) * 100))
   const roPct = Math.min(100, Math.max(0, ((RO - 1) / (17 - 1)) * 100))
-  const ePct  = (E_score / 4.0) * 100
+  const ePct  = (safeE / 4.0) * 100
   const gtPct = Math.min(100, Math.max(0, (grandTotal / 50) * 100))
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }}>
 
+      {/* Print stylesheet */}
+      <style>{`
+        @media print {
+          .msdt-header { background: white !important; border-bottom: 2px solid #a67c00 !important; }
+        }
+      `}</style>
+
       {/* Header */}
-      <div style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '28px var(--px)' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto' }}>
-          <div className="section-rule" style={{ marginBottom: '20px' }}>
+      <div className="msdt-header" style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '28px var(--px)' }}>
+        <div style={{ maxWidth: '760px', margin: '0 auto', position: 'relative' }}>
+          <div className="section-rule print-hide" style={{ marginBottom: '20px' }}>
             <span className="section-rule-pip" /><span className="section-rule-label">Laporan MSDT</span><span className="section-rule-line" />
           </div>
           <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '26px', color: 'var(--text)', marginBottom: '6px' }}>Laporan MSDT</h1>
@@ -149,33 +158,48 @@ export default function HasilMsdt() {
             <span style={{ color: 'var(--text-sub)', fontSize: '13px' }}>👤 <strong style={{ color: 'var(--text)' }}>{nama}</strong></span>
             <span style={{ color: 'var(--text-muted)', fontSize: '13px' }}>📅 {tanggal}</span>
           </div>
+          <button onClick={() => window.print()} className="print-hide" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+            🖨️ Cetak / PDF
+          </button>
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
 
+        {/* Print-Only Header */}
+        <div className="print-only" style={{ display: 'none', textAlign: 'center', paddingBottom: '20px', borderBottom: '2px solid #a67c00', marginBottom: '4px' }}>
+          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', letterSpacing: '0.22em', color: '#a67c00', marginBottom: '4px' }}>ASSESIN</div>
+          <div style={{ fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888' }}>Platform Asesmen Psikologi Digital · ASSESS · INSIGHT · GROW</div>
+          <div style={{ marginTop: '16px', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111' }}>LAPORAN MSDT</div>
+          <div style={{ fontSize: '12px', color: '#555', marginTop: '4px' }}>Management Style Diagnostic Test</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '11px', color: '#444', maxWidth: '600px', margin: '8px auto 0' }}>
+            <span>Peserta: <strong>{nama}</strong></span>
+            <span>Tanggal: {tanggal}</span>
+          </div>
+        </div>
+
         {/* ── Kartu Gaya Utama ──────────────────────────────────── */}
-        <div className={`${w.bg} border-2 ${w.border} rounded-2xl overflow-hidden`}>
-          <div className="px-6 py-6 flex items-center gap-5">
-            <span className="text-5xl">{info.emoji}</span>
-            <div className="flex-1">
-              <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-1">Gaya Manajemen Anda</p>
-              <h2 className={`text-3xl font-black ${w.title}`}>{gaya}</h2>
-              <div className="flex flex-wrap gap-2 mt-2">
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${w.badge}`}>
+        <div className="dark-card" style={{ overflow: 'hidden' }}>
+          <div style={{ padding: '24px', display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <span style={{ fontSize: '44px' }}>{info.emoji}</span>
+            <div style={{ flex: 1 }}>
+              <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Gaya Manajemen Anda</p>
+              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', color: 'var(--accent)', marginBottom: '10px' }}>{gaya}</h2>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '99px', background: 'var(--accent-dim)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }}>
                   TO: {info.labelTO}
                 </span>
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${w.badge}`}>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '99px', background: 'var(--accent-dim)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }}>
                   RO: {info.labelRO}
                 </span>
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${w.badge}`}>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '4px 12px', borderRadius: '99px', background: 'var(--accent-dim)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }}>
                   Efektivitas: {info.labelE}
                 </span>
               </div>
             </div>
           </div>
-          <div className="px-6 pb-6">
-            <p className="text-sm text-gray-700 leading-relaxed">{info.deskripsi}</p>
+          <div style={{ padding: '0 24px 24px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.75' }}>{info.deskripsi}</p>
           </div>
         </div>
 
@@ -186,23 +210,20 @@ export default function HasilMsdt() {
           <div className="dark-card" style={{ padding: '20px' }}>
             <div className="flex justify-between items-start mb-3">
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Task Orientation (TO)</p>
-                <p className="text-xs text-gray-400 mt-0.5">Orientasi pada tugas · range 3–19</p>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Task Orientation (TO)</p>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>Orientasi pada tugas · range 3–19</p>
               </div>
-              <div className="text-right">
-                <p className="text-3xl font-black">{TO}</p>
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${toTinggi ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+              <div style={{ textAlign: 'right' }}>
+                <p style={{ fontSize: '30px', fontFamily: 'Syne, sans-serif', fontWeight: 900, color: 'var(--text)' }}>{TO}</p>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: toTinggi ? 'rgba(249,115,22,0.15)' : 'rgba(59,130,246,0.15)', color: toTinggi ? '#fb923c' : '#60a5fa' }}>
                   {toTinggi ? 'Tinggi' : 'Rendah'}
                 </span>
               </div>
             </div>
-            <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all duration-700 ${toTinggi ? 'bg-orange-500' : 'bg-blue-400'}`}
-                style={{ width: `${toPct}%` }}
-              />
+            <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', background: toTinggi ? '#f97316' : '#3b82f6', width: `${toPct}%`, borderRadius: '99px', transition: 'width 0.7s' }} />
             </div>
-            <div className="flex justify-between text-[10px] text-gray-400 mt-1 px-0.5">
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>
               <span>3</span>
               <span>Threshold: 11</span>
               <span>19</span>
@@ -213,23 +234,20 @@ export default function HasilMsdt() {
           <div className="dark-card" style={{ padding: '20px' }}>
             <div className="flex justify-between items-start mb-3">
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Relationship Orientation (RO)</p>
-                <p className="text-xs text-gray-400 mt-0.5">Orientasi pada hubungan · range 1–17</p>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Relationship Orientation (RO)</p>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>Orientasi pada hubungan · range 1–17</p>
               </div>
-              <div className="text-right">
-                <p className="text-3xl font-black">{RO}</p>
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${roTinggi ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+              <div style={{ textAlign: 'right' }}>
+                <p style={{ fontSize: '30px', fontFamily: 'Syne, sans-serif', fontWeight: 900, color: 'var(--text)' }}>{RO}</p>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: roTinggi ? 'rgba(249,115,22,0.15)' : 'rgba(59,130,246,0.15)', color: roTinggi ? '#fb923c' : '#60a5fa' }}>
                   {roTinggi ? 'Tinggi' : 'Rendah'}
                 </span>
               </div>
             </div>
-            <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all duration-700 ${roTinggi ? 'bg-orange-500' : 'bg-blue-400'}`}
-                style={{ width: `${roPct}%` }}
-              />
+            <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', background: roTinggi ? '#f97316' : '#3b82f6', width: `${roPct}%`, borderRadius: '99px', transition: 'width 0.7s' }} />
             </div>
-            <div className="flex justify-between text-[10px] text-gray-400 mt-1 px-0.5">
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>
               <span>1</span>
               <span>Threshold: 9</span>
               <span>17</span>
@@ -240,23 +258,20 @@ export default function HasilMsdt() {
           <div className="dark-card" style={{ padding: '20px' }}>
             <div className="flex justify-between items-start mb-3">
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Skor Efektivitas (E)</p>
-                <p className="text-xs text-gray-400 mt-0.5">Konversi dari Grand Total · range 0–4</p>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Skor Efektivitas (E)</p>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>Konversi dari Grand Total · range 0–4</p>
               </div>
-              <div className="text-right">
-                <p className="text-3xl font-black">{E_score.toFixed(1)}</p>
-                <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${eTinggi ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+              <div style={{ textAlign: 'right' }}>
+                <p style={{ fontSize: '30px', fontFamily: 'Syne, sans-serif', fontWeight: 900, color: 'var(--text)' }}>{safeE.toFixed(1)}</p>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: eTinggi ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.06)', color: eTinggi ? '#4ade80' : 'var(--text-muted)' }}>
                   {eTinggi ? 'Efektif (≥2.0)' : 'Kurang Efektif'}
                 </span>
               </div>
             </div>
-            <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all duration-700 ${eTinggi ? 'bg-green-500' : 'bg-gray-400'}`}
-                style={{ width: `${ePct}%` }}
-              />
+            <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', background: eTinggi ? '#22c55e' : '#6b7280', width: `${ePct}%`, borderRadius: '99px', transition: 'width 0.7s' }} />
             </div>
-            <div className="flex justify-between text-[10px] text-gray-400 mt-1 px-0.5">
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>
               <span>0</span>
               <span>Threshold: 2.0</span>
               <span>4.0</span>
@@ -267,23 +282,20 @@ export default function HasilMsdt() {
           <div className="dark-card" style={{ padding: '20px' }}>
             <div className="flex justify-between items-start mb-3">
               <div>
-                <p className="text-xs text-gray-500 font-semibold uppercase tracking-wider">Grand Total</p>
-                <p className="text-xs text-gray-400 mt-0.5">TO + RO + E_raw + O_raw</p>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>Grand Total</p>
+                <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>TO + RO + E_raw + O_raw</p>
               </div>
-              <div className="text-right">
-                <p className="text-3xl font-black">{grandTotal}</p>
-                <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-orange-100 text-orange-700">
+              <div style={{ textAlign: 'right' }}>
+                <p style={{ fontSize: '30px', fontFamily: 'Syne, sans-serif', fontWeight: 900, color: 'var(--text)' }}>{grandTotal}</p>
+                <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: 'rgba(212,168,83,0.15)', color: 'var(--accent)' }}>
                   Skor Total
                 </span>
               </div>
             </div>
-            <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-amber-500 rounded-full transition-all duration-700"
-                style={{ width: `${gtPct}%` }}
-              />
+            <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+              <div style={{ height: '100%', background: 'var(--accent)', width: `${gtPct}%`, borderRadius: '99px', transition: 'width 0.7s' }} />
             </div>
-            <div className="flex justify-between text-[10px] text-gray-400 mt-1 px-0.5">
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', color: 'var(--text-muted)', marginTop: '4px' }}>
               <span>0</span>
               <span>Dasar E-score</span>
               <span>50</span>
@@ -294,9 +306,9 @@ export default function HasilMsdt() {
         {/* ── Decision Tree Visual ───────────────────────────────── */}
         <div className="dark-card" style={{ overflow: 'hidden' }}>
           <div style={{ background: 'var(--surface-2)', padding: '12px 24px', borderBottom: '1px solid var(--border)' }}>
-            <h3 className="font-bold text-gray-700 text-sm">Peta Gaya Manajemen (Decision Tree)</h3>
+            <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '13px' }}>Peta Gaya Manajemen (Decision Tree)</h3>
           </div>
-          <div className="p-6">
+          <div style={{ padding: '24px' }}>
             <div className="grid grid-cols-2 gap-3">
               {[
                 { label: 'Executive',           emoji: '🌟', to: true,  ro: true,  e: true  },
@@ -312,24 +324,25 @@ export default function HasilMsdt() {
                 return (
                   <div
                     key={item.label}
-                    className={`rounded-xl p-3 border-2 transition-all ${
-                      isActive
-                        ? `${w.border} ${w.bg} ${w.title} font-bold`
-                        : 'border-gray-100 bg-gray-50 text-gray-500'
-                    }`}
+                    style={{
+                      borderRadius: '10px',
+                      padding: '12px',
+                      border: isActive ? '2px solid var(--accent-border)' : '1px solid var(--border)',
+                      background: isActive ? 'var(--accent-dim)' : 'var(--surface-2)',
+                    }}
                   >
-                    <div className="flex items-center gap-2 mb-1">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                       <span>{item.emoji}</span>
-                      <span className="text-xs font-semibold">{item.label}</span>
+                      <span style={{ fontSize: '12px', fontWeight: isActive ? 700 : 500, color: isActive ? 'var(--accent)' : 'var(--text-sub)' }}>{item.label}</span>
                     </div>
-                    <div className="flex gap-1.5 flex-wrap">
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${item.to ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-500'}`}>
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, background: item.to ? 'rgba(249,115,22,0.15)' : 'rgba(255,255,255,0.05)', color: item.to ? '#fb923c' : 'var(--text-muted)' }}>
                         TO: {item.to ? 'T' : 'R'}
                       </span>
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${item.ro ? 'bg-orange-100 text-orange-700' : 'bg-gray-100 text-gray-500'}`}>
+                      <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, background: item.ro ? 'rgba(249,115,22,0.15)' : 'rgba(255,255,255,0.05)', color: item.ro ? '#fb923c' : 'var(--text-muted)' }}>
                         RO: {item.ro ? 'T' : 'R'}
                       </span>
-                      <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${item.e ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'}`}>
+                      <span style={{ fontSize: '10px', padding: '2px 6px', borderRadius: '4px', fontWeight: 600, background: item.e ? 'rgba(34,197,94,0.15)' : 'rgba(255,255,255,0.05)', color: item.e ? '#4ade80' : 'var(--text-muted)' }}>
                         E: {item.e ? '≥2' : '<2'}
                       </span>
                     </div>
@@ -337,73 +350,73 @@ export default function HasilMsdt() {
                 )
               })}
             </div>
-            <p className="text-[10px] text-gray-400 mt-3 text-center">T = Tinggi · R = Rendah · E = Skor Efektivitas</p>
+            <p style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '12px', textAlign: 'center' }}>T = Tinggi · R = Rendah · E = Skor Efektivitas</p>
           </div>
         </div>
 
         <PremiumSection show={!!fromDashboard} testType="MSDT" pesertaId={pesertaId} nama={nama}>
         {/* ── Implikasi HR ───────────────────────────────────────── */}
-        <div className={`bg-white rounded-2xl shadow-sm border-2 ${w.border} overflow-hidden`}>
-          <div className={`${w.bg} px-6 py-4 flex items-center gap-4`}>
-            <span className="text-2xl">💼</span>
+        <div className="dark-card" style={{ overflow: 'hidden' }}>
+          <div style={{ background: 'var(--surface-2)', padding: '16px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '20px' }}>💼</span>
             <div>
-              <h3 className={`font-black text-lg ${w.title}`}>Implikasi & Rekomendasi HR</h3>
-              <span className={`inline-block text-xs font-bold px-3 py-0.5 rounded-full ${w.badge}`}>
+              <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '14px', color: 'var(--text)', marginBottom: '4px' }}>Implikasi & Rekomendasi HR</h3>
+              <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 10px', borderRadius: '99px', background: 'var(--accent-dim)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }}>
                 Gaya: {gaya}
               </span>
             </div>
           </div>
-          <div className="px-6 py-5">
-            <p className="text-sm text-gray-700 leading-relaxed">{info.implikasi}</p>
+          <div style={{ padding: '20px 24px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.75' }}>{info.implikasi}</p>
           </div>
         </div>
 
         {/* ── Ringkasan Skor ─────────────────────────────────────── */}
         <div className="dark-card" style={{ overflow: 'hidden' }}>
           <div style={{ background: 'var(--surface-2)', padding: '12px 24px', borderBottom: '1px solid var(--border)' }}>
-            <h3 className="font-bold text-gray-700 text-sm">Ringkasan Skor</h3>
+            <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>Ringkasan Skor</h3>
           </div>
-          <table className="w-full text-sm">
+          <table style={{ width: '100%', fontSize: '13px', borderCollapse: 'collapse' }}>
             <thead>
-              <tr className="text-xs text-gray-500 font-semibold uppercase border-b border-gray-100">
-                <th className="px-6 py-3 text-left">Dimensi</th>
-                <th className="px-6 py-3 text-center">Skor</th>
-                <th className="px-6 py-3 text-center">Status</th>
+              <tr style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', borderBottom: '1px solid var(--border)' }}>
+                <th style={{ padding: '10px 24px', textAlign: 'left' }}>Dimensi</th>
+                <th style={{ padding: '10px 24px', textAlign: 'center' }}>Skor</th>
+                <th style={{ padding: '10px 24px', textAlign: 'center' }}>Status</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-gray-50">
-                <td className="px-6 py-3 font-medium">Task Orientation (TO)</td>
-                <td className="px-6 py-3 text-center font-bold text-gray-800">{TO}</td>
-                <td className="px-6 py-3 text-center">
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full ${toTinggi ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+              <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                <td style={{ padding: '12px 24px', color: 'var(--text-sub)' }}>Task Orientation (TO)</td>
+                <td style={{ padding: '12px 24px', textAlign: 'center', fontWeight: 700, color: 'var(--text)' }}>{TO}</td>
+                <td style={{ padding: '12px 24px', textAlign: 'center' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: toTinggi ? 'rgba(249,115,22,0.15)' : 'rgba(59,130,246,0.15)', color: toTinggi ? '#fb923c' : '#60a5fa' }}>
                     {toTinggi ? 'Tinggi (>11)' : 'Rendah (≤11)'}
                   </span>
                 </td>
               </tr>
-              <tr className="border-b border-gray-50">
-                <td className="px-6 py-3 font-medium">Relationship Orientation (RO)</td>
-                <td className="px-6 py-3 text-center font-bold text-gray-800">{RO}</td>
-                <td className="px-6 py-3 text-center">
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full ${roTinggi ? 'bg-orange-100 text-orange-700' : 'bg-blue-100 text-blue-700'}`}>
+              <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                <td style={{ padding: '12px 24px', color: 'var(--text-sub)' }}>Relationship Orientation (RO)</td>
+                <td style={{ padding: '12px 24px', textAlign: 'center', fontWeight: 700, color: 'var(--text)' }}>{RO}</td>
+                <td style={{ padding: '12px 24px', textAlign: 'center' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: roTinggi ? 'rgba(249,115,22,0.15)' : 'rgba(59,130,246,0.15)', color: roTinggi ? '#fb923c' : '#60a5fa' }}>
                     {roTinggi ? 'Tinggi (>9)' : 'Rendah (≤9)'}
                   </span>
                 </td>
               </tr>
-              <tr className="border-b border-gray-50">
-                <td className="px-6 py-3 font-medium">Grand Total</td>
-                <td className="px-6 py-3 text-center font-bold text-gray-800">{grandTotal}</td>
-                <td className="px-6 py-3 text-center">
-                  <span className="text-xs font-bold px-3 py-1 rounded-full bg-amber-100 text-amber-700">
+              <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                <td style={{ padding: '12px 24px', color: 'var(--text-sub)' }}>Grand Total</td>
+                <td style={{ padding: '12px 24px', textAlign: 'center', fontWeight: 700, color: 'var(--text)' }}>{grandTotal}</td>
+                <td style={{ padding: '12px 24px', textAlign: 'center' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: 'var(--accent-dim)', color: 'var(--accent)', border: '1px solid var(--accent-border)' }}>
                     Dasar E-score
                   </span>
                 </td>
               </tr>
               <tr>
-                <td className="px-6 py-3 font-medium">Skor Efektivitas (E)</td>
-                <td className="px-6 py-3 text-center font-bold text-gray-800">{E_score.toFixed(1)}</td>
-                <td className="px-6 py-3 text-center">
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full ${eTinggi ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
+                <td style={{ padding: '12px 24px', color: 'var(--text-sub)' }}>Skor Efektivitas (E)</td>
+                <td style={{ padding: '12px 24px', textAlign: 'center', fontWeight: 700, color: 'var(--text)' }}>{safeE.toFixed(1)}</td>
+                <td style={{ padding: '12px 24px', textAlign: 'center' }}>
+                  <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 10px', borderRadius: '99px', background: eTinggi ? 'rgba(34,197,94,0.15)' : 'rgba(107,114,128,0.15)', color: eTinggi ? '#4ade80' : '#9ca3af' }}>
                     {eTinggi ? 'Efektif (≥2.0)' : 'Kurang Efektif (<2.0)'}
                   </span>
                 </td>
@@ -414,23 +427,43 @@ export default function HasilMsdt() {
         </PremiumSection>
 
         {/* ── Catatan ────────────────────────────────────────────── */}
-        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5">
-          <h4 className="font-bold text-blue-800 mb-2">⚠️ Catatan Penting</h4>
-          <p className="text-sm text-blue-700 leading-relaxed">
-            MSDT adalah alat <strong>diagnostik gaya manajemen</strong>, bukan penilaian mutlak kualitas kepemimpinan.
+        <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '20px' }}>
+          <h4 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', color: 'var(--text-sub)', letterSpacing: '0.08em', marginBottom: '10px' }}>⚠️ CATATAN PENTING</h4>
+          <p style={{ fontSize: '13px', color: 'var(--text-muted)', lineHeight: '1.75' }}>
+            MSDT adalah alat <strong style={{ color: 'var(--text-sub)' }}>diagnostik gaya manajemen</strong>, bukan penilaian mutlak kualitas kepemimpinan.
             Gaya manajemen dapat berkembang dan beradaptasi sesuai konteks dan situasi.
             Interpretasi dan tindak lanjut harus dilakukan oleh profesional HR yang berwenang.
-            Hasil bersifat <strong>rahasia</strong> dan digunakan untuk kepentingan pengembangan sumber daya manusia.
+            Hasil bersifat <strong style={{ color: 'var(--text-sub)' }}>rahasia</strong> dan hanya digunakan untuk kepentingan pengembangan diri dan profesional Anda.
           </p>
         </div>
 
-        {/* ── Navigasi ───────────────────────────────────────────── */}
-        <div className="text-center pt-2">
+        {/* Print-Only Footer */}
+        <div className="print-only" style={{ display: 'none', paddingTop: '16px', borderTop: '1px solid #e0e0e0', textAlign: 'center' }}>
+          <p style={{ fontSize: '10px', color: '#777', lineHeight: '1.6' }}>MSDT adalah alat diagnostik gaya manajemen. Gaya manajemen dapat berkembang dan beradaptasi sesuai konteks dan situasi.</p>
+          <p style={{ fontSize: '10px', color: '#bbb', marginTop: '4px' }}>© 2026 AssesIN · assesin.com · Laporan ini bersifat rahasia</p>
+        </div>
+
+        {/* ── Navigasi (hidden in print) ─────────────────────────── */}
+        <div className="print-hide" style={{ display: 'flex', gap: '10px', justifyContent: 'center', paddingTop: '8px' }}>
+          {!fromDashboard && (
+            <button
+              onClick={() => navigate('/tes-msdt')}
+              style={{ padding: '12px 24px', background: 'var(--surface-2)', color: 'var(--text-sub)', borderRadius: '10px', fontWeight: 600, fontSize: '13px', border: '1px solid var(--border)', cursor: 'pointer' }}
+            >
+              Ulangi Tes
+            </button>
+          )}
           <button
-            onClick={() => navigate('/')}
-            className={`${w.btn} text-white font-bold px-10 py-3.5 rounded-xl transition-all shadow-lg`}
+            onClick={() => navigate(fromDashboard ? '/dashboard' : '/')}
+            style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}
           >
-            ← Kembali ke Beranda
+            {fromDashboard ? '← Dashboard' : '← Beranda'}
+          </button>
+          <button
+            onClick={() => window.print()}
+            style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 28px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}
+          >
+            🖨️ Cetak / PDF
           </button>
         </div>
 

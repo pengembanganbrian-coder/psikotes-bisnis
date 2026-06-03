@@ -8,7 +8,7 @@ const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
 
 export default function ResetPassword() {
   const navigate  = useNavigate()
-  const location  = useLocation()
+  useLocation()
 
   const [password,  setPassword]  = useState('')
   const [confirm,   setConfirm]   = useState('')
@@ -17,12 +17,6 @@ export default function ResetPassword() {
   const [status,    setStatus]    = useState('checking') // 'checking' | 'ready' | 'invalid'
 
   useEffect(() => {
-    // ── Debug: log everything about the current URL ──────────────
-    console.log('[ResetPassword] href  :', window.location.href)
-    console.log('[ResetPassword] hash  :', window.location.hash)
-    console.log('[ResetPassword] search:', window.location.search)
-    console.log('[ResetPassword] state :', location.state)
-
     let resolved = false
 
     const resolve = (ready) => {
@@ -31,57 +25,33 @@ export default function ResetPassword() {
       setStatus(ready ? 'ready' : 'invalid')
     }
 
-    // ── 1. Listen for PASSWORD_RECOVERY event ────────────────────
-    // Supabase fires this automatically when it parses #access_token&type=recovery
-    // from the URL. The AuthListener in App.jsx navigates here when it fires,
-    // but the event may fire again on this page too if the hash is present.
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('[ResetPassword] onAuthStateChange:', event, 'user:', session?.user?.email ?? 'none')
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
         resolve(true)
       }
     })
 
-    // ── 2. Check if a session already exists ─────────────────────
-    // AuthListener navigated here after PASSWORD_RECOVERY fired on a
-    // different page (Home), so the session is already established.
-    supabase.auth.getSession().then(({ data: { session }, error: sessionError }) => {
-      console.log('[ResetPassword] getSession → user:', session?.user?.email ?? 'none', '| error:', sessionError?.message ?? 'none')
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (resolved) return
-      if (session) {
-        resolve(true)
-      }
-      // else: wait for PASSWORD_RECOVERY event or timeout
+      if (session) resolve(true)
     })
 
-    // ── 3. Fallback: try parsing tokens from URL hash ─────────────
-    // Handles edge case where Supabase redirects directly to /reset-password
-    // with the hash present (e.g. redirect URL set to .../reset-password).
     const hash = window.location.hash
-    console.log('[ResetPassword] checking URL hash for tokens:', hash)
     if (hash.includes('access_token')) {
       const params       = new URLSearchParams(hash.slice(1))
       const accessToken  = params.get('access_token')
       const refreshToken = params.get('refresh_token') ?? ''
       const type         = params.get('type')
-      console.log('[ResetPassword] hash params → type:', type, '| access_token present:', !!accessToken)
 
       if (accessToken && type === 'recovery') {
         supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
           .then(({ data, error: sessErr }) => {
-            console.log('[ResetPassword] setSession → user:', data?.session?.user?.email ?? 'none', '| error:', sessErr?.message ?? 'none')
-            if (!resolved) {
-              resolve(!sessErr && !!data?.session)
-            }
+            if (!resolved) resolve(!sessErr && !!data?.session)
           })
       }
     }
 
-    // ── 4. Timeout: if nothing resolved in 4 s, mark invalid ─────
-    const timer = setTimeout(() => {
-      console.log('[ResetPassword] timeout — marking invalid')
-      resolve(false)
-    }, 4000)
+    const timer = setTimeout(() => resolve(false), 4000)
 
     return () => {
       subscription.unsubscribe()
@@ -107,7 +77,6 @@ export default function ResetPassword() {
     setLoading(false)
 
     if (updateError) {
-      console.error('[ResetPassword] updateUser error:', updateError.message)
       setError('Gagal mengubah password: ' + updateError.message)
       return
     }

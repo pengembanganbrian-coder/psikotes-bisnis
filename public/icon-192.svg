@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <rect width="192" height="192" rx="42" fill="#09090f"/>
+  <!-- Bar chart -->
+  <rect x="32" y="148" width="128" height="6" rx="3" fill="#d4a853" opacity="0.25"/>
+  <rect x="36" y="112" width="32" height="36" rx="8" fill="#d4a853" opacity="0.45"/>
+  <rect x="80" y="76"  width="32" height="72" rx="8" fill="#d4a853" opacity="0.72"/>
+  <rect x="124" y="40" width="32" height="108" rx="8" fill="#d4a853"/>
+  <!-- Trend line dots -->
+  <circle cx="52"  cy="102" r="7" fill="#d4a853" opacity="0.5"/>
+  <circle cx="96"  cy="66"  r="7" fill="#d4a853" opacity="0.75"/>
+  <circle cx="140" cy="30"  r="9" fill="#d4a853"/>
+  <path d="M52 102 L96 66 L140 30" stroke="#d4a853" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.5" stroke-dasharray="6 6"/>
+</svg>

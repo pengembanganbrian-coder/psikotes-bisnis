@@ -2,6 +2,7 @@
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
+import PrivacyCheckbox from '../components/PrivacyCheckbox'
 
 const soal = [
   { id: 1, pilihan: [
@@ -197,6 +198,7 @@ function TesDisc() {
   const [jawaban, setJawaban]       = useState({})
   const [loading, setLoading]       = useState(false)
   const [formErrors, setFormErrors] = useState({})
+  const [setujuPrivasi, setSetujuPrivasi] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const navigate = useNavigate()
 
@@ -206,6 +208,7 @@ function TesDisc() {
     if (!email.trim()) errs.email = 'Email wajib diisi.'
     if (!usia)         errs.usia  = 'Usia wajib diisi.'
     if (!jenisKelamin) errs.jenisKelamin = 'Jenis kelamin wajib dipilih.'
+    if (!setujuPrivasi) errs.privasi = 'Wajib menyetujui Kebijakan Privasi untuk melanjutkan.'
     setFormErrors(errs)
     return Object.keys(errs).length === 0
   }
@@ -293,7 +296,7 @@ function TesDisc() {
               <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
               {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div className="form-grid-2">
               <div>
                 <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
                 <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
@@ -309,6 +312,12 @@ function TesDisc() {
                 {formErrors.jenisKelamin && <p style={S_ERR}>{formErrors.jenisKelamin}</p>}
               </div>
             </div>
+            <PrivacyCheckbox
+              id="privacy-disc"
+              checked={setujuPrivasi}
+              onChange={v => { setSetujuPrivasi(v); setFormErrors(p => ({...p, privasi: ''})) }}
+              error={formErrors.privasi}
+            />
             <button
               onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
               style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
@@ -336,7 +345,7 @@ function TesDisc() {
         <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes DISC</p>
-            <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {jumlahDijawab}/{soal.length} kelompok</p>
+            <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {jumlahDijawab}/{soal.length} kelompok</p>
           </div>
           <div style={{ flex: 1, maxWidth: '180px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
             <div style={{ height: '100%', background: 'var(--accent)', width: `${progress}%`, transition: 'width 0.5s' }} />
