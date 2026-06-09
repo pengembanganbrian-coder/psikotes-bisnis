@@ -60,7 +60,7 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
           pesertaId,
           testType,
           nama:   nama  || 'Peserta',
-          email:  email || 'peserta@assesin.id',
+          email:  email || undefined,
           amount: HARGA_TES[testType],
         },
       })

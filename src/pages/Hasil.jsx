@@ -1,4 +1,4 @@
-﻿import { useLocation, useNavigate } from 'react-router-dom'
+﻿import { useLocation, useNavigate, Navigate } from 'react-router-dom'
 import PaymentGate from '../components/PaymentGate'
 
 const deskripsiMBTI = {
@@ -484,10 +484,14 @@ function LaporanLengkapMBTI({ info, refData }) {
 function Hasil() {
   const { state } = useLocation()
   const navigate = useNavigate()
-  const tipe         = state?.tipe         || 'ISTJ'
-  const nama         = state?.nama         || 'Peserta'
-  const pesertaId    = state?.pesertaId    || null
-  const fromDashboard = state?.fromDashboard || false
+
+  if (!state?.tipe) return <Navigate to="/tes" replace />
+
+  const tipe          = state.tipe
+  const nama          = state.nama          || 'Peserta'
+  const email         = state.email         || null
+  const pesertaId     = state.pesertaId     || null
+  const fromDashboard = state.fromDashboard || false
   const info = deskripsiMBTI[tipe]
 
   if (!info) return (
@@ -584,7 +588,7 @@ function Hasil() {
         {fromDashboard ? (
           <LaporanLengkapMBTI info={info} refData={ref} />
         ) : (
-          <PaymentGate testType="MBTI" pesertaId={pesertaId} nama={nama}>
+          <PaymentGate testType="MBTI" pesertaId={pesertaId} nama={nama} email={email}>
             <LaporanLengkapMBTI info={info} refData={ref} />
           </PaymentGate>
         )}

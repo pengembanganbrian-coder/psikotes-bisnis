@@ -44,7 +44,7 @@ serve(async (req: Request) => {
       },
       body: JSON.stringify({
         transaction_details: { order_id: orderId, gross_amount: amount },
-        customer_details:    { first_name: nama, email: email || "pengembangan.brian@gmail.com" },
+        customer_details:    { first_name: nama, ...(email ? { email } : {}) },
         item_details: [{
           id:       testType,
           price:    amount,
@@ -52,7 +52,7 @@ serve(async (req: Request) => {
           name:     `Laporan Lengkap ${testType} — AssesIN`,
         }],
         callbacks: {
-          finish: `${Deno.env.get("FRONTEND_URL") || "https://assesin.vercel.app"}/pembayaran-selesai`,
+          finish: `${Deno.env.get("FRONTEND_URL") || "https://assesin.com"}/pembayaran-selesai`,
         },
       }),
     })

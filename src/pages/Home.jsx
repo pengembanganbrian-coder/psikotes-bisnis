@@ -153,11 +153,25 @@ export default function Home() {
             ))}
           </div>
 
+          <div className="anim-up" style={{ marginTop: '36px', display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <button
+              onClick={() => { const el = document.getElementById('instrumen'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }}
+              style={{
+                background: 'var(--accent)', color: '#09090f',
+                fontFamily: 'Syne, sans-serif', fontWeight: 800,
+                fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase',
+                padding: '14px 36px', borderRadius: '10px', border: 'none', cursor: 'pointer',
+              }}
+            >
+              Mulai Tes Sekarang →
+            </button>
+          </div>
+
         </div>
       </section>
 
       {/* ── Instruments ── */}
-      <section style={{ padding: '0 var(--px) 80px', position: 'relative', zIndex: 1 }}>
+      <section id="instrumen" style={{ padding: '0 var(--px) 80px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
 
           <div className="section-rule anim-up anim-delay-section">
@@ -345,14 +359,10 @@ export default function Home() {
           </div>
 
           {/* Bottom row */}
-          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '20px' }}>
             <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
               © 2026 AssesIN. All rights reserved.
             </p>
-            <div style={{ display: 'flex', gap: '20px' }}>
-              <Link to="/privacy-policy" style={{ color: 'var(--text-muted)', fontSize: '12px', textDecoration: 'none' }}>Kebijakan Privasi</Link>
-              <Link to="/terms" style={{ color: 'var(--text-muted)', fontSize: '12px', textDecoration: 'none' }}>Syarat & Ketentuan</Link>
-            </div>
           </div>
 
         </div>
