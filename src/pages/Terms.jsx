@@ -102,7 +102,7 @@ export default function Terms() {
 
         <Section title="4. Pembayaran dan Refund">
           <Item>
-            Akses laporan premium berbayar diproses secara aman melalui Midtrans. Dengan melakukan pembayaran, Anda menyetujui ketentuan Midtrans yang berlaku.
+            Akses laporan premium berbayar diproses secara aman melalui Duitku. Dengan melakukan pembayaran, Anda menyetujui ketentuan Duitku yang berlaku.
           </Item>
           <Item>
             <strong style={{ color: 'var(--text)' }}>Pembayaran bersifat final dan tidak dapat dikembalikan (non-refundable)</strong> setelah laporan premium berhasil dibuka dan ditampilkan.

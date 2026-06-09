@@ -1,15 +1,15 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../supabase'
 import { HARGA_TES, NAMA_TES, formatRupiah } from '../config/pricing'
 
 /**
- * PaymentGate — sembunyikan konten premium di balik paywall Midtrans.
+ * PaymentGate — sembunyikan konten premium di balik paywall Duitku.
  *
  * Props:
  *   testType   : 'MBTI' | 'DISC' | 'PAPI' | 'DASS' | 'Love Language' | 'MSDT'
  *   pesertaId  : UUID dari tabel peserta_xxx
- *   nama       : nama peserta (untuk Midtrans customer_details)
+ *   nama       : nama peserta (untuk Duitku customer detail)
  *   email      : email peserta (opsional)
  *   children   : konten premium yang dikunci
  *   freeContent: konten gratis yang selalu tampil di atas gate
@@ -19,6 +19,7 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
   const [loading, setLoading] = useState(true)
   const [paying,  setPaying]  = useState(false)
   const [error,   setError]   = useState('')
+  const payWindowRef = useRef(null)
 
   const localKey = `assesin_paid_${testType}_${pesertaId}`
 
@@ -48,14 +49,10 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
   useEffect(() => { checkStatus() }, [checkStatus])
 
   const handlePay = async () => {
-    if (!window.snap) {
-      setError('Midtrans Snap belum tersedia. Coba muat ulang halaman.')
-      return
-    }
     setPaying(true)
     setError('')
     try {
-      const { data, error: fnErr } = await supabase.functions.invoke('create-midtrans-token', {
+      const { data, error: fnErr } = await supabase.functions.invoke('create-duitku-payment', {
         body: {
           pesertaId,
           testType,
@@ -64,31 +61,23 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
           amount: HARGA_TES[testType],
         },
       })
-      if (fnErr || !data?.token) throw new Error(fnErr?.message || 'Gagal membuat token pembayaran.')
+      if (fnErr || !data?.paymentUrl) throw new Error(fnErr?.message || 'Gagal membuat invoice pembayaran.')
 
-      window.snap.pay(data.token, {
-        onSuccess: () => {
-          localStorage.setItem(localKey, 'true')
-          setIsPaid(true)
-          setPaying(false)
-        },
-        onPending: () => {
-          setError('Pembayaran sedang diproses. Segarkan halaman ini setelah pembayaran selesai.')
-          setPaying(false)
-        },
-        onError: () => {
-          setError('Pembayaran gagal. Silakan coba lagi.')
-          setPaying(false)
-        },
-        onClose: () => setPaying(false),
-      })
+      // Buka halaman pembayaran Duitku di tab baru
+      const win = window.open(data.paymentUrl, '_blank', 'width=650,height=750,noopener')
+      if (!win) {
+        // Jika popup diblokir browser, redirect langsung
+        window.location.href = data.paymentUrl
+        return
+      }
+      payWindowRef.current = win
     } catch (e) {
       setError(e.message)
       setPaying(false)
     }
   }
 
-  // Polling tiap 5 detik saat pop-up Midtrans terbuka
+  // Polling tiap 5 detik saat window Duitku terbuka
   useEffect(() => {
     if (!paying) return
     const interval = setInterval(async () => {
@@ -104,6 +93,8 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
         setIsPaid(true)
         setPaying(false)
         clearInterval(interval)
+        payWindowRef.current?.close()
+        payWindowRef.current = null
       }
     }, 5000)
     return () => clearInterval(interval)
@@ -161,7 +152,7 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
 
                 <button
                   onClick={handlePay}
-                  disabled={paying || !pesertaId}
+                  disabled={paying || !pesertaId || loading}
                   style={{
                     width: '100%', background: (paying || !pesertaId) ? 'var(--surface-2)' : 'var(--accent)',
                     color: (paying || !pesertaId) ? 'var(--text-muted)' : '#09090f',

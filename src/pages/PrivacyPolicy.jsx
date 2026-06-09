@@ -66,7 +66,7 @@ export default function PrivacyPolicy() {
           <Item><strong style={{ color: 'var(--text)' }}>Usia dan jenis kelamin</strong> — untuk konteks normatif dan analisis demografis yang bersifat agregat.</Item>
           <Item><strong style={{ color: 'var(--text)' }}>Jawaban tes</strong> — respons Anda terhadap setiap butir soal, yang digunakan untuk menghitung hasil tes.</Item>
           <Item><strong style={{ color: 'var(--text)' }}>Hasil tes</strong> — tipe kepribadian, skor, dan interpretasi yang dihasilkan dari jawaban Anda.</Item>
-          <Item><strong style={{ color: 'var(--text)' }}>Data pembayaran</strong> — status transaksi (bukan nomor kartu atau data rekening). Pembayaran diproses oleh Midtrans yang bersertifikasi PCI-DSS.</Item>
+          <Item><strong style={{ color: 'var(--text)' }}>Data pembayaran</strong> — status transaksi (bukan nomor kartu atau data rekening). Pembayaran diproses oleh Duitku yang bersertifikasi PCI-DSS.</Item>
         </Section>
 
         <Section title="2. Bagaimana Data Digunakan">
@@ -83,7 +83,7 @@ export default function PrivacyPolicy() {
         <Section title="3. Pembagian Data kepada Pihak Ketiga">
           <Item><strong style={{ color: 'var(--text)' }}>Data Anda tidak dijual</strong> kepada pihak manapun, dalam bentuk apapun.</Item>
           <Item>Data tidak dibagikan kepada pihak ketiga kecuali:
-            <br />— <em>Penyedia infrastruktur teknis</em>: Supabase (penyimpanan database terenkripsi) dan Midtrans (pemroses pembayaran), yang terikat perjanjian kerahasiaan data.
+            <br />— <em>Penyedia infrastruktur teknis</em>: Supabase (penyimpanan database terenkripsi) dan Duitku (pemroses pembayaran), yang terikat perjanjian kerahasiaan data.
             <br />— <em>Kewajiban hukum</em>: jika diwajibkan oleh peraturan perundang-undangan Indonesia yang berlaku.
           </Item>
           <Item>Semua penyedia layanan pihak ketiga yang kami gunakan memiliki standar keamanan yang telah diverifikasi.</Item>
@@ -93,7 +93,7 @@ export default function PrivacyPolicy() {
           <Item>Seluruh data disimpan di server Supabase dengan enkripsi <strong style={{ color: 'var(--text)' }}>AES-256 at rest</strong> dan <strong style={{ color: 'var(--text)' }}>TLS 1.3 in transit</strong>.</Item>
           <Item>Akses ke database hanya diberikan kepada admin AssesIN yang berwenang, dengan otentikasi berlapis.</Item>
           <Item>Row Level Security (RLS) diterapkan di semua tabel data peserta — artinya pengguna satu tidak dapat mengakses data pengguna lain.</Item>
-          <Item>Data pembayaran diproses oleh Midtrans yang bersertifikasi <strong style={{ color: 'var(--text)' }}>PCI-DSS Level 1</strong> — kami tidak pernah menyimpan informasi kartu kredit Anda.</Item>
+          <Item>Data pembayaran diproses oleh Duitku yang bersertifikasi <strong style={{ color: 'var(--text)' }}>PCI-DSS Level 1</strong> — kami tidak pernah menyimpan informasi kartu kredit Anda.</Item>
         </Section>
 
         <Section title="5. Penyimpanan dan Retensi Data">

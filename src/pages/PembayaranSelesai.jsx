@@ -37,8 +37,8 @@ export default function PembayaranSelesai() {
           <p style={{ color: 'var(--text-muted)', fontSize: '12px', lineHeight: '1.65' }}>
             Jika laporan belum terbuka, coba segarkan halaman hasil tes Anda.
             Butuh bantuan? Hubungi{' '}
-            <a href="mailto:pengembangan.brian@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
-              pengembangan.brian@gmail.com
+            <a href="mailto:brianlagiapa@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+              brianlagiapa@gmail.com
             </a>
           </p>
         </div>
