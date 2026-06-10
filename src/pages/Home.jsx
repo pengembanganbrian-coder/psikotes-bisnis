@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import Logo from '../components/Logo'
+import { HARGA_TES, formatRupiah } from '../config/pricing'
 
 const TESTS = [
   {
@@ -53,6 +53,12 @@ const TESTS = [
   },
 ]
 
+const KONTAK = {
+  email:   'admin@assesin.net',
+  telepon: '087872150877',
+  alamat:  'Jl. Kramat Asem Raya No. 3 RT 5 RW 12, Utan Kayu Selatan, Kec. Matraman, Jakarta Timur',
+}
+
 export default function Home() {
   const navigate = useNavigate()
 
@@ -92,15 +98,29 @@ export default function Home() {
         backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
         padding: '0 var(--px)',
       }}>
-        <div style={{ maxWidth: '1440px', margin: '0 auto', height: '64px', display: 'flex', alignItems: 'center', gap: '40px' }}>
-          <Logo size="sm" dark />
-          <div style={{ display: 'flex', gap: '28px', flexWrap: 'wrap' }} className="hidden md:flex">
-            {['6 Instrumen Terstandar', 'Mulai Gratis', 'Hasil Instan', 'Data Aman'].map((label) => (
-              <span key={label} style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.08em' }}>
-                {label}
-              </span>
-            ))}
+        <div style={{ maxWidth: '1440px', margin: '0 auto', height: '64px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
+            <Logo size="sm" dark />
+            <div style={{ display: 'flex', gap: '28px', flexWrap: 'wrap' }} className="hidden md:flex">
+              {['6 Instrumen Terstandar', 'Mulai Gratis', 'Hasil Instan', 'Data Aman'].map((label) => (
+                <span key={label} style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.08em' }}>
+                  {label}
+                </span>
+              ))}
+            </div>
           </div>
+          <a
+            href="#kontak"
+            style={{
+              color: 'var(--text-muted)', fontSize: '12px', letterSpacing: '0.06em',
+              textDecoration: 'none', border: '1px solid var(--border)',
+              padding: '7px 18px', borderRadius: '99px', flexShrink: 0,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.borderColor = 'var(--accent-border)' }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--text-muted)'; e.currentTarget.style.borderColor = 'var(--border)' }}
+          >
+            Kontak
+          </a>
         </div>
       </header>
 
@@ -226,6 +246,28 @@ export default function Home() {
                   ))}
                 </div>
 
+                {/* Harga laporan */}
+                <div style={{
+                  background: 'rgba(212,168,83,0.06)', border: '1px solid rgba(212,168,83,0.15)',
+                  borderRadius: '10px', padding: '12px 16px', marginBottom: '20px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                }}>
+                  <div>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '11px', marginBottom: '2px' }}>Laporan Lengkap</p>
+                    <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '18px', color: 'var(--accent)', lineHeight: 1 }}>
+                      {formatRupiah(HARGA_TES[test.id])}
+                    </p>
+                  </div>
+                  <span style={{
+                    background: 'rgba(212,168,83,0.12)', border: '1px solid rgba(212,168,83,0.2)',
+                    color: 'var(--accent)', fontSize: '10px', fontFamily: 'Syne, sans-serif',
+                    fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase',
+                    padding: '5px 12px', borderRadius: '99px',
+                  }}>
+                    Tes Gratis
+                  </span>
+                </div>
+
                 <div style={{
                   borderTop: '1px solid var(--border)', paddingTop: '20px',
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -305,6 +347,63 @@ export default function Home() {
         </div>
       </div>
 
+      {/* ── Kontak ── */}
+      <section id="kontak" style={{
+        borderTop: '1px solid var(--border)',
+        padding: '72px var(--px)', position: 'relative', zIndex: 1,
+      }}>
+        <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+
+          <div className="section-rule">
+            <span className="section-rule-pip" />
+            <span className="section-rule-label">Kontak & Dukungan</span>
+            <span className="section-rule-line" />
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px', marginTop: '8px' }}>
+            {/* Email */}
+            <a href={`mailto:${KONTAK.email}`} style={{ textDecoration: 'none' }}>
+              <div style={{
+                border: '1px solid var(--border)', borderRadius: '16px',
+                padding: '28px 24px', background: 'var(--surface)',
+                transition: 'border-color 0.2s',
+              }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent-border)'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              >
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '12px' }}>Email</p>
+                <p style={{ color: 'var(--accent)', fontSize: '15px', fontWeight: 600 }}>{KONTAK.email}</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '6px' }}>Balas dalam 1×24 jam kerja</p>
+              </div>
+            </a>
+            {/* Telepon */}
+            <a href={`tel:${KONTAK.telepon}`} style={{ textDecoration: 'none' }}>
+              <div style={{
+                border: '1px solid var(--border)', borderRadius: '16px',
+                padding: '28px 24px', background: 'var(--surface)',
+                transition: 'border-color 0.2s',
+              }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent-border)'}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              >
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '12px' }}>Telepon / WhatsApp</p>
+                <p style={{ color: 'var(--accent)', fontSize: '15px', fontWeight: 600 }}>{KONTAK.telepon}</p>
+                <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '6px' }}>Senin – Jumat, 09.00 – 17.00 WIB</p>
+              </div>
+            </a>
+            {/* Alamat */}
+            <div style={{
+              border: '1px solid var(--border)', borderRadius: '16px',
+              padding: '28px 24px', background: 'var(--surface)',
+            }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '12px' }}>Alamat Usaha</p>
+              <p style={{ color: 'var(--text)', fontSize: '14px', lineHeight: '1.6' }}>{KONTAK.alamat}</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       {/* ── Footer ── */}
       <footer style={{ borderTop: '1px solid var(--border)', padding: '40px var(--px) 32px', position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
@@ -312,11 +411,29 @@ export default function Home() {
           {/* Top row */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '32px', marginBottom: '32px' }}>
             {/* Brand */}
-            <div style={{ maxWidth: '260px' }}>
+            <div style={{ maxWidth: '280px' }}>
               <Logo size="sm" dark />
               <p style={{ color: 'var(--text-muted)', fontSize: '13px', lineHeight: '1.7', marginTop: '12px' }}>
                 Platform asesmen psikologi digital untuk pemetaan potensi dan kepribadian individu maupun organisasi.
               </p>
+              {/* Kontak singkat di footer */}
+              <div style={{ marginTop: '16px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <a href={`mailto:${KONTAK.email}`} style={{ color: 'var(--text-muted)', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
+                  onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                >
+                  <span style={{ opacity: 0.5 }}>✉</span> {KONTAK.email}
+                </a>
+                <a href={`tel:${KONTAK.telepon}`} style={{ color: 'var(--text-muted)', fontSize: '12px', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
+                  onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
+                >
+                  <span style={{ opacity: 0.5 }}>☎</span> {KONTAK.telepon}
+                </a>
+                <p style={{ color: 'var(--text-muted)', fontSize: '12px', display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  <span style={{ opacity: 0.5, flexShrink: 0 }}>📍</span> {KONTAK.alamat}
+                </p>
+              </div>
             </div>
             {/* Links */}
             <div style={{ display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
@@ -349,10 +466,10 @@ export default function Home() {
                     onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
                     onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
                   >Syarat & Ketentuan</Link>
-                  <a href="mailto:pengembangan.brian@gmail.com" style={{ color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none' }}
+                  <a href={`mailto:${KONTAK.email}`} style={{ color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none' }}
                     onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
                     onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}
-                  >Kontak</a>
+                  >Kontak Support</a>
                 </div>
               </div>
             </div>

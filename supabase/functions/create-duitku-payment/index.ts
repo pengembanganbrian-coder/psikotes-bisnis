@@ -4,11 +4,11 @@
 // Body (JSON): { pesertaId, testType, nama, email, amount }
 // Response:    { reference, paymentUrl }
 //
-// Env vars yang dibutuhkan di Supabase:
-//   DUITKU_MERCHANT_CODE   — kode merchant dari dashboard Duitku
-//   DUITKU_API_KEY         — API key dari dashboard Duitku
-//   DUITKU_IS_PRODUCTION   — "true" untuk production, kosong/false untuk sandbox
-//   FRONTEND_URL           — https://assesin.com (untuk returnUrl)
+// Env vars yang dibutuhkan di Supabase (set via Dashboard → Edge Functions → Secrets):
+//   DUITKU_MERCHANT_CODE   — kode merchant dari dashboard Duitku Sandbox
+//   DUITKU_API_KEY         — API key dari dashboard Duitku Sandbox
+//   DUITKU_IS_PRODUCTION   — kosongkan (atau "false") untuk sandbox
+//   FRONTEND_URL           — https://assesin.net
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
@@ -43,7 +43,7 @@ serve(async (req: Request) => {
 
     const merchantOrderId = `ASSESIN-${testType.replace(/\s+/g, "").toUpperCase()}-${Date.now()}`
     const callbackUrl     = `${Deno.env.get("SUPABASE_URL")}/functions/v1/duitku-webhook`
-    const returnUrl       = `${Deno.env.get("FRONTEND_URL") || "https://assesin.com"}/pembayaran-selesai`
+    const returnUrl       = `${Deno.env.get("FRONTEND_URL") || "https://assesin.net"}/pembayaran-selesai`
 
     // Signature: HMAC-SHA256(merchantCode + merchantOrderId + amount, apiKey)
     const signature = await hmacSHA256(`${merchantCode}${merchantOrderId}${amount}`, apiKey)
