@@ -10,8 +10,7 @@ CREATE TABLE IF NOT EXISTS public.payments (
   amount                    INTEGER     NOT NULL,          -- dalam rupiah, mis. 39000
   status                    TEXT        DEFAULT 'pending'  -- 'pending' | 'paid' | 'failed'
     CHECK (status IN ('pending', 'paid', 'failed')),
-  snap_token                TEXT,
-  midtrans_transaction_id   TEXT
+  duitku_reference          TEXT
 );
 
 -- Index untuk lookup cepat saat cek status bayar

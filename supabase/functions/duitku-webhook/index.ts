@@ -47,7 +47,7 @@ serve(async (req: Request) => {
 
     const { error } = await supabase
       .from("payments")
-      .update({ status, midtrans_transaction_id: reference })
+      .update({ status, duitku_reference: reference })
       .eq("order_id", merchantOrderId)
 
     if (error) {

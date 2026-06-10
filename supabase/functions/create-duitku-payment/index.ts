@@ -84,14 +84,14 @@ serve(async (req: Request) => {
     )
 
     await supabase.from("payments").insert({
-      order_id:   merchantOrderId,
-      peserta_id: pesertaId,
-      test_type:  testType,
+      order_id:         merchantOrderId,
+      peserta_id:       pesertaId,
+      test_type:        testType,
       nama,
-      email:      email || null,
+      email:            email || null,
       amount,
-      snap_token: duitkuData.reference,
-      status:     "pending",
+      duitku_reference: duitkuData.reference,
+      status:           "pending",
     })
 
     return new Response(
