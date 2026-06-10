@@ -159,7 +159,7 @@ function Tes() {
       .insert([{ name: nama, email, jabatan }])
       .select()
     if (error) {
-      setSubmitError(`Gagal menyimpan hasil: ${error.message} (code: ${error.code})`)
+      setSubmitError('Gagal menyimpan hasil. Periksa koneksi internet dan coba lagi.')
       setLoading(false)
       return
     }
