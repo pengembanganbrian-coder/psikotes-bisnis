@@ -23,6 +23,7 @@ import ResetPassword from './pages/ResetPassword'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import PembayaranSelesai from './pages/PembayaranSelesai'
+import Kontak from './pages/Kontak'
 
 // Listens for Supabase PASSWORD_RECOVERY event (fired when user clicks the reset link).
 // Must live inside BrowserRouter so it can call useNavigate().
@@ -64,6 +65,7 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/pembayaran-selesai" element={<PembayaranSelesai />} />
+        <Route path="/kontak" element={<Kontak />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
