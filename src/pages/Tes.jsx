@@ -156,7 +156,7 @@ function Tes() {
     const jabatan = `${usia} th · ${jenisKelamin}`
     const { data: pesertaData, error } = await supabase
       .from('peserta')
-      .insert([{ nama, email, jabatan }])
+      .insert([{ name: nama, email, jabatan }])
       .select()
     if (error) {
       setSubmitError('Gagal menyimpan hasil. Periksa koneksi internet dan coba lagi.')
