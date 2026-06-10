@@ -193,7 +193,8 @@ export default function HasilDass() {
   const navigate  = useNavigate()
   const state     = location.state
   const saved     = useRef(false)
-  const [isSaved, setIsSaved] = useState(false)
+  const [isSaved,   setIsSaved]   = useState(false)
+  const [pesertaId, setPesertaId] = useState(state?.pesertaId || null)
 
   /* Guard: pastikan state tersedia */
   if (!state?.skor) {
@@ -209,7 +210,7 @@ export default function HasilDass() {
     )
   }
 
-  const { skor, nama, nip, unitKerja, fromDashboard, pesertaId } = state
+  const { skor, nama, nip, unitKerja, fromDashboard } = state
 
   /* Kategorisasi */
   const kD = getKategori('D', skor.D)
@@ -224,7 +225,7 @@ export default function HasilDass() {
 
   /* ── Auto-save ke Supabase (hanya sekali, bukan dari dashboard, bukan jika pesertaId sudah ada) ── */
   useEffect(() => {
-    if (fromDashboard || saved.current || pesertaId) return
+    if (fromDashboard || saved.current || state?.pesertaId) return
     saved.current = true
 
     async function save() {
@@ -244,7 +245,10 @@ export default function HasilDass() {
         kategori_anxietas: kA.label,
         kategori_stres:    kS.label,
       })
-      if (!e2) setIsSaved(true)
+      if (!e2) {
+        setIsSaved(true)
+        setPesertaId(peserta.id)
+      }
     }
     save()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
