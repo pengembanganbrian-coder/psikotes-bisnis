@@ -1,6 +1,7 @@
 import { useNavigate, Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { HARGA_TES, formatRupiah } from '../config/pricing'
+import { TES_BARU } from '../tes-baru/definisi'
 
 const TESTS = [
   {
@@ -51,6 +52,15 @@ const TESTS = [
     desc: 'Bahasa Kasih · Gaya Apresiasi & Motivasi',
     tags: ['30 pasangan', '~8 menit', 'W · Q · G · A · P'],
   },
+  // Tes baru (beta) -- data dari tes-baru/definisi.js
+  ...Object.values(TES_BARU).map(t => ({
+    id: t.testType,
+    route: t.route,
+    abbr: t.abbr,
+    full: `${t.judul} (Beta)`,
+    desc: t.sub,
+    tags: [`${t.soal.length} pernyataan`, t.durasi, 'Beta'],
+  })),
 ]
 
 const EMAIL_KONTAK  = 'admin@assesin.net'
@@ -387,6 +397,7 @@ export default function Home() {
                     { label: 'Tes DASS-21', to: '/tes-dass' },
                     { label: 'Tes Love Language', to: '/tes-love-language' },
                     { label: 'Tes MSDT', to: '/tes-msdt' },
+                    ...Object.values(TES_BARU).map(t => ({ label: t.judul, to: t.route })),
                   ].map(l => (
                     <Link key={l.to} to={l.to} style={{ color: 'var(--text-muted)', fontSize: '13px', textDecoration: 'none' }}
                       onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}

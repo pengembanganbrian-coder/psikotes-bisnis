@@ -24,6 +24,9 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import PembayaranSelesai from './pages/PembayaranSelesai'
 import Kontak from './pages/Kontak'
+import TesBaru from './pages/TesBaru'
+import HasilBaru from './pages/HasilBaru'
+import { TES_BARU } from './tes-baru/definisi'
 
 // Listens for Supabase PASSWORD_RECOVERY event (fired when user clicks the reset link).
 // Must live inside BrowserRouter so it can call useNavigate().
@@ -59,6 +62,10 @@ function App() {
         <Route path="/hasil-love-language" element={<HasilLoveLanguage />} />
         <Route path="/tes-msdt" element={<TesMsdt />} />
         <Route path="/hasil-msdt" element={<HasilMsdt />} />
+        {Object.values(TES_BARU).flatMap(t => [
+          <Route key={t.route} path={t.route} element={<TesBaru kode={t.kode} />} />,
+          <Route key={t.hasilRoute} path={t.hasilRoute} element={<HasilBaru kode={t.kode} />} />,
+        ])}
         <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/job-profile" element={<ProtectedRoute><JobProfile /></ProtectedRoute>} />
         <Route path="/reset-password" element={<ResetPassword />} />

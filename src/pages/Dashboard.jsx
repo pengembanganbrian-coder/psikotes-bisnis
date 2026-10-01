@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
+import { TES_BARU, TES_BY_TYPE } from '../tes-baru/definisi'
 
 const PAPI_SCALES = ['G','L','I','T','V','S','R','D','C','E','N','A','P','X','B','O','Z','K','F','W']
 
@@ -12,6 +13,7 @@ const BADGE = {
   DASS:           { bg: 'rgba(20,184,166,0.18)',   color: '#2dd4bf'  },
   'Love Language':{ bg: 'rgba(244,63,94,0.18)',    color: '#fb7185'  },
   MSDT:           { bg: 'rgba(249,115,22,0.18)',   color: '#fb923c'  },
+  ...Object.fromEntries(Object.values(TES_BARU).map(t => [t.testType, { bg: t.warna + '2e', color: t.warna }])),
 }
 
 /* ── Tab accent per jenis tes ─────────────────────────────────── */
@@ -23,6 +25,7 @@ const TAB_ACCENT = {
   DASS:           '#2dd4bf',
   MSDT:           '#fb923c',
   'Love Language':'#fb7185',
+  ...Object.fromEntries(Object.values(TES_BARU).map(t => [t.testType, t.warna])),
 }
 
 const DISC_COLORS = { D: '#ef4444', I: '#f59e0b', S: '#22c55e', C: '#3b82f6' }
@@ -54,7 +57,13 @@ function Dashboard() {
     const llList   = (ll    || []).map(p => ({ ...p, jenis: 'Love Language', identifier: p.nip   }))
     const msdtList = (msdt  || []).map(p => ({ ...p, jenis: 'MSDT',          identifier: p.nip   }))
 
-    const merged = [...mbtiList, ...discList, ...papiList, ...dassList, ...llList, ...msdtList].sort(
+    // Tes baru (beta): satu pasang tabel per tes, hasil disimpan sebagai jsonb.
+    const baru = await Promise.all(Object.values(TES_BARU).map(async t => {
+      const { data } = await supabase.from(t.tabel.peserta).select(`*, ${t.tabel.hasil}(*)`).order('created_at', { ascending: false })
+      return (data || []).map(p => ({ ...p, jenis: t.testType, identifier: p.nip, hasil_baru: p[t.tabel.hasil]?.[0] || null }))
+    }))
+
+    const merged = [...mbtiList, ...discList, ...papiList, ...dassList, ...llList, ...msdtList, ...baru.flat()].sort(
       (a, b) => new Date(b.created_at) - new Date(a.created_at)
     )
     setPeserta(merged)
@@ -108,6 +117,10 @@ function Dashboard() {
     } else if (item.jenis === 'MSDT') {
       await supabase.from('hasil_msdt').delete().eq('peserta_id', item.id)
       await supabase.from('peserta_msdt').delete().eq('id', item.id)
+    } else if (TES_BY_TYPE[item.jenis]) {
+      const t = TES_BY_TYPE[item.jenis]
+      await supabase.from(t.tabel.hasil).delete().eq('peserta_id', item.id)
+      await supabase.from(t.tabel.peserta).delete().eq('id', item.id)
     }
     setSelected(null)
     fetchAllPeserta()
@@ -128,6 +141,7 @@ function Dashboard() {
       }
       if (p.jenis === 'Love Language') hasil = p.hasil_love_language?.[0]?.bahasa_utama || 'Belum tes'
       if (p.jenis === 'MSDT') hasil = p.hasil_msdt?.[0]?.gaya || 'Belum tes'
+      if (TES_BY_TYPE[p.jenis]) hasil = p.hasil_baru?.ringkasan || 'Belum tes'
       rows.push([
         p.nama,
         p.identifier,
@@ -146,6 +160,12 @@ function Dashboard() {
 
   /* ── Lihat Laporan ─────────────────────────────────────────── */
   const handleLihatLaporan = (item) => {
+    if (TES_BY_TYPE[item.jenis]) {
+      const h = item.hasil_baru
+      if (!h) return
+      navigate(TES_BY_TYPE[item.jenis].hasilRoute, { state: { skor: h.skor, jawaban: h.jawaban, nama: item.nama, email: item.nip, fromDashboard: true } })
+      return
+    }
     if (item.jenis === 'MBTI') {
       navigate('/hasil', { state: { tipe: item.hasil_tes?.[0]?.tipe_mbti, nama: item.nama, fromDashboard: true } })
     } else if (item.jenis === 'DISC') {
@@ -267,6 +287,7 @@ function Dashboard() {
     }
     if (p.jenis === 'Love Language') return p.hasil_love_language?.[0]?.bahasa_utama || '—'
     if (p.jenis === 'MSDT') return p.hasil_msdt?.[0]?.gaya || '—'
+    if (TES_BY_TYPE[p.jenis]) return p.hasil_baru?.ringkasan || '—'
     return '—'
   }
 
@@ -385,7 +406,7 @@ function Dashboard() {
 
           {/* Filter tabs */}
           <div style={{ padding: '14px 20px', display: 'flex', gap: '6px', flexWrap: 'wrap', borderBottom: '1px solid var(--border)' }}>
-            {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'MSDT', 'Love Language'].map(t => {
+            {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'MSDT', 'Love Language', ...Object.keys(TES_BY_TYPE)].map(t => {
               const accent = TAB_ACCENT[t]
               const isActive = tab === t
               return (
@@ -696,6 +717,42 @@ function Dashboard() {
                             </div>
                             <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
                               <div style={{ height: '100%', background: color, borderRadius: '99px', width: `${Math.min(100, (val / max) * 100)}%` }} />
+                            </div>
+                          </div>
+                        ))}
+                      </ScoreSection>
+                    )}
+                  </>
+                )
+              })()}
+
+              {/* ─── Tes baru (beta) ─── */}
+              {TES_BY_TYPE[selected.jenis] && (() => {
+                const t = TES_BY_TYPE[selected.jenis]
+                const h = selected.hasil_baru
+                return (
+                  <>
+                    <div style={{ background: t.warna + '22', border: `1px solid ${t.warna}55`, borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
+                      <p style={{ fontSize: '10px', color: t.warna, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>{t.judul}</p>
+                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '15px', color: t.warna }}>{h?.ringkasan || '—'}</p>
+                      <p style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>Beta</p>
+                    </div>
+                    <DetailRows rows={[
+                      ['Nama', selected.nama],
+                      ['Email', selected.nip],
+                      ['Usia', selected.jabatan || '—'],
+                      ['Tanggal', new Date(selected.created_at).toLocaleDateString('id-ID')],
+                    ]} />
+                    {h?.skor && (
+                      <ScoreSection label={`Skor ${t.singkat}`}>
+                        {Object.entries(t.dimensi).map(([k, d]) => (
+                          <div key={k} style={{ marginBottom: '8px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px' }}>
+                              <span style={{ color: 'var(--text-muted)' }}>{d.nama}</span>
+                              <span style={{ fontWeight: 700, color: 'var(--text)' }}>{h.skor[k] ?? '—'}</span>
+                            </div>
+                            <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                              <div style={{ height: '100%', background: d.warna, borderRadius: '99px', width: `${h.skor[k] ?? 0}%` }} />
                             </div>
                           </div>
                         ))}

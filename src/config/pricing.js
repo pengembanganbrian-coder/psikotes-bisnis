@@ -6,6 +6,11 @@ export const HARGA_TES = {
   DASS:           10000,
   'Love Language': 5000,
   MSDT:           25000,
+  // Tes baru (beta)
+  'Big Five':     15000,
+  RIASEC:         15000,
+  Resiliensi:     15000,
+  'Peran Tim':    15000,
 }
 
 export const NAMA_TES = {
@@ -15,6 +20,10 @@ export const NAMA_TES = {
   DASS:           'Tes DASS-21',
   'Love Language': 'Tes Love Language',
   MSDT:           'Tes MSDT',
+  'Big Five':     'Tes Kepribadian Big Five',
+  RIASEC:         'Tes Minat Karier RIASEC',
+  Resiliensi:     'Tes Resiliensi Kerja',
+  'Peran Tim':    'Tes Peran dalam Tim',
 }
 
 export const formatRupiah = (angka) =>

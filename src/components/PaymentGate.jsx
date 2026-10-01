@@ -8,6 +8,7 @@ import { HARGA_TES, NAMA_TES, formatRupiah } from '../config/pricing'
  *
  * Props:
  *   testType   : 'MBTI' | 'DISC' | 'PAPI' | 'DASS' | 'Love Language' | 'MSDT'
+ *                | 'Big Five' | 'RIASEC' | 'Resiliensi' | 'Peran Tim'
  *   pesertaId  : UUID dari tabel peserta_xxx
  *   nama       : nama peserta (untuk Duitku customer detail)
  *   email      : email peserta (opsional)
