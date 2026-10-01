@@ -56,11 +56,13 @@ export default function Logo({ size = 'md', dark = false, iconOnly = false }) {
         />
       </svg>
 
-      {/* ── Wordmark ──────────────────────────────── */}
+      {/* ── Wordmark ──────────────────────────────────
+          Situs bertema terang: prop `dark` dipertahankan agar pemanggil
+          lama tetap valid, tetapi wordmark selalu gelap + aksen indigo. */}
       {!iconOnly && (
-        <span className={`font-black ${s.text} tracking-tight leading-none`}>
-          <span className={dark ? 'text-white' : 'text-gray-900'}>Asses</span>
-          <span className={dark ? 'text-blue-300' : 'text-blue-600'}>IN</span>
+        <span className={`font-bold ${s.text} tracking-tight leading-none`} data-dark={dark || undefined}>
+          <span className="text-slate-900">Asses</span>
+          <span className="text-indigo-600">IN</span>
         </span>
       )}
 

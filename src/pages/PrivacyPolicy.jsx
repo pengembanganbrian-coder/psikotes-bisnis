@@ -3,7 +3,7 @@ import Logo from '../components/Logo'
 
 const Section = ({ title, children }) => (
   <div style={{ marginBottom: '36px' }}>
-    <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '16px', color: 'var(--text)', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px solid var(--border)' }}>
+    <h2 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '16px', color: 'var(--text)', marginBottom: '12px', paddingBottom: '10px', borderBottom: '1px solid var(--border)' }}>
       {title}
     </h2>
     <div style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: '1.85', display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -25,7 +25,7 @@ export default function PrivacyPolicy() {
     <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '80px' }}>
 
       {/* Header */}
-      <div style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '20px var(--px)' }}>
+      <div style={{ background: 'var(--overlay)', borderBottom: '1px solid var(--border)', padding: '20px var(--px)' }}>
         <div style={{ maxWidth: '760px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Logo size="sm" dark />
           <button onClick={() => navigate(-1)} style={{ color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>
@@ -41,7 +41,7 @@ export default function PrivacyPolicy() {
           <div className="section-rule" style={{ marginBottom: '20px' }}>
             <span className="section-rule-pip" /><span className="section-rule-label">Kebijakan Privasi</span><span className="section-rule-line" />
           </div>
-          <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '32px', color: 'var(--text)', marginBottom: '12px' }}>
+          <h1 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '32px', color: 'var(--text)', marginBottom: '12px' }}>
             Kebijakan Privasi
           </h1>
           <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.7' }}>
@@ -51,7 +51,7 @@ export default function PrivacyPolicy() {
         </div>
 
         {/* Intro */}
-        <div className="dark-card" style={{ padding: '20px 24px', marginBottom: '36px', borderColor: 'var(--accent-border)', background: 'rgba(212,168,83,0.04)' }}>
+        <div className="dark-card" style={{ padding: '20px 24px', marginBottom: '36px', borderColor: 'var(--accent-border)', background: 'rgba(79,70,229,0.04)' }}>
           <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: '1.8' }}>
             AssesIN berkomitmen untuk melindungi privasi Anda. Kebijakan ini menjelaskan secara transparan
             data apa yang kami kumpulkan, bagaimana kami menggunakannya, dan hak-hak Anda sebagai pengguna.

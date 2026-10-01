@@ -8,8 +8,8 @@ export default function NotFound() {
 
       <div className="anim-up" style={{ textAlign: 'center', maxWidth: '400px', position: 'relative', zIndex: 1 }}>
         <p style={{
-          fontFamily: 'Syne, sans-serif',
-          fontWeight: 800,
+          fontFamily: 'inherit',
+          fontWeight: 700,
           fontSize: 'clamp(96px, 18vw, 140px)',
           color: 'var(--text)',
           opacity: 0.035,
@@ -24,7 +24,7 @@ export default function NotFound() {
         <div style={{ width: '24px', height: '2px', background: 'var(--accent)', margin: '0 auto 20px', opacity: 0.7 }} />
 
         <h1 style={{
-          fontFamily: 'Syne, sans-serif',
+          fontFamily: 'inherit',
           fontWeight: 700,
           color: 'var(--text)',
           fontSize: '20px',
@@ -42,9 +42,9 @@ export default function NotFound() {
           onClick={() => navigate('/')}
           style={{
             background: 'var(--accent)',
-            color: '#09090f',
-            fontFamily: 'Syne, sans-serif',
-            fontWeight: 800,
+            color: 'var(--on-accent)',
+            fontFamily: 'inherit',
+            fontWeight: 700,
             fontSize: '12px',
             letterSpacing: '0.14em',
             textTransform: 'uppercase',

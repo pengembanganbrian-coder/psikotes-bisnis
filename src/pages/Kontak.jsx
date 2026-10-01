@@ -15,7 +15,7 @@ export default function Kontak() {
       <header style={{
         position: 'sticky', top: 0, zIndex: 50,
         borderBottom: '1px solid var(--border)',
-        background: 'rgba(9,9,15,0.82)',
+        background: 'var(--overlay)',
         backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)',
         padding: '0 var(--px)',
       }}>
@@ -47,7 +47,7 @@ export default function Kontak() {
           </div>
 
           <h1 className="anim-up" style={{
-            fontFamily: 'Syne, sans-serif', fontWeight: 800,
+            fontFamily: 'inherit', fontWeight: 700,
             fontSize: 'clamp(32px, 5vw, 56px)', lineHeight: 1.1,
             letterSpacing: '-0.025em', color: 'var(--text)',
             marginBottom: '16px',
@@ -76,7 +76,7 @@ export default function Kontak() {
                 <div style={{ width: '40px', height: '40px', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', marginBottom: '16px' }}>
                   ✉
                 </div>
-                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'inherit', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>
                   Email Admin
                 </p>
                 <p style={{ color: 'var(--accent)', fontSize: '15px', fontWeight: 600, marginBottom: '6px' }}>
@@ -100,7 +100,7 @@ export default function Kontak() {
                 <div style={{ width: '40px', height: '40px', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', marginBottom: '16px' }}>
                   ☎
                 </div>
-                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>
+                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'inherit', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>
                   Telepon Admin
                 </p>
                 <p style={{ color: 'var(--accent)', fontSize: '15px', fontWeight: 600, marginBottom: '6px' }}>
@@ -117,7 +117,7 @@ export default function Kontak() {
               <div style={{ width: '40px', height: '40px', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', marginBottom: '16px' }}>
                 📍
               </div>
-              <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'Syne, sans-serif', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>
+              <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'inherit', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>
                 Alamat Usaha
               </p>
               <p style={{ color: 'var(--text)', fontSize: '14px', lineHeight: 1.7 }}>

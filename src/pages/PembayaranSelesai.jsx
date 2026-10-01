@@ -25,7 +25,7 @@ export default function PembayaranSelesai() {
           ✅
         </div>
 
-        <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '24px', color: 'var(--text)', marginBottom: '12px' }}>
+        <h1 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '24px', color: 'var(--text)', marginBottom: '12px' }}>
           Pembayaran Berhasil!
         </h1>
 
@@ -45,7 +45,7 @@ export default function PembayaranSelesai() {
 
         <button
           onClick={() => navigate('/')}
-          style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px 40px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%' }}
+          style={{ background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px 40px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%' }}
           onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
           onMouseLeave={e => e.currentTarget.style.opacity = '1'}
         >

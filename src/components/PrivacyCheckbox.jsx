@@ -24,7 +24,7 @@ export default function PrivacyCheckbox({ checked, onChange, error, id = 'privac
         </label>
       </div>
       {error && (
-        <p style={{ color: '#f87171', fontSize: '11px', marginTop: '6px', paddingLeft: '25px' }}>{error}</p>
+        <p style={{ color: '#dc2626', fontSize: '11px', marginTop: '6px', paddingLeft: '25px' }}>{error}</p>
       )}
     </div>
   )

@@ -107,7 +107,7 @@ const dimensiUrutan = ['EI', 'SN', 'TF', 'JP']
 const dimensiNama = { EI: 'Extraversion / Introversion', SN: 'Sensing / iNtuition', TF: 'Thinking / Feeling', JP: 'Judging / Perceiving' }
 
 const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
-const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
+const S_ERR   = { color: '#dc2626', fontSize: '12px', marginTop: '6px' }
 
 function Tes() {
   const [step, setStep]               = useState('form')
@@ -154,23 +154,24 @@ function Tes() {
     setLoading(true)
     setSubmitError('')
     const jabatan = `${usia} th · ${jenisKelamin}`
-    const { data: pesertaData, error } = await supabase
+    // id dibuat di klien: pengunjung anonim hanya punya izin INSERT (RLS),
+    // sehingga insert().select() selalu ditolak.
+    const pesertaId = crypto.randomUUID()
+    const { error } = await supabase
       .from('peserta')
-      .insert([{ name: nama, email, jabatan }])
-      .select()
+      .insert([{ id: pesertaId, name: nama, email, jabatan }])
     if (error) {
       setSubmitError('Gagal menyimpan hasil. Periksa koneksi internet dan coba lagi.')
       setLoading(false)
       return
     }
-    const pesertaId = pesertaData[0].id
     const { tipe, skor } = hitungMBTI(jawaban)
     await supabase.from('hasil_tes').insert([{
       peserta_id: pesertaId, tipe_mbti: tipe,
       skor_e: skor.e, skor_i: skor.i, skor_s: skor.s, skor_n: skor.n,
       skor_t: skor.t, skor_f: skor.f, skor_j: skor.j, skor_p: skor.p,
     }])
-    navigate('/hasil', { state: { tipe, nama, pesertaId } })
+    navigate('/hasil', { state: { tipe, nama, email, pesertaId } })
     setLoading(false)
   }
 
@@ -178,14 +179,14 @@ function Tes() {
   if (step === 'form') return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px var(--px)' }}>
       <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(79,70,229,0.07) 0%, transparent 65%)' }} />
       </div>
 
       <div className="anim-up" style={{ width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1 }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <Logo size="sm" dark />
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes Kepribadian MBTI</p>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes Kepribadian MBTI</p>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>60 soal · ~15 menit</p>
         </div>
 
@@ -196,23 +197,23 @@ function Tes() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({...p, nama: ''})) }} placeholder="Nama lengkap" autoComplete="name" />
               {formErrors.nama && <p style={S_ERR}>{formErrors.nama}</p>}
             </div>
             <div>
-              <label style={S_LABEL}>Email <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Email <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
               {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
             </div>
             <div className="form-grid-2">
               <div>
-                <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
+                <label style={S_LABEL}>Usia <span style={{ color: '#dc2626' }}>*</span></label>
                 <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
                 {formErrors.usia && <p style={S_ERR}>{formErrors.usia}</p>}
               </div>
               <div>
-                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#f87171' }}>*</span></label>
+                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#dc2626' }}>*</span></label>
                 <select className="field" value={jenisKelamin} onChange={e => { setJenisKelamin(e.target.value); setFormErrors(p => ({...p, jenisKelamin: ''})) }}>
                   <option value="">— Pilih —</option>
                   <option value="Laki-laki">Laki-laki</option>
@@ -229,7 +230,7 @@ function Tes() {
             />
             <button
               onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
+              style={{ background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
               onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
@@ -251,10 +252,10 @@ function Tes() {
   return (
     <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
       {/* Sticky header */}
-      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'var(--overlay)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
         <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes MBTI</p>
+            <p style={{ fontFamily: 'inherit', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes MBTI</p>
             <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Halo {nama} · {Object.keys(jawaban).length}/60 soal dijawab</p>
           </div>
           <div style={{ flex: 1, maxWidth: '180px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
@@ -285,13 +286,13 @@ function Tes() {
 
         {soalDimensiAktif.map((s, idx) => (
           <div id={`soal-mbti-${s.id}`} key={s.id} style={{ marginBottom: '16px', paddingTop: idx > 0 ? '16px' : 0, borderTop: idx > 0 ? '1px solid var(--border)' : 'none' }}>
-            <p style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '12px', opacity: 0.7 }}>
+            <p style={{ color: 'var(--accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '12px', opacity: 0.7 }}>
               {String(idx + 1).padStart(2, '0')}
             </p>
             <div className="answer-grid">
               {(['kiri', 'kanan']).map(sisi => (
                 <button key={sisi} onClick={() => handleJawab(s.id, sisi)} className={`answer-btn ${jawaban[s.id] === sisi ? 'selected' : ''}`}>
-                  {jawaban[s.id] === sisi && <span style={{ display: 'block', color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '8px' }}>✓ DIPILIH</span>}
+                  {jawaban[s.id] === sisi && <span style={{ display: 'block', color: 'var(--accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '8px' }}>✓ DIPILIH</span>}
                   {s[sisi]}
                 </button>
               ))}
@@ -300,13 +301,13 @@ function Tes() {
         ))}
 
         {submitError && (
-          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#f87171', fontSize: '14px', marginBottom: '16px' }}>
+          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#dc2626', fontSize: '14px', marginBottom: '16px' }}>
             {submitError}
           </div>
         )}
 
         {sudahDijawab < totalDimensi && (
-          <p style={{ textAlign: 'center', color: '#fbbf24', fontSize: '13px', marginBottom: '12px' }}>
+          <p style={{ textAlign: 'center', color: '#d97706', fontSize: '13px', marginBottom: '12px' }}>
             Masih {totalDimensi - sudahDijawab} pertanyaan belum dijawab
           </p>
         )}
@@ -314,7 +315,7 @@ function Tes() {
         <button
           onClick={handleNext}
           disabled={loading}
-          style={{ width: '100%', background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, marginTop: '8px' }}
+          style={{ width: '100%', background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, marginTop: '8px' }}
         >
           {loading ? 'Menyimpan...' : dimensiAktif < 3 ? `Lanjut ke Bagian ${dimensiAktif + 2} →` : 'Selesai & Lihat Hasil →'}
         </button>

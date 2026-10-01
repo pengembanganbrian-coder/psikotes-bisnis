@@ -17,8 +17,8 @@ const SECRET       = 'RESET-ASSESIN-2024'
 const DISABLED_KEY = '__admin_reset_done__'
 
 const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
-const S_ERR   = { color: '#f87171', fontSize: '13px', marginTop: '8px', lineHeight: '1.5' }
-const S_OK    = { color: '#4ade80', fontSize: '13px', marginTop: '8px', lineHeight: '1.5' }
+const S_ERR   = { color: '#dc2626', fontSize: '13px', marginTop: '8px', lineHeight: '1.5' }
+const S_OK    = { color: '#16a34a', fontSize: '13px', marginTop: '8px', lineHeight: '1.5' }
 
 export default function AdminReset() {
   const navigate = useNavigate()
@@ -104,11 +104,11 @@ export default function AdminReset() {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
         <div className="dark-card" style={{ padding: '40px', textAlign: 'center', maxWidth: '420px', width: '100%' }}>
-          <p style={{ color: '#f87171', fontSize: '14px', lineHeight: '1.7', marginBottom: '24px' }}>
+          <p style={{ color: '#dc2626', fontSize: '14px', lineHeight: '1.7', marginBottom: '24px' }}>
             Halaman ini sudah digunakan dan tidak bisa diakses lagi.<br />
             Silakan hapus route /admin-reset dari App.jsx.
           </p>
-          <button onClick={() => navigate('/login')} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '12px 28px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
+          <button onClick={() => navigate('/login')} style={{ background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '12px 28px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
             Ke Login
           </button>
         </div>
@@ -120,41 +120,41 @@ export default function AdminReset() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
       <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(79,70,229,0.07) 0%, transparent 65%)' }} />
       </div>
 
       <div className="anim-up" style={{ width: '100%', maxWidth: '420px', position: 'relative', zIndex: 1 }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <Logo size="sm" dark />
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: '#f87171', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: '#dc2626', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>
             Emergency Access
           </p>
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '20px', color: 'var(--text)', marginBottom: '4px' }}>Admin Password Reset</p>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '20px', color: 'var(--text)', marginBottom: '4px' }}>Admin Password Reset</p>
           <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Satu kali pakai · Hapus route setelah digunakan</p>
         </div>
 
         <div className="dark-card" style={{ padding: '32px', borderColor: 'rgba(248,113,113,0.25)' }}>
           <div className="section-rule" style={{ marginBottom: '28px' }}>
-            <span className="section-rule-pip" style={{ background: '#f87171' }} />
+            <span className="section-rule-pip" style={{ background: '#dc2626' }} />
             <span className="section-rule-label">Reset Password</span>
             <span className="section-rule-line" />
           </div>
 
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
             <div>
-              <label style={S_LABEL}>Secret Key <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Secret Key <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" type="password" value={secretKey} onChange={e => setSecretKey(e.target.value)} placeholder="••••••••••••••••••" autoComplete="off" />
             </div>
             <div>
-              <label style={S_LABEL}>Email Admin <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Email Admin <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="admin@email.com" autoComplete="off" />
             </div>
             <div>
-              <label style={S_LABEL}>Password Baru <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Password Baru <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Minimal 8 karakter" autoComplete="new-password" />
             </div>
             <div>
-              <label style={S_LABEL}>Konfirmasi Password <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Konfirmasi Password <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" type="password" value={confirm} onChange={e => setConfirm(e.target.value)} placeholder="Ulangi password baru" autoComplete="new-password" />
             </div>
 
@@ -167,7 +167,7 @@ export default function AdminReset() {
             <button
               type="submit"
               disabled={loading || alreadyUsed}
-              style={{ background: '#ef4444', color: '#fff', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: loading || alreadyUsed ? 'not-allowed' : 'pointer', opacity: loading || alreadyUsed ? 0.5 : 1, marginTop: '4px' }}
+              style={{ background: '#ef4444', color: '#fff', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: loading || alreadyUsed ? 'not-allowed' : 'pointer', opacity: loading || alreadyUsed ? 0.5 : 1, marginTop: '4px' }}
             >
               {loading ? 'Memproses...' : 'Reset Password Sekarang'}
             </button>

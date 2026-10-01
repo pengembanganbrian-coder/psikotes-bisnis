@@ -136,7 +136,7 @@ function hitungPAPI(jawaban) {
 }
 
 const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
-const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
+const S_ERR   = { color: '#dc2626', fontSize: '12px', marginTop: '6px' }
 
 function TesPapi() {
   const [step, setStep]             = useState('form')
@@ -182,8 +182,11 @@ function TesPapi() {
     setSubmitError('')
 
     const jabatan = `${usia} th · ${jenisKelamin}`
-    const { data: pesertaData, error } = await supabase
-      .from('peserta_papi').insert([{ nama, nip: email, jabatan }]).select()
+    // id dibuat di klien: pengunjung anonim hanya punya izin INSERT (RLS),
+    // sehingga insert().select() selalu ditolak.
+    const pesertaId = crypto.randomUUID()
+    const { error } = await supabase
+      .from('peserta_papi').insert([{ id: pesertaId, nama, nip: email, jabatan }])
 
     if (error) {
       setSubmitError('Gagal menyimpan hasil. Periksa koneksi internet dan coba lagi.')
@@ -191,7 +194,6 @@ function TesPapi() {
       return
     }
 
-    const pesertaId = pesertaData[0].id
     const { scores, profil } = hitungPAPI(jawaban)
 
     await supabase.from('hasil_papi').insert([{
@@ -210,13 +212,13 @@ function TesPapi() {
   if (step === 'form') return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px var(--px)' }}>
       <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(79,70,229,0.07) 0%, transparent 65%)' }} />
       </div>
       <div className="anim-up" style={{ width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1 }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <Logo size="sm" dark />
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes PAPI Kostick</p>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes PAPI Kostick</p>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>90 pasangan · ~20 menit</p>
         </div>
         <div className="dark-card" style={{ padding: '32px' }}>
@@ -225,23 +227,23 @@ function TesPapi() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({...p, nama: ''})) }} placeholder="Nama lengkap" autoComplete="name" />
               {formErrors.nama && <p style={S_ERR}>{formErrors.nama}</p>}
             </div>
             <div>
-              <label style={S_LABEL}>Email <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Email <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
               {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
             </div>
             <div className="form-grid-2">
               <div>
-                <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
+                <label style={S_LABEL}>Usia <span style={{ color: '#dc2626' }}>*</span></label>
                 <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
                 {formErrors.usia && <p style={S_ERR}>{formErrors.usia}</p>}
               </div>
               <div>
-                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#f87171' }}>*</span></label>
+                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#dc2626' }}>*</span></label>
                 <select className="field" value={jenisKelamin} onChange={e => { setJenisKelamin(e.target.value); setFormErrors(p => ({...p, jenisKelamin: ''})) }}>
                   <option value="">— Pilih —</option>
                   <option value="Laki-laki">Laki-laki</option>
@@ -250,7 +252,7 @@ function TesPapi() {
                 {formErrors.jenisKelamin && <p style={S_ERR}>{formErrors.jenisKelamin}</p>}
               </div>
             </div>
-            <div className="dark-card" style={{ padding: '14px 16px', background: 'rgba(212,168,83,0.05)', borderColor: 'var(--accent-border)' }}>
+            <div className="dark-card" style={{ padding: '14px 16px', background: 'rgba(79,70,229,0.05)', borderColor: 'var(--accent-border)' }}>
               <p style={{ color: 'var(--text-sub)', fontSize: '13px', lineHeight: '1.65' }}>
                 Dari setiap pasang pernyataan, pilih satu yang paling mencerminkan diri Anda. Terdapat <strong style={{ color: 'var(--text)' }}>90 pasang</strong> pernyataan.
               </p>
@@ -263,7 +265,7 @@ function TesPapi() {
             />
             <button
               onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
+              style={{ background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
               onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
@@ -283,17 +285,17 @@ function TesPapi() {
 
   return (
     <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
-      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'var(--overlay)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
         <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes PAPI Kostick</p>
+            <p style={{ fontFamily: 'inherit', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes PAPI Kostick</p>
             <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {jumlahDijawab}/90 terjawab</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '120px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
               <div style={{ height: '100%', background: 'var(--accent)', width: `${progress}%`, transition: 'width 0.5s' }} />
             </div>
-            <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px' }}>{Math.round(progress)}%</span>
+            <span style={{ color: 'var(--accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px' }}>{Math.round(progress)}%</span>
           </div>
         </div>
       </div>
@@ -301,7 +303,7 @@ function TesPapi() {
       <div style={{ maxWidth: '1024px', margin: '0 auto', padding: '28px var(--px)' }}>
 
         {submitError && (
-          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#f87171', fontSize: '14px', marginBottom: '16px' }}>
+          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#dc2626', fontSize: '14px', marginBottom: '16px' }}>
             {submitError}
           </div>
         )}
@@ -312,7 +314,7 @@ function TesPapi() {
             const selesai = !!pilihan
             return (
               <div id={`soal-papi-${s.id}`} key={s.id} className="dark-card" style={{ padding: '20px', borderColor: selesai ? 'var(--accent-border)' : 'var(--border)' }}>
-                <p style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.7 }}>
+                <p style={{ color: 'var(--accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.7 }}>
                   {String(idx + 1).padStart(2, '0')}
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -321,7 +323,7 @@ function TesPapi() {
                     return (
                       <button key={key} onClick={() => handlePilih(s.id, key)} className={`answer-btn ${dipilih ? 'selected' : ''}`} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                         <span style={{ flexShrink: 0, width: '18px', height: '18px', borderRadius: '50%', border: '2px solid ' + (dipilih ? 'var(--accent)' : 'var(--border)'), background: dipilih ? 'var(--accent)' : 'transparent', marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          {dipilih && <span style={{ width: '6px', height: '6px', background: '#09090f', borderRadius: '50%' }} />}
+                          {dipilih && <span style={{ width: '6px', height: '6px', background: 'var(--bg)', borderRadius: '50%' }} />}
                         </span>
                         <span style={{ fontSize: '14px', lineHeight: '1.65', color: dipilih ? 'var(--text)' : 'var(--text-sub)', textAlign: 'left' }}>{teks}</span>
                       </button>
@@ -335,7 +337,7 @@ function TesPapi() {
 
         <div style={{ marginTop: '28px', position: 'sticky', bottom: '16px' }}>
           <button onClick={handleSubmit} disabled={loading || !sudahLengkap}
-            style={{ width: '100%', background: sudahLengkap ? 'var(--accent)' : 'var(--surface-2)', color: sudahLengkap ? '#09090f' : 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: '1px solid ' + (sudahLengkap ? 'var(--accent)' : 'var(--border)'), cursor: sudahLengkap && !loading ? 'pointer' : 'not-allowed', opacity: loading ? 0.6 : 1 }}>
+            style={{ width: '100%', background: sudahLengkap ? 'var(--accent)' : 'var(--surface-2)', color: sudahLengkap ? 'var(--on-accent)' : 'var(--text-muted)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: '1px solid ' + (sudahLengkap ? 'var(--accent)' : 'var(--border)'), cursor: sudahLengkap && !loading ? 'pointer' : 'not-allowed', opacity: loading ? 0.6 : 1 }}>
             {loading ? 'Menyimpan...' : sudahLengkap ? 'Selesai & Lihat Hasil →' : `Jawab ${90 - jumlahDijawab} soal lagi`}
           </button>
         </div>

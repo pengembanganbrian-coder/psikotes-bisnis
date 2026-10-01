@@ -4,7 +4,7 @@ import { supabase } from '../supabase'
 import Logo from '../components/Logo'
 
 const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
-const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
+const S_ERR   = { color: '#dc2626', fontSize: '12px', marginTop: '6px' }
 
 export default function ResetPassword() {
   const navigate  = useNavigate()
@@ -57,7 +57,7 @@ export default function ResetPassword() {
       subscription.unsubscribe()
       clearTimeout(timer)
     }
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -93,7 +93,7 @@ export default function ResetPassword() {
 
       {/* Background */}
       <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '700px', height: '700px', background: 'radial-gradient(ellipse at center, rgba(79,70,229,0.07) 0%, transparent 65%)' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '36px 36px' }} />
       </div>
 
@@ -102,7 +102,7 @@ export default function ResetPassword() {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <Logo size="md" dark />
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.24em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '18px', marginBottom: '6px' }}>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', letterSpacing: '0.24em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '18px', marginBottom: '6px' }}>
             Assess · Insight · Grow
           </p>
           <p style={{ color: 'var(--text-muted)', fontSize: '12px', letterSpacing: '0.04em' }}>
@@ -120,13 +120,13 @@ export default function ResetPassword() {
         {/* Invalid/expired link */}
         {status === 'invalid' && (
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '20px', padding: '32px', textAlign: 'center' }}>
-            <p style={{ color: '#f87171', fontSize: '14px', lineHeight: '1.7', marginBottom: '24px' }}>
+            <p style={{ color: '#dc2626', fontSize: '14px', lineHeight: '1.7', marginBottom: '24px' }}>
               Link reset password tidak valid atau sudah kadaluarsa.<br />
               Silakan minta link reset password baru.
             </p>
             <button
               onClick={() => navigate('/login')}
-              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '12px 28px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
+              style={{ background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '12px 28px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
             >
               Kembali ke Login
             </button>
@@ -173,7 +173,7 @@ export default function ResetPassword() {
               <button
                 type="submit"
                 disabled={loading}
-                style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, marginTop: '4px' }}
+                style={{ background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, marginTop: '4px' }}
               >
                 {loading ? 'Menyimpan...' : 'Simpan Password Baru →'}
               </button>

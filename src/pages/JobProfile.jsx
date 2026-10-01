@@ -85,7 +85,7 @@ function MiniBar({ D, I, S, C, height = 32 }) {
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: v >= 0 ? 'flex-end' : 'flex-start', height: height - 12 }}>
             <div style={{ width: '12px', borderRadius: '2px', backgroundColor: DC[d].hex, opacity: v === 0 ? 0.15 : v > 0 ? 0.9 : 0.35, height: `${Math.max(Math.abs(v) / max * 100, v !== 0 ? 10 : 0)}%`, minHeight: v !== 0 ? 2 : 0 }} />
           </div>
-          <span style={{ fontSize: '9px', fontWeight: 800, color: DC[d].hex }}>{d}</span>
+          <span style={{ fontSize: '9px', fontWeight: 700, color: DC[d].hex }}>{d}</span>
         </div>
       ))}
     </div>
@@ -159,10 +159,10 @@ function JobProfile() {
     <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }}>
 
       {/* Top Bar */}
-      <div style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '16px var(--px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ background: 'var(--overlay)', borderBottom: '1px solid var(--border)', padding: '16px var(--px)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <button onClick={() => navigate('/dashboard')} style={{ color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>← Dashboard</button>
-          <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '17px', color: 'var(--text)' }}>Manajemen Job Profile</h1>
+          <h1 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '17px', color: 'var(--text)' }}>Manajemen Job Profile</h1>
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
@@ -173,7 +173,7 @@ function JobProfile() {
           </button>
           <button
             onClick={() => { setShowForm(true); setShowTemplate(false); setEditId(null); setForm({ nama_jabatan: '', skor_d: 0, skor_i: 0, skor_s: 0, skor_c: 0 }) }}
-            style={{ background: 'var(--accent)', color: '#09090f', padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: 'none', cursor: 'pointer' }}
+            style={{ background: 'var(--accent)', color: 'var(--on-accent)', padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: 'none', cursor: 'pointer' }}
           >
             + Tambah Manual
           </button>
@@ -184,11 +184,11 @@ function JobProfile() {
 
         {/* Modal Template */}
         {showTemplate && (
-          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
             <div className="dark-card" style={{ width: '100%', maxWidth: '600px', maxHeight: '85vh', display: 'flex', flexDirection: 'column' }}>
               <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexShrink: 0 }}>
                 <div>
-                  <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '15px', color: 'var(--text)', marginBottom: '4px' }}>Template Jabatan</h2>
+                  <h2 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '15px', color: 'var(--text)', marginBottom: '4px' }}>Template Jabatan</h2>
                   <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Pilih jabatan sebagai dasar — skor sudah sesuai metodologi DISC (D+I+S+C = 0)</p>
                 </div>
                 <button onClick={() => setShowTemplate(false)} style={{ color: 'var(--text-muted)', fontSize: '20px', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1 }}>×</button>
@@ -200,7 +200,7 @@ function JobProfile() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                       {kat.items.map(tmpl => {
                         const profTmpl = getProfilLabel(tmpl.D, tmpl.I, tmpl.S, tmpl.C)
-                        const domHex = DC[profTmpl[0]]?.hex ?? '#d4a853'
+                        const domHex = DC[profTmpl[0]]?.hex ?? '#4f46e5'
                         return (
                           <button
                             key={tmpl.nama}
@@ -213,7 +213,7 @@ function JobProfile() {
                             <div style={{ flex: 1, minWidth: 0 }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                                 <p style={{ fontWeight: 600, fontSize: '13px', color: 'var(--text)' }}>{tmpl.nama}</p>
-                                <span style={{ fontSize: '11px', fontWeight: 800, padding: '2px 8px', borderRadius: '99px', background: domHex + '22', color: domHex }}>{profTmpl}</span>
+                                <span style={{ fontSize: '11px', fontWeight: 700, padding: '2px 8px', borderRadius: '99px', background: domHex + '22', color: domHex }}>{profTmpl}</span>
                               </div>
                               <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>{tmpl.deskripsi}</p>
                               <div style={{ display: 'flex', gap: '8px', marginTop: '4px' }}>
@@ -240,7 +240,7 @@ function JobProfile() {
         {showForm && (
           <div className="dark-card" style={{ padding: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '15px', color: 'var(--text)' }}>{editId ? 'Edit Jabatan' : 'Tambah Jabatan Baru'}</h2>
+              <h2 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '15px', color: 'var(--text)' }}>{editId ? 'Edit Jabatan' : 'Tambah Jabatan Baru'}</h2>
               <button onClick={() => setShowTemplate(true)} style={{ fontSize: '12px', color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer' }}>
                 📋 Ganti template
               </button>
@@ -261,12 +261,12 @@ function JobProfile() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '16px' }}>
               <div style={{ borderRadius: '10px', padding: '14px', textAlign: 'center', border: `1px solid ${isValid ? '#22c55e44' : '#ef444444'}`, background: isValid ? 'rgba(34,197,94,0.08)' : 'rgba(239,68,68,0.08)' }}>
                 <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Total D+I+S+C</p>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', color: isValid ? '#4ade80' : '#f87171' }}>{total > 0 ? '+' : ''}{total}</p>
-                <p style={{ fontSize: '11px', fontWeight: 600, color: isValid ? '#4ade80' : '#f87171', marginTop: '4px' }}>{isValid ? '✅ Valid (harus = 0)' : '⚠️ Harus = 0'}</p>
+                <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '28px', color: isValid ? '#16a34a' : '#dc2626' }}>{total > 0 ? '+' : ''}{total}</p>
+                <p style={{ fontSize: '11px', fontWeight: 600, color: isValid ? '#16a34a' : '#dc2626', marginTop: '4px' }}>{isValid ? '✅ Valid (harus = 0)' : '⚠️ Harus = 0'}</p>
               </div>
               <div style={{ borderRadius: '10px', padding: '14px', textAlign: 'center', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)' }}>
                 <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>Profil Dominan</p>
-                <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', color: 'var(--accent)' }}>{profil || '—'}</p>
+                <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '28px', color: 'var(--accent)' }}>{profil || '—'}</p>
                 <p style={{ fontSize: '11px', color: 'var(--accent)', marginTop: '4px' }}>
                   {dimensiLabel[profil[0]] || '—'}
                 </p>
@@ -290,7 +290,7 @@ function JobProfile() {
                 return (
                   <div key={d} style={{ borderRadius: '10px', border: `1px solid ${hex}30`, padding: '14px', background: hex + '0a' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-                      <label style={{ fontSize: '13px', fontWeight: 800, color: hex }}>{d}</label>
+                      <label style={{ fontSize: '13px', fontWeight: 700, color: hex }}>{d}</label>
                       <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{dimensiLabel[d]}</span>
                     </div>
                     <input
@@ -300,7 +300,7 @@ function JobProfile() {
                     />
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>-24</span>
-                      <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '22px', color: val !== 0 ? hex : 'var(--text-muted)' }}>
+                      <span style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '22px', color: val !== 0 ? hex : 'var(--text-muted)' }}>
                         {val > 0 ? '+' : ''}{val}
                       </span>
                       <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>+24</span>
@@ -314,7 +314,7 @@ function JobProfile() {
               <button
                 onClick={handleSubmit}
                 disabled={!isValid}
-                style={{ flex: 1, fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.08em', padding: '12px', borderRadius: '8px', border: 'none', cursor: isValid ? 'pointer' : 'not-allowed', background: isValid ? 'var(--accent)' : 'var(--surface-2)', color: isValid ? '#09090f' : 'var(--text-muted)' }}
+                style={{ flex: 1, fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.08em', padding: '12px', borderRadius: '8px', border: 'none', cursor: isValid ? 'pointer' : 'not-allowed', background: isValid ? 'var(--accent)' : 'var(--surface-2)', color: isValid ? 'var(--on-accent)' : 'var(--text-muted)' }}
               >
                 {editId ? 'Simpan Perubahan' : 'Tambah Jabatan'}
               </button>
@@ -331,7 +331,7 @@ function JobProfile() {
         {/* Daftar Jabatan */}
         <div className="dark-card" style={{ overflow: 'hidden' }}>
           <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)' }}>
+            <h2 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '14px', color: 'var(--text)' }}>
               Daftar Jabatan ({jobs.length})
             </h2>
           </div>
@@ -346,7 +346,7 @@ function JobProfile() {
               <p style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '20px' }}>Tambah dari template atau buat manual untuk mulai menghitung JPM.</p>
               <button
                 onClick={() => setShowTemplate(true)}
-                style={{ background: 'var(--accent)', color: '#09090f', padding: '10px 20px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: 'none', cursor: 'pointer' }}
+                style={{ background: 'var(--accent)', color: 'var(--on-accent)', padding: '10px 20px', borderRadius: '8px', fontSize: '12px', fontWeight: 700, border: 'none', cursor: 'pointer' }}
               >
                 📋 Pilih dari Template
               </button>
@@ -355,12 +355,12 @@ function JobProfile() {
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {jobs.map((job, idx) => {
                 const dom = getDominan(job)
-                const hex = DC[dom]?.hex ?? '#d4a853'
+                const hex = DC[dom]?.hex ?? '#4f46e5'
                 const profil = getProfilLabel(job.skor_d, job.skor_i, job.skor_s, job.skor_c)
                 const jobTotal = job.skor_d + job.skor_i + job.skor_s + job.skor_c
                 return (
                   <div key={job.id} style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '14px 24px', borderTop: idx === 0 ? 'none' : '1px solid var(--border)' }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '13px', flexShrink: 0, background: hex + '22', color: hex, border: `1px solid ${hex}44` }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontWeight: 700, fontSize: '13px', flexShrink: 0, background: hex + '22', color: hex, border: `1px solid ${hex}44` }}>
                       {profil}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -375,14 +375,14 @@ function JobProfile() {
                           )
                         })}
                         {jobTotal !== 0 && (
-                          <span style={{ fontSize: '11px', color: '#f87171', fontWeight: 600 }}>⚠️ total={jobTotal > 0 ? '+' : ''}{jobTotal}</span>
+                          <span style={{ fontSize: '11px', color: '#dc2626', fontWeight: 600 }}>⚠️ total={jobTotal > 0 ? '+' : ''}{jobTotal}</span>
                         )}
                       </div>
                     </div>
                     <MiniBar D={job.skor_d} I={job.skor_i} S={job.skor_s} C={job.skor_c} height={36} />
                     <div style={{ display: 'flex', gap: '10px', flexShrink: 0 }}>
                       <button onClick={() => handleEdit(job)} style={{ fontSize: '12px', color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>Edit</button>
-                      <button onClick={() => handleDelete(job.id)} style={{ fontSize: '12px', color: '#f87171', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>Hapus</button>
+                      <button onClick={() => handleDelete(job.id)} style={{ fontSize: '12px', color: '#dc2626', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>Hapus</button>
                     </div>
                   </div>
                 )

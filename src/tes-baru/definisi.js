@@ -52,10 +52,10 @@ const BIG_FIVE = {
   intro: 'Mengukur lima dimensi besar kepribadian yang paling banyak diteliti dalam psikologi, dan bagaimana kelimanya tampak dalam cara Anda bekerja.',
   petunjuk: 'Pilih seberapa setuju Anda dengan setiap pernyataan. Jawablah sesuai diri Anda sehari-hari, bukan sesuai yang Anda harapkan.',
   format: LIKERT5,
-  warna: '#a78bfa',
+  warna: '#7c3aed',
   dimensi: {
     O: {
-      nama: 'Openness', sub: 'Keterbukaan terhadap Pengalaman', warna: '#a78bfa',
+      nama: 'Openness', sub: 'Keterbukaan terhadap Pengalaman', warna: '#7c3aed',
       desk: 'Rasa ingin tahu, keterbukaan pada ide baru, dan kenyamanan dengan perubahan.',
       narasi: {
         tinggi: 'Anda cenderung penasaran, terbuka pada gagasan baru, dan menikmati tantangan yang belum pernah dicoba. Perubahan lebih terasa sebagai peluang daripada ancaman.',
@@ -68,7 +68,7 @@ const BIG_FIVE = {
       karir: ['Desain & kreatif', 'Riset dan pengembangan', 'Strategi & inovasi', 'Konsultan', 'Pemasaran'],
     },
     C: {
-      nama: 'Conscientiousness', sub: 'Ketelitian & Kedisiplinan', warna: '#34d399',
+      nama: 'Conscientiousness', sub: 'Ketelitian & Kedisiplinan', warna: '#059669',
       desk: 'Keteraturan, tanggung jawab, ketekunan, dan dorongan untuk menuntaskan pekerjaan.',
       narasi: {
         tinggi: 'Anda terorganisasi, dapat diandalkan, dan menjaga standar kerja yang tinggi. Komitmen yang Anda buat biasanya Anda tuntaskan.',
@@ -81,7 +81,7 @@ const BIG_FIVE = {
       karir: ['Keuangan & akuntansi', 'Manajemen proyek', 'Operasional', 'Audit & kepatuhan', 'Teknik'],
     },
     E: {
-      nama: 'Extraversion', sub: 'Ekstraversi', warna: '#60a5fa',
+      nama: 'Extraversion', sub: 'Ekstraversi', warna: '#2563eb',
       desk: 'Kecenderungan mendapatkan energi dari interaksi sosial dan aktivitas bersama orang lain.',
       narasi: {
         tinggi: 'Anda bersemangat dalam interaksi sosial, mudah membangun hubungan, dan nyaman menyampaikan pendapat di depan orang lain.',
@@ -94,7 +94,7 @@ const BIG_FIVE = {
       karir: ['Penjualan & pengembangan bisnis', 'Hubungan masyarakat', 'Pelatihan', 'Manajemen tim', 'Layanan pelanggan'],
     },
     A: {
-      nama: 'Agreeableness', sub: 'Keramahan & Kerja Sama', warna: '#fb923c',
+      nama: 'Agreeableness', sub: 'Keramahan & Kerja Sama', warna: '#ea580c',
       desk: 'Kepedulian, empati, kepercayaan pada orang lain, dan kecenderungan bekerja sama.',
       narasi: {
         tinggi: 'Anda peduli, empatik, dan mudah bekerja sama. Orang lain cenderung merasa nyaman dan dihargai saat bekerja dengan Anda.',
@@ -107,7 +107,7 @@ const BIG_FIVE = {
       karir: ['Sumber daya manusia', 'Konseling & layanan sosial', 'Pendidikan', 'Kesehatan', 'Layanan pelanggan'],
     },
     N: {
-      nama: 'Stabilitas Emosi', sub: 'Ketenangan di Bawah Tekanan', warna: '#f472b6',
+      nama: 'Stabilitas Emosi', sub: 'Ketenangan di Bawah Tekanan', warna: '#db2777',
       desk: 'Kemampuan tetap tenang, tidak mudah cemas, dan mengelola emosi saat menghadapi tekanan.',
       narasi: {
         tinggi: 'Anda cenderung tenang, tidak mudah cemas, dan mampu berpikir jernih saat menghadapi tekanan.',
@@ -194,10 +194,10 @@ const RIASEC = {
   intro: 'Memetakan minat kerja Anda ke dalam enam tipe minat karier (teori Holland), lalu menyusun kode minat tiga huruf sebagai arah eksplorasi karier.',
   petunjuk: 'Jawab “Ya” bila pernyataan menggambarkan minat atau kesukaan Anda, dan “Tidak” bila tidak. Tidak ada jawaban benar atau salah.',
   format: YA_TIDAK,
-  warna: '#fbbf24',
+  warna: '#d97706',
   dimensi: {
     R: {
-      nama: 'Realistic', sub: 'Praktis & Teknis', warna: '#fb923c',
+      nama: 'Realistic', sub: 'Praktis & Teknis', warna: '#ea580c',
       desk: 'Minat pada pekerjaan praktis, teknis, dan nyata: alat, mesin, bangunan, atau kegiatan lapangan.',
       narasi: {
         tinggi: 'Anda tertarik pada pekerjaan yang konkret dan hasilnya terlihat langsung, seperti merakit, memperbaiki, atau bekerja di lapangan.',
@@ -208,7 +208,7 @@ const RIASEC = {
       karir: ['Teknik mesin, sipil, atau elektro', 'Teknisi & perawatan', 'Pertanian & kehutanan', 'Logistik', 'Konstruksi', 'Keselamatan kerja'],
     },
     I: {
-      nama: 'Investigative', sub: 'Analitis & Ilmiah', warna: '#60a5fa',
+      nama: 'Investigative', sub: 'Analitis & Ilmiah', warna: '#2563eb',
       desk: 'Minat pada kegiatan menganalisis, meneliti, dan memecahkan masalah dengan logika.',
       narasi: {
         tinggi: 'Anda menikmati memahami cara sesuatu bekerja, menganalisis data, dan memecahkan masalah yang menantang secara logis.',
@@ -219,7 +219,7 @@ const RIASEC = {
       karir: ['Analis data', 'Peneliti', 'Teknologi informasi & rekayasa perangkat lunak', 'Kesehatan & farmasi', 'Analis keuangan', 'Sains terapan'],
     },
     A: {
-      nama: 'Artistic', sub: 'Kreatif & Ekspresif', warna: '#f472b6',
+      nama: 'Artistic', sub: 'Kreatif & Ekspresif', warna: '#db2777',
       desk: 'Minat pada kegiatan kreatif, ekspresif, dan orisinal: seni, desain, tulisan, atau pertunjukan.',
       narasi: {
         tinggi: 'Anda tertarik mengekspresikan ide secara kreatif dan menghargai kebebasan untuk berkarya dengan cara Anda sendiri.',
@@ -230,7 +230,7 @@ const RIASEC = {
       karir: ['Desain grafis & produk', 'Penulisan & konten', 'Periklanan & kreatif', 'Arsitektur', 'Fotografi & videografi', 'Seni pertunjukan'],
     },
     S: {
-      nama: 'Social', sub: 'Membantu & Mengajar', warna: '#34d399',
+      nama: 'Social', sub: 'Membantu & Mengajar', warna: '#059669',
       desk: 'Minat pada kegiatan membantu, mengajar, melayani, dan mengembangkan orang lain.',
       narasi: {
         tinggi: 'Anda tertarik membantu, membimbing, dan melayani orang lain, serta merasa puas ketika dapat membuat perbedaan bagi mereka.',
@@ -241,7 +241,7 @@ const RIASEC = {
       karir: ['Pendidikan & pelatihan', 'Konseling & psikologi', 'Sumber daya manusia', 'Kesehatan & keperawatan', 'Layanan pelanggan', 'Pekerjaan sosial'],
     },
     E: {
-      nama: 'Enterprising', sub: 'Memimpin & Memengaruhi', warna: '#fbbf24',
+      nama: 'Enterprising', sub: 'Memimpin & Memengaruhi', warna: '#d97706',
       desk: 'Minat pada kegiatan memimpin, memengaruhi, bernegosiasi, dan mengejar target.',
       narasi: {
         tinggi: 'Anda tertarik memimpin, meyakinkan orang lain, dan mengejar target yang menantang. Anda nyaman mengambil inisiatif.',
@@ -252,7 +252,7 @@ const RIASEC = {
       karir: ['Penjualan & pengembangan bisnis', 'Kewirausahaan', 'Manajemen', 'Pemasaran', 'Hukum & advokasi', 'Konsultan bisnis'],
     },
     C: {
-      nama: 'Conventional', sub: 'Teratur & Sistematis', warna: '#a78bfa',
+      nama: 'Conventional', sub: 'Teratur & Sistematis', warna: '#7c3aed',
       desk: 'Minat pada kegiatan yang teratur dan sistematis: data, dokumen, prosedur, dan ketelitian.',
       narasi: {
         tinggi: 'Anda tertarik pada pekerjaan yang terstruktur, rapi, dan jelas prosedurnya, serta menghargai akurasi.',
@@ -343,10 +343,10 @@ const RESILIENSI = {
   intro: 'Mengukur seberapa tangguh Anda menghadapi tekanan, perubahan, kegagalan, dan godaan untuk berkompromi dengan prinsip di tempat kerja.',
   petunjuk: 'Pilih seberapa setuju Anda dengan setiap pernyataan, berdasarkan pengalaman kerja Anda selama ini.',
   format: LIKERT5,
-  warna: '#f87171',
+  warna: '#dc2626',
   dimensi: {
     KT: {
-      nama: 'Ketangguhan', sub: 'Bertahan di Bawah Tekanan', warna: '#f87171',
+      nama: 'Ketangguhan', sub: 'Bertahan di Bawah Tekanan', warna: '#dc2626',
       desk: 'Kemampuan tetap produktif dan fokus ketika beban kerja dan tekanan tinggi.',
       narasi: {
         tinggi: 'Anda mampu menjaga produktivitas dan fokus meskipun beban kerja dan tekanan sedang tinggi.',
@@ -356,7 +356,7 @@ const RESILIENSI = {
       saran: ['Pecah pekerjaan besar menjadi bagian kecil yang dapat dituntaskan satu per satu', 'Jadwalkan jeda singkat untuk memulihkan fokus', 'Komunikasikan beban kerja kepada atasan sebelum menumpuk'],
     },
     AD: {
-      nama: 'Adaptabilitas', sub: 'Luwes Menghadapi Perubahan', warna: '#60a5fa',
+      nama: 'Adaptabilitas', sub: 'Luwes Menghadapi Perubahan', warna: '#2563eb',
       desk: 'Kemampuan menyesuaikan diri dengan perubahan aturan, cara kerja, dan situasi yang tidak menentu.',
       narasi: {
         tinggi: 'Anda cepat menyesuaikan diri dengan perubahan dan memandangnya sebagai peluang.',
@@ -366,7 +366,7 @@ const RESILIENSI = {
       saran: ['Cari tahu alasan di balik perubahan agar lebih mudah menerimanya', 'Mulai dari satu kebiasaan kerja baru yang kecil', 'Belajar dari rekan yang cepat beradaptasi'],
     },
     PE: {
-      nama: 'Pemulihan', sub: 'Bangkit Setelah Kegagalan', warna: '#34d399',
+      nama: 'Pemulihan', sub: 'Bangkit Setelah Kegagalan', warna: '#059669',
       desk: 'Kemampuan bangkit, belajar, dan kembali termotivasi setelah kegagalan atau kekecewaan.',
       narasi: {
         tinggi: 'Anda cepat bangkit setelah kegagalan dan mampu mengambil pelajaran tanpa terlalu lama terpuruk.',
@@ -376,7 +376,7 @@ const RESILIENSI = {
       saran: ['Tuliskan pelajaran dari setiap kegagalan, bukan hanya penyebabnya', 'Bicarakan kekecewaan dengan orang yang Anda percaya', 'Pisahkan penilaian atas hasil kerja dari penilaian atas diri sendiri'],
     },
     KP: {
-      nama: 'Keteguhan Prinsip', sub: 'Tetap Etis Saat Tertekan', warna: '#fbbf24',
+      nama: 'Keteguhan Prinsip', sub: 'Tetap Etis Saat Tertekan', warna: '#d97706',
       desk: 'Kemampuan tetap jujur, adil, dan memegang prinsip meskipun ada tekanan untuk berkompromi.',
       narasi: {
         tinggi: 'Anda teguh memegang prinsip dan tetap bersikap etis meskipun menghadapi tekanan.',
@@ -446,66 +446,66 @@ const PERAN_TIM = {
   intro: 'Mengidentifikasi peran yang paling alami Anda jalankan saat bekerja dalam tim, sehingga Anda dan tim dapat menempatkan kontribusi secara tepat.',
   petunjuk: 'Pilih seberapa setuju Anda dengan setiap pernyataan, berdasarkan cara Anda biasanya berperan saat bekerja bersama tim.',
   format: LIKERT5,
-  warna: '#38bdf8',
+  warna: '#0284c7',
   dimensi: {
     GG: {
-      nama: 'Penggagas', sub: 'Pemikir Kreatif', warna: '#a78bfa',
+      nama: 'Penggagas', sub: 'Pemikir Kreatif', warna: '#7c3aed',
       desk: 'Memunculkan ide orisinal dan solusi kreatif untuk masalah yang sulit.',
       narasi: { tinggi: 'Anda sering menjadi sumber ide segar dan solusi tak terduga dalam tim.', sedang: 'Sesekali Anda menyumbangkan ide kreatif, terutama saat tim membutuhkan sudut pandang baru.', rendah: 'Memunculkan ide orisinal bukan peran utama Anda dalam tim.' },
       kekuatan: ['Imajinatif', 'Memecahkan masalah sulit dengan cara baru'], tantangan: ['Bisa kurang memperhatikan detail pelaksanaan', 'Kurang sabar dengan hal teknis yang rutin'],
       saran: ['Pasangkan diri dengan rekan yang kuat di eksekusi', 'Uji ide Anda dengan pertanyaan “bagaimana menjalankannya?”'],
     },
     PJ: {
-      nama: 'Penjelajah Peluang', sub: 'Penghubung ke Luar', warna: '#fb923c',
+      nama: 'Penjelajah Peluang', sub: 'Penghubung ke Luar', warna: '#ea580c',
       desk: 'Membangun jejaring, mencari peluang, dan membawa informasi dari luar tim.',
       narasi: { tinggi: 'Anda pandai membangun jejaring dan sering membawa peluang serta informasi baru ke dalam tim.', sedang: 'Anda cukup aktif menjalin hubungan dengan pihak di luar tim bila dibutuhkan.', rendah: 'Mencari peluang dan kontak di luar tim bukan peran utama Anda.' },
       kekuatan: ['Antusias dan mudah bergaul', 'Membuka peluang baru'], tantangan: ['Antusiasme bisa cepat menurun setelah awal', 'Kurang menuntaskan tindak lanjut'],
       saran: ['Catat tindak lanjut setiap kontak atau peluang baru', 'Libatkan rekan yang teliti untuk mengawal peluang sampai selesai'],
     },
     KO: {
-      nama: 'Koordinator', sub: 'Penyelaras Tim', warna: '#60a5fa',
+      nama: 'Koordinator', sub: 'Penyelaras Tim', warna: '#2563eb',
       desk: 'Menyelaraskan tujuan, mendelegasikan tugas, dan mengarahkan keputusan bersama.',
       narasi: { tinggi: 'Anda cenderung mengambil peran menyelaraskan tujuan, membagi tugas sesuai kekuatan anggota, dan mengarahkan keputusan bersama.', sedang: 'Anda dapat mengoordinasikan tim saat diperlukan.', rendah: 'Mengoordinasikan dan mengarahkan tim bukan peran utama Anda.' },
       kekuatan: ['Tenang dan jelas mengarahkan', 'Menempatkan orang pada tugas yang tepat'], tantangan: ['Bisa terlalu banyak mendelegasikan', 'Terkesan menjaga jarak dari pekerjaan teknis'],
       saran: ['Pastikan delegasi disertai dukungan yang cukup', 'Sesekali terlibat langsung dalam pekerjaan tim'],
     },
     PD: {
-      nama: 'Pendorong', sub: 'Penggerak Kemajuan', warna: '#f87171',
+      nama: 'Pendorong', sub: 'Penggerak Kemajuan', warna: '#dc2626',
       desk: 'Mendorong tim bergerak cepat, menghadapi hambatan, dan mencapai target.',
       narasi: { tinggi: 'Anda mendorong tim untuk bergerak cepat dan tidak segan menghadapi hambatan demi mencapai target.', sedang: 'Anda dapat menjadi penggerak saat tim mulai kehilangan momentum.', rendah: 'Mendesak dan mendorong kecepatan tim bukan peran utama Anda.' },
       kekuatan: ['Energik dan berani', 'Menjaga momentum tim'], tantangan: ['Bisa terkesan menekan rekan', 'Kurang sabar terhadap proses yang lambat'],
       saran: ['Imbangi dorongan dengan perhatian pada kondisi rekan', 'Jelaskan alasan di balik target agar tim ikut terdorong'],
     },
     PN: {
-      nama: 'Penilai', sub: 'Evaluator Objektif', warna: '#34d399',
+      nama: 'Penilai', sub: 'Evaluator Objektif', warna: '#059669',
       desk: 'Menimbang pilihan secara cermat dan objektif sebelum keputusan diambil.',
       narasi: { tinggi: 'Anda cenderung menimbang pilihan secara cermat dan objektif, serta jeli melihat kelemahan rencana.', sedang: 'Anda cukup kritis dalam menilai ide dan rencana tim.', rendah: 'Mengevaluasi dan mengkritisi rencana secara mendalam bukan peran utama Anda.' },
       kekuatan: ['Objektif dan analitis', 'Mencegah keputusan tergesa-gesa'], tantangan: ['Bisa terkesan terlalu kritis', 'Kurang mampu membangkitkan semangat tim'],
       saran: ['Sampaikan kritik bersama alternatif solusinya', 'Akui sisi baik ide sebelum menyoroti kelemahannya'],
     },
     PR: {
-      nama: 'Perekat Tim', sub: 'Penjaga Harmoni', warna: '#fbbf24',
+      nama: 'Perekat Tim', sub: 'Penjaga Harmoni', warna: '#d97706',
       desk: 'Menjaga keharmonisan, kekompakan, dan semangat anggota tim.',
       narasi: { tinggi: 'Anda peka terhadap perasaan rekan dan berperan menjaga keharmonisan serta semangat tim.', sedang: 'Anda ikut menjaga suasana tim tetap positif.', rendah: 'Menjaga harmoni dan perasaan anggota tim bukan peran utama Anda.' },
       kekuatan: ['Peka dan suportif', 'Meredam ketegangan'], tantangan: ['Sulit mengambil sikap saat ada perbedaan tajam', 'Cenderung mengalah'],
       saran: ['Latih menyampaikan pendapat pribadi dengan tegas', 'Bedakan menjaga harmoni dari menghindari keputusan sulit'],
     },
     PL: {
-      nama: 'Pelaksana', sub: 'Pengubah Rencana Menjadi Aksi', warna: '#38bdf8',
+      nama: 'Pelaksana', sub: 'Pengubah Rencana Menjadi Aksi', warna: '#0284c7',
       desk: 'Mengubah keputusan menjadi langkah kerja yang jelas dan menjalankannya secara konsisten.',
       narasi: { tinggi: 'Anda andal mengubah rencana menjadi langkah kerja yang jelas dan menjalankannya secara konsisten.', sedang: 'Anda dapat diandalkan untuk menjalankan rencana yang sudah disepakati.', rendah: 'Menyusun dan menjalankan langkah teknis secara rutin bukan peran utama Anda.' },
       kekuatan: ['Disiplin dan dapat diandalkan', 'Praktis dan terorganisasi'], tantangan: ['Kurang luwes terhadap ide yang belum teruji', 'Lambat menanggapi perubahan rencana'],
       saran: ['Beri ruang untuk mencoba cara baru secara terkendali', 'Tinjau rencana secara berkala bersama tim'],
     },
     PS: {
-      nama: 'Penyempurna', sub: 'Penjaga Kualitas', warna: '#f472b6',
+      nama: 'Penyempurna', sub: 'Penjaga Kualitas', warna: '#db2777',
       desk: 'Memeriksa detail, menjaga kualitas, dan memastikan pekerjaan tuntas tepat waktu.',
       narasi: { tinggi: 'Anda teliti memeriksa detail dan memastikan pekerjaan tim selesai dengan kualitas baik dan tepat waktu.', sedang: 'Anda cukup memperhatikan kualitas dan ketepatan waktu pekerjaan tim.', rendah: 'Memeriksa detail dan menyempurnakan pekerjaan bukan peran utama Anda.' },
       kekuatan: ['Teliti dan cermat', 'Menjaga standar kualitas'], tantangan: ['Bisa cemas berlebihan terhadap kesalahan kecil', 'Sulit mendelegasikan'],
       saran: ['Tetapkan batas “cukup baik” untuk pekerjaan yang tidak kritis', 'Percayakan sebagian pemeriksaan kepada rekan'],
     },
     AH: {
-      nama: 'Ahli', sub: 'Sumber Keahlian Khusus', warna: '#4ade80',
+      nama: 'Ahli', sub: 'Sumber Keahlian Khusus', warna: '#16a34a',
       desk: 'Menyumbangkan pengetahuan dan keahlian teknis yang mendalam di bidang tertentu.',
       narasi: { tinggi: 'Anda menjadi rujukan tim untuk keahlian dan pengetahuan mendalam di bidang tertentu.', sedang: 'Anda memiliki keahlian khusus yang Anda sumbangkan saat dibutuhkan.', rendah: 'Menjadi rujukan keahlian teknis khusus bukan peran utama Anda saat ini.' },
       kekuatan: ['Pengetahuan mendalam', 'Rujukan teknis yang dipercaya'], tantangan: ['Cenderung fokus sempit pada bidangnya', 'Kurang memperhatikan gambaran besar'],

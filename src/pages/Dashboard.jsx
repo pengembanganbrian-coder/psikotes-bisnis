@@ -7,24 +7,24 @@ const PAPI_SCALES = ['G','L','I','T','V','S','R','D','C','E','N','A','P','X','B'
 
 /* ── Warna badge per jenis tes ─────────────────────────────────── */
 const BADGE = {
-  MBTI:           { bg: 'rgba(59,130,246,0.18)',   color: '#60a5fa'  },
-  DISC:           { bg: 'rgba(34,197,94,0.18)',    color: '#4ade80'  },
-  PAPI:           { bg: 'rgba(168,85,247,0.18)',   color: '#c084fc'  },
-  DASS:           { bg: 'rgba(20,184,166,0.18)',   color: '#2dd4bf'  },
-  'Love Language':{ bg: 'rgba(244,63,94,0.18)',    color: '#fb7185'  },
-  MSDT:           { bg: 'rgba(249,115,22,0.18)',   color: '#fb923c'  },
+  MBTI:           { bg: 'rgba(59,130,246,0.18)',   color: '#2563eb'  },
+  DISC:           { bg: 'rgba(34,197,94,0.18)',    color: '#16a34a'  },
+  PAPI:           { bg: 'rgba(168,85,247,0.18)',   color: '#9333ea'  },
+  DASS:           { bg: 'rgba(20,184,166,0.18)',   color: '#0d9488'  },
+  'Love Language':{ bg: 'rgba(244,63,94,0.18)',    color: '#e11d48'  },
+  MSDT:           { bg: 'rgba(249,115,22,0.18)',   color: '#ea580c'  },
   ...Object.fromEntries(Object.values(TES_BARU).map(t => [t.testType, { bg: t.warna + '2e', color: t.warna }])),
 }
 
 /* ── Tab accent per jenis tes ─────────────────────────────────── */
 const TAB_ACCENT = {
-  Semua:          '#d4a853',
-  MBTI:           '#60a5fa',
-  DISC:           '#4ade80',
-  PAPI:           '#c084fc',
-  DASS:           '#2dd4bf',
-  MSDT:           '#fb923c',
-  'Love Language':'#fb7185',
+  Semua:          '#4f46e5',
+  MBTI:           '#2563eb',
+  DISC:           '#16a34a',
+  PAPI:           '#9333ea',
+  DASS:           '#0d9488',
+  MSDT:           '#ea580c',
+  'Love Language':'#e11d48',
   ...Object.fromEntries(Object.values(TES_BARU).map(t => [t.testType, t.warna])),
 }
 
@@ -299,12 +299,12 @@ function Dashboard() {
   /* ── Styles ────────────────────────────────────────────────── */
   const S = {
     page:      { minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)' },
-    topbar:    { background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' },
-    topTitle:  { fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '15px', color: 'var(--text)', letterSpacing: '0.01em' },
+    topbar:    { background: 'var(--overlay)', borderBottom: '1px solid var(--border)', padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' },
+    topTitle:  { fontFamily: 'inherit', fontWeight: 700, fontSize: '15px', color: 'var(--text)', letterSpacing: '0.01em' },
     topRight:  { display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' },
-    btnAccent: { background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' },
-    btnGhost:  { background: 'transparent', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '12px', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer', whiteSpace: 'nowrap' },
-    btnDanger: { background: 'transparent', color: '#f87171', fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '12px', padding: '8px 14px', borderRadius: '8px', border: '1px solid rgba(248,113,113,0.3)', cursor: 'pointer', whiteSpace: 'nowrap' },
+    btnAccent: { background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' },
+    btnGhost:  { background: 'transparent', color: 'var(--text-muted)', fontFamily: 'inherit', fontWeight: 600, fontSize: '12px', padding: '8px 14px', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer', whiteSpace: 'nowrap' },
+    btnDanger: { background: 'transparent', color: '#dc2626', fontFamily: 'inherit', fontWeight: 600, fontSize: '12px', padding: '8px 14px', borderRadius: '8px', border: '1px solid rgba(248,113,113,0.3)', cursor: 'pointer', whiteSpace: 'nowrap' },
     card:      { background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', overflow: 'hidden' },
     fieldDark: { width: '100%', background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', fontSize: '13px', color: 'var(--text)', outline: 'none', boxSizing: 'border-box' },
   }
@@ -315,7 +315,7 @@ function Dashboard() {
       {/* ── Topbar ─────────────────────────────────────────────── */}
       <div style={S.topbar}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '16px', color: 'var(--accent)', letterSpacing: '0.05em' }}>AssesIN</span>
+          <span style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '16px', color: 'var(--accent)', letterSpacing: '0.05em' }}>AssesIN</span>
           <span style={{ width: '1px', height: '18px', background: 'var(--border)' }} />
           <span style={S.topTitle}>Admin Dashboard</span>
         </div>
@@ -337,9 +337,9 @@ function Dashboard() {
 
       {/* ── Modal Ganti Password ──────────────────────────────── */}
       {showGantiPw && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
           <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '16px', padding: '32px', width: '100%', maxWidth: '360px' }}>
-            <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '18px', color: 'var(--text)', marginBottom: '20px' }}>Ganti Password</h3>
+            <h3 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '18px', color: 'var(--text)', marginBottom: '20px' }}>Ganti Password</h3>
             <form onSubmit={handleGantiPassword} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <input
                 className="field"
@@ -351,13 +351,13 @@ function Dashboard() {
                 autoComplete="new-password"
               />
               {newPwMsg && (
-                <p style={{ fontSize: '13px', color: newPwMsg.ok ? '#4ade80' : '#f87171', lineHeight: '1.5' }}>{newPwMsg.text}</p>
+                <p style={{ fontSize: '13px', color: newPwMsg.ok ? '#16a34a' : '#dc2626', lineHeight: '1.5' }}>{newPwMsg.text}</p>
               )}
               <div style={{ display: 'flex', gap: '10px' }}>
-                <button type="submit" disabled={newPwLoading} style={{ flex: 1, background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px', borderRadius: '8px', border: 'none', cursor: 'pointer', opacity: newPwLoading ? 0.6 : 1 }}>
+                <button type="submit" disabled={newPwLoading} style={{ flex: 1, background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px', borderRadius: '8px', border: 'none', cursor: 'pointer', opacity: newPwLoading ? 0.6 : 1 }}>
                   {newPwLoading ? 'Menyimpan...' : 'Simpan'}
                 </button>
-                <button type="button" onClick={() => { setShowGantiPw(false); setNewPw(''); setNewPwMsg(null) }} style={{ padding: '12px 16px', background: 'var(--surface-2)', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 600, fontSize: '12px', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer' }}>
+                <button type="button" onClick={() => { setShowGantiPw(false); setNewPw(''); setNewPwMsg(null) }} style={{ padding: '12px 16px', background: 'var(--surface-2)', color: 'var(--text-muted)', fontFamily: 'inherit', fontWeight: 600, fontSize: '12px', borderRadius: '8px', border: '1px solid var(--border)', cursor: 'pointer' }}>
                   Batal
                 </button>
               </div>
@@ -375,12 +375,12 @@ function Dashboard() {
           {/* Banner data test */}
           {testEntries.length > 0 && (
             <div style={{ padding: '12px 20px', background: 'rgba(248,113,113,0.08)', borderBottom: '1px solid rgba(248,113,113,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
-              <p style={{ fontSize: '12px', color: '#f87171' }}>
+              <p style={{ fontSize: '12px', color: '#dc2626' }}>
                 ⚠️ <strong>{testEntries.length} data test</strong> terdeteksi — sebaiknya dihapus sebelum launch.
               </p>
               <button
                 onClick={handleHapusSemuaTest}
-                style={{ fontSize: '11px', fontWeight: 700, fontFamily: 'Syne, sans-serif', padding: '5px 14px', borderRadius: '6px', background: 'rgba(248,113,113,0.15)', color: '#f87171', border: '1px solid rgba(248,113,113,0.3)', cursor: 'pointer', whiteSpace: 'nowrap' }}
+                style={{ fontSize: '11px', fontWeight: 700, fontFamily: 'inherit', padding: '5px 14px', borderRadius: '6px', background: 'rgba(248,113,113,0.15)', color: '#dc2626', border: '1px solid rgba(248,113,113,0.3)', cursor: 'pointer', whiteSpace: 'nowrap' }}
               >
                 Hapus Semua Data Test
               </button>
@@ -390,8 +390,8 @@ function Dashboard() {
           {/* Search + judul */}
           <div style={{ padding: '20px 20px 0' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
-              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '15px', color: 'var(--text)' }}>Daftar Peserta</h2>
-              <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 600 }}>
+              <h2 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '15px', color: 'var(--text)' }}>Daftar Peserta</h2>
+              <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontFamily: 'inherit', fontWeight: 600 }}>
                 {filtered.length} peserta
               </span>
             </div>
@@ -416,7 +416,7 @@ function Dashboard() {
                   style={{
                     fontSize: '11px',
                     fontWeight: 700,
-                    fontFamily: 'Syne, sans-serif',
+                    fontFamily: 'inherit',
                     padding: '5px 12px',
                     borderRadius: '99px',
                     border: isActive ? `1px solid ${accent}55` : '1px solid var(--border)',
@@ -451,7 +451,7 @@ function Dashboard() {
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
                     {['Nama', 'Usia', 'Jenis', 'Hasil', 'Tanggal'].map(h => (
-                      <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontSize: '10px', fontWeight: 700, fontFamily: 'Syne, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'var(--surface-2)', whiteSpace: 'nowrap' }}>
+                      <th key={h} style={{ padding: '10px 16px', textAlign: 'left', fontSize: '10px', fontWeight: 700, fontFamily: 'inherit', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', background: 'var(--surface-2)', whiteSpace: 'nowrap' }}>
                         {h}
                       </th>
                     ))}
@@ -460,7 +460,7 @@ function Dashboard() {
                 <tbody>
                   {filtered.map(p => {
                     const isSelected = selected?.jenis === p.jenis && selected?.id === p.id
-                    const badge = BADGE[p.jenis] || { bg: 'rgba(255,255,255,0.08)', color: 'var(--text-muted)' }
+                    const badge = BADGE[p.jenis] || { bg: 'var(--track)', color: 'var(--text-muted)' }
                     return (
                       <tr
                         key={`${p.jenis}-${p.id}`}
@@ -468,7 +468,7 @@ function Dashboard() {
                         style={{
                           borderBottom: '1px solid var(--border)',
                           cursor: 'pointer',
-                          background: isSelected ? 'rgba(212,168,83,0.06)' : 'transparent',
+                          background: isSelected ? 'rgba(79,70,229,0.06)' : 'transparent',
                           transition: 'background 0.15s',
                         }}
                         onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'var(--surface-2)' }}
@@ -476,17 +476,17 @@ function Dashboard() {
                       >
                         <td style={{ padding: '11px 16px', fontWeight: 600, color: isSelected ? 'var(--accent)' : 'var(--text)', maxWidth: '160px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {p.nama}
-                          {isTestData(p) && <span style={{ marginLeft: '6px', fontSize: '9px', fontWeight: 700, padding: '1px 5px', borderRadius: '4px', background: 'rgba(248,113,113,0.15)', color: '#f87171', border: '1px solid rgba(248,113,113,0.2)', verticalAlign: 'middle' }}>TEST</span>}
+                          {isTestData(p) && <span style={{ marginLeft: '6px', fontSize: '9px', fontWeight: 700, padding: '1px 5px', borderRadius: '4px', background: 'rgba(248,113,113,0.15)', color: '#dc2626', border: '1px solid rgba(248,113,113,0.2)', verticalAlign: 'middle' }}>TEST</span>}
                         </td>
                         <td style={{ padding: '11px 16px', color: 'var(--text-muted)', whiteSpace: 'nowrap' }}>
                           {p.jabatan || '—'}
                         </td>
                         <td style={{ padding: '11px 16px' }}>
-                          <span style={{ fontSize: '10px', fontWeight: 700, fontFamily: 'Syne, sans-serif', padding: '3px 10px', borderRadius: '99px', background: badge.bg, color: badge.color, whiteSpace: 'nowrap' }}>
+                          <span style={{ fontSize: '10px', fontWeight: 700, fontFamily: 'inherit', padding: '3px 10px', borderRadius: '99px', background: badge.bg, color: badge.color, whiteSpace: 'nowrap' }}>
                             {p.jenis}
                           </span>
                         </td>
-                        <td style={{ padding: '11px 16px', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)', whiteSpace: 'nowrap' }}>
+                        <td style={{ padding: '11px 16px', fontFamily: 'inherit', fontWeight: 700, color: 'var(--accent)', whiteSpace: 'nowrap' }}>
                           {getHasil(p)}
                         </td>
                         <td style={{ padding: '11px 16px', color: 'var(--text-muted)', whiteSpace: 'nowrap', fontSize: '12px' }}>
@@ -507,7 +507,7 @@ function Dashboard() {
 
             {/* Header */}
             <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '13px', color: 'var(--text)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Detail Peserta</h2>
+              <h2 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '13px', color: 'var(--text)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Detail Peserta</h2>
               <button onClick={() => setSelected(null)} style={{ color: 'var(--text-muted)', fontSize: '20px', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1 }}>×</button>
             </div>
 
@@ -517,8 +517,8 @@ function Dashboard() {
               {selected.jenis === 'MBTI' && (
                 <>
                   <div style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-                    <p style={{ fontSize: '10px', color: '#60a5fa', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Tipe MBTI</p>
-                    <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '36px', color: '#60a5fa', letterSpacing: '0.12em' }}>{selected.hasil_tes?.[0]?.tipe_mbti || '—'}</p>
+                    <p style={{ fontSize: '10px', color: '#2563eb', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Tipe MBTI</p>
+                    <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '36px', color: '#2563eb', letterSpacing: '0.12em' }}>{selected.hasil_tes?.[0]?.tipe_mbti || '—'}</p>
                   </div>
                   <DetailRows rows={[
                     ['Nama', selected.nama],
@@ -529,16 +529,16 @@ function Dashboard() {
                   {selected.hasil_tes?.[0] && (
                     <ScoreSection label="Skor Dimensi">
                       {[
-                        ['E', selected.hasil_tes[0].skor_e, 'I', selected.hasil_tes[0].skor_i, '#60a5fa'],
-                        ['S', selected.hasil_tes[0].skor_s, 'N', selected.hasil_tes[0].skor_n, '#a78bfa'],
-                        ['T', selected.hasil_tes[0].skor_t, 'F', selected.hasil_tes[0].skor_f, '#34d399'],
+                        ['E', selected.hasil_tes[0].skor_e, 'I', selected.hasil_tes[0].skor_i, '#2563eb'],
+                        ['S', selected.hasil_tes[0].skor_s, 'N', selected.hasil_tes[0].skor_n, '#7c3aed'],
+                        ['T', selected.hasil_tes[0].skor_t, 'F', selected.hasil_tes[0].skor_f, '#059669'],
                         ['J', selected.hasil_tes[0].skor_j, 'P', selected.hasil_tes[0].skor_p, '#f59e0b'],
                       ].map(([a, sa, b, sb, color]) => (
                         <div key={a} style={{ marginBottom: '8px' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: 'var(--text-muted)', marginBottom: '4px' }}>
                             <span>{a} ({sa})</span><span>{b} ({sb})</span>
                           </div>
-                          <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                          <div style={{ height: '5px', background: 'var(--track)', borderRadius: '99px', overflow: 'hidden' }}>
                             <div style={{ height: '100%', background: color, borderRadius: '99px', width: `${(sa / (sa + sb)) * 100}%` }} />
                           </div>
                         </div>
@@ -552,8 +552,8 @@ function Dashboard() {
               {selected.jenis === 'DISC' && (
                 <>
                   <div style={{ background: 'rgba(34,197,94,0.15)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-                    <p style={{ fontSize: '10px', color: '#4ade80', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Profil DISC</p>
-                    <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '36px', color: '#4ade80', letterSpacing: '0.12em' }}>{selected.hasil_disc?.[0]?.profil || '—'}</p>
+                    <p style={{ fontSize: '10px', color: '#16a34a', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Profil DISC</p>
+                    <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '36px', color: '#16a34a', letterSpacing: '0.12em' }}>{selected.hasil_disc?.[0]?.profil || '—'}</p>
                   </div>
                   <DetailRows rows={[
                     ['Nama', selected.nama],
@@ -574,7 +574,7 @@ function Dashboard() {
                             <span style={{ fontWeight: 700, color }}>{key} — {label}</span>
                             <span>{val > 0 ? '+' : ''}{val}</span>
                           </div>
-                          <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                          <div style={{ height: '5px', background: 'var(--track)', borderRadius: '99px', overflow: 'hidden' }}>
                             <div style={{ height: '100%', background: color, borderRadius: '99px', width: `${Math.max(0, Math.min((val / 12) * 100, 100))}%` }} />
                           </div>
                         </div>
@@ -588,8 +588,8 @@ function Dashboard() {
               {selected.jenis === 'PAPI' && (
                 <>
                   <div style={{ background: 'rgba(168,85,247,0.15)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-                    <p style={{ fontSize: '10px', color: '#c084fc', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Profil PAPI Kostick</p>
-                    <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '22px', color: '#c084fc', letterSpacing: '0.08em', lineHeight: 1.3 }}>{selected.hasil_papi?.[0]?.profil || '—'}</p>
+                    <p style={{ fontSize: '10px', color: '#9333ea', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '6px' }}>Profil PAPI Kostick</p>
+                    <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '22px', color: '#9333ea', letterSpacing: '0.08em', lineHeight: 1.3 }}>{selected.hasil_papi?.[0]?.profil || '—'}</p>
                     <p style={{ fontSize: '10px', color: 'rgba(192,132,252,0.6)', marginTop: '4px' }}>Dimensi dominan</p>
                   </div>
                   <DetailRows rows={[
@@ -606,10 +606,10 @@ function Dashboard() {
                           return (
                             <div key={k}>
                               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '10px', marginBottom: '2px' }}>
-                                <span style={{ fontWeight: 700, color: '#c084fc' }}>{k}</span>
+                                <span style={{ fontWeight: 700, color: '#9333ea' }}>{k}</span>
                                 <span style={{ color: 'var(--text-muted)' }}>{val}</span>
                               </div>
-                              <div style={{ height: '4px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                              <div style={{ height: '4px', background: 'var(--track)', borderRadius: '99px', overflow: 'hidden' }}>
                                 <div style={{ height: '100%', background: '#a855f7', borderRadius: '99px', width: `${(val / 9) * 100}%` }} />
                               </div>
                             </div>
@@ -624,12 +624,12 @@ function Dashboard() {
               {/* ─── DASS ─── */}
               {selected.jenis === 'DASS' && (() => {
                 const h = selected.hasil_dass?.[0]
-                const katColor = { Normal: '#4ade80', Ringan: '#a3e635', Sedang: '#f59e0b', Berat: '#f97316', 'Sangat Berat': '#f43f5e' }
+                const katColor = { Normal: '#16a34a', Ringan: '#a3e635', Sedang: '#f59e0b', Berat: '#f97316', 'Sangat Berat': '#f43f5e' }
                 return (
                   <>
                     <div style={{ background: 'rgba(20,184,166,0.15)', border: '1px solid rgba(20,184,166,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-                      <p style={{ fontSize: '10px', color: '#2dd4bf', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>DASS-21</p>
-                      <p style={{ fontSize: '12px', fontWeight: 700, color: '#2dd4bf' }}>Depression · Anxiety · Stress</p>
+                      <p style={{ fontSize: '10px', color: '#0d9488', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>DASS-21</p>
+                      <p style={{ fontSize: '12px', fontWeight: 700, color: '#0d9488' }}>Depression · Anxiety · Stress</p>
                       {h && <p style={{ fontSize: '11px', color: 'rgba(45,212,191,0.7)', marginTop: '4px' }}>D:{h.kategori_depresi} · A:{h.kategori_anxietas} · S:{h.kategori_stres}</p>}
                     </div>
                     <DetailRows rows={[
@@ -655,7 +655,7 @@ function Dashboard() {
                                   <span style={{ fontSize: '10px', fontWeight: 700, padding: '1px 8px', borderRadius: '99px', background: color + '22', color }}>{kat}</span>
                                 </div>
                               </div>
-                              <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                              <div style={{ height: '5px', background: 'var(--track)', borderRadius: '99px', overflow: 'hidden' }}>
                                 <div style={{ height: '100%', background: '#14b8a6', borderRadius: '99px', width: `${(skor / 42) * 100}%` }} />
                               </div>
                             </div>
@@ -673,8 +673,8 @@ function Dashboard() {
                 return (
                   <>
                     <div style={{ background: 'rgba(244,63,94,0.15)', border: '1px solid rgba(244,63,94,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-                      <p style={{ fontSize: '10px', color: '#fb7185', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Love Language</p>
-                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '14px', color: '#fb7185', lineHeight: 1.4 }}>{h?.bahasa_utama || '—'}</p>
+                      <p style={{ fontSize: '10px', color: '#e11d48', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Love Language</p>
+                      <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '14px', color: '#e11d48', lineHeight: 1.4 }}>{h?.bahasa_utama || '—'}</p>
                     </div>
                     <DetailRows rows={[
                       ['Nama', selected.nama],
@@ -692,8 +692,8 @@ function Dashboard() {
                 return (
                   <>
                     <div style={{ background: 'rgba(249,115,22,0.15)', border: '1px solid rgba(249,115,22,0.3)', borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-                      <p style={{ fontSize: '10px', color: '#fb923c', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Gaya Manajemen</p>
-                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', color: '#fb923c' }}>{h?.gaya || '—'}</p>
+                      <p style={{ fontSize: '10px', color: '#ea580c', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Gaya Manajemen</p>
+                      <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '18px', color: '#ea580c' }}>{h?.gaya || '—'}</p>
                       <p style={{ fontSize: '10px', color: 'rgba(251,146,60,0.6)', marginTop: '2px' }}>MSDT</p>
                     </div>
                     <DetailRows rows={[
@@ -708,14 +708,14 @@ function Dashboard() {
                           { label: 'TO (Task Orientation)',         val: h.skor_to,     max: 19, color: '#f97316' },
                           { label: 'RO (Relationship Orientation)', val: h.skor_ro,     max: 17, color: '#f59e0b' },
                           { label: 'E Score (Efektivitas)',         val: h.e_score,     max: 4,  color: '#22c55e' },
-                          { label: 'Grand Total',                   val: h.grand_total, max: 50, color: '#d4a853' },
+                          { label: 'Grand Total',                   val: h.grand_total, max: 50, color: '#4f46e5' },
                         ].map(({ label, val, max, color }) => (
                           <div key={label} style={{ marginBottom: '8px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px' }}>
                               <span style={{ color: 'var(--text-muted)' }}>{label}</span>
                               <span style={{ fontWeight: 700, color: 'var(--text)' }}>{val}</span>
                             </div>
-                            <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                            <div style={{ height: '5px', background: 'var(--track)', borderRadius: '99px', overflow: 'hidden' }}>
                               <div style={{ height: '100%', background: color, borderRadius: '99px', width: `${Math.min(100, (val / max) * 100)}%` }} />
                             </div>
                           </div>
@@ -734,7 +734,7 @@ function Dashboard() {
                   <>
                     <div style={{ background: t.warna + '22', border: `1px solid ${t.warna}55`, borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
                       <p style={{ fontSize: '10px', color: t.warna, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>{t.judul}</p>
-                      <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '15px', color: t.warna }}>{h?.ringkasan || '—'}</p>
+                      <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '15px', color: t.warna }}>{h?.ringkasan || '—'}</p>
                       <p style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>Beta</p>
                     </div>
                     <DetailRows rows={[
@@ -751,7 +751,7 @@ function Dashboard() {
                               <span style={{ color: 'var(--text-muted)' }}>{d.nama}</span>
                               <span style={{ fontWeight: 700, color: 'var(--text)' }}>{h.skor[k] ?? '—'}</span>
                             </div>
-                            <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '99px', overflow: 'hidden' }}>
+                            <div style={{ height: '5px', background: 'var(--track)', borderRadius: '99px', overflow: 'hidden' }}>
                               <div style={{ height: '100%', background: d.warna, borderRadius: '99px', width: `${h.skor[k] ?? 0}%` }} />
                             </div>
                           </div>
@@ -766,13 +766,13 @@ function Dashboard() {
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button
                   onClick={() => handleLihatLaporan(selected)}
-                  style={{ flex: 1, background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '10px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
+                  style={{ flex: 1, background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '10px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
                 >
                   Lihat Laporan
                 </button>
                 <button
                   onClick={() => handleDelete(selected)}
-                  style={{ padding: '10px 14px', background: 'rgba(248,113,113,0.1)', color: '#f87171', border: '1px solid rgba(248,113,113,0.2)', borderRadius: '8px', cursor: 'pointer', fontSize: '14px' }}
+                  style={{ padding: '10px 14px', background: 'rgba(248,113,113,0.1)', color: '#dc2626', border: '1px solid rgba(248,113,113,0.2)', borderRadius: '8px', cursor: 'pointer', fontSize: '14px' }}
                 >
                   🗑️
                 </button>
@@ -803,7 +803,7 @@ function DetailRows({ rows }) {
 function ScoreSection({ label, children }) {
   return (
     <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px' }}>
-      <p style={{ fontSize: '10px', fontWeight: 700, fontFamily: 'Syne, sans-serif', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '12px' }}>{label}</p>
+      <p style={{ fontSize: '10px', fontWeight: 700, fontFamily: 'inherit', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '12px' }}>{label}</p>
       {children}
     </div>
   )

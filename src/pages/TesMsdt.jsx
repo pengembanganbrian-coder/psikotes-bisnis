@@ -126,7 +126,7 @@ function hitungMSDT(jawaban) {
 }
 
 const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
-const S_ERR   = { color: '#f87171', fontSize: '12px', marginTop: '6px' }
+const S_ERR   = { color: '#dc2626', fontSize: '12px', marginTop: '6px' }
 
 export default function TesMsdt() {
   const navigate = useNavigate()
@@ -169,13 +169,14 @@ export default function TesMsdt() {
     const jabatan = `${usia} th · ${jenisKelamin}`
 
     try {
-      const { data: peserta, error: e1 } = await supabase
+      // id dibuat di klien: pengunjung anonim hanya punya izin INSERT (RLS),
+      // sehingga insert().select() selalu ditolak.
+      const peserta = { id: crypto.randomUUID() }
+      const { error: e1 } = await supabase
         .from('peserta_msdt')
-        .insert({ nama, nip: email, jabatan })
-        .select()
-        .single()
+        .insert({ id: peserta.id, nama, nip: email, jabatan })
 
-      if (e1 || !peserta) throw e1 || new Error('Gagal menyimpan peserta')
+      if (e1) throw e1
 
       const { error: e2 } = await supabase.from('hasil_msdt').insert({
         peserta_id:  peserta.id,
@@ -201,13 +202,13 @@ export default function TesMsdt() {
   if (step === 'form') return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px var(--px)' }}>
       <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0 }}>
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: '600px', height: '600px', background: 'radial-gradient(ellipse at center, rgba(79,70,229,0.07) 0%, transparent 65%)' }} />
       </div>
       <div className="anim-up" style={{ width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1 }}>
         <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <Logo size="sm" dark />
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes Gaya Manajemen MSDT</p>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', letterSpacing: '0.22em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '16px', marginBottom: '4px' }}>AssesIN</p>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '22px', color: 'var(--text)', marginBottom: '4px' }}>Tes Gaya Manajemen MSDT</p>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>64 soal · ~20 menit</p>
         </div>
         <div className="dark-card" style={{ padding: '32px' }}>
@@ -216,23 +217,23 @@ export default function TesMsdt() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div>
-              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Nama Lengkap <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" value={nama} onChange={e => { setNama(e.target.value); setFormErrors(p => ({...p, nama: ''})) }} placeholder="Nama lengkap" autoComplete="name" />
               {formErrors.nama && <p style={S_ERR}>{formErrors.nama}</p>}
             </div>
             <div>
-              <label style={S_LABEL}>Email <span style={{ color: '#f87171' }}>*</span></label>
+              <label style={S_LABEL}>Email <span style={{ color: '#dc2626' }}>*</span></label>
               <input className="field" type="email" value={email} onChange={e => { setEmail(e.target.value); setFormErrors(p => ({...p, email: ''})) }} placeholder="email@contoh.com" autoComplete="email" />
               {formErrors.email && <p style={S_ERR}>{formErrors.email}</p>}
             </div>
             <div className="form-grid-2">
               <div>
-                <label style={S_LABEL}>Usia <span style={{ color: '#f87171' }}>*</span></label>
+                <label style={S_LABEL}>Usia <span style={{ color: '#dc2626' }}>*</span></label>
                 <input className="field" type="number" min="10" max="100" value={usia} onChange={e => { setUsia(e.target.value); setFormErrors(p => ({...p, usia: ''})) }} placeholder="Tahun" />
                 {formErrors.usia && <p style={S_ERR}>{formErrors.usia}</p>}
               </div>
               <div>
-                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#f87171' }}>*</span></label>
+                <label style={S_LABEL}>Jenis Kelamin <span style={{ color: '#dc2626' }}>*</span></label>
                 <select className="field" value={jenisKelamin} onChange={e => { setJenisKelamin(e.target.value); setFormErrors(p => ({...p, jenisKelamin: ''})) }}>
                   <option value="">— Pilih —</option>
                   <option value="Laki-laki">Laki-laki</option>
@@ -249,7 +250,7 @@ export default function TesMsdt() {
             />
             <button
               onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-              style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
+              style={{ background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
               onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
               onMouseLeave={e => e.currentTarget.style.opacity = '1'}
             >
@@ -267,17 +268,17 @@ export default function TesMsdt() {
   /* ── TES ── */
   return (
     <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
-      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'rgba(9,9,15,0.9)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'var(--overlay)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
         <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
-            <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes MSDT</p>
+            <p style={{ fontFamily: 'inherit', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes MSDT</p>
             <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {answered}/64 terjawab</p>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <div style={{ width: '120px', height: '3px', background: 'var(--border)', borderRadius: '99px', overflow: 'hidden' }}>
               <div style={{ height: '100%', background: 'var(--accent)', width: `${progress}%`, transition: 'width 0.5s' }} />
             </div>
-            <span style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px' }}>{Math.round(progress)}%</span>
+            <span style={{ color: 'var(--accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px' }}>{Math.round(progress)}%</span>
           </div>
         </div>
       </div>
@@ -295,13 +296,13 @@ export default function TesMsdt() {
             const done = val !== undefined
             return (
               <div id={`soal-msdt-${s.id}`} key={s.id} className="dark-card" style={{ padding: '20px', borderColor: done ? 'var(--accent-border)' : 'var(--border)' }}>
-                <p style={{ color: 'var(--accent)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.7 }}>
+                <p style={{ color: 'var(--accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: '14px', opacity: 0.7 }}>
                   {String(s.id).padStart(2, '0')}
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                   {[['a', s.a], ['b', s.b]].map(([key, teks]) => (
                     <button key={key} onClick={() => setJawaban(j => ({...j, [s.id]: key}))} className={`answer-btn ${val === key ? 'selected' : ''}`} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                      <span style={{ flexShrink: 0, width: '22px', height: '22px', borderRadius: '50%', border: '1px solid ' + (val === key ? 'var(--accent)' : 'var(--border)'), background: val === key ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '10px', color: val === key ? '#09090f' : 'var(--text-muted)', marginTop: '1px' }}>
+                      <span style={{ flexShrink: 0, width: '22px', height: '22px', borderRadius: '50%', border: '1px solid ' + (val === key ? 'var(--accent)' : 'var(--border)'), background: val === key ? 'var(--accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', color: val === key ? 'var(--on-accent)' : 'var(--text-muted)', marginTop: '1px' }}>
                         {key.toUpperCase()}
                       </span>
                       <span style={{ fontSize: '14px', lineHeight: '1.6', textAlign: 'left', color: val === key ? 'var(--text)' : 'var(--text-sub)' }}>{teks}</span>
@@ -314,17 +315,17 @@ export default function TesMsdt() {
         </div>
 
         {saveError && (
-          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#f87171', fontSize: '14px', marginTop: '20px' }}>
+          <div style={{ background: 'rgba(248,113,113,0.1)', border: '1px solid rgba(248,113,113,0.3)', borderRadius: '10px', padding: '12px 16px', color: '#dc2626', fontSize: '14px', marginTop: '20px' }}>
             {saveError}
           </div>
         )}
 
         <div style={{ marginTop: '28px' }}>
-          {answered < 64 && <p style={{ textAlign: 'center', color: '#fbbf24', fontSize: '13px', marginBottom: '12px' }}>Masih {64 - answered} soal belum dijawab</p>}
+          {answered < 64 && <p style={{ textAlign: 'center', color: '#d97706', fontSize: '13px', marginBottom: '12px' }}>Masih {64 - answered} soal belum dijawab</p>}
           <button
             onClick={handleSubmit}
             disabled={loading}
-            style={{ width: '100%', background: answered === 64 ? 'var(--accent)' : 'var(--surface-2)', color: answered === 64 ? '#09090f' : 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: '1px solid ' + (answered === 64 ? 'var(--accent)' : 'var(--border)'), cursor: answered === 64 && !loading ? 'pointer' : 'not-allowed', opacity: loading ? 0.6 : 1 }}
+            style={{ width: '100%', background: answered === 64 ? 'var(--accent)' : 'var(--surface-2)', color: answered === 64 ? 'var(--on-accent)' : 'var(--text-muted)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '16px', borderRadius: '12px', border: '1px solid ' + (answered === 64 ? 'var(--accent)' : 'var(--border)'), cursor: answered === 64 && !loading ? 'pointer' : 'not-allowed', opacity: loading ? 0.6 : 1 }}
           >
             {loading ? 'Menyimpan...' : answered === 64 ? 'Lihat Hasil →' : `${answered} / 64 terjawab`}
           </button>

@@ -5,7 +5,7 @@ import Logo from '../components/Logo'
 
 const LABEL_STYLE = {
   display: 'block',
-  fontFamily: 'Syne, sans-serif',
+  fontFamily: 'inherit',
   fontWeight: 700,
   fontSize: '10px',
   letterSpacing: '0.14em',
@@ -16,9 +16,9 @@ const LABEL_STYLE = {
 
 const GOLD_BTN = {
   background: 'var(--accent)',
-  color: '#09090f',
-  fontFamily: 'Syne, sans-serif',
-  fontWeight: 800,
+  color: 'var(--on-accent)',
+  fontFamily: 'inherit',
+  fontWeight: 700,
   fontSize: '12px',
   letterSpacing: '0.14em',
   textTransform: 'uppercase',
@@ -29,6 +29,13 @@ const GOLD_BTN = {
   width: '100%',
   marginTop: '4px',
 }
+
+/* ── Shared banners ── */
+const Banner = ({ msg, color, bg, border }) => msg ? (
+  <div style={{ border: `1px solid ${border}`, background: bg, borderRadius: '10px', padding: '12px 16px', marginBottom: '20px' }}>
+    <p style={{ color, fontSize: '13px', lineHeight: '1.6', whiteSpace: 'pre-line' }}>{msg}</p>
+  </div>
+) : null
 
 export default function Login() {
   const [view,     setView]     = useState('login')  // 'login' | 'forgot'
@@ -74,19 +81,12 @@ export default function Login() {
 
   const switchView = (v) => { setView(v); setError(''); setInfo('') }
 
-  /* ── Shared banners ── */
-  const Banner = ({ msg, color, bg, border }) => msg ? (
-    <div style={{ border: `1px solid ${border}`, background: bg, borderRadius: '10px', padding: '12px 16px', marginBottom: '20px' }}>
-      <p style={{ color, fontSize: '13px', lineHeight: '1.6', whiteSpace: 'pre-line' }}>{msg}</p>
-    </div>
-  ) : null
-
   return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
 
       {/* Background */}
       <div aria-hidden="true" style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 0, overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '700px', height: '700px', background: 'radial-gradient(ellipse at center, rgba(212,168,83,0.07) 0%, transparent 65%)' }} />
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '700px', height: '700px', background: 'radial-gradient(ellipse at center, rgba(79,70,229,0.07) 0%, transparent 65%)' }} />
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px)', backgroundSize: '36px 36px' }} />
       </div>
 
@@ -95,7 +95,7 @@ export default function Login() {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <Logo size="md" dark />
-          <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.24em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '18px', marginBottom: '6px' }}>
+          <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '10px', letterSpacing: '0.24em', color: 'var(--accent)', textTransform: 'uppercase', marginTop: '18px', marginBottom: '6px' }}>
             Assess · Insight · Grow
           </p>
           <p style={{ color: 'var(--text-muted)', fontSize: '12px', letterSpacing: '0.04em' }}>
@@ -108,7 +108,7 @@ export default function Login() {
 
           {view === 'login' ? (
             <>
-              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '22px', color: 'var(--text)', letterSpacing: '-0.01em', marginBottom: '6px' }}>
+              <h2 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '22px', color: 'var(--text)', letterSpacing: '-0.01em', marginBottom: '6px' }}>
                 Selamat Datang
               </h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '28px', lineHeight: '1.5' }}>
@@ -116,8 +116,8 @@ export default function Login() {
               </p>
               <div style={{ width: '32px', height: '2px', background: 'var(--accent)', marginBottom: '28px', opacity: 0.7 }} />
 
-              <Banner msg={successMessage} color="var(--accent)" bg="rgba(212,168,83,0.08)" border="rgba(212,168,83,0.3)" />
-              <Banner msg={error}          color="#f87171"        bg="rgba(239,68,68,0.06)"  border="rgba(239,68,68,0.25)" />
+              <Banner msg={successMessage} color="var(--accent)" bg="rgba(79,70,229,0.08)" border="rgba(79,70,229,0.3)" />
+              <Banner msg={error}          color="#dc2626"        bg="rgba(239,68,68,0.06)"  border="rgba(239,68,68,0.25)" />
 
               <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <div>
@@ -143,7 +143,7 @@ export default function Login() {
             </>
           ) : (
             <>
-              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '20px', color: 'var(--text)', marginBottom: '6px' }}>
+              <h2 style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '20px', color: 'var(--text)', marginBottom: '6px' }}>
                 Lupa Password
               </h2>
               <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '28px', lineHeight: '1.5' }}>
@@ -151,8 +151,8 @@ export default function Login() {
               </p>
               <div style={{ width: '32px', height: '2px', background: 'var(--accent)', marginBottom: '28px', opacity: 0.7 }} />
 
-              <Banner msg={error} color="#f87171"        bg="rgba(239,68,68,0.06)"  border="rgba(239,68,68,0.25)" />
-              <Banner msg={info}  color="var(--accent)"  bg="rgba(212,168,83,0.08)" border="rgba(212,168,83,0.3)" />
+              <Banner msg={error} color="#dc2626"        bg="rgba(239,68,68,0.06)"  border="rgba(239,68,68,0.25)" />
+              <Banner msg={info}  color="var(--accent)"  bg="rgba(79,70,229,0.08)" border="rgba(79,70,229,0.3)" />
 
               <form onSubmit={handleForgot} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <div>

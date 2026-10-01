@@ -1,5 +1,6 @@
 ﻿import { useLocation, useNavigate } from 'react-router-dom'
 import PaymentGate from '../components/PaymentGate'
+import { LaporanPage, LaporanBar, LaporanHero, Kartu, BarisSkor, Radar, Poin, Chip, Sorot, Catatan, AksiBawah, TanpaData } from '../components/Laporan'
 
 /* ── Definisi 20 skala PAPI Kostick ─────────────────────────────── */
 const skalaInfo = {
@@ -162,158 +163,23 @@ const narasiSkala = {
 /* urutan pada radar (searah jarum jam dari atas) */
 const RADAR_ORDER = ['L','P','I','G','A','N','T','V','X','Z','B','O','S','K','E','F','W','C','D','R']
 
-/* ── Komponen Radar Chart SVG ──────────────────────────────────── */
-function RadarChart({ scores }) {
-  const cx = 220, cy = 220, maxR = 170
-  const n = RADAR_ORDER.length
-  const labelR = maxR + 22
-
-  const toXY = (i, val) => {
-    const angle = (Math.PI * 2 * i / n) - Math.PI / 2
-    const r = (val / 9) * maxR
-    return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) }
-  }
-
-  const axisEnd = (i) => {
-    const angle = (Math.PI * 2 * i / n) - Math.PI / 2
-    return { x: cx + maxR * Math.cos(angle), y: cy + maxR * Math.sin(angle) }
-  }
-
-  const labelPos = (i) => {
-    const angle = (Math.PI * 2 * i / n) - Math.PI / 2
-    return { x: cx + labelR * Math.cos(angle), y: cy + labelR * Math.sin(angle) }
-  }
-
-  /* poligon data peserta */
-  const pts = RADAR_ORDER.map((s, i) => toXY(i, scores[s] ?? 0))
-  const polyStr = pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
-
-  /* ring grid: 3, 6, 9 */
-  const rings = [3, 6, 9]
-  const ringPoly = (val) =>
-    RADAR_ORDER.map((_, i) => {
-      const angle = (Math.PI * 2 * i / n) - Math.PI / 2
-      const r = (val / 9) * maxR
-      return `${(cx + r * Math.cos(angle)).toFixed(1)},${(cy + r * Math.sin(angle)).toFixed(1)}`
-    }).join(' ')
-
-  return (
-    <svg viewBox="0 0 440 440" className="w-full max-w-md mx-auto">
-      {/* ring grid */}
-      {rings.map(v => (
-        <polygon key={v} points={ringPoly(v)}
-          fill="none" stroke="#1e1e30" strokeWidth="1" />
-      ))}
-
-      {/* axis lines */}
-      {RADAR_ORDER.map((_, i) => {
-        const end = axisEnd(i)
-        return <line key={i} x1={cx} y1={cy} x2={end.x.toFixed(1)} y2={end.y.toFixed(1)}
-          stroke="#1e1e30" strokeWidth="1" />
-      })}
-
-      {/* ring labels (nilai) */}
-      {rings.map(v => {
-        const y = cy - (v / 9) * maxR
-        return <text key={v} x={cx + 3} y={y - 2} fontSize="9" fill="#56566e">{v}</text>
-      })}
-
-      {/* area peserta */}
-      <polygon points={polyStr}
-        fill="rgba(99,102,241,0.20)" stroke="#6366f1" strokeWidth="2" strokeLinejoin="round" />
-
-      {/* titik nilai */}
-      {pts.map((p, i) => (
-        <circle key={i} cx={p.x.toFixed(1)} cy={p.y.toFixed(1)} r="4"
-          fill={skalaInfo[RADAR_ORDER[i]].warna} stroke="white" strokeWidth="1.5" />
-      ))}
-
-      {/* label skala */}
-      {RADAR_ORDER.map((s, i) => {
-        const lp = labelPos(i)
-        const score = scores[s] ?? 0
-        const color = skalaInfo[s].warna
-        return (
-          <g key={s}>
-            <text x={lp.x.toFixed(1)} y={lp.y.toFixed(1)}
-              textAnchor="middle" dominantBaseline="middle"
-              fontSize="11" fontWeight="700" fill={color}>
-              {s}
-            </text>
-            <text x={lp.x.toFixed(1)} y={(lp.y + 12).toFixed(1)}
-              textAnchor="middle" dominantBaseline="middle"
-              fontSize="9" fill="#56566e">
-              {score}
-            </text>
-          </g>
-        )
-      })}
-    </svg>
-  )
-}
-
-/* ── Bar mini per skala ──────────────────────────────────────────── */
-function ScoreBar({ val }) {
-  const pct = (val / 9) * 100
-  const color = val >= 7 ? '#ef4444' : val >= 5 ? '#f97316' : val >= 3 ? '#3b82f6' : '#56566e'
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <div style={{ flex: 1, background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '6px' }}>
-        <div style={{ height: '6px', borderRadius: '99px', transition: 'width 0.5s', width: `${pct}%`, backgroundColor: color }} />
-      </div>
-      <span style={{ fontSize: '11px', fontWeight: 700, width: '16px', textAlign: 'right', color }}>{val}</span>
-    </div>
-  )
-}
-
 /* ── Label tingkat ────────────────────────────────────────────────── */
 function levelLabel(v) {
-  if (v >= 8) return { label: 'Sangat Tinggi', color: '#ef4444' }
-  if (v >= 6) return { label: 'Tinggi',        color: '#f97316' }
-  if (v >= 4) return { label: 'Sedang',        color: '#3b82f6' }
-  if (v >= 2) return { label: 'Rendah',        color: '#6b7280' }
-  return { label: 'Sangat Rendah', color: '#d1d5db' }
+  if (v >= 8) return { label: 'Sangat tinggi', color: '#dc2626' }
+  if (v >= 6) return { label: 'Tinggi',        color: '#ea580c' }
+  if (v >= 4) return { label: 'Sedang',        color: '#2563eb' }
+  if (v >= 2) return { label: 'Rendah',        color: '#64748b' }
+  return { label: 'Sangat rendah', color: '#94a3b8' }
 }
 
-/* ── Halaman Utama ─────────────────────────────────────────────────── */
-/* Helper: tampilkan konten premium atau langsung (jika dashboard) */
-function PremiumSection({ show, testType, pesertaId, nama, children }) {
-  if (show) return <>{children}</>
-  return (
-    <PaymentGate testType={testType} pesertaId={pesertaId} nama={nama}>
-      {children}
-    </PaymentGate>
-  )
-}
+const Bulat = ({ kode, warna, besar }) => (
+  <span style={{ flexShrink: 0, width: besar ? 36 : 22, height: besar ? 36 : 22, borderRadius: 99, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: besar ? 14 : 11, fontWeight: 800, background: warna }}>{kode}</span>
+)
 
-export default function HasilPapi() {
-  const { state } = useLocation()
-  const navigate = useNavigate()
-
-  if (!state?.scores) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-        <div className="dark-card" style={{ padding: '40px', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '20px' }}>Data hasil tidak ditemukan. Silakan kerjakan tes terlebih dahulu.</p>
-          <button onClick={() => navigate('/tes-papi')} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
-            Kembali ke Tes
-          </button>
-        </div>
-      </div>
-    )
-  }
-
-  const { scores, nama, nip, unitKerja, pesertaId, fromDashboard } = state
-  const tanggal = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
-
-  /* Top 5 skala tertinggi */
-  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1])
-  const top5 = sorted.slice(0, 5)
-
-  /* Kelompok per sektor */
+function LaporanLengkapPAPI({ scores, sorted }) {
+  const top3 = sorted.slice(0, 3)
   const sektorList = ['Kepemimpinan', 'Arah Kerja', 'Aktivitas', 'Hubungan Sosial', 'Temperamen', 'Pengikut', 'Gaya Kerja']
-
-  const skalaPerSektor = sektorList.map(sek => ({
+  const perSektor = sektorList.map(sek => ({
     sektor: sek,
     skalas: Object.entries(skalaInfo)
       .filter(([, info]) => info.sektor === sek)
@@ -321,376 +187,132 @@ export default function HasilPapi() {
       .sort((a, b) => b.nilai - a.nilai),
   }))
 
-  /* Skor ROLES vs NEEDS */
-  const ROLES = ['G','L','I','T','V','S','R','D','C','E']
-  const NEEDS = ['N','A','P','X','B','O','Z','K','F','W']
-  const totalRoles = ROLES.reduce((s, k) => s + (scores[k] ?? 0), 0)
-  const totalNeeds = NEEDS.reduce((s, k) => s + (scores[k] ?? 0), 0)
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <Kartu ikon="📝" judul="Interpretasi profil kepribadian" sub="Berdasarkan tiga dimensi paling dominan">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          {top3.map(([kode, nilai], i) => {
+            const info = skalaInfo[kode]
+            const lv = levelLabel(nilai)
+            return (
+              <div key={kode} style={{ display: 'flex', gap: '14px', padding: '16px', borderRadius: '16px', background: 'var(--surface-2)' }}>
+                <Bulat kode={kode} warna={info.warna} besar />
+                <div style={{ minWidth: 0 }}>
+                  <p style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>
+                    #{i + 1} {info.nama} <Chip warna={lv.color}>{lv.label} · {nilai}</Chip>
+                  </p>
+                  <p className="rpt-teks" style={{ fontSize: '14px' }}>{narasiSkala[kode]?.tinggi}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </Kartu>
 
-  /* Top 3 untuk narasi */
-  const top3 = sorted.slice(0, 3)
-  const top3KekuatanAll = top3.map(([k]) => ({ kode: k, list: narasiSkala[k]?.kekuatan || [] }))
-  const top3Pengembangan = top3.map(([k]) => ({ kode: k, teks: narasiSkala[k]?.pengembangan })).filter(x => x.teks)
-  const top3Rekomendasi = top3.map(([k]) => ({ kode: k, nama: skalaInfo[k]?.nama, warna: skalaInfo[k]?.warna, list: narasiSkala[k]?.rekomendasi || [] }))
+      <div className="rpt-grid-2">
+        <Kartu ikon="💪" judul="Kekuatan utama" aksen="#16a34a">
+          {top3.map(([kode]) => (
+            <Poin key={kode} judul={skalaInfo[kode].nama} items={narasiSkala[kode]?.kekuatan} warna="#16a34a" />
+          ))}
+        </Kartu>
+        <Kartu ikon="🌱" judul="Area pengembangan">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {top3.filter(([k]) => narasiSkala[k]?.pengembangan).map(([kode]) => (
+              <Sorot key={kode} judul={skalaInfo[kode].nama} warna={skalaInfo[kode].warna}>{narasiSkala[kode].pengembangan}</Sorot>
+            ))}
+          </div>
+        </Kartu>
+      </div>
 
-  const handlePrint = () => window.print()
+      <Kartu ikon="🏢" judul="Rekomendasi jabatan" sub="Jabatan yang selaras dengan profil dominan Anda">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {top3.map(([kode]) => (
+            <div key={kode}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: skalaInfo[kode].warna, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Bulat kode={kode} warna={skalaInfo[kode].warna} /> {skalaInfo[kode].nama}
+              </p>
+              <div className="rpt-chips">
+                {(narasiSkala[kode]?.rekomendasi || []).map(j => <Chip key={j} warna={skalaInfo[kode].warna}>{j}</Chip>)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Kartu>
+
+      <Kartu ikon="🗂️" judul="Rincian per sektor" sub="20 skala PAPI dikelompokkan dalam 7 sektor">
+        <div className="rpt-grid-2">
+          {perSektor.map(({ sektor, skalas }) => {
+            const w = sektorWarna[sektor]?.dot ?? '#64748b'
+            const rata = skalas.reduce((s, sk) => s + sk.nilai, 0) / skalas.length
+            return (
+              <div key={sektor} style={{ background: 'var(--surface-2)', borderRadius: '16px', padding: '14px 16px', borderTop: `3px solid ${w}` }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)' }}>{sektor}</p>
+                  <Chip warna={w}>rata-rata {rata.toFixed(1)}</Chip>
+                </div>
+                {skalas.map(sk => (
+                  <BarisSkor key={sk.kode} label={`${sk.kode} · ${sk.nama}`} nilai={sk.nilai} maks={9} warna={w} ket={sk.deskripsi} />
+                ))}
+              </div>
+            )
+          })}
+        </div>
+      </Kartu>
+    </div>
+  )
+}
+
+export default function HasilPapi() {
+  const { state } = useLocation()
+  const navigate = useNavigate()
+
+  if (!state?.scores) return <TanpaData onKembali={() => navigate('/tes-papi')} />
+
+  const { scores, nama, email, pesertaId, fromDashboard } = state
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1])
+  const top5 = sorted.slice(0, 5)
+  const keBelakang = () => navigate(fromDashboard ? '/dashboard' : '/')
+  const laporan = <LaporanLengkapPAPI scores={scores} sorted={sorted} />
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }} className="print:bg-white">
-      {/* Header */}
-      <div style={{ background: 'rgba(9,9,15,0.97)', borderBottom: '1px solid var(--border)', padding: '28px var(--px)' }} className="print:py-4">
-        <div style={{ maxWidth: '900px', margin: '0 auto', position: 'relative' }}>
-          <div className="section-rule print:hidden" style={{ marginBottom: '20px' }}>
-            <span className="section-rule-pip" /><span className="section-rule-label">Laporan PAPI Kostick</span><span className="section-rule-line" />
-          </div>
-          <h1 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '26px', color: 'var(--text)', marginBottom: '4px' }}>Laporan PAPI Kostick</h1>
-          <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>Personality and Preference Inventory</p>
-          <button onClick={handlePrint} className="print:hidden" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '8px 16px', borderRadius: '8px', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>
-            🖨️ Cetak / PDF
-          </button>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
-
-        {/* Print-Only Header */}
-        <div className="print-only" style={{ display: 'none', textAlign: 'center', paddingBottom: '20px', borderBottom: '2px solid #a67c00', marginBottom: '4px' }}>
-          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', letterSpacing: '0.22em', color: '#a67c00', marginBottom: '4px' }}>ASSESIN</div>
-          <div style={{ fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888' }}>Platform Asesmen Psikologi Digital · ASSESS · INSIGHT · GROW</div>
-          <div style={{ marginTop: '16px', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111' }}>LAPORAN PAPI KOSTICK</div>
-          <div style={{ fontSize: '12px', color: '#555', marginTop: '4px' }}>Personality and Preference Inventory</div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', fontSize: '11px', color: '#444', maxWidth: '700px', margin: '8px auto 0' }}>
-            <span>Peserta: <strong>{nama}</strong></span>
-            <span>Tanggal: {tanggal}</span>
-          </div>
-        </div>
-
-        {/* ── Identitas ── */}
-        <div className="dark-card" style={{ padding: '20px' }}>
-          <div className="hasil-grid-2" style={{ marginBottom: '16px' }}>
-            <div>
-              <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Nama</p>
-              <p style={{ fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>{nama || '—'}</p>
+    <LaporanPage lebar={860} bar={<LaporanBar kembali={fromDashboard ? '← Dashboard' : null} onKembali={keBelakang} />}>
+      <LaporanHero tes="PAPI Kostick" sub="Personality and Preference Inventory" nama={nama} tersimpan={!!pesertaId} warna="#6d28d9" warna2="#2563eb" watermark={sorted.slice(0, 3).map(([k]) => k).join('')}>
+        <p className="rpt-label">Tiga dimensi paling dominan</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
+          {sorted.slice(0, 3).map(([kode, nilai]) => (
+            <div key={kode} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span className="rpt-tile" style={{ width: 44, height: 44, fontSize: 20, borderRadius: 12 }}>{kode}</span>
+              <p style={{ fontSize: '17px', fontWeight: 700, flex: 1 }}>{skalaInfo[kode].nama}</p>
+              <p style={{ fontSize: '17px', fontWeight: 800 }}>{nilai}<span style={{ opacity: 0.7, fontSize: '13px' }}>/9</span></p>
             </div>
-            <div>
-              <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>NIK / ID</p>
-              <p style={{ fontWeight: 600, color: 'var(--text-sub)', fontSize: '13px' }}>{nip || '—'}</p>
-            </div>
-            <div>
-              <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Tanggal Tes</p>
-              <p style={{ fontWeight: 600, color: 'var(--text-sub)', fontSize: '13px' }}>{tanggal}</p>
-            </div>
-            <div>
-              <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Alat Ukur</p>
-              <p style={{ fontWeight: 600, color: 'var(--text-sub)', fontSize: '13px' }}>PAPI Kostick 2020</p>
-            </div>
-          </div>
-          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
-            <p style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>Departemen / Perusahaan</p>
-            <p style={{ fontWeight: 600, color: 'var(--text-sub)', fontSize: '13px' }}>{unitKerja || '—'}</p>
-          </div>
+          ))}
         </div>
+      </LaporanHero>
 
-        <PremiumSection show={fromDashboard} testType="PAPI" pesertaId={pesertaId} nama={nama}>
-        {/* ── Interpretasi Profil ── */}
-        <div className="dark-card" style={{ padding: '24px' }}>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '17px', color: 'var(--text)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ width: '34px', height: '34px', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '16px', flexShrink: 0 }}>📝</span>
-            Interpretasi Profil Kepribadian
-          </h2>
-          <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '20px', marginLeft: '44px' }}>Berdasarkan 3 dimensi kepribadian dominan</p>
+      <Kartu no={1} ikon="🕸️" judul="Profil kepribadian" sub="20 skala PAPI, rentang 0–9" aksen="#6d28d9">
+        <Radar maks={9} warna="#6d28d9" ukuran={460}
+          data={RADAR_ORDER.map(k => ({ label: k, nilai: scores[k] ?? 0, warna: skalaInfo[k].warna }))} />
+      </Kartu>
 
-          {/* Narasi per top-3 skala */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-            {top3.map(([kode, nilai], idx) => {
-              const info  = skalaInfo[kode]
-              const narasi = narasiSkala[kode]
-              const lv    = levelLabel(nilai)
-              return (
-                <div key={kode} style={{ display: 'flex', gap: '16px', padding: '16px', borderRadius: '12px', background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
-                  <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                    <span style={{ width: '34px', height: '34px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px', fontWeight: 900, color: '#09090f', backgroundColor: info.warna }}>
-                      {kode}
-                    </span>
-                    <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)' }}>#{idx+1}</span>
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
-                      <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)' }}>{info.nama}</span>
-                      <span style={{ fontSize: '11px', fontWeight: 600, padding: '2px 10px', borderRadius: '99px', background: 'var(--surface)', border: `1px solid ${lv.color}44`, color: lv.color }}>
-                        {lv.label} ({nilai})
-                      </span>
-                    </div>
-                    <p style={{ fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.7' }}>{narasi?.tinggi}</p>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
+      <Kartu no={2} ikon="🏆" judul="Lima dimensi dominan" aksen="#6d28d9">
+          {top5.map(([kode, nilai]) => {
+            const info = skalaInfo[kode]
+            return (
+              <BarisSkor key={kode} label={`${kode} · ${info.nama}`} nilai={nilai} maks={9} warna={info.warna} lencana={levelLabel(nilai).label} ket={info.deskripsi} />
+            )
+          })}
+      </Kartu>
 
-          {/* Kekuatan & Area Pengembangan */}
-          <div className="hasil-grid-2" style={{ gap: '12px', marginBottom: '16px' }}>
-            <div style={{ background: 'rgba(34,197,94,0.08)', border: '1px solid rgba(34,197,94,0.2)', borderRadius: '12px', padding: '16px' }}>
-              <p style={{ fontSize: '11px', fontWeight: 700, color: '#4ade80', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                ✅ Kekuatan Utama
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {top3KekuatanAll.map(({ kode, list }) => {
-                  const info = skalaInfo[kode]
-                  return (
-                    <div key={kode}>
-                      <p style={{ fontSize: '11px', fontWeight: 700, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px', color: info.warna }}>
-                        <span style={{ width: '16px', height: '16px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090f', fontSize: '9px', fontWeight: 900, backgroundColor: info.warna }}>{kode}</span>
-                        {info.nama}
-                      </p>
-                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                        {list.map((k, i) => (
-                          <li key={i} style={{ fontSize: '12px', color: '#86efac', display: 'flex', alignItems: 'flex-start', gap: '8px', lineHeight: '1.6' }}>
-                            <span style={{ width: '5px', height: '5px', borderRadius: '99px', background: '#4ade80', flexShrink: 0, marginTop: '6px' }} />
-                            {k}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-            <div style={{ background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '12px', padding: '16px' }}>
-              <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                🔧 Area Pengembangan
-              </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                {top3Pengembangan.map(({ kode, teks }) => {
-                  const info = skalaInfo[kode]
-                  return (
-                    <div key={kode}>
-                      <p style={{ fontSize: '11px', fontWeight: 700, marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px', color: info.warna }}>
-                        <span style={{ width: '16px', height: '16px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090f', fontSize: '9px', fontWeight: 900, backgroundColor: info.warna }}>{kode}</span>
-                        {info.nama}
-                      </p>
-                      <p style={{ fontSize: '12px', color: 'var(--text-sub)', lineHeight: '1.65' }}>{teks}</p>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
+      {fromDashboard ? laporan : (
+        <PaymentGate testType="PAPI" pesertaId={pesertaId} nama={nama} email={email}>{laporan}</PaymentGate>
+      )}
 
-          {/* Rekomendasi Jabatan */}
-          <div style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px' }}>
-            <p style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-sub)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              🏢 Rekomendasi Jabatan
-            </p>
-            <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px' }}>
-              Berdasarkan profil kepribadian dominan, berikut adalah jabatan-jabatan yang sesuai:
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              {top3Rekomendasi.map(({ kode, nama, warna, list }) => (
-                <div key={kode}>
-                  <p style={{ fontSize: '11px', fontWeight: 700, marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px', color: warna }}>
-                    <span style={{ width: '16px', height: '16px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#09090f', fontSize: '9px', fontWeight: 900, backgroundColor: warna }}>{kode}</span>
-                    {nama}
-                  </p>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {list.map((jabatan, i) => (
-                      <span key={i}
-                        style={{ fontSize: '12px', padding: '4px 12px', borderRadius: '99px', fontWeight: 600, backgroundColor: warna + '20', color: warna, border: `1px solid ${warna}44` }}>
-                        {jabatan}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+      <Catatan>
+        Laporan ini bersifat deskriptif: gambaran kecenderungan kepribadian dan preferensi kerja berdasarkan jawaban Anda sendiri.
+        Hasil tidak sebaiknya dijadikan satu-satunya dasar keputusan seleksi atau pengembangan. Hasil bersifat rahasia.
+      </Catatan>
 
-        {/* ── Radar + Top 5 ── */}
-        <div className="hasil-grid-2" style={{ gap: '20px' }}>
-          {/* Radar */}
-          <div className="dark-card" style={{ padding: '20px' }}>
-            <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)', marginBottom: '14px' }}>Profil Kepribadian</h2>
-            <RadarChart scores={scores} />
-            <p style={{ textAlign: 'center', fontSize: '11px', color: 'var(--text-muted)', marginTop: '8px' }}>Skala 0–9 per dimensi (20 skala)</p>
-          </div>
-
-          {/* Top 5 + ringkasan */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {/* Top 5 */}
-            <div className="dark-card" style={{ padding: '20px' }}>
-              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)', marginBottom: '14px' }}>5 Dimensi Dominan</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {top5.map(([kode, nilai], idx) => {
-                  const info = skalaInfo[kode]
-                  const lv = levelLabel(nilai)
-                  return (
-                    <div key={kode} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span style={{ width: '22px', height: '22px', borderRadius: '99px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 700, color: '#09090f', backgroundColor: info.warna, flexShrink: 0 }}>
-                        {idx + 1}
-                      </span>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-sub)' }}>
-                            <span style={{ color: info.warna, fontWeight: 700 }}>{kode}</span>
-                            {' – '}{info.nama}
-                          </span>
-                          <span style={{ fontSize: '11px', fontWeight: 700, marginLeft: '8px', color: lv.color }}>
-                            {lv.label}
-                          </span>
-                        </div>
-                        <ScoreBar val={nilai} />
-                        <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '3px' }}>{info.deskripsi}</p>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </div>
-
-            {/* ROLES vs NEEDS */}
-            <div className="dark-card" style={{ padding: '20px' }}>
-              <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)', marginBottom: '12px' }}>Ringkasan Kelompok</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
-                    <span style={{ fontWeight: 600, color: '#818cf8' }}>ROLES (G L I T V S R D C E)</span>
-                    <span style={{ fontWeight: 700, color: '#818cf8' }}>{totalRoles}/45</span>
-                  </div>
-                  <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '8px' }}>
-                    <div style={{ height: '8px', borderRadius: '99px', background: '#6366f1', transition: 'width 0.5s', width: `${(totalRoles / 45) * 100}%` }} />
-                  </div>
-                </div>
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', marginBottom: '6px' }}>
-                    <span style={{ fontWeight: 600, color: '#c084fc' }}>NEEDS (N A P X B O Z K F W)</span>
-                    <span style={{ fontWeight: 700, color: '#c084fc' }}>{totalNeeds}/45</span>
-                  </div>
-                  <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '8px' }}>
-                    <div style={{ height: '8px', borderRadius: '99px', background: '#a855f7', transition: 'width 0.5s', width: `${(totalNeeds / 45) * 100}%` }} />
-                  </div>
-                </div>
-              </div>
-              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '10px' }}>Total ROLES + NEEDS selalu = 90 (dari 90 pasangan soal)</p>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Detail per Sektor ── */}
-        <div>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '15px', color: 'var(--text)', marginBottom: '14px' }}>Detail per Sektor</h2>
-          <div className="hasil-grid-2" style={{ gap: '14px' }}>
-            {skalaPerSektor.map(({ sektor, skalas }) => {
-              const wc = sektorWarna[sektor] ?? { dot: '#6b7280' }
-              const avgVal = skalas.reduce((s, sk) => s + sk.nilai, 0) / skalas.length
-              return (
-                <div key={sektor} className="dark-card" style={{ padding: '16px', borderLeft: `3px solid ${wc.dot}` }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', color: 'var(--text)' }}>{sektor}</h3>
-                    <span style={{ fontSize: '11px', fontWeight: 600, padding: '2px 8px', borderRadius: '99px', background: wc.dot + '22', color: wc.dot }}>
-                      Rata-rata: {avgVal.toFixed(1)}
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {skalas.map(sk => (
-                      <div key={sk.kode}>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
-                          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-sub)' }}>
-                            <span style={{ fontWeight: 800, color: wc.dot }}>{sk.kode}</span> – {sk.nama}
-                          </span>
-                          <span style={{ fontSize: '12px', fontWeight: 700, color: wc.dot }}>{sk.nilai}</span>
-                        </div>
-                        <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '5px' }}>
-                          <div style={{ height: '5px', borderRadius: '99px', transition: 'width 0.5s', width: `${(sk.nilai / 9) * 100}%`, backgroundColor: wc.dot }} />
-                        </div>
-                        <p style={{ fontSize: '11px', marginTop: '3px', color: 'var(--text-muted)' }}>{sk.deskripsi}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* ── Tabel Lengkap ── */}
-        <div className="dark-card" style={{ overflow: 'hidden' }}>
-          <div style={{ padding: '16px 20px', borderBottom: '1px solid var(--border)' }}>
-            <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '14px', color: 'var(--text)' }}>Skor Lengkap (20 Skala)</h2>
-          </div>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', fontSize: '13px', borderCollapse: 'collapse' }}>
-              <thead>
-                <tr style={{ background: 'var(--surface-2)', fontSize: '10px', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                  <th style={{ textAlign: 'left', padding: '10px 16px' }}>Kode</th>
-                  <th style={{ textAlign: 'left', padding: '10px 16px' }}>Nama Skala</th>
-                  <th style={{ textAlign: 'left', padding: '10px 16px' }}>Sektor</th>
-                  <th style={{ textAlign: 'center', padding: '10px 16px' }}>Skor</th>
-                  <th style={{ textAlign: 'left', padding: '10px 16px', width: '160px' }}>Bar</th>
-                </tr>
-              </thead>
-              <tbody>
-                {RADAR_ORDER.map(kode => {
-                  const info = skalaInfo[kode]
-                  const val = scores[kode] ?? 0
-                  const lv = levelLabel(val)
-                  return (
-                    <tr key={kode} style={{ borderTop: '1px solid var(--border)' }}>
-                      <td style={{ padding: '10px 16px' }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '26px', height: '26px', borderRadius: '99px', fontSize: '11px', fontWeight: 900, color: '#09090f', backgroundColor: info.warna }}>
-                          {kode}
-                        </span>
-                      </td>
-                      <td style={{ padding: '10px 16px', fontWeight: 600, color: 'var(--text-sub)' }}>{info.nama}</td>
-                      <td style={{ padding: '10px 16px', color: 'var(--text-muted)', fontSize: '11px' }}>{info.sektor}</td>
-                      <td style={{ padding: '10px 16px', textAlign: 'center' }}>
-                        <span style={{ fontWeight: 700, fontSize: '13px', color: lv.color }}>{val}</span>
-                      </td>
-                      <td style={{ padding: '10px 16px' }}>
-                        <div style={{ background: 'rgba(255,255,255,0.07)', borderRadius: '99px', height: '6px', width: '100%' }}>
-                          <div style={{ height: '6px', borderRadius: '99px', width: `${(val / 9) * 100}%`, backgroundColor: info.warna }} />
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        </PremiumSection>
-
-        {/* ── Catatan & Tombol ── */}
-        <div className="print:hidden" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '16px', fontSize: '12px', color: 'var(--text-muted)' }}>
-          ⚠️ Laporan ini bersifat deskriptif dan merupakan gambaran kecenderungan kepribadian berdasarkan self-report.
-          Interpretasi akhir harus dilakukan oleh psikolog yang berwenang dan tidak dapat dijadikan satu-satunya dasar keputusan seleksi atau pengembangan profesional.
-        </div>
-
-        <div className="print:hidden" style={{ display: 'flex', gap: '10px', justifyContent: 'center', paddingBottom: '24px' }}>
-          <button onClick={() => navigate('/')}
-            style={{ padding: '10px 22px', background: 'var(--surface-2)', color: 'var(--text-sub)', borderRadius: '10px', fontWeight: 600, fontSize: '13px', border: '1px solid var(--border)', cursor: 'pointer' }}>
-            ← Beranda
-          </button>
-          <button onClick={() => navigate('/tes-papi')}
-            style={{ padding: '10px 22px', background: 'rgba(168,85,247,0.12)', color: '#c084fc', borderRadius: '10px', fontWeight: 600, fontSize: '13px', border: '1px solid rgba(168,85,247,0.3)', cursor: 'pointer' }}>
-            Tes Ulang
-          </button>
-          <button onClick={handlePrint}
-            style={{ padding: '10px 22px', background: 'var(--accent)', color: '#09090f', borderRadius: '10px', fontWeight: 700, fontSize: '12px', letterSpacing: '0.08em', border: 'none', cursor: 'pointer' }}>
-            🖨️ Cetak / PDF
-          </button>
-        </div>
-      </div>
-
-      {/* ── Print styles ── */}
-      <style>{`
-        @media print {
-          body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-          .print\\:hidden { display: none !important; }
-          .print\\:bg-white { background: white !important; }
-          .print\\:py-4 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
-        }
-      `}</style>
-    </div>
+      <AksiBawah kembali={fromDashboard ? 'Dashboard' : 'Beranda'} onKembali={keBelakang} ulang={fromDashboard ? null : 'Ulangi tes'} onUlang={() => navigate('/tes-papi')} />
+    </LaporanPage>
   )
 }

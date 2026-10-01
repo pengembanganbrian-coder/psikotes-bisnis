@@ -1,5 +1,6 @@
 ﻿import { useLocation, useNavigate, Navigate } from 'react-router-dom'
 import PaymentGate from '../components/PaymentGate'
+import { LaporanPage, LaporanBar, LaporanHero, Kartu, Poin, Sorot, Chip, Catatan, AksiBawah, TanpaData } from '../components/Laporan'
 
 const deskripsiMBTI = {
   ISTJ: {
@@ -383,101 +384,78 @@ const preferensiLabel = {
   J: "Judging", P: "Perceiving"
 }
 
-const Section = ({ title, items, color = "blue" }) => {
-  const borderColors = {
-    blue:   '#3b82f6',
-    green:  '#22c55e',
-    amber:  '#f59e0b',
-    red:    '#ef4444',
-    purple: '#a855f7',
-    gray:   '#6b7280',
-  }
-  const border = borderColors[color] || borderColors.blue
-  return (
-    <div style={{ background: 'var(--surface-2)', borderLeft: `3px solid ${border}`, borderRadius: '10px', padding: '16px 20px', marginBottom: '12px' }}>
-      <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '13px', marginBottom: '10px' }}>{title}</h3>
-      <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-        {items.filter(i => i && i !== '0').map((item, i) => (
-          <li key={i} style={{ color: 'var(--text-sub)', fontSize: '13px', lineHeight: '1.7', display: 'flex', gap: '8px' }}>
-            <span style={{ color: border, flexShrink: 0 }}>•</span>
-            <span>{item}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
+const preferensiArti = {
+  E: 'Mendapat energi dari interaksi', I: 'Mendapat energi dari refleksi',
+  S: 'Fokus pada fakta & detail', N: 'Fokus pada pola & kemungkinan',
+  T: 'Memutuskan dengan logika', F: 'Memutuskan dengan nilai & perasaan',
+  J: 'Menyukai keteraturan & rencana', P: 'Menyukai fleksibilitas & spontanitas',
 }
+
+const ASPEK = [
+  ['karakteristik', 'Karakteristik umum', '🧬', '#4f46e5'],
+  ['kekuatan', 'Kekuatan', '💪', '#16a34a'],
+  ['relationship', 'Hubungan interpersonal', '🤝', '#db2777'],
+  ['keputusan', 'Pengambilan keputusan', '⚖️', '#0284c7'],
+  ['informasi', 'Cara memproses informasi', '🧠', '#7c3aed'],
+  ['komunikasi', 'Gaya komunikasi', '💬', '#0891b2'],
+  ['kepuasan', 'Sumber kepuasan', '✨', '#ca8a04'],
+  ['pemimpin', 'Sebagai pemimpin & anggota tim', '🧭', '#4f46e5'],
+  ['stres', 'Saat kecewa atau stres', '🌧️', '#d97706'],
+  ['stresKuat', 'Saat tertekan berat', '⛈️', '#dc2626'],
+  ['pandangan', 'Bagaimana orang lain melihat Anda', '👀', '#64748b'],
+  ['waspada', 'Yang perlu diwaspadai', '⚠️', '#d97706'],
+  ['saran', 'Saran', '🌱', '#16a34a'],
+]
 
 /* ── Konten premium MBTI ────────────────────────────────────── */
 function LaporanLengkapMBTI({ info, refData }) {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {refData.uraian && (
-        <div className="dark-card" style={{ padding: '24px', marginBottom: '16px' }}>
-          <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '15px', marginBottom: '12px' }}>Uraian Kepribadian</h3>
-          <p style={{ fontSize: '14px', color: 'var(--text-sub)', lineHeight: '1.75', marginBottom: '16px' }}>{refData.uraian}</p>
+        <Kartu ikon="📖" judul="Uraian kepribadian">
+          <p className="rpt-teks">{refData.uraian}</p>
           {refData.saranPengembangan && (
-            <div style={{ background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '10px', padding: '16px' }}>
-              <p style={{ fontSize: '12px', fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px', letterSpacing: '0.06em' }}>SARAN PENGEMBANGAN</p>
-              <p style={{ fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.7' }}>{refData.saranPengembangan}</p>
+            <div style={{ marginTop: '16px' }}>
+              <Sorot judul="Saran pengembangan">{refData.saranPengembangan}</Sorot>
             </div>
           )}
-        </div>
+        </Kartu>
       )}
 
-      <div className="dark-card" style={{ padding: '24px', marginBottom: '16px' }}>
-        <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '15px', marginBottom: '16px' }}>Laporan Interpretasi MBTI</h3>
-        <Section title="Karakteristik Umum" items={info.karakteristik} color="blue" />
-        <Section title="Kekuatan" items={info.kekuatan} color="green" />
-        <Section title="Hubungan Interpersonal" items={info.relationship} color="purple" />
-        <Section title="Pengambilan Keputusan" items={info.keputusan} color="blue" />
-        <Section title="Memperlakukan Informasi" items={info.informasi} color="gray" />
-        <Section title="Gaya Komunikasi" items={info.komunikasi} color="blue" />
-        <Section title="Faktor Kepuasan" items={info.kepuasan} color="green" />
-        <Section title="Pemimpin & Pengikut" items={info.pemimpin} color="purple" />
-        <Section title="Perilaku Saat Kecewa / Stres" items={info.stres} color="amber" />
-        <Section title="Perilaku Saat Depresi / Stres Berat" items={info.stresKuat} color="red" />
-        <Section title="Pandangan Orang Awam" items={info.pandangan} color="gray" />
-        <Section title="Yang Perlu Diwaspadai" items={info.waspada} color="amber" />
-        <Section title="Saran" items={info.saran} color="green" />
-      </div>
+      <Kartu ikon="🔎" judul="Interpretasi lengkap" sub="13 aspek kepribadian Anda">
+        <div className="rpt-grid-2">
+          {ASPEK.map(([k, judul, ikon, warna]) => (
+            <div key={k} style={{ background: 'var(--surface-2)', borderRadius: '14px', padding: '14px 16px' }}>
+              <Poin judul={`${ikon} ${judul}`} items={info[k]} warna={warna} />
+            </div>
+          ))}
+        </div>
+      </Kartu>
 
       {(refData.saranProfesi || refData.partner) && (
-        <div className="grid md:grid-cols-2 gap-4" style={{ marginBottom: '16px' }}>
+        <div className="rpt-grid-2">
           {refData.saranProfesi && (
-            <div className="dark-card" style={{ padding: '20px' }}>
-              <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '13px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ width: '26px', height: '26px', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px' }}>💼</span>
-                Saran Profesi
-              </h3>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {refData.saranProfesi.split(',').map((p, i) => (
-                  <span key={i} style={{ fontSize: '12px', background: 'var(--accent-dim)', color: 'var(--accent)', fontWeight: 600, padding: '5px 12px', borderRadius: '99px', border: '1px solid var(--accent-border)' }}>
-                    {p.trim()}
-                  </span>
-                ))}
+            <Kartu ikon="💼" judul="Saran profesi">
+              <div className="rpt-chips">
+                {refData.saranProfesi.split(',').map(p => <Chip key={p} besar>{p.trim()}</Chip>)}
               </div>
-            </div>
+            </Kartu>
           )}
           {refData.partner && (
-            <div className="dark-card" style={{ padding: '20px' }}>
-              <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '13px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ width: '26px', height: '26px', background: 'var(--surface-2)', border: '1px solid var(--border)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '13px' }}>🤝</span>
-                Partner Kerja / Hidup
-              </h3>
-              <div style={{ display: 'flex', gap: '12px', marginTop: '4px' }}>
-                {refData.partner.split(' atau ').map((p, i) => (
-                  <div key={i} style={{ flex: 1, background: 'var(--surface-2)', border: '1px solid var(--accent-border)', borderRadius: '12px', padding: '12px', textAlign: 'center' }}>
-                    <p style={{ fontSize: '20px', fontFamily: 'Syne, sans-serif', fontWeight: 900, color: 'var(--accent)' }}>{p.trim()}</p>
-                    <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '2px' }}>{mbtiRef[p.trim()]?.subtitle || ''}</p>
+            <Kartu ikon="🤝" judul="Partner kerja yang melengkapi">
+              <div style={{ display: 'flex', gap: '12px' }}>
+                {refData.partner.split(' atau ').map(p => (
+                  <div key={p} style={{ flex: 1, background: 'var(--accent-dim)', borderRadius: '14px', padding: '14px', textAlign: 'center' }}>
+                    <p style={{ fontSize: '22px', fontWeight: 800, color: 'var(--accent)' }}>{p.trim()}</p>
+                    <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '2px' }}>{mbtiRef[p.trim()]?.subtitle || ''}</p>
                   </div>
                 ))}
               </div>
-            </div>
+            </Kartu>
           )}
         </div>
       )}
-    </>
+    </div>
   )
 }
 
@@ -487,124 +465,64 @@ function Hasil() {
 
   if (!state?.tipe) return <Navigate to="/tes" replace />
 
-  const tipe          = state.tipe
-  const nama          = state.nama          || 'Peserta'
-  const email         = state.email         || null
-  const pesertaId     = state.pesertaId     || null
-  const fromDashboard = state.fromDashboard || false
+  const { tipe, email = null, pesertaId = null, fromDashboard = false } = state
+  const nama = state.nama || 'Peserta'
   const info = deskripsiMBTI[tipe]
-
-  if (!info) return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
-      <div className="dark-card" style={{ padding: '40px', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
-        <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '20px' }}>Tipe tidak ditemukan.</p>
-        <button onClick={() => navigate('/tes')} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '12px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer' }}>Ulangi Tes</button>
-      </div>
-    </div>
-  )
+  if (!info) return <TanpaData onKembali={() => navigate('/tes')} />
 
   const huruf = tipe.split('')
   const ref = mbtiRef[tipe] || {}
+  const keBelakang = () => navigate(fromDashboard ? '/dashboard' : '/')
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingBottom: '48px' }} className="print:bg-white">
-      {/* Sticky Top Bar */}
-      <div className="sticky top-0 z-10 print:hidden" style={{ background: 'rgba(9,9,15,0.92)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
-        <div style={{ maxWidth: '760px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <button onClick={() => navigate('/tes')} style={{ color: 'var(--text-muted)', fontSize: '13px', background: 'none', border: 'none', cursor: 'pointer' }}>
-            ← Ulangi Tes
-          </button>
-          <span style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '10px', letterSpacing: '0.18em', color: 'var(--accent)', textTransform: 'uppercase' }}>MBTI · AssesIN</span>
-          <button onClick={() => window.print()} style={{ background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '11px', letterSpacing: '0.1em', padding: '6px 14px', borderRadius: '6px', border: 'none', cursor: 'pointer' }}>
-            🖨️ Cetak / PDF
-          </button>
+    <LaporanPage bar={<LaporanBar kembali={fromDashboard ? '← Dashboard' : null} onKembali={keBelakang} />}>
+      <LaporanHero tes="MBTI" sub="Myers-Briggs Type Indicator" nama={nama} tersimpan={!!pesertaId} watermark={tipe}>
+        <p className="rpt-label">Tipe kepribadian Anda</p>
+        <div style={{ display: 'flex', gap: '10px', margin: '12px 0 10px', flexWrap: 'wrap' }}>
+          {huruf.map((h, i) => <span key={i} className="rpt-tile">{h}</span>)}
         </div>
-      </div>
-      <div className="max-w-3xl mx-auto py-8 px-4">
+        {ref.subtitle && <p className="rpt-besar" style={{ fontSize: '24px' }}>“{ref.subtitle}”</p>}
+        <p className="rpt-ket">{huruf.map(h => preferensiLabel[h]).join(' · ')}</p>
+      </LaporanHero>
 
-        {/* Print-Only Header */}
-        <div className="print-only" style={{ display: 'none', textAlign: 'center', paddingBottom: '20px', borderBottom: '2px solid #a67c00', marginBottom: '20px' }}>
-          <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', letterSpacing: '0.22em', color: '#a67c00', marginBottom: '4px' }}>ASSESIN</div>
-          <div style={{ fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888' }}>Platform Asesmen Psikologi Digital · ASSESS · INSIGHT · GROW</div>
-          <div style={{ marginTop: '16px', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '18px', letterSpacing: '0.14em', textTransform: 'uppercase', color: '#111' }}>LAPORAN MBTI</div>
-          <div style={{ fontSize: '12px', color: '#555', marginTop: '4px' }}>Myers-Briggs Type Indicator</div>
-          <div style={{ marginTop: '8px', fontSize: '11px', color: '#444' }}>Peserta: <strong>{nama}</strong></div>
-        </div>
-
-        {/* Header Laporan */}
-        <div className="dark-card" style={{ padding: '32px', marginBottom: '20px', textAlign: 'center' }}>
-          <div className="section-rule" style={{ marginBottom: '24px', justifyContent: 'center' }}>
-            <span className="section-rule-pip" /><span className="section-rule-label">Laporan MBTI</span><span className="section-rule-line" />
-          </div>
-          <p style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.08em', marginBottom: '12px' }}>
-            AssesIN — Platform Asesmen Psikologi Digital
-          </p>
-          <h2 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '22px', color: 'var(--text)', marginBottom: '28px' }}>{nama}</h2>
-
-          {/* Tipe besar */}
-          <div style={{ background: 'var(--surface-2)', border: '1px solid var(--accent-border)', borderRadius: '16px', padding: '28px 24px', marginBottom: '20px' }}>
-            <p style={{ fontSize: '10px', letterSpacing: '0.14em', color: 'var(--text-muted)', marginBottom: '16px', textTransform: 'uppercase' }}>TIPE KEPRIBADIAN</p>
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '16px' }}>
-              {huruf.map((h, i) => (
-                <div key={i} style={{ width: '64px', height: '64px', borderRadius: '12px', background: 'var(--bg)', border: '2px solid var(--accent-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Syne, sans-serif', fontWeight: 900, fontSize: '28px', color: 'var(--accent)' }}>
-                  {h}
-                </div>
-              ))}
+      <Kartu no={1} ikon="🧭" judul="Cara membaca tipe Anda" sub="Empat preferensi yang membentuk tipe MBTI">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {[['E', 'I'], ['S', 'N'], ['T', 'F'], ['J', 'P']].map(pasang => (
+            <div key={pasang[0]} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              {pasang.map(h => {
+                const aktif = huruf.includes(h)
+                return (
+                  <div key={h} style={{ borderRadius: '14px', padding: '12px 14px', background: aktif ? 'var(--accent-dim)' : 'var(--surface-2)', border: `1px solid ${aktif ? 'var(--accent-border)' : 'transparent'}`, opacity: aktif ? 1 : 0.7 }}>
+                    <p style={{ fontSize: '14px', fontWeight: 700, color: aktif ? 'var(--accent)' : 'var(--text-muted)' }}>
+                      <span style={{ fontSize: '17px', marginRight: '6px' }}>{h}</span>{preferensiLabel[h]}{aktif && ' ✓'}
+                    </p>
+                    <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>{preferensiArti[h]}</p>
+                  </div>
+                )
+              })}
             </div>
-            {ref.subtitle && (
-              <p style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '16px', color: 'var(--text)', marginBottom: '12px' }}>{ref.subtitle}</p>
-            )}
-            <p style={{ fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', marginBottom: '4px', textTransform: 'uppercase' }}>PREFERENSI</p>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-sub)' }}>
-              {huruf.map(h => preferensiLabel[h]).join(' — ')}
-            </p>
-          </div>
-
-          {/* Faktor Dominan */}
-          <div style={{ background: 'var(--surface-2)', borderRadius: '12px', padding: '16px', textAlign: 'left' }}>
-            <p style={{ fontSize: '10px', letterSpacing: '0.1em', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 700, marginBottom: '6px' }}>Faktor Dominan</p>
-            <p style={{ fontSize: '13px', color: 'var(--text-sub)', lineHeight: '1.65' }}>{info.dominan}</p>
-          </div>
+          ))}
         </div>
-
-        {/* Penjelasan 4 Dimensi */}
-        <div className="dark-card" style={{ padding: '24px', marginBottom: '20px' }}>
-          <h3 style={{ fontFamily: 'Syne, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: '15px', marginBottom: '16px' }}>Cara Membaca Tipe MBTI</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {[['E','I'], ['S','N'], ['T','F'], ['J','P']].map(([a, b], i) => (
-  <div key={i} className="col-span-2 grid grid-cols-2 gap-3">
-    <div style={{ borderRadius: '10px', padding: '12px', fontSize: '13px', background: huruf.includes(a) ? 'var(--accent-dim)' : 'var(--surface-2)', border: huruf.includes(a) ? '1px solid var(--accent-border)' : '1px solid var(--border)', color: huruf.includes(a) ? 'var(--accent)' : 'var(--text-muted)', fontWeight: huruf.includes(a) ? 700 : 400 }}>
-      <span style={{ fontWeight: 800 }}>{a}</span> — {preferensiLabel[a]}
-    </div>
-    <div style={{ borderRadius: '10px', padding: '12px', fontSize: '13px', background: huruf.includes(b) ? 'var(--accent-dim)' : 'var(--surface-2)', border: huruf.includes(b) ? '1px solid var(--accent-border)' : '1px solid var(--border)', color: huruf.includes(b) ? 'var(--accent)' : 'var(--text-muted)', fontWeight: huruf.includes(b) ? 700 : 400 }}>
-      <span style={{ fontWeight: 800 }}>{b}</span> — {preferensiLabel[b]}
-    </div>
-  </div>
-))}
-          </div>
+        <div style={{ marginTop: '14px' }}>
+          <Sorot judul="Fungsi dominan">{info.dominan}</Sorot>
         </div>
+      </Kartu>
 
-        {/* ── KONTEN PREMIUM (Laporan Lengkap) ── */}
-        {fromDashboard ? (
+      {fromDashboard ? (
+        <LaporanLengkapMBTI info={info} refData={ref} />
+      ) : (
+        <PaymentGate testType="MBTI" pesertaId={pesertaId} nama={nama} email={email}>
           <LaporanLengkapMBTI info={info} refData={ref} />
-        ) : (
-          <PaymentGate testType="MBTI" pesertaId={pesertaId} nama={nama} email={email}>
-            <LaporanLengkapMBTI info={info} refData={ref} />
-          </PaymentGate>
-        )}
+        </PaymentGate>
+      )}
 
-        {/* Footer Watermark */}
-        <div style={{ textAlign: 'center', paddingTop: '24px', borderTop: '1px solid var(--border)', marginTop: '32px' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '11px', letterSpacing: '0.1em', opacity: 0.4 }}>© 2026 · AssesIN · Platform Asesmen Psikologi Digital</p>
-        </div>
+      <Catatan>
+        Hasil MBTI menggambarkan preferensi, bukan kemampuan atau ukuran baik-buruk. Setiap tipe memiliki kekuatan dan tantangannya sendiri.
+        Gunakan laporan ini sebagai bahan refleksi dan pengembangan diri. Hasil bersifat rahasia.
+      </Catatan>
 
-        {/* Tombol */}
-        <div className="print:hidden" style={{ display: 'flex', gap: '12px', position: 'sticky', bottom: '16px', marginTop: '24px' }}>
-          <button onClick={() => navigate('/tes')} style={{ flex: 1, background: 'var(--surface)', color: 'var(--text-muted)', fontFamily: 'Syne, sans-serif', fontWeight: 700, fontSize: '12px', padding: '14px', borderRadius: '10px', border: '1px solid var(--border)', cursor: 'pointer' }}>← Ulangi Tes</button>
-          <button onClick={() => window.print()} style={{ flex: 1, background: 'var(--accent)', color: '#09090f', fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer' }}>🖨️ Cetak / PDF</button>
-        </div>
-      </div>
-    </div>
+      <AksiBawah kembali={fromDashboard ? 'Dashboard' : 'Beranda'} onKembali={keBelakang} ulang={fromDashboard ? null : 'Ulangi tes'} onUlang={() => navigate('/tes')} />
+    </LaporanPage>
   )
 }
 
