@@ -143,7 +143,7 @@ export default function TesBaru({ kode }) {
   return (
     <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'var(--overlay)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
-        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '1120px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontFamily: 'inherit', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>{def.judul}</p>
             <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {answered}/{total} terjawab</p>
@@ -157,7 +157,7 @@ export default function TesBaru({ kode }) {
         </div>
       </div>
 
-      <div style={{ maxWidth: '1024px', margin: '0 auto', padding: '28px var(--px)' }}>
+      <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '28px var(--px)' }}>
         <div className="dark-card" style={{ padding: '20px', marginBottom: '24px' }}>
           <p style={{ color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, lineHeight: '1.6' }}>{def.petunjuk}</p>
         </div>

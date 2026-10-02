@@ -142,7 +142,7 @@
 .features-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 40px;
+  gap: 28px;
 }
 @media (min-width: 768px) {
   .features-grid {

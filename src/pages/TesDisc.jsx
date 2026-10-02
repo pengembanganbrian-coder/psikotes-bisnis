@@ -343,7 +343,7 @@ function TesDisc() {
     <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
       {/* Sticky header */}
       <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'var(--overlay)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
-        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '1120px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontFamily: 'inherit', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes DISC</p>
             <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {jumlahDijawab}/{soal.length} kelompok</p>
@@ -354,7 +354,7 @@ function TesDisc() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '1024px', margin: '0 auto', padding: '28px var(--px)' }}>
+      <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '28px var(--px)' }}>
 
         {/* Instruksi */}
         <div className="dark-card" style={{ padding: '18px 20px', marginBottom: '24px' }}>

@@ -118,7 +118,7 @@ const FAQ = [
   },
 ]
 
-const WRAP = { maxWidth: '1120px', margin: '0 auto' }
+const WRAP = { maxWidth: '1200px', margin: '0 auto' }
 const BTN_UTAMA = {
   background: 'var(--accent)', color: 'var(--on-accent)', fontWeight: 600, fontSize: '15px',
   padding: '12px 22px', borderRadius: '10px', border: 'none', cursor: 'pointer', textDecoration: 'none',
@@ -160,7 +160,7 @@ export default function Home() {
       </header>
 
       {/* ── Hero ── */}
-      <section style={{ padding: 'clamp(56px, 9vw, 104px) var(--px) clamp(48px, 7vw, 80px)' }}>
+      <section style={{ padding: 'clamp(48px, 7vw, 88px) var(--px) clamp(40px, 6vw, 64px)' }}>
         <div style={{ ...WRAP, maxWidth: '720px', textAlign: 'center' }} className="anim-up">
           <h1 style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.02em', color: 'var(--text)', marginBottom: '16px' }}>
             Kenali kepribadian dan potensi Anda
@@ -196,7 +196,7 @@ export default function Home() {
       </section>
 
       {/* ── Kenapa AssesIN ── */}
-      <section style={{ padding: '0 var(--px) 80px' }}>
+      <section style={{ padding: '0 var(--px) 64px' }}>
         <div style={WRAP}>
           <div className="section-rule anim-up">
             <span className="section-rule-pip" />
@@ -223,7 +223,7 @@ export default function Home() {
       </section>
 
       {/* ── Daftar tes ── */}
-      <section id="tes" style={{ padding: '0 var(--px) 80px', scrollMarginTop: '80px' }}>
+      <section id="tes" style={{ padding: '0 var(--px) 64px', scrollMarginTop: '80px' }}>
         <div style={WRAP}>
           <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>Pilih tes</h2>
           <p style={{ color: 'var(--text-muted)', fontSize: '15px', marginBottom: '24px' }}>
@@ -261,7 +261,7 @@ export default function Home() {
       </section>
 
       {/* ── Cara kerja ── */}
-      <section id="cara-kerja" style={{ padding: '72px var(--px)', background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', scrollMarginTop: '64px' }}>
+      <section id="cara-kerja" style={{ padding: '56px var(--px)', background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)', scrollMarginTop: '64px' }}>
         <div style={WRAP}>
           <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--text)', marginBottom: '32px' }}>Cara kerja</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '32px' }}>
@@ -283,7 +283,7 @@ export default function Home() {
       </section>
 
       {/* ── FAQ ── */}
-      <section style={{ padding: '72px var(--px)' }}>
+      <section style={{ padding: '56px var(--px)' }}>
         <div style={{ ...WRAP, maxWidth: '760px' }}>
           <div className="section-rule anim-up">
             <span className="section-rule-pip" />

@@ -9,7 +9,7 @@ const tanggalHariIni = () =>
   new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
 
 /** Pembungkus halaman laporan. */
-export function LaporanPage({ bar, children, lebar = 780 }) {
+export function LaporanPage({ bar, children, lebar = 900 }) {
   return (
     <div className="rpt-page">
       {bar}

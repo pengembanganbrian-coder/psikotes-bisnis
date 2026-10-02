@@ -253,7 +253,7 @@ function Tes() {
     <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
       {/* Sticky header */}
       <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'var(--overlay)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
-        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '1120px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontFamily: 'inherit', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes MBTI</p>
             <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Halo {nama} · {Object.keys(jawaban).length}/60 soal dijawab</p>
@@ -264,7 +264,7 @@ function Tes() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '1024px', margin: '0 auto', padding: '28px var(--px)' }}>
+      <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '28px var(--px)' }}>
 
         {/* Dimension tabs */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '28px' }}>
@@ -290,12 +290,17 @@ function Tes() {
               {String(idx + 1).padStart(2, '0')}
             </p>
             <div className="answer-grid">
-              {(['kiri', 'kanan']).map(sisi => (
-                <button key={sisi} onClick={() => handleJawab(s.id, sisi)} className={`answer-btn ${jawaban[s.id] === sisi ? 'selected' : ''}`}>
-                  {jawaban[s.id] === sisi && <span style={{ display: 'block', color: 'var(--accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '9px', letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: '8px' }}>✓ DIPILIH</span>}
-                  {s[sisi]}
-                </button>
-              ))}
+              {(['kiri', 'kanan']).map(sisi => {
+                const dipilih = jawaban[s.id] === sisi
+                return (
+                  <button key={sisi} onClick={() => handleJawab(s.id, sisi)} className={`answer-btn ${dipilih ? 'selected' : ''}`} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                    <span style={{ flexShrink: 0, width: '18px', height: '18px', borderRadius: '50%', border: '2px solid ' + (dipilih ? 'var(--accent)' : 'var(--border)'), background: dipilih ? 'var(--accent)' : 'transparent', marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      {dipilih && <span style={{ width: '6px', height: '6px', background: 'var(--bg)', borderRadius: '50%' }} />}
+                    </span>
+                    <span>{s[sisi]}</span>
+                  </button>
+                )
+              })}
             </div>
           </div>
         ))}

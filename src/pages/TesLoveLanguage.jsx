@@ -246,7 +246,7 @@ export default function TesLoveLanguage() {
   return (
     <div style={{ minHeight: '100vh', paddingBottom: '40px' }}>
       <div style={{ position: 'sticky', top: 0, zIndex: 50, background: 'var(--overlay)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', borderBottom: '1px solid var(--border)', padding: '12px var(--px)' }}>
-        <div style={{ maxWidth: '1024px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
+        <div style={{ maxWidth: '1120px', margin: '0 auto', display: 'flex', alignItems: 'center', gap: '16px', justifyContent: 'space-between' }}>
           <div>
             <p style={{ fontFamily: 'inherit', fontWeight: 700, color: 'var(--text)', fontSize: '14px' }}>Tes Love Language</p>
             <p className="tes-header-name" style={{ color: 'var(--text-muted)', fontSize: '12px' }}>{nama} · {answered}/30 terjawab</p>
@@ -260,7 +260,7 @@ export default function TesLoveLanguage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '1024px', margin: '0 auto', padding: '28px var(--px)' }}>
+      <div style={{ maxWidth: '1120px', margin: '0 auto', padding: '28px var(--px)' }}>
         <div className="dark-card" style={{ padding: '16px 20px', marginBottom: '24px' }}>
           <p style={{ color: 'var(--text-sub)', fontSize: '13px', lineHeight: '1.65' }}>
             Dari setiap pasang pernyataan, pilih <strong style={{ color: 'var(--text)' }}>satu</strong> yang paling mencerminkan diri Anda. Jawab dengan jujur dan spontan.

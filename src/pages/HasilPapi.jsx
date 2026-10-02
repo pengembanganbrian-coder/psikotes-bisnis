@@ -275,7 +275,7 @@ export default function HasilPapi() {
   const laporan = <LaporanLengkapPAPI scores={scores} sorted={sorted} />
 
   return (
-    <LaporanPage lebar={860} bar={<LaporanBar kembali={fromDashboard ? '← Dashboard' : null} onKembali={keBelakang} />}>
+    <LaporanPage lebar={980} bar={<LaporanBar kembali={fromDashboard ? '← Dashboard' : null} onKembali={keBelakang} />}>
       <LaporanHero tes="PAPI Kostick" sub="Personality and Preference Inventory" nama={nama} tersimpan={!!pesertaId} warna="#6d28d9" warna2="#2563eb" watermark={sorted.slice(0, 3).map(([k]) => k).join('')}>
         <p className="rpt-label">Tiga dimensi paling dominan</p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '12px' }}>
