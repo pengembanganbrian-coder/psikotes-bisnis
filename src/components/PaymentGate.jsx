@@ -156,7 +156,7 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
 
               <div className="gate-harga">
                 <span style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em' }}>{harga}</span>
-                <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>sekali bayar</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>sekali bayar, akses selamanya</span>
               </div>
 
               {error && (

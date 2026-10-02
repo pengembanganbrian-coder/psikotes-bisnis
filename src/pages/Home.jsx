@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { HARGA_TES, formatRupiah } from '../config/pricing'
@@ -70,9 +71,52 @@ const LANGKAH = [
   { judul: 'Lihat hasil', isi: 'Ringkasan hasil langsung tampil. Laporan lengkap dapat dibuka bila diperlukan.' },
 ]
 
-const EMAIL_KONTAK  = 'admin@assesin.net'
-const TELEPON_ADMIN = '087872150877'
+const EMAIL_KONTAK  = 'psikologikantor@proton.me'
 const ALAMAT_USAHA  = 'Jl. Kramat Asem Raya No. 3 RT 5 RW 12, Utan Kayu Selatan, Kec. Matraman, Jakarta Timur'
+
+const BADGE_PERCAYA = [
+  { ikon: '🔒', teks: 'Data & hasil 100% rahasia' },
+  { ikon: '⚡', teks: 'Hasil ringkas tampil instan' },
+  { ikon: '🎓', teks: 'Berbasis kerangka psikometri teruji' },
+  { ikon: '💳', teks: 'Gratis dikerjakan, bayar hanya jika ingin laporan lengkap' },
+]
+
+const ALASAN = [
+  {
+    ikon: '🧭',
+    judul: 'Kenali diri lebih dalam',
+    isi: 'Bukan sekadar label kepribadian — tiap laporan menguraikan cara Anda bekerja, mengambil keputusan, dan berinteraksi, agar lebih mudah mengenali pola diri sendiri.',
+  },
+  {
+    ikon: '🎯',
+    judul: 'Langsung bisa dipakai',
+    isi: 'Setiap hasil disertai saran pengembangan dan rekomendasi arah karier yang konkret — bukan sekadar teori, tapi langkah yang bisa langsung dicoba.',
+  },
+  {
+    ikon: '🤝',
+    judul: 'Dipakai sendiri atau untuk tim',
+    isi: 'Cocok untuk refleksi pribadi, persiapan wawancara kerja, maupun kebutuhan HR dalam memahami gaya kerja tim.',
+  },
+]
+
+const FAQ = [
+  {
+    q: 'Apakah tesnya benar-benar gratis?',
+    a: 'Ya. Semua tes dapat dikerjakan penuh tanpa biaya, dan ringkasan hasil langsung tampil setelah selesai. Biaya hanya dikenakan jika Anda ingin membuka laporan lengkap dengan uraian dan saran pengembangan yang lebih rinci.',
+  },
+  {
+    q: 'Apakah data dan hasil tes saya aman?',
+    a: 'Aman. Data peserta bersifat rahasia dan hanya digunakan untuk menampilkan hasil tes Anda sendiri — tidak dibagikan ke pihak lain.',
+  },
+  {
+    q: 'Berapa lama laporan lengkap bisa diakses setelah bayar?',
+    a: 'Laporan terbuka otomatis begitu pembayaran berhasil dikonfirmasi — tanpa perlu menunggu, dan bisa diunduh sebagai PDF kapan saja.',
+  },
+  {
+    q: 'Hasil tes ini untuk apa saja?',
+    a: 'Untuk pengembangan diri, persiapan karier, atau kebutuhan tim/HR. Hasil menggambarkan kecenderungan saat mengerjakan tes dan bukan merupakan diagnosis klinis.',
+  },
+]
 
 const WRAP = { maxWidth: '1120px', margin: '0 auto' }
 const BTN_UTAMA = {
@@ -91,6 +135,7 @@ const gulirKe = id => document.getElementById(id)?.scrollIntoView({ behavior: 's
 
 export default function Home() {
   const navigate = useNavigate()
+  const [faqTerbuka, setFaqTerbuka] = useState(0)
 
   // Supabase auto-parses #access_token&type=recovery on load and fires PASSWORD_RECOVERY
   // via onAuthStateChange — the global AuthListener in App.jsx handles the redirect.
@@ -130,6 +175,50 @@ export default function Home() {
           <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginTop: '20px' }}>
             {TESTS.length} jenis tes · Tanpa instalasi · Data peserta bersifat rahasia
           </p>
+        </div>
+
+        {/* ── Badge kepercayaan ── */}
+        <div className="anim-up anim-delay-1" style={{
+          ...WRAP, marginTop: '40px',
+          display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px',
+        }}>
+          {BADGE_PERCAYA.map(b => (
+            <span key={b.teks} style={{
+              display: 'inline-flex', alignItems: 'center', gap: '7px',
+              background: 'var(--surface)', border: '1px solid var(--border)',
+              borderRadius: '99px', padding: '8px 16px',
+              fontSize: '12.5px', fontWeight: 500, color: 'var(--text-sub)',
+            }}>
+              <span aria-hidden="true">{b.ikon}</span>{b.teks}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Kenapa AssesIN ── */}
+      <section style={{ padding: '0 var(--px) 80px' }}>
+        <div style={WRAP}>
+          <div className="section-rule anim-up">
+            <span className="section-rule-pip" />
+            <span className="section-rule-label">Kenapa AssesIN</span>
+            <span className="section-rule-line" />
+          </div>
+          <div className="features-grid">
+            {ALASAN.map(a => (
+              <div key={a.judul} className="anim-up">
+                <div style={{
+                  width: '44px', height: '44px', borderRadius: '12px',
+                  background: 'var(--accent-dim)', border: '1px solid var(--accent-border)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '20px', marginBottom: '16px',
+                }}>
+                  {a.ikon}
+                </div>
+                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '8px' }}>{a.judul}</h3>
+                <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.7 }}>{a.isi}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -193,6 +282,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── FAQ ── */}
+      <section style={{ padding: '72px var(--px)' }}>
+        <div style={{ ...WRAP, maxWidth: '760px' }}>
+          <div className="section-rule anim-up">
+            <span className="section-rule-pip" />
+            <span className="section-rule-label">Pertanyaan umum</span>
+            <span className="section-rule-line" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {FAQ.map((f, i) => {
+              const terbuka = faqTerbuka === i
+              return (
+                <div key={f.q} className="dark-card anim-up" style={{ overflow: 'hidden' }}>
+                  <button
+                    onClick={() => setFaqTerbuka(terbuka ? -1 : i)}
+                    style={{
+                      width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer',
+                      padding: '18px 22px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px',
+                    }}
+                  >
+                    <span style={{ fontSize: '14.5px', fontWeight: 600, color: 'var(--text)' }}>{f.q}</span>
+                    <span style={{
+                      flexShrink: 0, color: 'var(--accent)', fontSize: '18px', fontWeight: 300,
+                      transform: terbuka ? 'rotate(45deg)' : 'none', transition: 'transform 0.2s',
+                    }}>+</span>
+                  </button>
+                  {terbuka && (
+                    <p style={{ padding: '0 22px 20px', color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.75 }}>
+                      {f.a}
+                    </p>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* ── Footer ── */}
       <footer style={{ padding: '48px var(--px) 32px', marginTop: 'auto' }}>
         <div style={WRAP}>
@@ -204,7 +331,6 @@ export default function Home() {
               </p>
               <div style={{ marginTop: '14px', display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: 'var(--text-muted)' }}>
                 <a href={`mailto:${EMAIL_KONTAK}`} style={{ ...LINK_KECIL, fontSize: '13px' }}>{EMAIL_KONTAK}</a>
-                <a href={`tel:${TELEPON_ADMIN}`} style={{ ...LINK_KECIL, fontSize: '13px' }}>{TELEPON_ADMIN} (Admin)</a>
                 <span style={{ lineHeight: 1.6 }}>{ALAMAT_USAHA}</span>
               </div>
             </div>

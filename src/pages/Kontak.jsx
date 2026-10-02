@@ -2,8 +2,7 @@ import { Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 
 const KONTAK = {
-  email:   'admin@assesin.net',
-  telepon: '087872150877',
+  email:   'psikologikantor@proton.me',
   alamat:  'Jl. Kramat Asem Raya No. 3 RT 5 RW 12, Utan Kayu Selatan, Kec. Matraman, Jakarta Timur',
 }
 
@@ -84,30 +83,6 @@ export default function Kontak() {
                 </p>
                 <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
                   Balas dalam 1×24 jam kerja
-                </p>
-              </div>
-            </a>
-
-            {/* Telepon / WhatsApp */}
-            <a href={`tel:${KONTAK.telepon}`} style={{ textDecoration: 'none' }}>
-              <div className="dark-card anim-up" style={{
-                padding: '32px 28px', cursor: 'pointer',
-                transition: 'border-color 0.2s, transform 0.2s',
-              }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent-border)'; e.currentTarget.style.transform = 'translateY(-2px)' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = 'translateY(0)' }}
-              >
-                <div style={{ width: '40px', height: '40px', background: 'var(--accent-dim)', border: '1px solid var(--accent-border)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', marginBottom: '16px' }}>
-                  ☎
-                </div>
-                <p style={{ color: 'var(--text-muted)', fontSize: '11px', fontFamily: 'inherit', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>
-                  Telepon Admin
-                </p>
-                <p style={{ color: 'var(--accent)', fontSize: '15px', fontWeight: 600, marginBottom: '6px' }}>
-                  {KONTAK.telepon}
-                </p>
-                <p style={{ color: 'var(--text-muted)', fontSize: '12px' }}>
-                  Senin – Jumat, 09.00 – 17.00 WIB
                 </p>
               </div>
             </a>
