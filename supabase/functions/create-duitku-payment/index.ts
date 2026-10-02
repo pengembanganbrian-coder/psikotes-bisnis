@@ -10,16 +10,14 @@
 //   DUITKU_IS_PRODUCTION   — kosongkan (atau "false") untuk sandbox
 //   FRONTEND_URL           — https://assesin.net
 
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
-import { crypto } from "https://deno.land/std@0.177.0/crypto/mod.ts"
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 }
 
-serve(async (req: Request) => {
+Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders })
   }
