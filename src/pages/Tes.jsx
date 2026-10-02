@@ -159,7 +159,7 @@ function Tes() {
     const pesertaId = crypto.randomUUID()
     const { error } = await supabase
       .from('peserta')
-      .insert([{ id: pesertaId, name: nama, email, jabatan }])
+      .insert([{ id: pesertaId, nama, email, jabatan }])
     if (error) {
       setSubmitError('Gagal menyimpan hasil. Periksa koneksi internet dan coba lagi.')
       setLoading(false)
