@@ -89,13 +89,13 @@ const ALASAN = [
   },
   {
     ikon: '🎯',
-    judul: 'Langsung bisa dipakai',
-    isi: 'Setiap hasil disertai saran pengembangan dan rekomendasi arah karier yang konkret — bukan sekadar teori, tapi langkah yang bisa langsung dicoba.',
+    judul: 'Tahu kekuatan & yang perlu dilatih',
+    isi: 'Setiap hasil menunjukkan kekuatan sekaligus bagian yang masih bisa dikembangkan, lengkap dengan saran praktis — jadi Anda tahu dari mana sebaiknya mulai berlatih.',
   },
   {
     ikon: '🤝',
-    judul: 'Dipakai sendiri atau untuk tim',
-    isi: 'Cocok untuk refleksi pribadi, persiapan wawancara kerja, maupun kebutuhan HR dalam memahami gaya kerja tim.',
+    judul: 'Cocok untuk berbagai kebutuhan',
+    isi: 'Bisa dipakai untuk refleksi pribadi, latihan sebelum tes seleksi kerja (termasuk CPNS dan BUMN), persiapan wawancara, maupun kebutuhan HR dalam memahami gaya kerja tim.',
   },
 ]
 
@@ -115,6 +115,10 @@ const FAQ = [
   {
     q: 'Hasil tes ini untuk apa saja?',
     a: 'Untuk pengembangan diri, persiapan karier, atau kebutuhan tim/HR. Hasil menggambarkan kecenderungan saat mengerjakan tes dan bukan merupakan diagnosis klinis.',
+  },
+  {
+    q: 'Apakah bisa dipakai untuk latihan tes CPNS, BUMN, atau melamar kerja?',
+    a: 'Bisa. Banyak yang memakai AssesIN untuk mengenali gaya kerja dan kepribadian sendiri sebelum menghadapi tes psikologi di seleksi CPNS, BUMN, atau rekrutmen kerja — sekaligus melihat bagian mana yang masih perlu dilatih. Perlu diingat, ini adalah tes untuk latihan dan pengembangan diri, bukan simulasi resmi dari instansi atau perusahaan tertentu.',
   },
 ]
 
@@ -165,8 +169,8 @@ export default function Home() {
           <h1 style={{ fontSize: 'clamp(32px, 5vw, 48px)', fontWeight: 700, lineHeight: 1.15, letterSpacing: '-0.02em', color: 'var(--text)', marginBottom: '16px' }}>
             Kenali kepribadian dan potensi Anda
           </h1>
-          <p style={{ color: 'var(--text-sub)', fontSize: '17px', lineHeight: 1.7, maxWidth: '560px', margin: '0 auto 32px' }}>
-            Asesmen psikologi online untuk pengembangan diri, karier, dan tim. Kerjakan gratis, hasil ringkas langsung tampil.
+          <p style={{ color: 'var(--text-sub)', fontSize: '17px', lineHeight: 1.7, maxWidth: '600px', margin: '0 auto 32px' }}>
+            Asesmen psikologi online untuk mengenal diri lebih dalam — cocok untuk berlatih menghadapi tes seleksi CPNS, BUMN, dan rekrutmen kerja, maupun pengembangan diri sehari-hari. Kerjakan gratis, hasil ringkas langsung tampil.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
             <button onClick={() => gulirKe('tes')} style={BTN_UTAMA}>Pilih tes</button>
