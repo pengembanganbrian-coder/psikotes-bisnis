@@ -2,67 +2,77 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { HARGA_TES, formatRupiah } from '../config/pricing'
-import { TES_BARU } from '../tes-baru/definisi'
+import { TES_BY_TYPE } from '../tes-baru/definisi'
 
+// Deskripsi kartu ditulis untuk landing page (lebih "menjual" dari intro di halaman tes).
+// kategori: 'seleksi' = relevan untuk latihan tes psikologi CPNS/BUMN/rekrutmen,
+//           'diri'    = untuk mengenal & mengembangkan diri.
 const TESTS = [
   {
-    id: 'MBTI',
-    route: '/tes',
-    nama: 'MBTI',
-    full: 'Tes Kepribadian MBTI',
-    desc: '16 tipe kepribadian berdasarkan empat preferensi dasar.',
-    meta: ['60 soal', '~15 menit'],
-  },
-  {
-    id: 'DISC',
-    route: '/tes-disc',
-    nama: 'DISC',
-    full: 'Tes Kepribadian DISC',
-    desc: 'Gaya perilaku: Dominance, Influence, Steadiness, Conscientiousness.',
-    meta: ['24 soal', '~7 menit'],
-  },
-  {
-    id: 'PAPI',
-    route: '/tes-papi',
-    nama: 'PAPI Kostick',
-    full: 'Tes PAPI Kostick',
-    desc: 'Kebutuhan dan preferensi kerja dalam 20 skala.',
+    id: 'PAPI', route: '/tes-papi', nama: 'PAPI Kostick', kategori: 'seleksi',
+    desc: 'Salah satu tes kepribadian kerja yang paling sering ditemui di rekrutmen BUMN dan perusahaan. Kenali pola kerja Anda di 20 aspek — dari kepemimpinan sampai ketelitian — sebelum bertemu tes aslinya.',
     meta: ['90 pasangan', '~20 menit'],
   },
   {
-    id: 'DASS',
-    route: '/tes-dass',
-    nama: 'DASS-21',
-    full: 'Tes DASS-21',
-    desc: 'Skrining tingkat depresi, kecemasan, dan stres.',
-    meta: ['21 pernyataan', '~5 menit'],
+    id: 'DISC', route: '/tes-disc', nama: 'DISC', kategori: 'seleksi',
+    desc: 'Tegas, persuasif, stabil, atau teliti? Petakan gaya perilaku kerja Anda dalam 7 menit — tes favorit HR untuk membaca cara kandidat bekerja dan berkomunikasi.',
+    meta: ['24 soal', '~7 menit'],
   },
   {
-    id: 'MSDT',
-    route: '/tes-msdt',
-    nama: 'MSDT',
-    full: 'Tes Gaya Manajemen MSDT',
-    desc: 'Delapan gaya manajemen dan kepemimpinan.',
+    id: 'MSDT', route: '/tes-msdt', nama: 'MSDT', kategori: 'seleksi',
+    desc: 'Melamar posisi supervisor atau manajer? Lihat gaya kepemimpinan dominan Anda di antara delapan gaya manajemen, dan seberapa efektif gaya itu di mata organisasi.',
     meta: ['64 soal', '~20 menit'],
   },
   {
-    id: 'Love Language',
-    route: '/tes-love-language',
-    nama: 'Love Language',
-    full: 'Tes Love Language',
-    desc: 'Cara Anda paling menghargai dan merasa dihargai.',
+    id: 'Big Five', kategori: 'seleksi',
+    desc: 'Model kepribadian yang paling banyak diteliti dan dipakai dalam asesmen kerja modern. Ketahui posisi Anda di lima dimensi besar — termasuk ketekunan dan stabilitas emosi yang sering dinilai saat seleksi.',
+  },
+  {
+    id: 'Resiliensi', kategori: 'seleksi',
+    desc: 'Seberapa kuat Anda saat ditekan target, perubahan mendadak, atau godaan melanggar prinsip? Ukur ketangguhan dan integritas kerja Anda — aspek yang kerap digali dalam seleksi abdi negara.',
+  },
+  {
+    id: 'MBTI', route: '/tes', nama: 'MBTI', kategori: 'diri',
+    desc: 'Temukan tipe Anda di antara 16 kepribadian: dari mana energi Anda datang, bagaimana Anda mengambil keputusan, dan lingkungan seperti apa yang membuat Anda berkembang.',
+    meta: ['60 soal', '~15 menit'],
+  },
+  {
+    id: 'RIASEC', kategori: 'diri',
+    desc: 'Bingung memilih jurusan atau arah karier? Dapatkan kode minat tiga huruf versi teori Holland beserta contoh bidang kerja yang paling cocok dengan Anda.',
+  },
+  {
+    id: 'Peran Tim', kategori: 'diri',
+    desc: 'Penggagas ide, penggerak, atau penjaga detail? Kenali peran yang paling alami Anda jalankan dalam tim agar kontribusi Anda lebih terlihat dan tepat sasaran.',
+  },
+  {
+    id: 'Love Language', route: '/tes-love-language', nama: 'Love Language', kategori: 'diri',
+    desc: 'Pujian, waktu bersama, bantuan nyata, hadiah, atau sentuhan? Pahami cara Anda paling merasa dihargai — berguna untuk hubungan pribadi maupun kerja sama tim.',
     meta: ['30 pasangan', '~8 menit'],
   },
-  // Tes baru (beta) -- data dari tes-baru/definisi.js
-  ...Object.values(TES_BARU).map(t => ({
-    id: t.testType,
-    route: t.route,
-    nama: t.singkat,
-    full: t.judul,
-    desc: t.intro,
-    meta: [`${t.soal.length} pernyataan`, t.durasi],
-    beta: true,
-  })),
+  {
+    id: 'DASS', route: '/tes-dass', nama: 'DASS-21', kategori: 'diri',
+    desc: 'Cek kondisi emosional Anda dalam 5 menit. Skrining tingkat depresi, kecemasan, dan stres yang Anda alami seminggu terakhir — langkah awal untuk lebih peduli pada diri sendiri.',
+    meta: ['21 pernyataan', '~5 menit'],
+  },
+].map(t => {
+  // Tes baru (beta) -- rute, nama, dan meta diambil dari tes-baru/definisi.js
+  const def = TES_BY_TYPE[t.id]
+  return def
+    ? { route: def.route, nama: def.singkat, meta: [`${def.soal.length} pernyataan`, def.durasi], beta: true, ...t }
+    : t
+})
+
+const KATEGORI = [
+  {
+    id: 'seleksi',
+    judul: 'Latihan tes seleksi CPNS, BUMN & rekrutmen',
+    sub: 'Jenis tes kepribadian yang lazim muncul di psikotes seleksi kerja. Kenali hasil Anda lebih dulu supaya lebih siap dan percaya diri.',
+  },
+  {
+    id: 'diri',
+    judul: 'Pengembangan diri & karier',
+    sub: 'Untuk lebih mengenal diri sendiri, menentukan arah karier, dan menjaga kesehatan mental.',
+  },
 ]
 
 const LANGKAH = [
@@ -122,7 +132,7 @@ const FAQ = [
   },
 ]
 
-const WRAP = { maxWidth: '1200px', margin: '0 auto' }
+const WRAP = { maxWidth: '1360px', margin: '0 auto' }
 const LINK_KECIL = { color: 'var(--text-muted)', fontSize: '14px', textDecoration: 'none' }
 
 const gulirKe = id => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -224,33 +234,41 @@ export default function Home() {
             Semua tes gratis dikerjakan. Laporan lengkap dapat dibuka dengan biaya yang tertera.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
-            {TESTS.map(test => (
-              <button
-                key={test.id}
-                onClick={() => navigate(test.route)}
-                className="card-test"
-                style={{ textAlign: 'left', padding: '24px', width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text)' }}>{test.nama}</h3>
-                  {test.beta && (
-                    <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', background: 'var(--accent-dim)', padding: '2px 8px', borderRadius: '99px' }}>Beta</span>
-                  )}
-                </div>
-                <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.6, flex: 1 }}>{test.desc}</p>
-                <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>{test.meta.join(' · ')}</p>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
-                  <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                    Laporan lengkap <strong style={{ color: 'var(--text)', fontWeight: 600 }}>{formatRupiah(HARGA_TES[test.id])}</strong>
-                  </span>
-                  <span className="card-cta">
-                    Mulai <span className="card-cta-arrow" aria-hidden="true">→</span>
-                  </span>
-                </div>
-              </button>
-            ))}
-          </div>
+          {KATEGORI.map(kat => (
+            <div key={kat.id} style={{ marginBottom: '40px' }}>
+              <div style={{ marginBottom: '16px' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{kat.judul}</h3>
+                <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: 1.6, maxWidth: '760px' }}>{kat.sub}</p>
+              </div>
+              <div className="tes-grid">
+                {TESTS.filter(t => t.kategori === kat.id).map(test => (
+                  <button
+                    key={test.id}
+                    onClick={() => navigate(test.route)}
+                    className="card-test"
+                    style={{ textAlign: 'left', padding: '22px', width: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <h4 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text)' }}>{test.nama}</h4>
+                      {test.beta && (
+                        <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', background: 'var(--accent-dim)', padding: '2px 8px', borderRadius: '99px' }}>Beta</span>
+                      )}
+                    </div>
+                    <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.6, flex: 1 }}>{test.desc}</p>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>{test.meta.join(' · ')}</p>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
+                      <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
+                        Laporan lengkap <strong style={{ color: 'var(--text)', fontWeight: 600 }}>{formatRupiah(HARGA_TES[test.id])}</strong>
+                      </span>
+                      <span className="card-cta">
+                        Mulai <span className="card-cta-arrow" aria-hidden="true">→</span>
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 

@@ -699,3 +699,13 @@ select.field option {
   /* Score bar fills keep their color */
   .print-bar-fill  { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+
+/* ── Grid kartu tes (landing) ────────────────────────── */
+/* Tiap kategori berisi 5 tes: 5 kolom di layar lebar supaya muat satu baris. */
+.tes-grid {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+@media (min-width: 1280px) {
+  .tes-grid { grid-template-columns: repeat(5, 1fr); gap: 14px; }
+}
