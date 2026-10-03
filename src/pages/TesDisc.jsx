@@ -321,11 +321,9 @@ function TesDisc() {
             />
             <button
               onClick={() => { if (validateForm()) { setStep('tes'); window.scrollTo(0, 0) } }}
-              style={{ background: 'var(--accent)', color: 'var(--on-accent)', fontFamily: 'inherit', fontWeight: 700, fontSize: '12px', letterSpacing: '0.14em', textTransform: 'uppercase', padding: '14px', borderRadius: '10px', border: 'none', cursor: 'pointer', width: '100%', marginTop: '8px' }}
-              onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
-              onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+              className="btn-cta block"
             >
-              Mulai Tes →
+              Mulai Tes <span className="btn-arrow" aria-hidden="true">→</span>
             </button>
           </div>
         </div>

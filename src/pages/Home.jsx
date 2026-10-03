@@ -123,16 +123,6 @@ const FAQ = [
 ]
 
 const WRAP = { maxWidth: '1200px', margin: '0 auto' }
-const BTN_UTAMA = {
-  background: 'var(--accent)', color: 'var(--on-accent)', fontWeight: 600, fontSize: '15px',
-  padding: '12px 22px', borderRadius: '10px', border: 'none', cursor: 'pointer', textDecoration: 'none',
-  display: 'inline-block',
-}
-const BTN_KEDUA = {
-  background: 'var(--surface)', color: 'var(--text)', fontWeight: 600, fontSize: '15px',
-  padding: '12px 22px', borderRadius: '10px', border: '1px solid var(--border)', cursor: 'pointer',
-  textDecoration: 'none', display: 'inline-block',
-}
 const LINK_KECIL = { color: 'var(--text-muted)', fontSize: '14px', textDecoration: 'none' }
 
 const gulirKe = id => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
@@ -173,8 +163,8 @@ export default function Home() {
             Asesmen psikologi online untuk mengenal diri lebih dalam — cocok untuk berlatih menghadapi tes seleksi CPNS, BUMN, dan rekrutmen kerja, maupun pengembangan diri sehari-hari. Kerjakan gratis, hasil ringkas langsung tampil.
           </p>
           <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button onClick={() => gulirKe('tes')} style={BTN_UTAMA}>Pilih tes</button>
-            <button onClick={() => gulirKe('cara-kerja')} style={BTN_KEDUA}>Cara kerja</button>
+            <button onClick={() => gulirKe('tes')} className="btn-cta">Pilih tes <span className="btn-arrow" aria-hidden="true">→</span></button>
+            <button onClick={() => gulirKe('cara-kerja')} className="btn-ghost">Cara kerja</button>
           </div>
           <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginTop: '20px' }}>
             {TESTS.length} jenis tes · Tanpa instalasi · Data peserta bersifat rahasia
@@ -254,8 +244,8 @@ export default function Home() {
                   <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
                     Laporan lengkap <strong style={{ color: 'var(--text)', fontWeight: 600 }}>{formatRupiah(HARGA_TES[test.id])}</strong>
                   </span>
-                  <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--accent)' }}>
-                    Mulai <span className="card-cta-arrow">→</span>
+                  <span className="card-cta">
+                    Mulai <span className="card-cta-arrow" aria-hidden="true">→</span>
                   </span>
                 </div>
               </button>
