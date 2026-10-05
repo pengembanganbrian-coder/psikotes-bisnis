@@ -31,18 +31,14 @@ const ISI_LAPORAN = {
 }
 
 async function sudahBayar(pesertaId, testType) {
-  // Utamakan fungsi RPC (tabel payments tidak perlu dibuka untuk publik);
-  // jatuh ke query tabel bila fungsi belum dipasang di database.
+  // Cek cepat ke database dulu; bila belum lunas, minta server menanyakan
+  // status tagihan langsung ke Mayar (berjaga kalau webhook terlambat/gagal).
   const rpc = await supabase.rpc('cek_pembayaran', { p_peserta: pesertaId, p_tes: testType })
-  if (!rpc.error) return rpc.data === true
-  const { data } = await supabase
-    .from('payments')
-    .select('status')
-    .eq('peserta_id', pesertaId)
-    .eq('test_type', testType)
-    .eq('status', 'paid')
-    .maybeSingle()
-  return !!data
+  if (!rpc.error && rpc.data === true) return true
+  const { data } = await supabase.functions.invoke('cek-mayar-payment', {
+    body: { pesertaId, testType },
+  })
+  return data?.paid === true
 }
 
 export default function PaymentGate({ testType, pesertaId, nama, email, children, freeContent }) {
@@ -74,15 +70,21 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
     setPaying(true)
     setError('')
     try {
-      const { data, error: fnErr } = await supabase.functions.invoke('create-duitku-payment', {
+      // Nominal sengaja tidak dikirim: server menentukan harga sendiri.
+      const { data, error: fnErr } = await supabase.functions.invoke('create-mayar-payment', {
         body: {
           pesertaId,
           testType,
-          nama:   nama  || 'Peserta',
-          email:  email || undefined,
-          amount: HARGA_TES[testType],
+          nama:  nama  || 'Peserta',
+          email: email || undefined,
         },
       })
+      if (data?.alreadyPaid) {
+        localStorage.setItem(localKey, 'true')
+        setIsPaid(true)
+        setPaying(false)
+        return
+      }
       if (fnErr || !data?.paymentUrl) throw new Error(fnErr?.message || 'Gagal membuat tagihan pembayaran.')
 
       // Tanpa 'noopener' di fitur jendela: dengan itu window.open selalu
