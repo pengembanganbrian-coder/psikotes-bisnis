@@ -24,6 +24,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import PembayaranSelesai from './pages/PembayaranSelesai'
 import LaporanSaya from './pages/LaporanSaya'
+import RouteSeo from './components/RouteSeo'
 import Kontak from './pages/Kontak'
 import TesBaru from './pages/TesBaru'
 import HasilBaru from './pages/HasilBaru'
@@ -48,6 +49,7 @@ function App() {
   return (
     <BrowserRouter>
       <AuthListener />
+      <RouteSeo />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

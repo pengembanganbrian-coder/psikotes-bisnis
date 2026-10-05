@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /job-profile
+Disallow: /login
+Disallow: /reset-password
+Disallow: /laporan-saya
+Disallow: /pembayaran-selesai
+Disallow: /profil
+
+Sitemap: https://www.assesin.net/sitemap.xml
