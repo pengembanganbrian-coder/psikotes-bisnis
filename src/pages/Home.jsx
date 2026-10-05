@@ -45,7 +45,7 @@ const TESTS = [
     desc: 'Penggagas ide, penggerak, atau penjaga detail? Kenali peran yang paling alami Anda jalankan dalam tim agar kontribusi Anda lebih terlihat dan tepat sasaran.',
   },
   {
-    id: 'Love Language', route: '/tes-love-language', nama: 'Love Language', kategori: 'diri',
+    id: 'Love Language', route: '/tes-love-language', nama: 'Love Language', kategori: 'promo',
     desc: 'Pujian, waktu bersama, bantuan nyata, hadiah, atau sentuhan? Pahami cara Anda paling merasa dihargai — berguna untuk hubungan pribadi maupun kerja sama tim.',
     meta: ['30 pasangan', '~8 menit'],
   },
@@ -63,6 +63,11 @@ const TESTS = [
 })
 
 const KATEGORI = [
+  {
+    id: 'promo',
+    judul: 'Promo: laporan lengkap gratis',
+    sub: 'Untuk waktu terbatas, laporan lengkap tes ini dapat dibuka tanpa biaya.',
+  },
   {
     id: 'seleksi',
     judul: 'Latihan tes seleksi CPNS, BUMN & rekrutmen',
@@ -253,12 +258,15 @@ export default function Home() {
                       {test.beta && (
                         <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', background: 'var(--accent-dim)', padding: '2px 8px', borderRadius: '99px' }}>Beta</span>
                       )}
+                      {HARGA_TES[test.id] === 0 && (
+                        <span style={{ fontSize: '11px', fontWeight: 600, color: '#047857', background: 'rgba(16,185,129,0.12)', padding: '2px 8px', borderRadius: '99px' }}>Promo</span>
+                      )}
                     </div>
                     <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.6, flex: 1 }}>{test.desc}</p>
                     <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>{test.meta.join(' · ')}</p>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
                       <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                        Laporan lengkap <strong style={{ color: 'var(--text)', fontWeight: 600 }}>{formatRupiah(HARGA_TES[test.id])}</strong>
+                        Laporan lengkap <strong style={{ color: 'var(--text)', fontWeight: 600 }}>{HARGA_TES[test.id] === 0 ? 'Gratis' : formatRupiah(HARGA_TES[test.id])}</strong>
                       </span>
                       <span className="card-cta">
                         Mulai <span className="card-cta-arrow" aria-hidden="true">→</span>

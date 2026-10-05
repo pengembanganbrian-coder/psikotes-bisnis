@@ -38,6 +38,7 @@ Deno.serve(async (req: Request) => {
   if (!testType || !(testType in HARGA_TES)) return json({ error: "Jenis tes tidak dikenal." }, 400)
 
   const amount       = HARGA_TES[testType]
+  if (!(amount > 0)) return json({ error: "Laporan tes ini sedang gratis." }, 400)
   const nama         = (body.nama || "Peserta").slice(0, 100)
   const emailPeserta = body.email && EMAIL.test(body.email) ? body.email : null
   const email        = emailPeserta ?? Deno.env.get("MAYAR_FALLBACK_EMAIL")

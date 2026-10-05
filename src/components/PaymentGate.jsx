@@ -51,7 +51,8 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
   const localKey = `assesin_paid_${testType}_${pesertaId}`
 
   const checkStatus = useCallback(async () => {
-    if (localStorage.getItem(localKey) === 'true') {
+    // Harga 0 = laporan lengkap sedang digratiskan (promo).
+    if (HARGA_TES[testType] === 0 || localStorage.getItem(localKey) === 'true') {
       setIsPaid(true)
       setLoading(false)
       return

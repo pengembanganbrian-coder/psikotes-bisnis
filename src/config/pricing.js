@@ -1,11 +1,13 @@
-// Harga unlock laporan lengkap per jenis tes
+// Harga unlock laporan lengkap per jenis tes. Harus sama dengan
+// supabase/functions/_shared/harga.ts (yang dipakai server untuk menagih).
+// 0 = laporan lengkap digratiskan (promo).
 export const HARGA_TES = {
-  MBTI:           15000,
-  DISC:           20000,
-  PAPI:           30000,
-  DASS:           10000,
-  'Love Language': 5000,
-  MSDT:           25000,
+  MBTI:           19000,
+  DISC:           25000,
+  PAPI:           35000,
+  DASS:           15000,
+  'Love Language':    0,
+  MSDT:           29000,
   // Tes baru (beta)
   'Big Five':     15000,
   RIASEC:         15000,
