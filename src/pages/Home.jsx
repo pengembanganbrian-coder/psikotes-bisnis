@@ -163,6 +163,7 @@ export default function Home() {
           <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <button onClick={() => gulirKe('tes')} className="hidden sm:inline" style={{ ...LINK_KECIL, background: 'none', border: 'none', cursor: 'pointer' }}>Tes</button>
             <button onClick={() => gulirKe('cara-kerja')} className="hidden sm:inline" style={{ ...LINK_KECIL, background: 'none', border: 'none', cursor: 'pointer' }}>Cara kerja</button>
+            <Link to="/laporan-saya" style={LINK_KECIL}>Laporan saya</Link>
             <Link to="/kontak" style={LINK_KECIL}>Kontak</Link>
           </nav>
         </div>

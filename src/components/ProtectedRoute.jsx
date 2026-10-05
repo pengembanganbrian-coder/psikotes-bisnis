@@ -3,11 +3,15 @@ import { Navigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 
 function ProtectedRoute({ children }) {
-  const [status, setStatus] = useState('loading') // 'loading' | 'auth' | 'unauth'
+  const [status, setStatus] = useState('loading') // 'loading' | 'auth' | 'unauth' | 'peserta'
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setStatus(session ? 'auth' : 'unauth')
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (!session) { setStatus('unauth'); return }
+      // Peserta juga bisa login (lewat "Laporan saya"), jadi sesi saja tidak
+      // cukup: hanya akun di tabel admins yang boleh masuk dashboard.
+      const { data: admin } = await supabase.rpc('is_admin')
+      setStatus(admin === true ? 'auth' : 'peserta')
     })
   }, [])
 
@@ -21,6 +25,7 @@ function ProtectedRoute({ children }) {
   )
 
   if (status === 'unauth') return <Navigate to="/login" replace />
+  if (status === 'peserta') return <Navigate to="/laporan-saya" replace />
 
   return children
 }

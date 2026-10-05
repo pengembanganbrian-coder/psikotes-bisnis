@@ -23,6 +23,7 @@ import ResetPassword from './pages/ResetPassword'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Terms from './pages/Terms'
 import PembayaranSelesai from './pages/PembayaranSelesai'
+import LaporanSaya from './pages/LaporanSaya'
 import Kontak from './pages/Kontak'
 import TesBaru from './pages/TesBaru'
 import HasilBaru from './pages/HasilBaru'
@@ -72,6 +73,7 @@ function App() {
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/pembayaran-selesai" element={<PembayaranSelesai />} />
+        <Route path="/laporan-saya" element={<LaporanSaya />} />
         <Route path="/kontak" element={<Kontak />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

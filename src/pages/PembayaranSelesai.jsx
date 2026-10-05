@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 
 export default function PembayaranSelesai() {
@@ -35,8 +35,10 @@ export default function PembayaranSelesai() {
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--accent-border)', borderRadius: '12px', padding: '16px 20px', marginBottom: '28px' }}>
           <p style={{ color: 'var(--text-muted)', fontSize: '12px', lineHeight: '1.65' }}>
-            Jika laporan belum terbuka, coba segarkan halaman hasil tes Anda.
-            Butuh bantuan? Hubungi{' '}
+            Jika laporan belum terbuka, coba segarkan halaman hasil tes Anda. Halaman hasil sudah tertutup?
+            Buka lagi lewat{' '}
+            <Link to="/laporan-saya" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Laporan saya</Link>
+            {' '}dengan email yang Anda pakai saat tes. Butuh bantuan? Hubungi{' '}
             <a href="mailto:brianlagiapa@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
               brianlagiapa@gmail.com
             </a>
