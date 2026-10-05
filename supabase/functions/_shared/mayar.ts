@@ -1,5 +1,6 @@
 // Helper bersama untuk integrasi Mayar.id.
 import { createClient, SupabaseClient } from "https://esm.sh/@supabase/supabase-js@2"
+import { kirimEmailLaporan } from "./email.ts"
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -52,11 +53,24 @@ export async function verifikasiKeMayar(admin: SupabaseClient, p: Payment): Prom
     return false
   }
 
-  const { error } = await admin
+  // Hanya mengubah baris yang masih 'pending': bila webhook dan pengecekan
+  // dari browser jalan bersamaan, cuma satu yang mendapat baris ini, sehingga
+  // email laporan terkirim tepat sekali.
+  const { data: diubah, error } = await admin
     .from("payments")
     .update({ status: "paid", paid_at: new Date().toISOString() })
     .eq("id", p.id)
+    .eq("status", "pending")
+    .select("email, nama, test_type, order_id")
   if (error) throw new Error(`Gagal menandai lunas: ${error.message}`)
   console.log(`[mayar] ${p.order_id} → paid`)
+
+  if (diubah?.length) {
+    try {
+      await kirimEmailLaporan(admin, diubah[0])
+    } catch (e) {
+      console.error("[email] gagal", p.order_id, String(e))
+    }
+  }
   return true
 }
