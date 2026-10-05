@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import Logo from '../components/Logo'
 import { HARGA_TES, formatRupiah } from '../config/pricing'
 import { TES_BY_TYPE } from '../tes-baru/definisi'
@@ -144,6 +144,12 @@ const gulirKe = id => document.getElementById(id)?.scrollIntoView({ behavior: 's
 
 export default function Home() {
   const navigate = useNavigate()
+  const { hash } = useLocation()
+
+  // Link dari halaman lain (mis. "/#tes" di artikel) langsung menggulir ke bagiannya.
+  useEffect(() => {
+    if (hash) setTimeout(() => gulirKe(hash.slice(1)), 0)
+  }, [hash])
   const [faqTerbuka, setFaqTerbuka] = useState(0)
 
   // Supabase auto-parses #access_token&type=recovery on load and fires PASSWORD_RECOVERY
@@ -163,6 +169,7 @@ export default function Home() {
           <nav style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
             <button onClick={() => gulirKe('tes')} className="hidden sm:inline" style={{ ...LINK_KECIL, background: 'none', border: 'none', cursor: 'pointer' }}>Tes</button>
             <button onClick={() => gulirKe('cara-kerja')} className="hidden sm:inline" style={{ ...LINK_KECIL, background: 'none', border: 'none', cursor: 'pointer' }}>Cara kerja</button>
+            <Link to="/artikel" style={LINK_KECIL}>Artikel</Link>
             <Link to="/laporan-saya" style={LINK_KECIL}>Laporan saya</Link>
             <Link to="/kontak" style={LINK_KECIL}>Kontak</Link>
           </nav>
@@ -366,6 +373,7 @@ export default function Home() {
               <div>
                 <p style={{ fontWeight: 600, fontSize: '13px', color: 'var(--text)', marginBottom: '12px' }}>Informasi</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <Link to="/artikel" style={{ ...LINK_KECIL, fontSize: '13px' }}>Artikel</Link>
                   <Link to="/privacy-policy" style={{ ...LINK_KECIL, fontSize: '13px' }}>Kebijakan Privasi</Link>
                   <Link to="/terms" style={{ ...LINK_KECIL, fontSize: '13px' }}>Syarat &amp; Ketentuan</Link>
                   <Link to="/kontak" style={{ ...LINK_KECIL, fontSize: '13px' }}>Kontak</Link>

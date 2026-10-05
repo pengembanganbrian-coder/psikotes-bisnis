@@ -25,6 +25,7 @@ import Terms from './pages/Terms'
 import PembayaranSelesai from './pages/PembayaranSelesai'
 import LaporanSaya from './pages/LaporanSaya'
 import RouteSeo from './components/RouteSeo'
+import { DaftarArtikel, BacaArtikel } from './pages/Artikel'
 import Kontak from './pages/Kontak'
 import TesBaru from './pages/TesBaru'
 import HasilBaru from './pages/HasilBaru'
@@ -76,6 +77,8 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/pembayaran-selesai" element={<PembayaranSelesai />} />
         <Route path="/laporan-saya" element={<LaporanSaya />} />
+        <Route path="/artikel" element={<DaftarArtikel />} />
+        <Route path="/artikel/:slug" element={<BacaArtikel />} />
         <Route path="/kontak" element={<Kontak />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -2,6 +2,7 @@
 // components/RouteSeo.jsx setiap kali rute berubah. Halaman yang tidak ada di
 // sini (hasil tes, dashboard, login, dsb.) otomatis diberi noindex.
 // Daftar rute yang diindeks harus sama dengan public/sitemap.xml.
+import { ARTIKEL } from '../artikel/data.js'
 
 export const SITE_URL = 'https://www.assesin.net'
 
@@ -62,4 +63,12 @@ export const SEO = {
     title: 'Syarat & Ketentuan | AssesIN',
     description: 'Syarat dan ketentuan penggunaan layanan tes dan laporan AssesIN.',
   },
+  '/artikel': {
+    title: 'Artikel Psikotes & Tes Kepribadian | AssesIN',
+    description: 'Panduan menghadapi psikotes kerja, CPNS, dan BUMN: penjelasan tes PAPI Kostick, DISC, dan jenis tes lain yang sering muncul, beserta tips mengerjakannya.',
+  },
+  ...Object.fromEntries(ARTIKEL.map(a => [
+    `/artikel/${a.slug}`,
+    { title: `${a.judulSeo} | AssesIN`, description: a.deskripsi },
+  ])),
 }

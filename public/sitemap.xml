@@ -56,4 +56,20 @@
     <loc>https://www.assesin.net/terms</loc>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://www.assesin.net/artikel</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.assesin.net/artikel/tes-papi-kostick</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.assesin.net/artikel/apa-itu-tes-disc</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.assesin.net/artikel/persiapan-psikotes-kerja</loc>
+    <priority>0.8</priority>
+  </url>
 </urlset>
