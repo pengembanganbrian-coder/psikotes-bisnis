@@ -30,6 +30,10 @@ const ISI_LAPORAN = {
   'Peran Tim': ['Uraian tiga peran terkuat Anda', 'Kontribusi khas dan hal yang perlu diwaspadai', 'Peran yang perlu dilengkapi rekan tim'],
 }
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+// Terima 08xx, 628xx, atau +628xx; dikirim ke server apa adanya (server menormalkan).
+const WA_RE = /^(\+?62|0)8\d{7,12}$/
+
 async function sudahBayar(pesertaId, testType) {
   // Cek cepat ke database dulu; bila belum lunas, minta server menanyakan
   // status tagihan langsung ke Mayar (berjaga kalau webhook terlambat/gagal).
@@ -46,6 +50,8 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
   const [loading, setLoading] = useState(true)
   const [paying,  setPaying]  = useState(false)
   const [error,   setError]   = useState('')
+  const [emailBayar, setEmailBayar] = useState(email || '')
+  const [waBayar,    setWaBayar]    = useState('')
   const payWindowRef = useRef(null)
 
   const localKey = `assesin_paid_${testType}_${pesertaId}`
@@ -68,6 +74,16 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
   useEffect(() => { checkStatus() }, [checkStatus])
 
   const handlePay = async () => {
+    const emailBersih = emailBayar.trim()
+    const waBersih = waBayar.replace(/[\s-]/g, '')
+    if (!EMAIL_RE.test(emailBersih)) {
+      setError('Masukkan email yang valid untuk menerima bukti pembayaran.')
+      return
+    }
+    if (waBersih && !WA_RE.test(waBersih)) {
+      setError('Nomor WhatsApp tidak valid. Contoh: 081234567890')
+      return
+    }
     setPaying(true)
     setError('')
     try {
@@ -77,7 +93,8 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
           pesertaId,
           testType,
           nama:  nama  || 'Peserta',
-          email: email || undefined,
+          email: emailBersih,
+          mobile: waBersih || undefined,
         },
       })
       if (data?.alreadyPaid) {
@@ -169,9 +186,26 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
               )}
 
               {pesertaId ? (
-                <button className="rpt-btn" style={{ width: '100%', padding: '14px' }} onClick={handlePay} disabled={paying}>
-                  {paying ? 'Menunggu pembayaran…' : `Buka laporan — ${harga}`}
-                </button>
+                <>
+                  <div style={{ display: 'grid', gap: '12px', marginBottom: '16px' }}>
+                    <div>
+                      <label htmlFor="gate-email" style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-sub)', marginBottom: '6px' }}>
+                        Email untuk bukti pembayaran <span style={{ color: '#dc2626' }}>*</span>
+                      </label>
+                      <input id="gate-email" className="field" type="email" value={emailBayar} onChange={e => { setEmailBayar(e.target.value); setError('') }} placeholder="email@contoh.com" autoComplete="email" disabled={paying} />
+                    </div>
+                    <div>
+                      <label htmlFor="gate-wa" style={{ display: 'block', fontSize: '13px', fontWeight: 600, color: 'var(--text-sub)', marginBottom: '6px' }}>
+                        Nomor WhatsApp <span style={{ fontWeight: 400, color: 'var(--text-muted)' }}>(opsional)</span>
+                      </label>
+                      <input id="gate-wa" className="field" type="tel" inputMode="tel" value={waBayar} onChange={e => { setWaBayar(e.target.value); setError('') }} placeholder="081234567890" autoComplete="tel" disabled={paying} />
+                      <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '6px' }}>Untuk menghubungi Anda bila ada kendala pembayaran.</p>
+                    </div>
+                  </div>
+                  <button className="rpt-btn" style={{ width: '100%', padding: '14px' }} onClick={handlePay} disabled={paying}>
+                    {paying ? 'Menunggu pembayaran…' : `Buka laporan — ${harga}`}
+                  </button>
+                </>
               ) : (
                 <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '12px', padding: '12px 14px' }}>
                   <p style={{ color: '#92400e', fontSize: '13px', lineHeight: '1.6' }}>

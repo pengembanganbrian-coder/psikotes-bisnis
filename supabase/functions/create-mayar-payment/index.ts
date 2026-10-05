@@ -1,7 +1,7 @@
 // Edge Function: create-mayar-payment
 // Membuat tagihan Mayar (Single Payment Request) untuk membuka laporan lengkap.
 //
-// Body (JSON): { pesertaId, testType, nama, email? }
+// Body (JSON): { pesertaId, testType, nama, email?, mobile? }
 // Response:    { orderId, paymentUrl }  atau  { alreadyPaid: true }
 //
 // Nominal TIDAK diambil dari body — dibaca dari _shared/harga.ts.
@@ -26,7 +26,7 @@ Deno.serve(async (req: Request) => {
   const apiKey = Deno.env.get("MAYAR_API_KEY")
   if (!apiKey) return json({ error: "Server belum dikonfigurasi (MAYAR_API_KEY)." }, 500)
 
-  let body: { pesertaId?: string; testType?: string; nama?: string; email?: string }
+  let body: { pesertaId?: string; testType?: string; nama?: string; email?: string; mobile?: string }
   try {
     body = await req.json()
   } catch {
@@ -43,6 +43,10 @@ Deno.serve(async (req: Request) => {
   const emailPeserta = body.email && EMAIL.test(body.email) ? body.email : null
   const email        = emailPeserta ?? Deno.env.get("MAYAR_FALLBACK_EMAIL")
   if (!email) return json({ error: "Server belum dikonfigurasi (MAYAR_FALLBACK_EMAIL)." }, 500)
+
+  // Nomor WA opsional: 08xx / 628xx / +628xx → 08xx. Tidak sah → pakai cadangan.
+  const wa = String(body.mobile ?? "").replace(/[\s-]/g, "").replace(/^\+?62/, "0")
+  const mobile = /^08\d{7,12}$/.test(wa) ? wa : (Deno.env.get("MAYAR_FALLBACK_MOBILE") ?? "08000000000")
 
   const admin = adminClient()
 
@@ -65,7 +69,7 @@ Deno.serve(async (req: Request) => {
         name:        nama,
         email,
         amount,
-        mobile:      Deno.env.get("MAYAR_FALLBACK_MOBILE") ?? "08000000000",
+        mobile,
         redirectURL: `${frontend}/pembayaran-selesai`,
         description: `Laporan Lengkap ${testType} - AssesIN (${orderId})`,
         expiredAt:   new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
