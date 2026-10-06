@@ -13,10 +13,9 @@ export const HARGA_TES = {
   RIASEC:         15000,
   Resiliensi:     15000,
   'Peran Tim':    15000,
-  // Ruang Tes Kemampuan -- promo gratis sampai harganya diaktifkan juga di
-  // supabase/functions/_shared/harga.ts (lalu deploy ulang create-mayar-payment).
-  Pauli:              0,
-  Kognitif:           0,
+  // Ruang Tes Kemampuan (harus sama dengan harga.ts)
+  Pauli:          15000,
+  Kognitif:       25000,
 }
 
 export const NAMA_TES = {

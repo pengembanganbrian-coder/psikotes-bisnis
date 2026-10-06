@@ -28,6 +28,8 @@ const ISI_LAPORAN = {
   RIASEC: ['Uraian tiga minat utama Anda', 'Kekuatan yang menyertai tiap minat', 'Daftar bidang karier untuk dijajaki'],
   Resiliensi: ['Rencana penguatan untuk aspek yang lebih rendah', 'Langkah praktis yang dapat dicoba', 'Cara memanfaatkan kekuatan resiliensi Anda'],
   'Peran Tim': ['Uraian tiga peran terkuat Anda', 'Kontribusi khas dan hal yang perlu diwaspadai', 'Peran yang perlu dilengkapi rekan tim'],
+  Pauli: ['Grafik kerja per menit', 'Penilaian ketelitian, keajegan, dan ketahanan kerja', 'Saran latihan'],
+  Kognitif: ['Kekuatan dan area latihan', 'Pembahasan 40 soal lengkap dengan kunci jawaban'],
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

@@ -17,6 +17,8 @@ const NAMA_TES: Record<string, string> = {
   RIASEC: "Tes Minat Karier RIASEC",
   Resiliensi: "Tes Resiliensi Kerja",
   "Peran Tim": "Tes Peran dalam Tim",
+  Pauli: "Tes Pauli Digital",
+  Kognitif: "Tes Kemampuan Kognitif",
 }
 
 const escapeHtml = (s: string) =>
