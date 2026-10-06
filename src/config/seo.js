@@ -65,7 +65,7 @@ export const SEO = {
   },
   '/artikel': {
     title: 'Artikel Psikotes & Tes Kepribadian | AssesIN',
-    description: 'Panduan menghadapi psikotes kerja, CPNS, dan BUMN: penjelasan tes PAPI Kostick, DISC, dan jenis tes lain yang sering muncul, beserta tips mengerjakannya.',
+    description: 'Panduan menghadapi psikotes kerja, CPNS, dan BUMN, plus penjelasan tes PAPI Kostick, DISC, MBTI, MSDT, dan DASS-21 beserta tips mengerjakannya.',
   },
   ...Object.fromEntries(ARTIKEL.map(a => [
     `/artikel/${a.slug}`,

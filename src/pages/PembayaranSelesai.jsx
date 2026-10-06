@@ -39,8 +39,8 @@ export default function PembayaranSelesai() {
             Buka lagi lewat{' '}
             <Link to="/laporan-saya" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Laporan saya</Link>
             {' '}dengan email yang Anda pakai saat tes. Butuh bantuan? Hubungi{' '}
-            <a href="mailto:brianlagiapa@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
-              brianlagiapa@gmail.com
+            <a href="mailto:psikologikantor@proton.me" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
+              psikologikantor@proton.me
             </a>
           </p>
         </div>

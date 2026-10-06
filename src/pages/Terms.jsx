@@ -153,7 +153,7 @@ export default function Terms() {
           <p>Untuk pertanyaan terkait Syarat & Ketentuan ini, hubungi:</p>
           <div className="dark-card" style={{ padding: '16px 20px', marginTop: '8px' }}>
             <p style={{ color: 'var(--text)', fontWeight: 600, marginBottom: '4px' }}>AssesIN</p>
-            <p>Email: <strong style={{ color: 'var(--accent)' }}>pengembangan.brian@gmail.com</strong></p>
+            <p>Email: <strong style={{ color: 'var(--accent)' }}>psikologikantor@proton.me</strong></p>
           </div>
         </Section>
 

@@ -110,7 +110,7 @@ export default function PrivacyPolicy() {
           <Item><strong style={{ color: 'var(--text)' }}>Hak Penarikan Persetujuan</strong> — Anda dapat menarik persetujuan penggunaan data kapan saja, yang akan berakibat pada penghentian akses layanan.</Item>
           <p style={{ marginTop: '8px' }}>
             Untuk menggunakan hak-hak di atas, kirimkan permintaan ke:{' '}
-            <strong style={{ color: 'var(--accent)' }}>pengembangan.brian@gmail.com</strong>
+            <strong style={{ color: 'var(--accent)' }}>psikologikantor@proton.me</strong>
           </p>
         </Section>
 
@@ -131,7 +131,7 @@ export default function PrivacyPolicy() {
           </p>
           <div className="dark-card" style={{ padding: '16px 20px', marginTop: '8px' }}>
             <p style={{ color: 'var(--text)', fontWeight: 600, marginBottom: '4px' }}>AssesIN</p>
-            <p>Email: <strong style={{ color: 'var(--accent)' }}>pengembangan.brian@gmail.com</strong></p>
+            <p>Email: <strong style={{ color: 'var(--accent)' }}>psikologikantor@proton.me</strong></p>
           </div>
         </Section>
 
