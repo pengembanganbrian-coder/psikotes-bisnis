@@ -57,6 +57,18 @@
     <priority>0.3</priority>
   </url>
   <url>
+    <loc>https://www.assesin.net/kemampuan</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.assesin.net/tes-pauli</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.assesin.net/tes-kognitif</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.assesin.net/artikel</loc>
     <priority>0.8</priority>
   </url>

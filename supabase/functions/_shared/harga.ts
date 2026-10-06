@@ -14,4 +14,6 @@ export const HARGA_TES: Record<string, number> = {
   RIASEC:         15000,
   Resiliensi:     15000,
   'Peran Tim':    15000,
+  Pauli:              0,
+  Kognitif:           0,
 }

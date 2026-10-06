@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
-import { TES_BARU, TES_BY_TYPE } from '../tes-baru/definisi'
+import { TES_BY_TYPE } from '../tes-baru/definisi'
+import { KEMAMPUAN_BY_TYPE } from '../kemampuan/daftar'
+
+// Tes yang hasilnya disimpan sebagai jsonb: tes beta + ruang Tes Kemampuan.
+const TES_JSON = { ...TES_BY_TYPE, ...KEMAMPUAN_BY_TYPE }
 
 const PAPI_SCALES = ['G','L','I','T','V','S','R','D','C','E','N','A','P','X','B','O','Z','K','F','W']
 
@@ -13,7 +17,7 @@ const BADGE = {
   DASS:           { bg: 'rgba(20,184,166,0.18)',   color: '#0d9488'  },
   'Love Language':{ bg: 'rgba(244,63,94,0.18)',    color: '#e11d48'  },
   MSDT:           { bg: 'rgba(249,115,22,0.18)',   color: '#ea580c'  },
-  ...Object.fromEntries(Object.values(TES_BARU).map(t => [t.testType, { bg: t.warna + '2e', color: t.warna }])),
+  ...Object.fromEntries(Object.values(TES_JSON).map(t => [t.testType, { bg: t.warna + '2e', color: t.warna }])),
 }
 
 /* ── Tab accent per jenis tes ─────────────────────────────────── */
@@ -25,7 +29,7 @@ const TAB_ACCENT = {
   DASS:           '#0d9488',
   MSDT:           '#ea580c',
   'Love Language':'#e11d48',
-  ...Object.fromEntries(Object.values(TES_BARU).map(t => [t.testType, t.warna])),
+  ...Object.fromEntries(Object.values(TES_JSON).map(t => [t.testType, t.warna])),
 }
 
 const DISC_COLORS = { D: '#ef4444', I: '#f59e0b', S: '#22c55e', C: '#3b82f6' }
@@ -58,7 +62,7 @@ function Dashboard() {
     const msdtList = (msdt  || []).map(p => ({ ...p, jenis: 'MSDT',          identifier: p.nip   }))
 
     // Tes baru (beta): satu pasang tabel per tes, hasil disimpan sebagai jsonb.
-    const baru = await Promise.all(Object.values(TES_BARU).map(async t => {
+    const baru = await Promise.all(Object.values(TES_JSON).map(async t => {
       const { data } = await supabase.from(t.tabel.peserta).select(`*, ${t.tabel.hasil}(*)`).order('created_at', { ascending: false })
       return (data || []).map(p => ({ ...p, jenis: t.testType, identifier: p.nip, hasil_baru: p[t.tabel.hasil]?.[0] || null }))
     }))
@@ -117,8 +121,8 @@ function Dashboard() {
     } else if (item.jenis === 'MSDT') {
       await supabase.from('hasil_msdt').delete().eq('peserta_id', item.id)
       await supabase.from('peserta_msdt').delete().eq('id', item.id)
-    } else if (TES_BY_TYPE[item.jenis]) {
-      const t = TES_BY_TYPE[item.jenis]
+    } else if (TES_JSON[item.jenis]) {
+      const t = TES_JSON[item.jenis]
       await supabase.from(t.tabel.hasil).delete().eq('peserta_id', item.id)
       await supabase.from(t.tabel.peserta).delete().eq('id', item.id)
     }
@@ -141,7 +145,7 @@ function Dashboard() {
       }
       if (p.jenis === 'Love Language') hasil = p.hasil_love_language?.[0]?.bahasa_utama || 'Belum tes'
       if (p.jenis === 'MSDT') hasil = p.hasil_msdt?.[0]?.gaya || 'Belum tes'
-      if (TES_BY_TYPE[p.jenis]) hasil = p.hasil_baru?.ringkasan || 'Belum tes'
+      if (TES_JSON[p.jenis]) hasil = p.hasil_baru?.ringkasan || 'Belum tes'
       rows.push([
         p.nama,
         p.identifier,
@@ -160,10 +164,10 @@ function Dashboard() {
 
   /* ── Lihat Laporan ─────────────────────────────────────────── */
   const handleLihatLaporan = (item) => {
-    if (TES_BY_TYPE[item.jenis]) {
+    if (TES_JSON[item.jenis]) {
       const h = item.hasil_baru
       if (!h) return
-      navigate(TES_BY_TYPE[item.jenis].hasilRoute, { state: { skor: h.skor, jawaban: h.jawaban, nama: item.nama, email: item.nip, fromDashboard: true } })
+      navigate(TES_JSON[item.jenis].hasilRoute, { state: { skor: h.skor, jawaban: h.jawaban, nama: item.nama, email: item.nip, fromDashboard: true } })
       return
     }
     if (item.jenis === 'MBTI') {
@@ -284,7 +288,7 @@ function Dashboard() {
     }
     if (p.jenis === 'Love Language') return p.hasil_love_language?.[0]?.bahasa_utama || '—'
     if (p.jenis === 'MSDT') return p.hasil_msdt?.[0]?.gaya || '—'
-    if (TES_BY_TYPE[p.jenis]) return p.hasil_baru?.ringkasan || '—'
+    if (TES_JSON[p.jenis]) return p.hasil_baru?.ringkasan || '—'
     return '—'
   }
 
@@ -403,7 +407,7 @@ function Dashboard() {
 
           {/* Filter tabs */}
           <div style={{ padding: '14px 20px', display: 'flex', gap: '6px', flexWrap: 'wrap', borderBottom: '1px solid var(--border)' }}>
-            {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'MSDT', 'Love Language', ...Object.keys(TES_BY_TYPE)].map(t => {
+            {['Semua', 'MBTI', 'DISC', 'PAPI', 'DASS', 'MSDT', 'Love Language', ...Object.keys(TES_JSON)].map(t => {
               const accent = TAB_ACCENT[t]
               const isActive = tab === t
               return (
@@ -724,15 +728,15 @@ function Dashboard() {
               })()}
 
               {/* ─── Tes baru (beta) ─── */}
-              {TES_BY_TYPE[selected.jenis] && (() => {
-                const t = TES_BY_TYPE[selected.jenis]
+              {TES_JSON[selected.jenis] && (() => {
+                const t = TES_JSON[selected.jenis]
                 const h = selected.hasil_baru
                 return (
                   <>
                     <div style={{ background: t.warna + '22', border: `1px solid ${t.warna}55`, borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
                       <p style={{ fontSize: '10px', color: t.warna, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '4px' }}>{t.judul}</p>
                       <p style={{ fontFamily: 'inherit', fontWeight: 700, fontSize: '15px', color: t.warna }}>{h?.ringkasan || '—'}</p>
-                      <p style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>Beta</p>
+                      <p style={{ fontSize: '10px', color: 'var(--text-muted)', marginTop: '2px' }}>{t.dimensi ? 'Beta' : 'Tes Kemampuan'}</p>
                     </div>
                     <DetailRows rows={[
                       ['Nama', selected.nama],
@@ -740,7 +744,7 @@ function Dashboard() {
                       ['Usia', selected.jabatan || '—'],
                       ['Tanggal', new Date(selected.created_at).toLocaleDateString('id-ID')],
                     ]} />
-                    {h?.skor && (
+                    {h?.skor && t.dimensi && (
                       <ScoreSection label={`Skor ${t.singkat}`}>
                         {Object.entries(t.dimensi).map(([k, d]) => (
                           <div key={k} style={{ marginBottom: '8px' }}>

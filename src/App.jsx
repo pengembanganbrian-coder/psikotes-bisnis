@@ -29,6 +29,11 @@ import { DaftarArtikel, BacaArtikel } from './pages/Artikel'
 import Kontak from './pages/Kontak'
 import TesBaru from './pages/TesBaru'
 import HasilBaru from './pages/HasilBaru'
+import Kemampuan from './pages/Kemampuan'
+import TesPauli from './pages/TesPauli'
+import HasilPauli from './pages/HasilPauli'
+import TesKognitif from './pages/TesKognitif'
+import HasilKognitif from './pages/HasilKognitif'
 import { TES_BARU } from './tes-baru/definisi'
 
 // Listens for Supabase PASSWORD_RECOVERY event (fired when user clicks the reset link).
@@ -79,6 +84,11 @@ function App() {
         <Route path="/laporan-saya" element={<LaporanSaya />} />
         <Route path="/artikel" element={<DaftarArtikel />} />
         <Route path="/artikel/:slug" element={<BacaArtikel />} />
+        <Route path="/kemampuan" element={<Kemampuan />} />
+        <Route path="/tes-pauli" element={<TesPauli />} />
+        <Route path="/hasil-pauli" element={<HasilPauli />} />
+        <Route path="/tes-kognitif" element={<TesKognitif />} />
+        <Route path="/hasil-kognitif" element={<HasilKognitif />} />
         <Route path="/kontak" element={<Kontak />} />
         <Route path="*" element={<NotFound />} />
       </Routes>

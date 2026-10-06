@@ -285,6 +285,20 @@ export default function Home() {
               </div>
             </div>
           ))}
+
+          {/* Ruang Tes Kemampuan */}
+          <Link to="/kemampuan" className="card-test" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', padding: '22px', textDecoration: 'none' }}>
+            <div style={{ flex: 1, minWidth: '240px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text)' }}>Ruang Tes Kemampuan</h3>
+                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--accent)', background: 'var(--accent-dim)', padding: '2px 8px', borderRadius: '99px' }}>Baru</span>
+              </div>
+              <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.6 }}>
+                Latihan tes berbatas waktu: Pauli digital (ganjil-genap) dan tes kemampuan kognitif — deret angka, analogi, logika, dan matriks gambar.
+              </p>
+            </div>
+            <span className="card-cta">Masuk <span className="card-cta-arrow" aria-hidden="true">→</span></span>
+          </Link>
         </div>
       </section>
 

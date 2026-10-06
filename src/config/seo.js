@@ -51,6 +51,18 @@ export const SEO = {
     title: 'Tes Peran dalam Tim Online | AssesIN',
     description: 'Penggagas ide, penggerak, atau penjaga detail? Kenali peran yang paling alami Anda jalankan dalam tim agar kontribusi Anda lebih terlihat.',
   },
+  '/kemampuan': {
+    title: 'Tes Kemampuan Online — Pauli Digital & Tes Kognitif | AssesIN',
+    description: 'Latihan tes kemampuan berbatas waktu untuk psikotes kerja, BUMN, dan CPNS: tes Pauli digital ganjil-genap serta tes deret angka, analogi, logika, dan matriks gambar.',
+  },
+  '/tes-pauli': {
+    title: 'Tes Pauli Online (Ganjil-Genap) — Latihan Kecepatan & Ketelitian | AssesIN',
+    description: 'Latihan tes Pauli/Kraepelin versi digital selama 10 menit. Lihat jumlah kerja, persentase kesalahan, dan grafik kerja per menit: kecepatan, ketelitian, keajegan, dan ketahanan.',
+  },
+  '/tes-kognitif': {
+    title: 'Tes Kemampuan Kognitif Online — Deret Angka, Analogi, Logika, Matriks | AssesIN',
+    description: 'Latihan 40 soal kemampuan berpikir yang sering muncul di psikotes: deret angka, analogi verbal, penalaran logis, dan matriks gambar, lengkap dengan pembahasan.',
+  },
   '/kontak': {
     title: 'Kontak | AssesIN',
     description: 'Hubungi tim AssesIN untuk pertanyaan seputar tes, pembayaran laporan, atau kerja sama asesmen.',

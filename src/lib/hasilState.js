@@ -2,6 +2,7 @@
 // bisa dibuka lagi dari "Laporan saya" (bentuk state sama dengan yang dikirim
 // halaman tes saat selesai).
 import { TES_BY_TYPE } from '../tes-baru/definisi'
+import { KEMAMPUAN_BY_TYPE } from '../kemampuan/daftar'
 
 const PAPI_SCALES = ['G','L','I','T','V','S','R','D','C','E','N','A','P','X','B','O','Z','K','F','W']
 
@@ -14,7 +15,7 @@ export function stateHasil(item) {
   if (!h) return null
   const dasar = { nama: item.nama, email: item.email, jabatan: item.jabatan, pesertaId: item.id }
 
-  const baru = TES_BY_TYPE[item.jenis]
+  const baru = TES_BY_TYPE[item.jenis] || KEMAMPUAN_BY_TYPE[item.jenis]
   if (baru) {
     return { route: baru.hasilRoute, state: { ...dasar, skor: h.skor, jawaban: h.jawaban } }
   }
