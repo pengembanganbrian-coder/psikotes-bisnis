@@ -3,6 +3,7 @@ import { supabase } from '../supabase'
 import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 import PrivacyCheckbox from '../components/PrivacyCheckbox'
+import { hitungGrafikDISC } from '../disc/skoring'
 
 const soal = [
   { id: 1, pilihan: [
@@ -179,9 +180,11 @@ function hitungDISC(jawaban) {
   const changeS = mostS - leastS
   const changeC = mostC - leastC
 
-  const scores = { D: changeD, I: changeI, S: changeS, C: changeC }
-  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1])
-  const profil = sorted[0][0] + (sorted[1][1] > 0 ? sorted[1][0] : '')
+  // Profil dibaca dari posisi grafik (tabel konversi eDISC), bukan skor mentah.
+  const { profil } = hitungGrafikDISC(
+    { D: mostD, I: mostI, S: mostS, C: mostC },
+    { D: leastD, I: leastI, S: leastS, C: leastC },
+  )
 
   return { profil, mostD, mostI, mostS, mostC, leastD, leastI, leastS, leastC, changeD, changeI, changeS, changeC }
 }

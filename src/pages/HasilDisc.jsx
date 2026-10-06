@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../supabase'
 import PaymentGate from '../components/PaymentGate'
 import { LaporanPage, LaporanBar, LaporanHero, Kartu, BarisSkor, Poin, Chip, Sorot, Catatan, AksiBawah, TanpaData } from '../components/Laporan'
+import { DIMENSI, GARIS_TENGAH, NAMA_GRAFIK, LABEL_KONDISI, hitungGrafikDISC } from '../disc/skoring'
+import { POLA_DISC } from '../disc/pola'
 
 const profilDISC = {
   D: { nama: "Developer", tipe: "D", deskripsi: "selalu akan mencari solusi-solusi baru dari tiap persoalan yang dihadapi. Ia memiliki internal motif yang kuat dan memiliki kecepatan kerja untuk mencapai tujuannya, serta mampu membuat keputusan dengan mudah walaupun dalam suasana penuh tekanan. Ia adalah seorang yang kreatif dan percaya diri, ia cenderung menggunakan keseimbangan antara intuisi dan fakta ketika mengambil keputusan. Ia memiliki kekuatan ego yang besar, cenderung sangat individualistis dan selalu mencari pandangan-pandangan baru karenanya ia tidak menyukai berada dibawah atasan yang penuh kontrol.", karakteristik: ["Mengambil keputusan","Langsung/direct","Kekuatan ego yang besar","Memecahkan masalah","Berani mengambil resiko","Dominan","Penggerak"], perilakuKerja: { kekuatan: ["Tidak takut bersaing","Kreatif dan memiliki banyak ide","Percaya diri dan mandiri","Berani mengambil risiko"], kelemahan: ["Kurang peka terhadap perasaan orang lain","Terlalu cepat mengambil keputusan","Cenderung mendominasi"] }, suasanaEmosi: { kekuatan: ["Percaya diri","Berkemauan keras","Tekun dan ulet","Berani dan tegar"], kelemahan: ["Pendiriannya sangat keras","Tidak sabaran, suka menekan","Memaksakan kehendak"] }, kekuatan: ["Percaya diri","Berkemauan keras","Tekun dan ulet","Berani dan tegar","Menghadapi hidup tanpa kompromi","Organisator dan promotor","Cepat bertindak","Berani memutuskan dalam keadaan mendesak","Mampu memberikan solusi","Memiliki inisiatif","Mampu bekerja dengan cepat","Memotivasi orang lain","Cepat membuat keputusan","Berani mengambil resiko"], kelemahan: ["Pendiriannya sangat keras","Terlalu cepat mengambil keputusan","Tidak sabaran, suka menekan","Kurang peka terhadap perasaan orang lain","Terlalu percaya diri","Kurang menghargai pendapat orang lain","Cenderung mendominasi","Memaksakan kehendak","Cenderung egois"], gayaKepemimpinan: ["Mengendalikan orang lain","Cepat bertindak","Percaya diri","Mencari perubahan","Persuasif","Kompetitif","Berani mengambil resiko"], pekerjaan: ["Pekerjaan yang membutuhkan pengambilan keputusan secara cepat","Pekerjaan yang berorientasi kepada hasil","Pekerjaan yang kompetitif dan banyak tantangan","Bebas dari pekerjaan detail dan spesifik","Menggunakan kekuasaan dan wewenang","Mengambil suatu gagasan dan menjalankannya","Beragam kegiatan","Bebas dari pengawasan langsung","Memunculkan ide-ide baru","Mengkoordinir kegiatan"], karir: ["Director","Entrepreneur","Manager","Sales Manager","Executive"] },
@@ -12,15 +14,10 @@ const profilDISC = {
 }
 
 const getProfilInfo = (profil) => {
-  const dominan = profil[0]
-  const base = profilDISC[dominan]
-  const namaKombinasi = {
-    DI: "Inspirational", DIS: "Director", DIC: "Chancellor", DC: "Challenger", DS: "Achiever", DSC: "Achiever", DSI: "Achiever",
-    ID: "Persuader", IDC: "Leader", IDS: "Reformer", IS: "Agent", ISC: "Governor", ISD: "Motivator", IC: "Appraiser", ICD: "Appraiser", ICS: "Governor",
-    SD: "Achiever", SDC: "Achiever", SDI: "Agent", SI: "Agent", SIC: "Advocate", SID: "Agent", SC: "Investigator", SCD: "Inquirer", SCI: "Advocate",
-    CD: "Creative", CDI: "Creative", CDS: "Contemplator", CI: "Appraiser", CID: "Creative", CIS: "Mediator", CS: "Perfectionist", CSD: "Perfectionist", CSI: "Practitioner",
-  }
-  return { ...base, nama: namaKombinasi[profil] || base.nama }
+  const base = profilDISC[profil[0]]
+  const pola = POLA_DISC[profil]
+  if (!pola) return { ...base, uraian: `${base.nama} ${base.deskripsi}` }
+  return { ...base, nama: pola.tipe, uraian: pola.deskripsi, karakteristik: pola.karakter.length ? pola.karakter : base.karakteristik }
 }
 
 const DC = {
@@ -30,30 +27,33 @@ const DC = {
   C: { hex: '#3b82f6', dim: 'rgba(59,130,246,0.12)', border: 'rgba(59,130,246,0.35)', label: 'Conscientiousness'},
 }
 
-/** Grafik batang D-I-S-C dengan garis nol di tengah (nilai bisa negatif). */
-function GrafikDISC({ judul, sub, data }) {
-  const maks = Math.max(...data.map(d => Math.abs(d.val)), 1)
-  const adaNegatif = data.some(d => d.val < 0)
-  const H = 70 // tinggi tiap sisi (px)
+/** Grafik posisi D-I-S-C (1-32) dengan garis tengah; batang naik/turun dari garis tengah. */
+function GrafikDISC({ judul, sub, grafik }) {
+  const H = 64 // tinggi tiap sisi (px)
+  const tengah = GARIS_TENGAH - 0.5
+  const kondisi = LABEL_KONDISI[grafik.kondisi]
   return (
     <div style={{ background: 'var(--surface-2)', borderRadius: '16px', padding: '14px 12px 12px' }}>
       <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', textAlign: 'center' }}>{judul}</p>
-      <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '10px' }}>{sub}</p>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', position: 'relative' }}>
-        {data.map(d => {
-          const h = Math.max((Math.abs(d.val) / maks) * H, d.val !== 0 ? 4 : 0)
+      <p style={{ fontSize: '11.5px', color: 'var(--text-muted)', textAlign: 'center', marginBottom: '4px' }}>{sub}</p>
+      <p style={{ fontSize: '13px', fontWeight: 800, textAlign: 'center', marginBottom: '10px', color: kondisi ? '#b45309' : 'var(--accent)' }}>
+        {kondisi ? kondisi.judul : grafik.kode}
+      </p>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px' }}>
+        {DIMENSI.map(d => {
+          const pos = grafik.pos[d]
+          const h = (Math.abs(pos - tengah) / 16) * H
           return (
-            <div key={d.label} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <span style={{ fontSize: '12px', fontWeight: 800, color: DC[d.label].hex, height: '18px' }}>{d.val > 0 ? '+' : ''}{d.val}</span>
-              <div style={{ height: H, width: '100%', display: 'flex', alignItems: 'flex-end', borderBottom: '1.5px solid #cbd5e1' }}>
-                {d.val > 0 && <div style={{ width: '100%', height: h, background: DC[d.label].hex, borderRadius: '6px 6px 0 0' }} />}
+            <div key={d} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <span style={{ fontSize: '12px', fontWeight: 800, color: DC[d].hex, height: '18px' }}>{pos}</span>
+              <div style={{ height: H, width: '100%', display: 'flex', alignItems: 'flex-end', borderBottom: '1.5px solid #94a3b8' }}>
+                {pos > tengah && <div style={{ width: '100%', height: h, background: DC[d].hex, borderRadius: '6px 6px 0 0' }} />}
               </div>
-              {adaNegatif && (
-                <div style={{ height: H, width: '100%', display: 'flex', alignItems: 'flex-start' }}>
-                  {d.val < 0 && <div style={{ width: '100%', height: h, background: DC[d.label].hex, opacity: 0.45, borderRadius: '0 0 6px 6px' }} />}
-                </div>
-              )}
-              <span style={{ fontSize: '14px', fontWeight: 800, color: DC[d.label].hex, marginTop: '6px' }}>{d.label}</span>
+              <div style={{ height: H, width: '100%', display: 'flex', alignItems: 'flex-start' }}>
+                {pos < tengah && <div style={{ width: '100%', height: h, background: DC[d].hex, opacity: 0.45, borderRadius: '0 0 6px 6px' }} />}
+              </div>
+              <span style={{ fontSize: '14px', fontWeight: 800, color: DC[d].hex, marginTop: '6px' }}>{d}</span>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>skor {grafik.mentah[d] > 0 && judul.includes('Change') ? '+' : ''}{grafik.mentah[d]}</span>
             </div>
           )
         })}
@@ -166,20 +166,10 @@ function JobPersonMatch({ hasil }) {
   )
 }
 
-function deteksiProfilKhusus(hasil) {
-  const skor = [hasil.changeD || 0, hasil.changeI || 0, hasil.changeS || 0, hasil.changeC || 0]
-  const rata = skor.reduce((a, b) => a + b, 0) / 4
-  const kondisi = []
-  if (Math.max(...skor) - Math.min(...skor) <= 2) {
-    kondisi.push(['Profil datar (tight profile)', 'Selisih skor antardimensi sangat kecil, sehingga tidak ada dimensi yang benar-benar dominan. Bisa jadi Anda sangat adaptif, atau sedang kurang nyaman saat mengisi tes. Hasil sebaiknya didiskusikan lebih lanjut.'])
-  }
-  if (skor.every(s => s <= 0)) {
-    kondisi.push(['Under shift', 'Semua skor grafik Change bernilai nol atau negatif. Ini dapat menandakan Anda sedang berada di bawah tekanan atau kurang nyaman dengan lingkungan saat ini, sehingga perilaku yang tampak berbeda dari kecenderungan asli.'])
-  }
-  if (skor.every(s => s >= 0) && rata > 5) {
-    kondisi.push(['Upper shift', 'Semua skor grafik Change positif dan tinggi. Ini dapat menandakan antusiasme dan motivasi yang besar, atau upaya menampilkan diri sebaik mungkin saat tes.'])
-  }
-  return kondisi
+function deteksiProfilKhusus(g) {
+  return [1, 2, 3]
+    .filter(n => LABEL_KONDISI[g.grafik[n].kondisi])
+    .map(n => [`${LABEL_KONDISI[g.grafik[n].kondisi].judul} pada ${NAMA_GRAFIK[n].judul}`, LABEL_KONDISI[g.grafik[n].kondisi].isi])
 }
 
 export default function HasilDisc() {
@@ -189,11 +179,14 @@ export default function HasilDisc() {
   if (!state?.hasil) return <TanpaData onKembali={() => navigate('/tes-disc')} />
 
   const { hasil, nama, email, pesertaId, fromDashboard } = state
-  const profil  = hasil.profil || 'D'
+  // Profil selalu dihitung ulang dari skor Most/Least, sehingga hasil lama
+  // ikut terbaca dengan aturan grafik eDISC.
+  const ambil = k => Object.fromEntries(DIMENSI.map(d => [d, hasil[`${k}${d}`] || 0]))
+  const g       = hitungGrafikDISC(ambil('most'), ambil('least'))
+  const profil  = g.profil
   const dominan = profil[0]
   const info    = getProfilInfo(profil)
-  const profilKhusus = deteksiProfilKhusus(hasil)
-  const seri = k => ['D', 'I', 'S', 'C'].map(l => ({ label: l, val: hasil[`${k}${l}`] || 0 }))
+  const profilKhusus = deteksiProfilKhusus(g)
   const keBelakang = () => navigate(fromDashboard ? '/dashboard' : '/')
   const laporan = <PremiumContentDISC info={info} warna={DC[dominan].hex} />
 
@@ -209,15 +202,18 @@ export default function HasilDisc() {
       </LaporanHero>
 
       <Kartu no={1} ikon="📖" judul="Uraian kepribadian">
-        <p className="rpt-teks"><strong style={{ color: 'var(--text)' }}>{nama || 'Anda'}</strong> {info.deskripsi}</p>
+        <p className="rpt-teks">{info.uraian}</p>
       </Kartu>
 
       <Kartu no={2} ikon="📊" judul="Grafik kepribadian" sub="Perilaku Anda dari tiga sudut pandang">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
-          <GrafikDISC judul="Most" sub="Diri yang ditampilkan" data={seri('most')} />
-          <GrafikDISC judul="Least" sub="Saat di bawah tekanan" data={seri('least')} />
-          <GrafikDISC judul="Change" sub="Kecenderungan asli" data={seri('change')} />
+          {[1, 2, 3].map(n => <GrafikDISC key={n} judul={NAMA_GRAFIK[n].judul} sub={NAMA_GRAFIK[n].sub} grafik={g.grafik[n]} />)}
         </div>
+        {!g.profilPasti && (
+          <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '12px' }}>
+            Grafik 3 tidak membentuk profil yang jelas, sehingga profil di atas dibaca dari {NAMA_GRAFIK[g.sumberProfil].judul}.
+          </p>
+        )}
         {profilKhusus.length > 0 && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '14px' }}>
             {profilKhusus.map(([judul, isi]) => <Sorot key={judul} judul={judul} warna="#b45309">{isi}</Sorot>)}
