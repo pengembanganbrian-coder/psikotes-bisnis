@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 import PrivacyCheckbox from '../components/PrivacyCheckbox'
 
-const soal = [
+const SOAL_DASAR = [
   // EI - Bagian 1 (15 soal)
   { id: 1, kiri: "Lebih memilih berkomunikasi dengan menulis.", kanan: "Lebih memilih berkomunikasi dengan berbicara.", dimensi: "EI", arahKiri: "I", arahKanan: "E" },
   { id: 2, kiri: "Menemukan dan mengembangkan ide dengan merenungkan.", kanan: "Menemukan dan mengembangkan ide dengan mendiskusikan.", dimensi: "EI", arahKiri: "I", arahKanan: "E" },
@@ -20,7 +20,7 @@ const soal = [
   { id: 12, kiri: "Mencari kesempatan untuk berkomunikasi secara perorangan.", kanan: "Memilih berkomunikasi pada sekelompok orang.", dimensi: "EI", arahKiri: "I", arahKanan: "E" },
   { id: 13, kiri: "Komunikasi tidak langsung lebih disukai (telepon, surat, email).", kanan: "Komunikasi yang dilakukan secara langsung lebih disukai (bertatap muka).", dimensi: "EI", arahKiri: "I", arahKanan: "E" },
   { id: 14, kiri: "Membangun ide dengan matang baru membicarakannya.", kanan: "Membangun idenya justru pada saat berbicara.", dimensi: "EI", arahKiri: "I", arahKanan: "E" },
-  { id: 15, kiri: "Berhati-hati, penuh pertimbangan, kaku.", kanan: "Spontan, easy going, fleksibel.", dimensi: "EI", arahKiri: "I", arahKanan: "E" },
+  { id: 15, kiri: "Berhati-hati dan penuh pertimbangan.", kanan: "Spontan, easy going, fleksibel.", dimensi: "EI", arahKiri: "I", arahKanan: "E" },
   // SN - Bagian 2 (15 soal)
   { id: 16, kiri: "Bergerak dari detail kepada gambaran besar sebagai kesimpulan akhir.", kanan: "Bergerak dari gambaran umum (big picture) baru kemudian menuju detail.", dimensi: "SN", arahKiri: "S", arahKanan: "N" },
   { id: 17, kiri: "Berbicara mengenai masalah yang dihadapi hari ini dan langkah-langkah praktis mengatasinya.", kanan: "Berbicara mengenai visi masa depan dan konsep-konsep mengenai visi tersebut.", dimensi: "SN", arahKiri: "S", arahKanan: "N" },
@@ -61,8 +61,8 @@ const soal = [
   { id: 50, kiri: "Fokus pada target dan mengabaikan hal-hal baru.", kanan: "Memperhatikan hal-hal baru dan siap menyesuaikan diri dan merubah target.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
   { id: 51, kiri: "Merasa tenang bila semuanya sudah diputuskan.", kanan: "Merasa nyaman bila situasi tetap terbuka terhadap pilihan-pilihan lain.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
   { id: 52, kiri: "Ketidakpastian membuat bingung dan meresahkan.", kanan: "Ketidakpastian itu menegangkan, seru, dan membuat lebih fun.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
-  { id: 53, kiri: "Situasi last minute sangat menyiksa, membuat stress, dan merupakan kesalahan.", kanan: "Situasi last minute membuat bersemangat dan memunculkan potensi.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
-  { id: 54, kiri: "Perubahan adalah musuh.", kanan: "Perubahan adalah semangat hidup.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
+  { id: 53, kiri: "Situasi serba mendadak di menit terakhir membuat saya tertekan.", kanan: "Situasi last minute membuat bersemangat dan memunculkan potensi.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
+  { id: 54, kiri: "Saya lebih nyaman bila keadaan tidak banyak berubah.", kanan: "Perubahan membuat saya bersemangat.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
   { id: 55, kiri: "Bertindak sesuai dengan apa yang sudah direncanakan.", kanan: "Bertindak sesuai situasi dan kondisi yang terjadi saat itu.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
   { id: 56, kiri: "Hidup harus sudah diatur dari awal.", kanan: "Hidup harusnya mengalir sesuai kondisi.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
   { id: 57, kiri: "Daftar dan checklist adalah panduan penting.", kanan: "Daftar dan checklist adalah tugas dan beban.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
@@ -70,6 +70,13 @@ const soal = [
   { id: 59, kiri: "Mengatur orang lain dengan tata tertib agar tujuan tercapai.", kanan: "Membiarkan orang lain bertindak bebas asalkan tujuan tercapai.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
   { id: 60, kiri: "Berpegang teguh pada pendirian.", kanan: "Pendirian masih bisa berubah tergantung situasi nantinya.", dimensi: "JP", arahKiri: "J", arahKanan: "P" },
 ]
+
+// Di daftar dasar kutub I/S/T/J selalu di kiri. Agar kecenderungan memilih
+// sisi tertentu tidak menggeser tipe, posisi nomor genap ditukar. Skor
+// dihitung lewat arahKiri/arahKanan, jadi penukaran tidak mengubah kunci.
+const soal = SOAL_DASAR.map(s => s.id % 2 === 0
+  ? { ...s, kiri: s.kanan, kanan: s.kiri, arahKiri: s.arahKanan, arahKanan: s.arahKiri }
+  : s)
 
 function hitungMBTI(jawaban) {
   let e=0, i=0, s=0, n=0, t=0, f=0, j=0, p=0

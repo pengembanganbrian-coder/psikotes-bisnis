@@ -65,11 +65,8 @@ export function stateHasil(item) {
             TO:         h.skor_to,
             RO:         h.skor_ro,
             E_score:    h.e_score,
-            grandTotal: h.grand_total,
+            E_raw:      h.grand_total,  // grand_total menyimpan skor mentah dimensi E
             gaya:       h.gaya,
-            toTinggi:   h.skor_to > 11,
-            roTinggi:   h.skor_ro > 9,
-            eTinggi:    h.e_score >= 2.0,
           },
         },
       }

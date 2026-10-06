@@ -89,12 +89,13 @@ const PETA = [
   { label: 'Deserter',            to: false, ro: false, e: false },
 ]
 
-function LaporanLengkapMSDT({ gaya, info, TO, RO, grandTotal, safeE, toTinggi, roTinggi, eTinggi }) {
+const fmt = v => (v ?? 0).toFixed(1).replace('.', ',')
+
+function LaporanLengkapMSDT({ gaya, info, TO, RO, E_raw, konversi }) {
   const baris = [
-    ['Task Orientation (TO)', TO, toTinggi ? 'Tinggi (>11)' : 'Rendah (≤11)', toTinggi ? '#ea580c' : '#2563eb'],
-    ['Relationship Orientation (RO)', RO, roTinggi ? 'Tinggi (>9)' : 'Rendah (≤9)', roTinggi ? '#ea580c' : '#2563eb'],
-    ['Grand Total', grandTotal, 'Dasar skor E', '#4f46e5'],
-    ['Skor Efektivitas (E)', safeE.toFixed(1), eTinggi ? 'Efektif (≥2,0)' : 'Kurang efektif (<2,0)', eTinggi ? '#16a34a' : '#64748b'],
+    ['Task Orientation (TO)', TO, konversi && fmt(konversi.TO)],
+    ['Relationship Orientation (RO)', RO, konversi && fmt(konversi.RO)],
+    ['Effectiveness (E)', E_raw, konversi && fmt(konversi.E)],
   ]
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -104,13 +105,13 @@ function LaporanLengkapMSDT({ gaya, info, TO, RO, grandTotal, safeE, toTinggi, r
       <Kartu ikon="📋" judul="Ringkasan skor">
         <div style={{ overflowX: 'auto' }}>
           <table className="rpt-tabel">
-            <thead><tr><th>Dimensi</th><th style={{ textAlign: 'center' }}>Skor</th><th style={{ textAlign: 'right' }}>Status</th></tr></thead>
+            <thead><tr><th>Dimensi</th><th style={{ textAlign: 'center' }}>Skor</th><th style={{ textAlign: 'right' }}>Konversi (0–4)</th></tr></thead>
             <tbody>
-              {baris.map(([nama, nilai, status, warna]) => (
+              {baris.map(([nama, nilai, konv]) => (
                 <tr key={nama}>
                   <td>{nama}</td>
-                  <td style={{ textAlign: 'center', fontWeight: 800, color: 'var(--text)' }}>{nilai}</td>
-                  <td style={{ textAlign: 'right' }}><Chip warna={warna}>{status}</Chip></td>
+                  <td style={{ textAlign: 'center', fontWeight: 800, color: 'var(--text)' }}>{nilai ?? '—'}</td>
+                  <td style={{ textAlign: 'right' }}>{konv ? <Chip warna="#4f46e5">{konv}</Chip> : '—'}</td>
                 </tr>
               ))}
             </tbody>
@@ -128,34 +129,48 @@ export default function HasilMsdt() {
   if (!state?.hasil) return <TanpaData onKembali={() => navigate('/tes-msdt')} />
 
   const { hasil, nama, email, pesertaId, fromDashboard } = state
-  const { TO, RO, E_score, grandTotal, gaya, toTinggi, roTinggi, eTinggi } = hasil
+  // Data lama dari server hanya menyimpan TO, RO, skor E & gaya; gayaSkor
+  // (8 gaya) hanya tersedia untuk tes yang baru dikerjakan.
+  const { TO, RO, E_raw, E_score, gaya, gayaSkor, gayaSeri = [] } = hasil
+  const konversi = hasil.konversi || (E_score != null ? { E: E_score } : null)
   const info  = gayaInfo[gaya] || gayaInfo.Deserter
+  const ciri  = PETA.find(p => p.label === gaya) || PETA.at(-1)
   const safeE = E_score ?? 0
+  const urutGaya = gayaSkor ? Object.entries(gayaSkor).sort((a, b) => b[1] - a[1]) : []
+  const maksGaya = Math.max(16, ...urutGaya.map(([, v]) => v))
   const keBelakang = () => navigate(fromDashboard ? '/dashboard' : '/')
-  const laporan = <LaporanLengkapMSDT {...{ gaya, info, TO, RO, grandTotal, safeE, toTinggi, roTinggi, eTinggi }} />
+  const laporan = <LaporanLengkapMSDT {...{ gaya, info, TO, RO, E_raw, konversi }} />
 
   return (
     <LaporanPage bar={<LaporanBar kembali={fromDashboard ? '← Dashboard' : null} onKembali={keBelakang} />}>
       <LaporanHero tes="MSDT" sub="Management Style Diagnostic Test" nama={nama} tersimpan={!!pesertaId} warna="#1e40af" warna2="#4f46e5" watermark="MSDT">
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-          <Cincin nilai={safeE} maks={4} terang ukuran={112} tampil={safeE.toFixed(1)} label="efektivitas" />
+          <Cincin nilai={safeE} maks={4} terang ukuran={112} tampil={fmt(safeE)} label="efektivitas" />
           <div style={{ flex: 1, minWidth: '200px' }}>
             <p className="rpt-label">{info.emoji} Gaya manajemen Anda</p>
             <p className="rpt-besar" style={{ fontSize: '28px' }}>{gaya}</p>
           </div>
         </div>
         <div className="rpt-chips" style={{ marginTop: '14px' }}>
-          {[`Orientasi tugas: ${info.labelTO}`, `Orientasi hubungan: ${info.labelRO}`, info.labelE].map(t => (
+          {[`Orientasi tugas: ${ciri.to ? 'Tinggi' : 'Rendah'}`, `Orientasi hubungan: ${ciri.ro ? 'Tinggi' : 'Rendah'}`, ciri.e ? 'Efektif' : 'Kurang efektif'].map(t => (
             <span key={t} style={{ fontSize: '12.5px', fontWeight: 700, padding: '5px 12px', borderRadius: '99px', background: 'rgba(255,255,255,0.2)' }}>{t}</span>
           ))}
         </div>
         <p className="rpt-ket" style={{ marginTop: '14px' }}>{info.deskripsi}</p>
       </LaporanHero>
 
-      <Kartu no={1} ikon="📊" judul="Skor gaya manajemen">
-        <BarisSkor label="Task Orientation (TO)" sub="orientasi pada tugas" nilai={TO} min={3} maks={19} warna={toTinggi ? '#ea580c' : '#2563eb'} lencana={toTinggi ? 'Tinggi' : 'Rendah'} ket="Rentang 3–19, batas tinggi di atas 11." />
-        <BarisSkor label="Relationship Orientation (RO)" sub="orientasi pada hubungan" nilai={RO} min={1} maks={17} warna={roTinggi ? '#ea580c' : '#2563eb'} lencana={roTinggi ? 'Tinggi' : 'Rendah'} ket="Rentang 1–17, batas tinggi di atas 9." />
-        <BarisSkor label="Skor Efektivitas (E)" nilai={safeE} tampil={safeE.toFixed(1)} maks={4} warna={eTinggi ? '#16a34a' : '#64748b'} lencana={eTinggi ? 'Efektif' : 'Kurang efektif'} ket="Rentang 0–4, efektif bila 2,0 atau lebih." />
+      <Kartu no={1} ikon="📊" judul="Skor gaya manajemen" sub="Gaya dominan = skor tertinggi dari delapan gaya">
+        {urutGaya.length > 0 ? urutGaya.map(([nama, nilai]) => (
+          <BarisSkor key={nama} label={`${gayaInfo[nama].emoji} ${nama}`} nilai={nilai} maks={maksGaya}
+            warna={nama === gaya ? 'var(--accent)' : '#94a3b8'} lencana={nama === gaya ? 'Dominan' : null} />
+        )) : (
+          <p style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Rincian delapan gaya tidak tersimpan untuk hasil ini.</p>
+        )}
+        {gayaSeri.length > 0 && (
+          <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '8px' }}>
+            Skor {gaya} sama tinggi dengan {gayaSeri.join(', ')}. Gaya-gaya ini sama kuatnya dalam diri Anda.
+          </p>
+        )}
       </Kartu>
 
       <Kartu no={2} ikon="🗺️" judul="Peta gaya manajemen" sub="Delapan gaya berdasarkan orientasi tugas, hubungan, dan efektivitas">

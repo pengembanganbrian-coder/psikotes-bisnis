@@ -16,7 +16,7 @@ const soal = [
   { id: 9,  a: "Saya akan memberikan tugas-tugas yang sulit kepada bawahan saya yang belum berpengalaman, tetapi bila mereka memperoleh kesukaran, saya akan mengambil alih tanggung jawab mereka.", b: "Bila jumlah dan mutu hasil kerja bagian saya tidak memuaskan, saya mengatakan kepada bawahan-bawahan saya bahwa direktur merasa kecewa. Oleh karena itu mereka harus memperbaiki kerja mereka." },
   { id: 10, a: "Saya merasa bahwa dengan bekerja keras untuk bawahan saya, mereka akan menyukai saya.", b: "Saya membiarkan orang lain menangani tugas mereka masing-masing, walaupun mereka membuat banyak kesalahan." },
   { id: 11, a: "Saya menunjukkan minat saya terhadap kehidupan pribadi bawahan-bawahan saya, karena sayapun mengharapkan mereka berbuat seperti itu kepada saya.", b: "Saya merasa bahwa bawahan-bawahan saya tidak perlu mengerti mengapa mereka mengerjakan sesuatu hal, sejauh mereka mengerjakan hal tersebut." },
-  { id: 12, a: "Saya percaya bahwa bawahan-bawahan yang tidak disiplin tidak akan memperbaiki jumlah atau mutu kerja mereka dalam jangka waktu yang panjang.", b: "Bila menghadapi masalah yang sulit, saya berusaha untuk mencapai pemecahan yang dapat diterima oleh sebagian besar orang." },
+  { id: 12, a: "Saya percaya bahwa penerapan disiplin pada bawahan tidak akan memperbaiki jumlah atau mutu kerja mereka dalam jangka waktu yang panjang.", b: "Bila menghadapi masalah yang sulit, saya berusaha untuk mencapai pemecahan yang dapat diterima oleh sebagian besar orang." },
   { id: 13, a: "Bila beberapa bawahan saya merasa tidak bahagia, saya akan mencoba melakukan sesuatu untuk mengatasi hal tersebut.", b: "Saya berusaha bekerja sebaik mungkin dan memberikan ide-ide pengembangan pada pimpinan." },
   { id: 14, a: "Saya menyetujui kenaikan tunjangan-tunjangan untuk staf dan karyawan.", b: "Saya mendukung bawahan saya yang ingin meningkatkan pengetahuan tentang pekerjaan dan perusahaan, walaupun hal itu sebenarnya belum diperlukan untuk kedudukan mereka sekarang." },
   { id: 15, a: "Saya membiarkan orang lain menangani tugas mereka masing-masing, walaupun mereka banyak membuat kesalahan.", b: "Saya membuat keputusan-keputusan sendiri, tetapi saya akan mempertimbangkan usul-usul dari bawahan-bawahan saya." },
@@ -31,14 +31,14 @@ const soal = [
   { id: 24, a: "Saya biasanya membuat keputusan-keputusan sendiri dan menyampaikannya kepada bawahan saya.", b: "Saya merasa bahwa serikat-serikat buruh dan pimpinan perusahaan dapat bekerjasama untuk mencapai tujuan-tujuan bersama." },
   { id: 25, a: "Saya menyukai penggunaan skala penggajian karyawan.", b: "Saya selalu melakukan diskusi-diskusi untuk mencapai kata sepakat." },
   { id: 26, a: "Saya tidak akan memberikan tugas yang tidak saya senangi kepada orang lain.", b: "Bila beberapa bawahan saya merasa tidak berbahagia, saya akan mencoba melakukan sesuatu untuk mengatasi hal tersebut." },
-  { id: 27, a: "Bila ada tugas yang mendesak, walaupun semua peralatannya sudah diselesaikan, saya akan membiarkannya saja dan meminta salah seorang bawahan saya untuk mengerjakan tugas tersebut.", b: "Adalah penting bagi saya untuk memperoleh penghargaan atas ide-ide saya yang baik." },
+  { id: 27, a: "Bila ada tugas yang mendesak, walaupun semua peralatannya sudah disediakan, saya akan membiarkannya saja dan meminta salah seorang bawahan saya untuk mengerjakan tugas tersebut.", b: "Adalah penting bagi saya untuk memperoleh penghargaan atas ide-ide saya yang baik." },
   { id: 28, a: "Tujuan saya adalah berusaha mengerjakan tugas sebaik mungkin tanpa mengeluh.", b: "Saya memberikan tugas kepada bawahan saya tanpa banyak mempertimbangkan pengalaman atau kemampuan mereka, lebih menuntut pencapaian hasilnya saja." },
   { id: 29, a: "Saya memberikan tugas kepada bawahan saya tanpa banyak mempertimbangkan pengalaman atau kemampuan mereka, lebih menuntut pencapaian hasilnya saja.", b: "Saya dengan sabar mendengarkan keluhan-keluhan dan ketidakpuasan bawahan saya, tetapi sering kali saya meralat apa yang mereka katakan." },
   { id: 30, a: "Saya merasa bahwa keluhan-keluhan tidak dapat dicegah dan saya berusaha untuk menghilangkan keluhan tersebut.", b: "Saya percaya bahwa bawahan-bawahan saya akan merasakan kepuasan kerja tanpa merasa tertekan oleh saya." },
   { id: 31, a: "Bila menghadapi masalah yang sulit, saya berusaha untuk mencapai pemecahan yang dapat diterima oleh sebagian besar orang.", b: "Saya percaya bahwa pengalaman bekerja lebih bermanfaat daripada pendidikan teoritis." },
   { id: 32, a: "Saya selalu memberikan tugas-tugas yang sangat sulit kepada karyawan-karyawan yang paling berpengalaman.", b: "Saya percaya bahwa kenaikan jabatan adalah semata-mata berdasarkan kemampuan yang ada." },
   { id: 33, a: "Saya merasa bahwa masalah-masalah yang timbul diantara para karyawan biasanya akan dapat diselesaikan di antara mereka sendiri, tanpa campur tangan dari saya.", b: "Bila saya ditegur oleh atasan saya, saya akan memanggil semua bawahan saya dan mengatakan semua teguran tersebut kepada mereka." },
-  { id: 34, a: "Saya tidak peduli dengan apa yang dikerjakan oleh karyawan saya di luar jam kerja kantornya.", b: "Saya percaya bahwa bawahan-bawahan yang tidak disiplin tidak akan memperbaiki jumlah atau mutu kerja mereka dalam jangka waktu yang panjang." },
+  { id: 34, a: "Saya tidak peduli dengan apa yang dikerjakan oleh karyawan saya di luar jam kerja kantornya.", b: "Saya percaya bahwa penerapan disiplin pada bawahan tidak akan memperbaiki jumlah atau mutu kerja mereka dalam jangka waktu yang panjang." },
   { id: 35, a: "Saya memberikan informasi kepada pimpinan perusahaan tidak lebih dari apa yang mereka tanyakan.", b: "Kadang-kadang saya merasa bahwa apa yang dikeluhkan oleh serikat buruh bukanlah masalah yang mendasar." },
   { id: 36, a: "Saya kadang ragu-ragu untuk membuat suatu keputusan yang akan tidak disukai oleh bawahan-bawahan saya.", b: "Tujuan saya adalah berusaha mengerjakan tugas sebaik mungkin tanpa mengeluh." },
   { id: 37, a: "Saya dengan sabar mendengarkan keluhan-keluhan dan ketidakpuasan bawahan saya, tetapi sering kali saya meralat apa yang mereka katakan.", b: "Saya kadang ragu-ragu untuk membuat suatu keputusan yang akan tidak disukai oleh bawahan-bawahan saya." },
@@ -48,7 +48,7 @@ const soal = [
   { id: 41, a: "Di dalam diskusi-diskusi saya memberikan fakta-fakta sesuai pemahaman bawahan saya, dan membiarkan mereka untuk membuat kesimpulan sendiri.", b: "Bila direktur memberikan perintah yang kurang menyenangkan, saya pikir adalah cukup bijaksana bila saya menyebutkan namanya dan bukan nama saya." },
   { id: 42, a: "Bila ada tugas-tugas mendadak atau tugas yang tidak menyenangkan, sebelumnya saya akan meminta beberapa sukarelawan yang mau mengerjakan tugas tersebut.", b: "Saya menunjukkan minat saya terhadap kehidupan pribadi bawahan-bawahan saya, karena sayapun mengharapkan mereka berbuat seperti itu kepada saya." },
   { id: 43, a: "Saya selalu memperhatikan kebahagiaan karyawan-karyawan saya saat mereka mengerjakan tugas-tugas mereka.", b: "Saya selalu memperhatikan keterlambatan dan kemangkiran bawahan saya." },
-  { id: 44, a: "Sebagian besar dari bawahan-bawahan saya dapat menyelesaikan tugas-tugas mereka, bila perlu tanpa kehadiran saya.", b: "Bila ada tugas yang mendesak, walaupun semua peralatannya sudah diselesaikan, saya akan membiarkannya saja dan meminta salah seorang bawahan saya untuk mengerjakan tugas tersebut." },
+  { id: 44, a: "Sebagian besar dari bawahan-bawahan saya dapat menyelesaikan tugas-tugas mereka, bila perlu tanpa kehadiran saya.", b: "Bila ada tugas yang mendesak, walaupun semua peralatannya sudah disediakan, saya akan membiarkannya saja dan meminta salah seorang bawahan saya untuk mengerjakan tugas tersebut." },
   { id: 45, a: "Saya percaya bahwa bawahan-bawahan saya akan merasakan kepuasan kerja tanpa merasa tertekan oleh saya.", b: "Saya memberikan informasi kepada pimpinan perusahaan tidak lebih dari apa yang mereka tanyakan." },
   { id: 46, a: "Saya percaya bahwa pertemuan-pertemuan yang sering dengan karyawan secara pribadi akan membantu pengembangan diri mereka.", b: "Saya selalu memperhatikan kebahagiaan karyawan-karyawan saya saat mereka mengerjakan tugas-tugas mereka." },
   { id: 47, a: "Saya mendukung bawahan saya yang ingin meningkatkan pengetahuan tentang pekerjaan dan perusahaan, walaupun hal itu sebenarnya belum diperlukan untuk kedudukan mereka sekarang.", b: "Saya mengawasi benar bawahan-bawahan saya yang kurang mahir dalam pekerjaannya atau bawahan-bawahan saya yang hasil kerjanya kurang memuaskan." },
@@ -71,58 +71,52 @@ const soal = [
   { id: 64, a: "Saya mengijinkan bawahan-bawahan saya untuk ikut serta di dalam pengambilan keputusan, tetapi sayapun menyediakan sesuatu yang jitu sebagai keputusan terakhir.", b: "Saya tidak akan ragu-ragu untuk mempekerjakan pegawai-pegawai yang cacat jasmani, bilamana saya merasa pasti bahwa mereka dapat menangani pekerjaannya." },
 ]
 
+// Kunci skoring MSDT (lembar skoring Reddin). Soal 1-64 disusun dalam
+// matriks 8x8 per baris: baris 1 = soal 1-8, baris 2 = soal 9-16, dst.
+// Skor gaya ke-k = jumlah jawaban "a" di BARIS k + jumlah jawaban "b" di
+// KOLOM k + koreksi k. Gaya dominan = skor gaya tertinggi.
+const GAYA_MSDT = ['Deserter', 'Missionary', 'Autocrat', 'Compromiser', 'Bureaucrat', 'Developer', 'Benevolent Autocrat', 'Executive']
+const KOREKSI_MSDT = [1, 2, 1, 0, 3, -1, 0, -4]
+// Urutan pada baris HASIL lembar skoring; dipakai bila ada skor yang seri.
+const PRIORITAS_SERI = ['Executive', 'Compromiser', 'Benevolent Autocrat', 'Autocrat', 'Developer', 'Missionary', 'Bureaucrat', 'Deserter']
+
+// Konversi skor dimensi TO / RO / E ke skala 0-4.
+function konversiMSDT(total) {
+  if (total <= 29) return 0
+  if (total <= 31) return 0.6
+  if (total === 32) return 1.2
+  if (total === 33) return 1.8
+  if (total === 34) return 2.4
+  if (total === 35) return 3.0
+  if (total <= 37) return 3.6
+  return 4.0
+}
+
 function hitungMSDT(jawaban) {
-  const colGroups = {
-    1: [1,9,17,25,33,41,49,57],
-    2: [2,10,18,26,34,42,50,58],
-    3: [3,11,19,27,35,43,51,59],
-    4: [4,12,20,28,36,44,52,60],
-    5: [5,13,21,29,37,45,53,61],
-    6: [6,14,22,30,38,46,54,62],
-    7: [7,15,23,31,39,47,55,63],
-    8: [8,16,24,32,40,48,56,64],
+  const gayaSkor = {}
+  GAYA_MSDT.forEach((nama, k) => {
+    let a = 0, b = 0
+    for (let i = 0; i < 8; i++) {
+      if (jawaban[k * 8 + i + 1] === 'a') a++  // baris k
+      if (jawaban[i * 8 + k + 1] === 'b') b++  // kolom k
+    }
+    gayaSkor[nama] = a + b + KOREKSI_MSDT[k]
+  })
+
+  const s = gayaSkor
+  const TO    = s.Autocrat + s.Compromiser + s['Benevolent Autocrat'] + s.Executive
+  const RO    = s.Missionary + s.Compromiser + s.Developer + s.Executive
+  const E_raw = s.Bureaucrat + s.Developer + s['Benevolent Autocrat'] + s.Executive
+
+  const tertinggi = Math.max(...Object.values(s))
+  const gaya = PRIORITAS_SERI.find(g => s[g] === tertinggi)
+  const gayaSeri = PRIORITAS_SERI.filter(g => s[g] === tertinggi && g !== gaya)
+
+  return {
+    gaya, gayaSeri, gayaSkor, TO, RO, E_raw,
+    konversi: { TO: konversiMSDT(TO), RO: konversiMSDT(RO), E: konversiMSDT(E_raw) },
+    E_score: konversiMSDT(E_raw),
   }
-  const koreksi = { 1:1, 2:2, 3:1, 4:0, 5:3, 6:-1, 7:0, 8:-4 }
-
-  const colSkor = {}
-  for (let col = 1; col <= 8; col++) {
-    const aCount = colGroups[col].filter(q => jawaban[q] === 'a').length
-    colSkor[col] = aCount + koreksi[col]
-  }
-
-  const TO = colSkor[1] + colSkor[2]
-  const RO = colSkor[3] + colSkor[4]
-  const E_raw = colSkor[5] + colSkor[6]
-  const O_raw = colSkor[7] + colSkor[8]
-  const grandTotal = TO + RO + E_raw + O_raw
-
-  function konversiE(total) {
-    if (total <= 29) return 0
-    if (total <= 31) return 0.6
-    if (total === 32) return 1.2
-    if (total === 33) return 1.8
-    if (total === 34) return 2.4
-    if (total === 35) return 3.0
-    if (total <= 37) return 3.6
-    return 4.0
-  }
-  const E_score = konversiE(grandTotal)
-
-  const toTinggi = TO > 11
-  const roTinggi = RO > 9
-  const eTinggi  = E_score >= 2.0
-
-  let gaya
-  if      ( toTinggi &&  roTinggi &&  eTinggi) gaya = 'Executive'
-  else if ( toTinggi &&  roTinggi && !eTinggi) gaya = 'Compromiser'
-  else if ( toTinggi && !roTinggi &&  eTinggi) gaya = 'Benevolent Autocrat'
-  else if ( toTinggi && !roTinggi && !eTinggi) gaya = 'Autocrat'
-  else if (!toTinggi &&  roTinggi &&  eTinggi) gaya = 'Developer'
-  else if (!toTinggi &&  roTinggi && !eTinggi) gaya = 'Missionary'
-  else if (!toTinggi && !roTinggi &&  eTinggi) gaya = 'Bureaucrat'
-  else                                          gaya = 'Deserter'
-
-  return { TO, RO, E_raw, O_raw, E_score, grandTotal, gaya, toTinggi, roTinggi, eTinggi, colSkor }
 }
 
 const S_LABEL = { display: 'block', color: 'var(--text-sub)', fontSize: '13px', fontWeight: 600, marginBottom: '8px', letterSpacing: '0.03em' }
@@ -183,7 +177,7 @@ export default function TesMsdt() {
         skor_to:     hasil.TO,
         skor_ro:     hasil.RO,
         e_score:     hasil.E_score,
-        grand_total: hasil.grandTotal,
+        grand_total: hasil.E_raw,   // skor mentah dimensi E
         gaya:        hasil.gaya,
       })
 

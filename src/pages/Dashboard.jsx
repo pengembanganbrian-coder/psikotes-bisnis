@@ -248,11 +248,8 @@ function Dashboard() {
             TO:         h.skor_to,
             RO:         h.skor_ro,
             E_score:    h.e_score,
-            grandTotal: h.grand_total,
+            E_raw:      h.grand_total,  // grand_total menyimpan skor mentah dimensi E
             gaya:       h.gaya,
-            toTinggi:   h.skor_to > 11,
-            roTinggi:   h.skor_ro > 9,
-            eTinggi:    h.e_score >= 2.0,
           },
         },
       })
@@ -705,10 +702,10 @@ function Dashboard() {
                     {h && (
                       <ScoreSection label="Skor MSDT">
                         {[
-                          { label: 'TO (Task Orientation)',         val: h.skor_to,     max: 19, color: '#f97316' },
-                          { label: 'RO (Relationship Orientation)', val: h.skor_ro,     max: 17, color: '#f59e0b' },
-                          { label: 'E Score (Efektivitas)',         val: h.e_score,     max: 4,  color: '#22c55e' },
-                          { label: 'Grand Total',                   val: h.grand_total, max: 50, color: '#4f46e5' },
+                          { label: 'TO (Task Orientation)',         val: h.skor_to,     max: 64, color: '#f97316' },
+                          { label: 'RO (Relationship Orientation)', val: h.skor_ro,     max: 64, color: '#f59e0b' },
+                          { label: 'Konversi E (0–4)',         val: h.e_score,     max: 4,  color: '#22c55e' },
+                          { label: 'E (Effectiveness)',             val: h.grand_total, max: 64, color: '#4f46e5' },
                         ].map(({ label, val, max, color }) => (
                           <div key={label} style={{ marginBottom: '8px' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '11px', marginBottom: '4px' }}>
