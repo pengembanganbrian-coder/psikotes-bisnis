@@ -4,176 +4,167 @@ import { useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
 import PrivacyCheckbox from '../components/PrivacyCheckbox'
 import { hitungGrafikDISC } from '../disc/skoring'
+import { KUNCI_DISC } from '../disc/kunci'
 
 const soal = [
   { id: 1, pilihan: [
-    { teks: "Mudah bergaul, menyenangkan", dimensi: "I" },
-    { teks: "Mudah percaya kepada orang lain", dimensi: "S" },
-    { teks: "Suka berpetualangan, pengambil resiko", dimensi: "D" },
-    { teks: "Penuh toleransi, menghormati orang lain", dimensi: "S" },
+    { teks: "Mudah bergaul, menyenangkan" },
+    { teks: "Mudah percaya kepada orang lain" },
+    { teks: "Suka berpetualangan, pengambil resiko" },
+    { teks: "Penuh toleransi, menghormati orang lain" },
   ]},
   { id: 2, pilihan: [
-    { teks: "Berbicara lembut, pendiam/penyendiri", dimensi: "C" },
-    { teks: "Optimis, berpikir positif, memiliki visi/tujuan", dimensi: "I" },
-    { teks: "Pusat perhatian, mudah bersosialisasi", dimensi: "I" },
-    { teks: "Pendamai, pembawa keharmonisan", dimensi: "S" },
+    { teks: "Berbicara lembut, pendiam/penyendiri" },
+    { teks: "Optimis, berpikir positif, memiliki visi/tujuan" },
+    { teks: "Pusat perhatian, mudah bersosialisasi" },
+    { teks: "Pendamai, pembawa keharmonisan" },
   ]},
   { id: 3, pilihan: [
-    { teks: "Memberikan dorongan kepada orang lain", dimensi: "I" },
-    { teks: "Berusaha untuk selalu sempurna", dimensi: "C" },
-    { teks: "Menjadi bagian dari sebuah kelompok", dimensi: "S" },
-    { teks: "Ingin menetapkan tujuan", dimensi: "D" },
+    { teks: "Memberikan dorongan kepada orang lain" },
+    { teks: "Berusaha untuk selalu sempurna" },
+    { teks: "Menjadi bagian dari sebuah kelompok" },
+    { teks: "Ingin menetapkan tujuan" },
   ]},
   { id: 4, pilihan: [
-    { teks: "Mudah menjadi frustasi", dimensi: "C" },
-    { teks: "Memendam perasaan, tertutup", dimensi: "S" },
-    { teks: "Menyampaikan pendapatnya, terbuka", dimensi: "I" },
-    { teks: "Berani menghadapi pihak oposisi", dimensi: "D" },
+    { teks: "Mudah menjadi frustasi" },
+    { teks: "Memendam perasaan, tertutup" },
+    { teks: "Menyampaikan pendapatnya, terbuka" },
+    { teks: "Berani menghadapi pihak oposisi" },
   ]},
   { id: 5, pilihan: [
-    { teks: "Penuh semangat, banyak bicara", dimensi: "I" },
-    { teks: "Bertindak cepat, tegas", dimensi: "D" },
-    { teks: "Mencoba untuk menjaga kedamaian", dimensi: "S" },
-    { teks: "Mencoba untuk mengikuti aturan", dimensi: "C" },
+    { teks: "Penuh semangat, banyak bicara" },
+    { teks: "Bertindak cepat, tegas" },
+    { teks: "Mencoba untuk menjaga kedamaian" },
+    { teks: "Mencoba untuk mengikuti aturan" },
   ]},
   { id: 6, pilihan: [
-    { teks: "Mengatur waktu dengan baik", dimensi: "C" },
-    { teks: "Seringkali terburu-buru, merasa tertekan", dimensi: "D" },
-    { teks: "Berhubungan dengan orang lain adalah penting", dimensi: "S" },
-    { teks: "Senang menyelesaikan hal yang telah dimulai", dimensi: "C" },
+    { teks: "Mengatur waktu dengan baik" },
+    { teks: "Seringkali terburu-buru, merasa tertekan" },
+    { teks: "Berhubungan dengan orang lain adalah penting" },
+    { teks: "Senang menyelesaikan hal yang telah dimulai" },
   ]},
   { id: 7, pilihan: [
-    { teks: "Menolak perubahan yang mendadak", dimensi: "S" },
-    { teks: "Cenderung terlalu banyak berjanji", dimensi: "I" },
-    { teks: "Menarik diri ketika dibawah tekanan", dimensi: "C" },
-    { teks: "Tidak takut untuk konfrontasi langsung", dimensi: "D" },
+    { teks: "Menolak perubahan yang mendadak" },
+    { teks: "Cenderung terlalu banyak berjanji" },
+    { teks: "Menarik diri ketika dibawah tekanan" },
+    { teks: "Tidak takut untuk konfrontasi langsung" },
   ]},
   { id: 8, pilihan: [
-    { teks: "Pendorong, pemberi semangat yang baik", dimensi: "I" },
-    { teks: "Pendengar yang baik", dimensi: "S" },
-    { teks: "Penganalisis yang baik", dimensi: "C" },
-    { teks: "Pendelegasi yang baik", dimensi: "D" },
+    { teks: "Pendorong, pemberi semangat yang baik" },
+    { teks: "Pendengar yang baik" },
+    { teks: "Penganalisis yang baik" },
+    { teks: "Pendelegasi yang baik" },
   ]},
   { id: 9, pilihan: [
-    { teks: "Hasil adalah segalanya", dimensi: "D" },
-    { teks: "Lakukan dengan benar, ketepatan adalah penting", dimensi: "C" },
-    { teks: "Buatlah sesuatu menjadi menyenangkan", dimensi: "I" },
-    { teks: "Mari lakukan bersama-sama", dimensi: "S" },
+    { teks: "Hasil adalah segalanya" },
+    { teks: "Lakukan dengan benar, ketepatan adalah penting" },
+    { teks: "Buatlah sesuatu menjadi menyenangkan" },
+    { teks: "Mari lakukan bersama-sama" },
   ]},
   { id: 10, pilihan: [
-    { teks: "Tidak tergantung orang lain", dimensi: "D" },
-    { teks: "Akan membeli mengikuti dorongan hati", dimensi: "I" },
-    { teks: "Akan menunggu dengan sabar", dimensi: "S" },
-    { teks: "Akan mengeluarkan uang untuk hal yang diinginkan", dimensi: "C" },
+    { teks: "Tidak tergantung orang lain" },
+    { teks: "Akan membeli mengikuti dorongan hati" },
+    { teks: "Akan menunggu dengan sabar" },
+    { teks: "Akan mengeluarkan uang untuk hal yang diinginkan" },
   ]},
   { id: 11, pilihan: [
-    { teks: "Ramah, mudah berteman", dimensi: "I" },
-    { teks: "Unik, mudah bosan terhadap rutinitas", dimensi: "D" },
-    { teks: "Aktif mengubah sesuatu", dimensi: "D" },
-    { teks: "Ingin segala sesuatu tepat", dimensi: "C" },
+    { teks: "Ramah, mudah berteman" },
+    { teks: "Unik, mudah bosan terhadap rutinitas" },
+    { teks: "Aktif mengubah sesuatu" },
+    { teks: "Ingin segala sesuatu tepat" },
   ]},
   { id: 12, pilihan: [
-    { teks: "Tidak melawan, mengalah", dimensi: "S" },
-    { teks: "Menyukai hal rinci/detail", dimensi: "C" },
-    { teks: "Berubah di saat-saat terakhir", dimensi: "I" },
-    { teks: "Penuntut, kasar", dimensi: "D" },
+    { teks: "Tidak melawan, mengalah" },
+    { teks: "Menyukai hal rinci/detail" },
+    { teks: "Berubah di saat-saat terakhir" },
+    { teks: "Penuntut, kasar" },
   ]},
   { id: 13, pilihan: [
-    { teks: "Ingin maju", dimensi: "D" },
-    { teks: "Puas dengan apa yang ada, puas hati", dimensi: "S" },
-    { teks: "Terbuka mengungkapkan perasaan", dimensi: "I" },
-    { teks: "Rendah hati, sederhana", dimensi: "C" },
+    { teks: "Ingin maju" },
+    { teks: "Puas dengan apa yang ada, puas hati" },
+    { teks: "Terbuka mengungkapkan perasaan" },
+    { teks: "Rendah hati, sederhana" },
   ]},
   { id: 14, pilihan: [
-    { teks: "Tenang, suka menyendiri/pendiam", dimensi: "C" },
-    { teks: "Gembira, periang", dimensi: "I" },
-    { teks: "Menyenangkan, ramah", dimensi: "S" },
-    { teks: "Tegas, berani", dimensi: "D" },
+    { teks: "Tenang, suka menyendiri/pendiam" },
+    { teks: "Gembira, periang" },
+    { teks: "Menyenangkan, ramah" },
+    { teks: "Tegas, berani" },
   ]},
   { id: 15, pilihan: [
-    { teks: "Menghabiskan waktu dengan orang lain", dimensi: "I" },
-    { teks: "Merencanakan masa depan, penuh persiapan", dimensi: "C" },
-    { teks: "Mencari tantangan baru", dimensi: "D" },
-    { teks: "Menerima penghargaan untuk tujuan yang tercapai", dimensi: "S" },
+    { teks: "Menghabiskan waktu dengan orang lain" },
+    { teks: "Merencanakan masa depan, penuh persiapan" },
+    { teks: "Mencari tantangan baru" },
+    { teks: "Menerima penghargaan untuk tujuan yang tercapai" },
   ]},
   { id: 16, pilihan: [
-    { teks: "Peraturan perlu diuji", dimensi: "D" },
-    { teks: "Peraturan membuat adil", dimensi: "C" },
-    { teks: "Peraturan membuat bosan", dimensi: "I" },
-    { teks: "Peraturan membuat aman", dimensi: "S" },
+    { teks: "Peraturan perlu diuji" },
+    { teks: "Peraturan membuat adil" },
+    { teks: "Peraturan membuat bosan" },
+    { teks: "Peraturan membuat aman" },
   ]},
   { id: 17, pilihan: [
-    { teks: "Pendidikan, budaya", dimensi: "C" },
-    { teks: "Prestasi, penghargaan", dimensi: "D" },
-    { teks: "Keselamatan, keamanan", dimensi: "S" },
-    { teks: "Bergaul, berkumpul dengan kelompok", dimensi: "I" },
+    { teks: "Pendidikan, budaya" },
+    { teks: "Prestasi, penghargaan" },
+    { teks: "Keselamatan, keamanan" },
+    { teks: "Bergaul, berkumpul dengan kelompok" },
   ]},
   { id: 18, pilihan: [
-    { teks: "Memimpin, bicara langsung", dimensi: "D" },
-    { teks: "Terbuka, antusias, bersemangat", dimensi: "I" },
-    { teks: "Mudah diduga, konsisten", dimensi: "S" },
-    { teks: "Berhati-hati", dimensi: "C" },
+    { teks: "Memimpin, bicara langsung" },
+    { teks: "Terbuka, antusias, bersemangat" },
+    { teks: "Mudah diduga, konsisten" },
+    { teks: "Berhati-hati" },
   ]},
   { id: 19, pilihan: [
-    { teks: "Tidak mudah dikalahkan/ditundukkan", dimensi: "D" },
-    { teks: "Mengikuti keinginan/perintah pemimpin", dimensi: "S" },
-    { teks: "Bersemangat, periang", dimensi: "I" },
-    { teks: "Ingin teratur, rapi", dimensi: "C" },
+    { teks: "Tidak mudah dikalahkan/ditundukkan" },
+    { teks: "Mengikuti keinginan/perintah pemimpin" },
+    { teks: "Bersemangat, periang" },
+    { teks: "Ingin teratur, rapi" },
   ]},
   { id: 20, pilihan: [
-    { teks: "Saya akan memimpin orang lain", dimensi: "D" },
-    { teks: "Saya akan melaksanakannya", dimensi: "S" },
-    { teks: "Saya akan meyakinkan orang lain", dimensi: "I" },
-    { teks: "Saya akan mendapatkan fakta", dimensi: "C" },
+    { teks: "Saya akan memimpin orang lain" },
+    { teks: "Saya akan melaksanakannya" },
+    { teks: "Saya akan meyakinkan orang lain" },
+    { teks: "Saya akan mendapatkan fakta" },
   ]},
   { id: 21, pilihan: [
-    { teks: "Mendahulukan kepentingan orang lain", dimensi: "S" },
-    { teks: "Suka bersaing, suka tantangan", dimensi: "D" },
-    { teks: "Optimis, berpikir positif", dimensi: "I" },
-    { teks: "Berpikir logis, sistematis", dimensi: "C" },
+    { teks: "Mendahulukan kepentingan orang lain" },
+    { teks: "Suka bersaing, suka tantangan" },
+    { teks: "Optimis, berpikir positif" },
+    { teks: "Berpikir logis, sistematis" },
   ]},
   { id: 22, pilihan: [
-    { teks: "Menyenangkan orang, mudah setuju", dimensi: "S" },
-    { teks: "Tertawa dengan keras, hidup", dimensi: "I" },
-    { teks: "Berani, tegas", dimensi: "D" },
-    { teks: "Pendiam/suka menyendiri", dimensi: "C" },
+    { teks: "Menyenangkan orang, mudah setuju" },
+    { teks: "Tertawa dengan keras, hidup" },
+    { teks: "Berani, tegas" },
+    { teks: "Pendiam/suka menyendiri" },
   ]},
   { id: 23, pilihan: [
-    { teks: "Menginginkan otoritas yang lebih", dimensi: "D" },
-    { teks: "Menginginkan kesempatan baru", dimensi: "I" },
-    { teks: "Menghindari konflik", dimensi: "S" },
-    { teks: "Menginginkan arahan yang jelas", dimensi: "C" },
+    { teks: "Menginginkan otoritas yang lebih" },
+    { teks: "Menginginkan kesempatan baru" },
+    { teks: "Menghindari konflik" },
+    { teks: "Menginginkan arahan yang jelas" },
   ]},
   { id: 24, pilihan: [
-    { teks: "Dapat dipercaya/diandalkan", dimensi: "S" },
-    { teks: "Kreatif, unik", dimensi: "I" },
-    { teks: "Berorientasi pada hasil", dimensi: "D" },
-    { teks: "Memegang standar yang tinggi, teliti", dimensi: "C" },
+    { teks: "Dapat dipercaya/diandalkan" },
+    { teks: "Kreatif, unik" },
+    { teks: "Berorientasi pada hasil" },
+    { teks: "Memegang standar yang tinggi, teliti" },
   ]},
 ]
 
 function hitungDISC(jawaban) {
-  let mostD=0, mostI=0, mostS=0, mostC=0
-  let leastD=0, leastI=0, leastS=0, leastC=0
-
-  soal.forEach(sq => {
+  // Kata yang dipilih dipetakan lewat kunci M/L; kata berkunci '*' tidak diskor.
+  const most  = { D: 0, I: 0, S: 0, C: 0, '*': 0 }
+  const least = { D: 0, I: 0, S: 0, C: 0, '*': 0 }
+  soal.forEach((sq, i) => {
     const j = jawaban[sq.id]
     if (!j) return
-    const pilihanM = sq.pilihan[j.most]
-    const pilihanL = sq.pilihan[j.least]
-    if (pilihanM) {
-      if (pilihanM.dimensi === 'D') mostD++
-      if (pilihanM.dimensi === 'I') mostI++
-      if (pilihanM.dimensi === 'S') mostS++
-      if (pilihanM.dimensi === 'C') mostC++
-    }
-    if (pilihanL) {
-      if (pilihanL.dimensi === 'D') leastD++
-      if (pilihanL.dimensi === 'I') leastI++
-      if (pilihanL.dimensi === 'S') leastS++
-      if (pilihanL.dimensi === 'C') leastC++
-    }
+    if (j.most !== undefined) most[KUNCI_DISC[i].most[j.most]]++
+    if (j.least !== undefined) least[KUNCI_DISC[i].least[j.least]]++
   })
+  const { D: mostD, I: mostI, S: mostS, C: mostC } = most
+  const { D: leastD, I: leastI, S: leastS, C: leastC } = least
 
   const changeD = mostD - leastD
   const changeI = mostI - leastI
