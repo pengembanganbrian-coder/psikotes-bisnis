@@ -14,6 +14,9 @@ import { HARGA_TES, NAMA_TES, formatRupiah } from '../config/pricing'
  *   email      : email peserta (opsional)
  *   children   : konten premium yang dikunci
  *   freeContent: konten gratis yang selalu tampil di atas gate
+ *   mode       : 'laporan' (default) = bayar untuk membuka laporan setelah tes;
+ *                'awal' = bayar sebelum tes (Pauli, Kognitif). children (tesnya)
+ *                baru dirender setelah lunas, tanpa pratinjau buram.
  */
 
 // Isi laporan lengkap per tes, ditampilkan di kotak pembuka.
@@ -32,6 +35,12 @@ const ISI_LAPORAN = {
   Kognitif: ['Kekuatan dan area latihan', 'Pembahasan 40 soal lengkap dengan kunci jawaban'],
 }
 
+// Untuk mode 'awal': yang dibeli adalah kesempatan tes + laporannya.
+const ISI_TES_AWAL = {
+  Pauli: ['1 kali Tes Pauli Digital 10 menit', 'Grafik kerja per menit', 'Penilaian ketelitian, keajegan, dan ketahanan kerja', 'Saran latihan'],
+  Kognitif: ['1 kali tes 40 soal (numerik, verbal, logika, figural)', 'Skor per subtes, kekuatan dan area latihan', 'Pembahasan 40 soal lengkap dengan kunci jawaban'],
+}
+
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 // Terima 08xx, 628xx, atau +628xx; dikirim ke server apa adanya (server menormalkan).
 const WA_RE = /^(\+?62|0)8\d{7,12}$/
@@ -47,7 +56,7 @@ async function sudahBayar(pesertaId, testType) {
   return data?.paid === true
 }
 
-export default function PaymentGate({ testType, pesertaId, nama, email, children, freeContent }) {
+export default function PaymentGate({ testType, pesertaId, nama, email, children, freeContent, mode = 'laporan' }) {
   const [isPaid,  setIsPaid]  = useState(false)
   const [loading, setLoading] = useState(true)
   const [paying,  setPaying]  = useState(false)
@@ -147,22 +156,25 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
   }
 
   const harga = formatRupiah(HARGA_TES[testType])
-  const isi = ISI_LAPORAN[testType] || []
+  const awal = mode === 'awal'
+  const isi = (awal ? ISI_TES_AWAL[testType] : ISI_LAPORAN[testType]) || []
 
   return (
     <div>
       {freeContent}
 
-      <div className="gate-preview" aria-hidden="true">
-        <div className="gate-blur">{children}</div>
-      </div>
+      {!awal && (
+        <div className="gate-preview" aria-hidden="true">
+          <div className="gate-blur">{children}</div>
+        </div>
+      )}
 
       <div className="gate-card print-hide">
         <div className="gate-head">
           <div className="gate-lock">🔒</div>
           <div>
             <p style={{ fontSize: '12px', opacity: 0.85, fontWeight: 600 }}>{NAMA_TES[testType]}</p>
-            <p style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.01em' }}>Buka laporan lengkap Anda</p>
+            <p style={{ fontSize: '19px', fontWeight: 800, letterSpacing: '-0.01em' }}>{awal ? 'Bayar untuk mulai tes' : 'Buka laporan lengkap Anda'}</p>
           </div>
         </div>
         <div className="gate-body">
@@ -178,7 +190,7 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
 
               <div className="gate-harga">
                 <span style={{ fontSize: '28px', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.02em' }}>{harga}</span>
-                <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>sekali bayar, akses selamanya</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>{awal ? 'untuk 1 kali tes beserta laporan lengkapnya' : 'sekali bayar, akses selamanya'}</span>
               </div>
 
               {error && (
@@ -205,7 +217,7 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
                     </div>
                   </div>
                   <button className="rpt-btn" style={{ width: '100%', padding: '14px' }} onClick={handlePay} disabled={paying}>
-                    {paying ? 'Menunggu pembayaran…' : `Buka laporan — ${harga}`}
+                    {paying ? 'Menunggu pembayaran…' : awal ? `Bayar & mulai tes — ${harga}` : `Buka laporan — ${harga}`}
                   </button>
                 </>
               ) : (
@@ -218,7 +230,7 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
 
               {paying && (
                 <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '10px', textAlign: 'center' }}>
-                  Selesaikan pembayaran di jendela yang terbuka. Laporan terbuka otomatis setelah pembayaran diterima.
+                  Selesaikan pembayaran di jendela yang terbuka. {awal ? 'Tes bisa dimulai' : 'Laporan terbuka'} otomatis setelah pembayaran diterima.
                 </p>
               )}
 
@@ -227,6 +239,12 @@ export default function PaymentGate({ testType, pesertaId, nama, email, children
                 <Link to="/terms" target="_blank" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>Syarat & Ketentuan</Link>
                 {' '}AssesIN.
               </p>
+              {awal && (
+                <p style={{ color: 'var(--text-muted)', fontSize: '12px', marginTop: '8px', textAlign: 'center', lineHeight: 1.6 }}>
+                  Ingin memakai tes ini untuk banyak peserta (instansi, perusahaan, sekolah)? Untuk kerja sama hubungi{' '}
+                  <a href="mailto:psikologikantor@proton.me" style={{ color: 'var(--accent)', fontWeight: 600 }}>psikologikantor@proton.me</a>.
+                </p>
+              )}
             </>
           )}
         </div>

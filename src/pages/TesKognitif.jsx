@@ -2,15 +2,21 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import FormPeserta from '../components/FormPeserta'
+import PaymentGate from '../components/PaymentGate'
+import { ambilSesi, simpanSesi, hapusSesi } from '../kemampuan/sesiBayar'
 import { TampilSoal, TampilOpsi } from '../components/SoalKognitif'
 import { SUBTES, TOTAL_SOAL, hitungKognitif, ringkasanKognitif } from '../kemampuan/kognitif'
 
 const TOTAL_MENIT = Math.round(SUBTES.reduce((t, s) => t + s.detik, 0) / 60)
+// Satu pembayaran = satu tes, dengan satu kesempatan mengulang bila terputus.
+const MAKS_MULAI = 2
 
 export default function TesKognitif() {
   const navigate = useNavigate()
-  const [step, setStep]       = useState('form')     // form | intro | soal | simpan
-  const [peserta, setPeserta] = useState(null)
+  // Sesi yang sudah dibuat (mis. kembali dari halaman pembayaran Mayar) dilanjutkan.
+  const [sesi, setSesi]       = useState(() => ambilSesi('Kognitif'))
+  const [step, setStep]       = useState(() => (sesi ? 'bayar' : 'form'))     // form | bayar | intro | soal | simpan
+  const peserta = sesi?.peserta ?? null
   const [stIdx, setStIdx]     = useState(0)
   const [soalIdx, setSoalIdx] = useState(0)
   const [jawaban, setJawaban] = useState({})
@@ -24,18 +30,22 @@ export default function TesKognitif() {
   const simpan = useCallback(async () => {
     setStep('simpan')
     const skor = hitungKognitif(jawabanRef.current)
-    const state = { skor, jawaban: jawabanRef.current, ...peserta }
-    const pesertaId = crypto.randomUUID()
+    // pesertaId tetap dikirim walau penyimpanan gagal: pembayaran terikat ke ID ini.
+    const { pesertaId } = sesi
+    const state = { skor, jawaban: jawabanRef.current, ...peserta, pesertaId }
     try {
       const { error: e1 } = await supabase.from('peserta_kognitif').insert([{ id: pesertaId, nama: peserta.nama, nip: peserta.email, jabatan: peserta.jabatan }])
-      if (e1) throw e1
+      // 23505 = baris peserta sudah ada dari percobaan simpan sebelumnya.
+      if (e1 && e1.code !== '23505') throw e1
       const { error: e2 } = await supabase.from('hasil_kognitif').insert([{ peserta_id: pesertaId, skor, ringkasan: ringkasanKognitif(skor), jawaban: jawabanRef.current }])
       if (e2) throw e2
-      navigate('/hasil-kognitif', { state: { ...state, pesertaId } })
+      hapusSesi('Kognitif')
+      navigate('/hasil-kognitif', { state: { ...state, tersimpan: true } })
     } catch {
-      navigate('/hasil-kognitif', { state })
+      hapusSesi('Kognitif')
+      navigate('/hasil-kognitif', { state: { ...state, tersimpan: false } })
     }
-  }, [navigate, peserta])
+  }, [navigate, peserta, sesi])
 
   const subtesSelesai = useCallback(() => {
     if (stIdx < SUBTES.length - 1) {
@@ -47,6 +57,14 @@ export default function TesKognitif() {
       simpan()
     }
   }, [stIdx, simpan])
+
+  // Peringatan bila halaman ditutup/di-refresh saat tes berjalan
+  useEffect(() => {
+    if (step !== 'intro' && step !== 'soal') return
+    const cegah = e => { e.preventDefault(); e.returnValue = '' }
+    window.addEventListener('beforeunload', cegah)
+    return () => window.removeEventListener('beforeunload', cegah)
+  }, [step])
 
   // Jam per subtes
   useEffect(() => {
@@ -69,11 +87,53 @@ export default function TesKognitif() {
     <FormPeserta
       id="kognitif" judul="Tes Kemampuan Kognitif" meta={`${TOTAL_SOAL} soal · ${SUBTES.length} subtes · ${TOTAL_MENIT} menit`}
       intro="Latihan kemampuan berpikir yang sering muncul di psikotes kerja, BUMN, dan CPNS: deret angka, analogi kata, penalaran logis, dan matriks gambar. Setiap subtes punya batas waktu sendiri."
-      onMulai={p => { setPeserta(p); setStep('intro'); window.scrollTo(0, 0) }}
+      onMulai={p => {
+        const baru = { pesertaId: crypto.randomUUID(), peserta: p }
+        simpanSesi('Kognitif', baru); setSesi(baru)
+        setStep('bayar'); window.scrollTo(0, 0)
+      }}
     />
   )
 
   const wadah = { minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px var(--px)', textAlign: 'center', gap: '22px' }
+
+  if (step === 'bayar') {
+    const mulai = sesi.mulai ?? 0
+    return (
+      <div style={{ ...wadah, justifyContent: 'flex-start', paddingTop: '40px', textAlign: 'left' }}>
+        <div style={{ width: '100%', maxWidth: '520px' }}>
+          <PaymentGate testType="Kognitif" mode="awal" pesertaId={sesi.pesertaId} nama={peserta.nama} email={peserta.email}>
+            <div className="dark-card" style={{ padding: '24px 28px' }}>
+              <p style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: '10px' }}>Siap mulai</p>
+              <p style={{ color: 'var(--text-sub)', fontSize: '15px', lineHeight: 1.7, marginBottom: '8px' }}>
+                {TOTAL_SOAL} soal dalam {SUBTES.length} subtes ({SUBTES.map(x => x.nama).join(', ')}), total sekitar {TOTAL_MENIT} menit.
+                Setiap subtes punya batas waktu sendiri dan tidak bisa dijeda.
+              </p>
+              {mulai > 0 && mulai < MAKS_MULAI && (
+                <p style={{ color: '#b45309', fontSize: '14px', marginBottom: '8px' }}>Tes sebelumnya terputus. Anda masih punya 1 kesempatan mengulang.</p>
+              )}
+              <p style={{ color: 'var(--text-muted)', fontSize: '13px', marginBottom: '20px' }}>Pembayaran ini berlaku untuk satu kali tes. Jangan menutup atau me-refresh halaman selama tes.</p>
+              {mulai >= MAKS_MULAI ? (
+                <p style={{ color: '#b91c1c', fontSize: '14px', lineHeight: 1.6 }}>
+                  Kesempatan tes untuk pembayaran ini sudah terpakai. Bila tes terputus karena kendala teknis, hubungi{' '}
+                  <a href="mailto:psikologikantor@proton.me" style={{ color: 'var(--accent)', fontWeight: 600 }}>psikologikantor@proton.me</a>.
+                </p>
+              ) : (
+                <button className="btn-cta block" onClick={() => {
+                  const s2 = { ...sesi, mulai: mulai + 1 }
+                  simpanSesi('Kognitif', s2); setSesi(s2)
+                  setStIdx(0); setSoalIdx(0); jawabanRef.current = {}; setJawaban({})
+                  setStep('intro'); window.scrollTo(0, 0)
+                }}>
+                  Mulai tes <span className="btn-arrow" aria-hidden="true">→</span>
+                </button>
+              )}
+            </div>
+          </PaymentGate>
+        </div>
+      </div>
+    )
+  }
 
   if (step === 'simpan') return <div style={wadah}><p style={{ color: 'var(--text-sub)' }}>Menyimpan hasil…</p></div>
 

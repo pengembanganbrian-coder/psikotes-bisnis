@@ -36,7 +36,8 @@ export default function Kemampuan() {
         <h1 style={{ fontSize: 'clamp(28px, 4.5vw, 40px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.2, marginBottom: '12px' }}>Latihan tes kemampuan & ketelitian</h1>
         <p style={{ color: 'var(--text-sub)', fontSize: '16px', lineHeight: 1.7, maxWidth: '680px', marginBottom: '36px' }}>
           Berbeda dengan tes kepribadian, tes di sini punya jawaban benar dan batas waktu. Kerjakan di tempat tenang,
-          sebaiknya tanpa gangguan, karena waktu tidak bisa dijeda. Skor dan grafik ringkas langsung tampil gratis.
+          sebaiknya tanpa gangguan, karena waktu tidak bisa dijeda. Pembayaran dilakukan sebelum tes dimulai dan berlaku untuk satu kali tes
+          beserta laporan lengkapnya.
         </p>
 
         <div className="tes-grid">
@@ -51,7 +52,7 @@ export default function Kemampuan() {
               <p style={{ color: 'var(--text-muted)', fontSize: '13px' }}>{t.meta.join(' · ')}</p>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid var(--border)', paddingTop: '14px' }}>
                 <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>
-                  Laporan lengkap <strong style={{ color: 'var(--text)', fontWeight: 600 }}>{HARGA_TES[t.id] ? formatRupiah(HARGA_TES[t.id]) : 'Gratis (promo)'}</strong>
+                  Tes + laporan lengkap <strong style={{ color: 'var(--text)', fontWeight: 600 }}>{HARGA_TES[t.id] ? formatRupiah(HARGA_TES[t.id]) : 'Gratis (promo)'}</strong>
                 </span>
                 <span className="card-cta">Mulai <span className="card-cta-arrow" aria-hidden="true">→</span></span>
               </div>
@@ -64,6 +65,15 @@ export default function Kemampuan() {
           <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.7 }}>
             Semua soal dibuat sendiri oleh AssesIN untuk latihan. Hasil tidak dinyatakan sebagai skor IQ; kategori yang tampil
             adalah kriteria sementara sampai norma peserta AssesIN terkumpul.
+          </p>
+        </div>
+
+        <div className="dark-card" style={{ padding: '22px 24px', marginTop: '16px', borderLeft: '3px solid var(--accent)' }}>
+          <p style={{ fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>Kerja sama</p>
+          <p style={{ color: 'var(--text-sub)', fontSize: '14px', lineHeight: 1.7 }}>
+            Ingin memakai tes ini untuk seleksi atau pelatihan banyak peserta (instansi, perusahaan, sekolah, lembaga bimbel)?
+            Untuk kerja sama, hubungi kami di{' '}
+            <a href="mailto:psikologikantor@proton.me" style={{ color: 'var(--accent)', fontWeight: 600 }}>psikologikantor@proton.me</a>.
           </p>
         </div>
       </main>

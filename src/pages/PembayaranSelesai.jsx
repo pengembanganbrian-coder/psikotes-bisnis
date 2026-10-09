@@ -1,15 +1,21 @@
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import Logo from '../components/Logo'
+import { NAMA_TES } from '../config/pricing'
+import { RUTE_TES, sesiTertunda } from '../kemampuan/sesiBayar'
 
 export default function PembayaranSelesai() {
   const navigate = useNavigate()
+  // Tes kemampuan dibayar di awal: bila ada tes yang belum dikerjakan,
+  // arahkan peserta ke sana, bukan ke beranda.
+  const [tesTertunda] = sesiTertunda()
 
   useEffect(() => {
+    if (tesTertunda) return
     // Auto redirect ke beranda setelah 8 detik
     const t = setTimeout(() => navigate('/'), 8000)
     return () => clearTimeout(t)
-  }, [navigate])
+  }, [navigate, tesTertunda])
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}>
@@ -30,20 +36,34 @@ export default function PembayaranSelesai() {
         </h1>
 
         <p style={{ color: 'var(--text-muted)', fontSize: '14px', lineHeight: '1.7', marginBottom: '32px' }}>
-          Laporan lengkap Anda sudah terbuka. Silakan kembali ke halaman hasil tes untuk mengakses laporan Anda.
+          {tesTertunda
+            ? `Pembayaran ${NAMA_TES[tesTertunda]} diterima. Silakan lanjutkan untuk mulai mengerjakan tes.`
+            : 'Laporan lengkap Anda sudah terbuka. Silakan kembali ke halaman hasil tes untuk mengakses laporan Anda.'}
         </p>
 
         <div style={{ background: 'var(--surface)', border: '1px solid var(--accent-border)', borderRadius: '12px', padding: '16px 20px', marginBottom: '28px' }}>
           <p style={{ color: 'var(--text-muted)', fontSize: '12px', lineHeight: '1.65' }}>
-            Jika laporan belum terbuka, coba segarkan halaman hasil tes Anda. Halaman hasil sudah tertutup?
-            Buka lagi lewat{' '}
-            <Link to="/laporan-saya" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Laporan saya</Link>
-            {' '}dengan email yang Anda pakai saat tes. Butuh bantuan? Hubungi{' '}
+            {tesTertunda ? (
+              <>Tombol mulai tes muncul setelah pembayaran tercatat, biasanya dalam beberapa detik. Pembayaran berlaku untuk satu kali tes. Butuh bantuan? Hubungi{' '}</>
+            ) : (
+              <>
+                Jika laporan belum terbuka, coba segarkan halaman hasil tes Anda. Halaman hasil sudah tertutup?
+                Buka lagi lewat{' '}
+                <Link to="/laporan-saya" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Laporan saya</Link>
+                {' '}dengan email yang Anda pakai saat tes. Butuh bantuan? Hubungi{' '}
+              </>
+            )}
             <a href="mailto:psikologikantor@proton.me" style={{ color: 'var(--accent)', textDecoration: 'none' }}>
               psikologikantor@proton.me
             </a>
           </p>
         </div>
+
+        {tesTertunda && (
+          <button className="btn-cta block" style={{ width: '100%', marginBottom: '12px' }} onClick={() => navigate(RUTE_TES[tesTertunda])}>
+            Lanjutkan ke {NAMA_TES[tesTertunda]} <span className="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        )}
 
         <button
           onClick={() => navigate('/')}
@@ -54,9 +74,11 @@ export default function PembayaranSelesai() {
           ← Kembali ke Beranda
         </button>
 
-        <p style={{ color: 'var(--text-muted)', fontSize: '11px', marginTop: '16px' }}>
-          Otomatis redirect dalam beberapa detik...
-        </p>
+        {!tesTertunda && (
+          <p style={{ color: 'var(--text-muted)', fontSize: '11px', marginTop: '16px' }}>
+            Otomatis redirect dalam beberapa detik...
+          </p>
+        )}
 
       </div>
     </div>

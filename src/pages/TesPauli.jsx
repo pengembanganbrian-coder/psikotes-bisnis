@@ -3,12 +3,20 @@ import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabase'
 import Logo from '../components/Logo'
 import FormPeserta from '../components/FormPeserta'
+import PaymentGate from '../components/PaymentGate'
+import { HARGA_TES, formatRupiah } from '../config/pricing'
+import { ambilSesi, simpanSesi, hapusSesi } from '../kemampuan/sesiBayar'
 import { JUMLAH_INTERVAL, DETIK_PER_INTERVAL, angkaAcak, kunciPauli, hitungPauli, ringkasanPauli } from '../kemampuan/pauli'
 import '../kemampuan/pauli.css'
 
 const SOAL_LATIHAN = 10
 const DURASI_MS = JUMLAH_INTERVAL * DETIK_PER_INTERVAL * 1000
 const MS_INTERVAL = DETIK_PER_INTERVAL * 1000
+
+const BERBAYAR = HARGA_TES.Pauli > 0
+// Satu pembayaran = satu tes, dengan satu kesempatan mengulang bila tes
+// terputus (halaman tertutup, koneksi/perangkat bermasalah).
+const MAKS_MULAI = 2
 
 const intervalKosong = () => Array.from({ length: JUMLAH_INTERVAL }, () => ({ jumlah: 0, benar: 0, salah: 0 }))
 
@@ -127,8 +135,11 @@ function Petunjuk({ onLanjut }) {
 
 export default function TesPauli() {
   const navigate = useNavigate()
-  const [step, setStep]       = useState('form')
-  const [peserta, setPeserta] = useState(null)
+  // Sesi yang sudah dibuat (mis. kembali dari halaman pembayaran Mayar)
+  // langsung dilanjutkan ke langkah pembayaran/mulai tes.
+  const [sesi, setSesi]       = useState(() => ambilSesi('Pauli'))
+  const [step, setStep]       = useState(() => (sesi ? 'bayar' : 'form'))
+  const peserta = sesi?.peserta ?? null
   const [pasangan, setPasangan] = useState(() => [angkaAcak(), angkaAcak()])
   const [lalu, setLalu]       = useState(null)
   const [nomor, setNomor]     = useState(0)
@@ -185,18 +196,23 @@ export default function TesPauli() {
     selesaiRef.current = true
     setMenyimpan(true)
     const skor = hitungPauli(intervalRef.current)
-    const state = { skor, ...peserta }
-    const pesertaId = crypto.randomUUID()
+    // pesertaId tetap dikirim walau penyimpanan gagal: pembayaran terikat ke
+    // ID ini, jadi laporan tetap terbuka di halaman hasil.
+    const { pesertaId } = sesi
+    const state = { skor, ...peserta, pesertaId }
     try {
       const { error: e1 } = await supabase.from('peserta_pauli').insert([{ id: pesertaId, nama: peserta.nama, nip: peserta.email, jabatan: peserta.jabatan }])
-      if (e1) throw e1
+      // 23505 = baris peserta sudah ada dari percobaan simpan sebelumnya.
+      if (e1 && e1.code !== '23505') throw e1
       const { error: e2 } = await supabase.from('hasil_pauli').insert([{ peserta_id: pesertaId, skor, ringkasan: ringkasanPauli(skor) }])
       if (e2) throw e2
-      navigate('/hasil-pauli', { state: { ...state, pesertaId } })
+      hapusSesi('Pauli')
+      navigate('/hasil-pauli', { state: { ...state, tersimpan: true } })
     } catch {
-      navigate('/hasil-pauli', { state })
+      hapusSesi('Pauli')
+      navigate('/hasil-pauli', { state: { ...state, tersimpan: false } })
     }
-  }, [navigate, peserta])
+  }, [navigate, peserta, sesi])
 
   const jawabTes = useCallback(pilihan => {
     if (selesaiRef.current) return
@@ -245,7 +261,11 @@ export default function TesPauli() {
     <FormPeserta
       id="pauli" judul="Tes Pauli Digital" meta={`${JUMLAH_INTERVAL} menit · ganjil-genap`}
       intro="Mengukur kecepatan, ketelitian, kestabilan, dan daya tahan kerja Anda pada tugas hitung sederhana yang berulang — aspek yang dilihat pada tes Pauli dan Kraepelin dalam seleksi kerja."
-      onMulai={p => { setPeserta(p); setStep('petunjuk'); window.scrollTo(0, 0) }}
+      onMulai={p => {
+        const baru = { pesertaId: crypto.randomUUID(), peserta: p }
+        simpanSesi('Pauli', baru); setSesi(baru)
+        setStep('petunjuk'); window.scrollTo(0, 0)
+      }}
     />
   )
 
@@ -284,10 +304,8 @@ export default function TesPauli() {
               <p className="pl-teks" style={{ marginBottom: '20px' }}>
                 Saat tes, <b>tidak ada tanda benar/salah</b> dan waktu <b>tidak bisa dijeda</b>. Pastikan Anda siap dan tidak akan terganggu.
               </p>
-              <button className="btn-cta block" onClick={() => {
-                setPasangan([angkaAcak(), angkaAcak()]); setLalu(null); setDitekan(null); setStep('tes'); window.scrollTo(0, 0)
-              }}>
-                Mulai tes {JUMLAH_INTERVAL} menit <span className="btn-arrow" aria-hidden="true">→</span>
+              <button className="btn-cta block" onClick={() => { setStep('bayar'); window.scrollTo(0, 0) }}>
+                {BERBAYAR ? `Lanjut ke tes — ${formatRupiah(HARGA_TES.Pauli)}` : `Lanjut ke tes ${JUMLAH_INTERVAL} menit`} <span className="btn-arrow" aria-hidden="true">→</span>
               </button>
               <button className="btn-ghost block" style={{ marginTop: '10px', width: '100%' }} onClick={mulaiLatihan}>Ulangi latihan</button>
             </div>
@@ -296,6 +314,42 @@ export default function TesPauli() {
       </div>
     )
   }
+
+  if (step === 'bayar') return (
+    <div className="pl-layar">
+      <BarAtas kanan="Tes Pauli Digital" />
+      <div className="pl-isi anim-up" style={{ justifyContent: 'flex-start', textAlign: 'left' }}>
+        <PaymentGate testType="Pauli" mode="awal" pesertaId={sesi.pesertaId} nama={peserta.nama} email={peserta.email}>
+          <div className="pl-kartu">
+            <p className="pl-label">Siap mulai</p>
+            <p className="pl-teks" style={{ margin: '12px 0 8px' }}>
+              Tes berjalan <b>{JUMLAH_INTERVAL} menit tanpa jeda</b> dan tidak ada tanda benar/salah. Jumlahkan dua angka; bila lebih dari 9,
+              lihat angka terakhirnya, lalu tekan GANJIL atau GENAP.
+            </p>
+            {(sesi.mulai ?? 0) > 0 && (sesi.mulai ?? 0) < MAKS_MULAI && (
+              <p className="pl-teks" style={{ marginBottom: '8px', color: '#b45309' }}>Tes sebelumnya terputus. Anda masih punya 1 kesempatan mengulang.</p>
+            )}
+            <p className="pl-catatan" style={{ marginBottom: '20px' }}>Pembayaran ini berlaku untuk satu kali tes. Jangan menutup atau me-refresh halaman selama tes.</p>
+            {(sesi.mulai ?? 0) >= MAKS_MULAI ? (
+              <p className="pl-teks" style={{ color: '#b91c1c' }}>
+                Kesempatan tes untuk pembayaran ini sudah terpakai. Bila tes terputus karena kendala teknis, hubungi{' '}
+                <a href="mailto:psikologikantor@proton.me" style={{ color: 'var(--accent)', fontWeight: 600 }}>psikologikantor@proton.me</a>.
+              </p>
+            ) : (
+            <button className="btn-cta block" onClick={() => {
+              const s2 = { ...sesi, mulai: (sesi.mulai ?? 0) + 1 }
+              simpanSesi('Pauli', s2); setSesi(s2)
+              setPasangan([angkaAcak(), angkaAcak()]); setLalu(null); setDitekan(null); setStep('tes'); window.scrollTo(0, 0)
+            }}>
+              Mulai tes {JUMLAH_INTERVAL} menit <span className="btn-arrow" aria-hidden="true">→</span>
+            </button>
+            )}
+            <button className="btn-ghost block" style={{ marginTop: '10px', width: '100%' }} onClick={() => setStep('petunjuk')}>Lihat petunjuk & latihan lagi</button>
+          </div>
+        </PaymentGate>
+      </div>
+    </div>
+  )
 
   const detik = Math.ceil(sisaMs / 1000)
   const lewatMs = DURASI_MS - sisaMs

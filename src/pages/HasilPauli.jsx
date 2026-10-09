@@ -85,7 +85,7 @@ export default function HasilPauli() {
 
   return (
     <LaporanPage bar={<LaporanBar kembali={fromDashboard ? '← Dashboard' : '← Tes Kemampuan'} onKembali={keBelakang} />}>
-      <LaporanHero tes="Pauli Digital" sub="Tes ganjil-genap 10 menit" nama={nama} tersimpan={!!pesertaId} warna="#0f766e" warna2="#4f46e5" watermark="PAULI">
+      <LaporanHero tes="Pauli Digital" sub="Tes ganjil-genap 10 menit" nama={nama} tersimpan={state.tersimpan ?? !!pesertaId} warna="#0f766e" warna2="#4f46e5" watermark="PAULI">
         <p className="rpt-label">Jumlah soal dikerjakan</p>
         <p className="rpt-besar">{skor.total}</p>
         <StatHero items={[

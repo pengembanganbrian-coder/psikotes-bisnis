@@ -76,7 +76,7 @@ export default function HasilKognitif() {
 
   return (
     <LaporanPage bar={<LaporanBar kembali={fromDashboard ? '← Dashboard' : '← Tes Kemampuan'} onKembali={keBelakang} />}>
-      <LaporanHero tes="Tes Kemampuan Kognitif" sub="Numerik · Verbal · Logika · Figural" nama={nama} tersimpan={!!pesertaId} warna="#1d4ed8" warna2="#7c3aed" watermark="IQ">
+      <LaporanHero tes="Tes Kemampuan Kognitif" sub="Numerik · Verbal · Logika · Figural" nama={nama} tersimpan={state.tersimpan ?? !!pesertaId} warna="#1d4ed8" warna2="#7c3aed" watermark="IQ">
         <div style={{ display: 'flex', alignItems: 'center', gap: '22px', flexWrap: 'wrap' }}>
           <Cincin nilai={skor.persen} terang ukuran={120} tampil={`${skor.benar}/${skor.dari}`} label="benar" />
           <div style={{ flex: 1, minWidth: '200px' }}>
