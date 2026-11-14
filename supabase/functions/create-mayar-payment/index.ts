@@ -62,7 +62,7 @@ Deno.serve(async (req: Request) => {
 
   let res: Response
   try {
-    res = await fetch(`${mayarBase()}/hl/v1/payment/create`, {
+    res = await fetch(`${mayarBase()}/hl/v2/payments/create`, {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -70,7 +70,7 @@ Deno.serve(async (req: Request) => {
         email,
         amount,
         mobile,
-        redirectURL: `${frontend}/pembayaran-selesai`,
+        redirectUrl: `${frontend}/pembayaran-selesai`,
         description: `Laporan Lengkap ${testType} - AssesIN (${orderId})`,
         expiredAt:   new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       }),
@@ -81,7 +81,7 @@ Deno.serve(async (req: Request) => {
 
   const payload = await res.json().catch(() => null)
   const d = payload?.data
-  if (!res.ok || !d?.link || !d?.id) {
+  if (!res.ok || (payload?.statusCode && payload.statusCode !== 200) || !d?.link || !d?.id) {
     console.error("[create-mayar-payment] Mayar menolak", res.status, JSON.stringify(payload))
     return json({ error: "Mayar menolak permintaan pembayaran.", detail: payload }, 502)
   }

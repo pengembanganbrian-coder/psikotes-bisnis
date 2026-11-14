@@ -28,7 +28,7 @@ export type Payment = {
 }
 
 /**
- * Tanya status ke API Mayar (GET /hl/v1/payment/{id}) lalu tandai 'paid' bila
+ * Tanya status ke API Mayar (GET /hl/v2/payments/{id}) lalu tandai 'paid' bila
  * Mayar bilang lunas dan nominalnya cocok. Inilah satu-satunya jalan sebuah
  * pembayaran menjadi 'paid' — isi webhook sendiri tidak dipercaya karena Mayar
  * tidak menandatanganinya.
@@ -37,12 +37,13 @@ export async function verifikasiKeMayar(admin: SupabaseClient, p: Payment): Prom
   if (p.status === "paid") return true
   if (!p.mayar_payment_id) return false
 
-  const res = await fetch(`${mayarBase()}/hl/v1/payment/${p.mayar_payment_id}`, {
+  const res = await fetch(`${mayarBase()}/hl/v2/payments/${p.mayar_payment_id}`, {
     headers: { Authorization: `Bearer ${Deno.env.get("MAYAR_API_KEY")}` },
   })
   const body = await res.json().catch(() => null)
   const d = body?.data
-  if (!res.ok || !d) {
+  // V2: statusCode di body yang menentukan; HTTP bisa 200 walau gagal.
+  if (!res.ok || (body?.statusCode && body.statusCode !== 200) || !d) {
     console.warn("[mayar] gagal cek status", p.order_id, res.status, JSON.stringify(body))
     return false
   }
